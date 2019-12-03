@@ -17,7 +17,15 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ngx-galerie": [
+        "dist/ngx-galerie"
+      ],
+      "ngx-galerie/*": [
+        "dist/ngx-galerie/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
