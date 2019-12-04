@@ -1,13 +1,24 @@
-<ul class="thumbnails">
-  <li
-    *ngFor="let item of items"
-    class="thumbnail"
-    [style.height]="thumbHeight"
-    [style.width]="thumbWidth"
-  >
-    <img [src]="item" alt="" />
-  </li>
-</ul>
+<div class="thumbnails">
+  <ul>
+    <li
+      *ngFor="let item of items"
+      class="thumbnail"
+      [style.height]="thumbHeight"
+      [style.width]="thumbWidth"
+    >
+      <img [src]="item" alt="" />
+    </li>
+  </ul>
+</div>
 <div class="viewer">
-  <img [src]="selectedItem" alt="" />
+  <ul class="image-list" #imageList>
+    <li
+      *ngFor="let item of items"
+      (panstart)="onPanStart()"
+      (pan)="onPan($event)"
+      (panend)="onPanEnd()"
+    >
+      <img [src]="item" alt="" />
+    </li>
+  </ul>
 </div>

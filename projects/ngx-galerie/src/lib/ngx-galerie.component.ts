@@ -4,7 +4,10 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
-  HostBinding
+  HostBinding,
+  ViewChild,
+  ElementRef,
+  Renderer2
 } from '@angular/core';
 
 @Component({
@@ -30,10 +33,15 @@ export class NgxGalerieComponent implements OnChanges, OnInit {
   @Input()
   thumbHeight = '80px';
 
+  @ViewChild('imageList', { static: false })
+  imageList: ElementRef;
+
   // TODO rework selection mechanism
   selectedItem: string;
 
-  constructor() {}
+  private currentImageListPosition = 0;
+
+  constructor(private renderer: Renderer2) {}
 
   ngOnChanges({ items }: SimpleChanges) {
     if (items.previousValue !== items.currentValue) {
@@ -42,4 +50,28 @@ export class NgxGalerieComponent implements OnChanges, OnInit {
   }
 
   ngOnInit() {}
+
+  onPanStart() {}
+
+  onPan(e) {
+    const imageList = this.imageList.nativeElement as HTMLUListElement;
+
+    this.renderer.setStyle(imageList, 'transition', `transform 0s`);
+    this.renderer.setStyle(
+      imageList,
+      'transform',
+      `translate3D(${e.deltaX}px, 0px, 0px)`
+    );
+  }
+
+  onPanEnd() {
+    const imageList = this.imageList.nativeElement as HTMLUListElement;
+
+    this.renderer.setStyle(imageList, 'transition', `transform 0.3s`);
+    this.renderer.setStyle(
+      imageList,
+      'transform',
+      `translate3D(${this.currentImageListPosition}px, 0px, 0px)`
+    );
+  }
 }

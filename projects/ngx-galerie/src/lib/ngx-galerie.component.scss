@@ -2,13 +2,9 @@
   display: flex;
 }
 
-.thumbnails {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
 .thumbnail {
+  margin: 1px;
+
   img {
     object-fit: cover;
     vertical-align: top;
@@ -18,12 +14,29 @@
 }
 
 .viewer {
+  overflow: hidden;
+}
+
+.image-list {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-left: 1px;
+  width: 100%;
+  height: 100%;
+
+  li {
+    display: flex;
+    flex: 1 0 100%;
+    height: 100%;
+  }
 
   img {
     width: 100%;
+    object-fit: contain;
   }
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
