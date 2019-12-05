@@ -1,5 +1,9 @@
 :host {
   display: flex;
+
+  &.column {
+    flex-direction: column;
+  }
 }
 
 .thumbnail {
@@ -10,6 +14,19 @@
     vertical-align: top;
     width: 100%;
     height: 100%;
+  }
+}
+
+.thumbnails {
+  &.top,
+  &.bottom {
+    ul {
+      display: flex;
+    }
+  }
+  &.bottom,
+  &.right {
+    order: 1;
   }
 }
 

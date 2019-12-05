@@ -1,4 +1,4 @@
-<div class="thumbnails">
+<div [class]="'thumbnails ' + thumbsOrientation">
   <ul #thumbnailList>
     <li
       *ngFor="let item of items"

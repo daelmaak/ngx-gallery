@@ -28,6 +28,9 @@ export class NgxGalerieComponent implements OnChanges, OnInit {
   height = '500px';
 
   @Input()
+  thumbsOrientation: 'top' | 'bottom' | 'left' | 'right' = 'left';
+
+  @Input()
   thumbWidth = '120px';
 
   @Input()
@@ -38,6 +41,13 @@ export class NgxGalerieComponent implements OnChanges, OnInit {
 
   @ViewChild('thumbnailList', { static: false })
   thumbnailList: ElementRef;
+
+  @HostBinding('class.column')
+  get galleryCollumn() {
+    return (
+      this.thumbsOrientation == 'top' || this.thumbsOrientation == 'bottom'
+    );
+  }
 
   // TODO rework selection mechanism
   selectedItem: string;
