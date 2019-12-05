@@ -36,8 +36,12 @@ export class NgxGalerieComponent implements OnChanges, OnInit {
   @ViewChild('imageList', { static: false })
   imageList: ElementRef;
 
+  @ViewChild('thumbnailList', { static: false })
+  thumbnailList: ElementRef;
+
   // TODO rework selection mechanism
   selectedItem: string;
+  itemWidth: number;
 
   private currentImageListPosition = 0;
 
@@ -57,21 +61,45 @@ export class NgxGalerieComponent implements OnChanges, OnInit {
     const imageList = this.imageList.nativeElement as HTMLUListElement;
 
     this.renderer.setStyle(imageList, 'transition', `transform 0s`);
-    this.renderer.setStyle(
-      imageList,
-      'transform',
-      `translate3D(${e.deltaX}px, 0px, 0px)`
-    );
+    this.setTranslateX(e.deltaX);
   }
 
   onPanEnd() {
     const imageList = this.imageList.nativeElement as HTMLUListElement;
 
     this.renderer.setStyle(imageList, 'transition', `transform 0.3s`);
+    this.setTranslateX(this.currentImageListPosition);
+  }
+
+  selectItem(item: string) {
+    if (!this.itemWidth) {
+      const imageList = this.imageList.nativeElement as HTMLUListElement;
+
+      this.itemWidth = imageList
+        .querySelector('li')
+        .getBoundingClientRect().width;
+    }
+
+    const newItemIndex = this.items.indexOf(item);
+
+    this.setTranslateX(this.itemWidth * newItemIndex * -1);
+  }
+
+  private getTranslateX() {
+    const imageList = this.imageList.nativeElement as HTMLUListElement;
+
+    const match = imageList.style.transform.match(/translate3D\((\d+)/);
+
+    return match && match[0];
+  }
+
+  private setTranslateX(x: number) {
+    const imageList = this.imageList.nativeElement as HTMLUListElement;
+
     this.renderer.setStyle(
       imageList,
       'transform',
-      `translate3D(${this.currentImageListPosition}px, 0px, 0px)`
+      `translate3D(${x}px, 0px, 0px)`
     );
   }
 }

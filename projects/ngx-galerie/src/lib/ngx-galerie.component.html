@@ -1,10 +1,11 @@
 <div class="thumbnails">
-  <ul>
+  <ul #thumbnailList>
     <li
       *ngFor="let item of items"
       class="thumbnail"
       [style.height]="thumbHeight"
       [style.width]="thumbWidth"
+      (click)="selectItem(item)"
     >
       <img [src]="item" alt="" />
     </li>
