@@ -3,8 +3,9 @@
     <li
       *ngFor="let item of items"
       class="thumbnail"
-      [style.height]="thumbHeight"
-      [style.width]="thumbWidth"
+      [style.height.px]="thumbHeight"
+      [style.width.px]="thumbWidth"
+      [style.minWidth.px]="thumbWidth"
       (click)="selectItem(item)"
     >
       <img [src]="item" alt="" />
@@ -17,9 +18,10 @@
       *ngFor="let item of items"
       (panstart)="onPanStart()"
       (pan)="onPan($event)"
-      (panend)="onPanEnd()"
+      (panend)="onPanEnd($event)"
     >
-      <img [src]="item" alt="" />
+      <!-- <img [src]="item" alt="" /> -->
+      <img [src]="item" alt="" draggable="false" ondragstart="return false" />
     </li>
   </ul>
 </div>

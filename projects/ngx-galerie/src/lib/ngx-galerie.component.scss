@@ -1,5 +1,8 @@
 :host {
   display: flex;
+  height: 500px;
+  width: 500px;
+  overflow: hidden;
 
   &.column {
     flex-direction: column;
@@ -36,19 +39,19 @@
 
 .image-list {
   display: flex;
-  align-items: center;
   width: 100%;
   height: 100%;
   transition: transform 0.3s;
 
   li {
     display: flex;
+    align-items: center;
     flex: 1 0 100%;
-    height: 100%;
   }
 
   img {
     width: 100%;
+    height: 100%;
     object-fit: contain;
   }
 }

@@ -1,0 +1,7 @@
+ngx-galerie {
+  width: 700px;
+
+  @media (max-width: 767px) {
+    width: auto;
+  }
+}
