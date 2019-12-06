@@ -8,8 +8,8 @@ import {
   ViewChild,
   ElementRef,
   Renderer2,
-  AfterViewInit,
-  OnDestroy
+  OnDestroy,
+  NgZone
 } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 
@@ -31,7 +31,7 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   thumbHeight = 80;
 
-  @ViewChild('imageList', { static: false })
+  @ViewChild('imageList', { static: true })
   imageList: ElementRef;
 
   @ViewChild('thumbnailList', { static: false })
@@ -44,6 +44,7 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
     );
   }
 
+  imageListHammer: any;
   // TODO rework selection mechanism
   selectedItem: string;
   selectedItemX: number;
@@ -51,7 +52,7 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
 
   private resizeSub: Subscription;
 
-  constructor(private renderer: Renderer2, private elRef: ElementRef) {}
+  constructor(private renderer: Renderer2, private zone: NgZone) {}
 
   ngOnChanges({ items }: SimpleChanges) {
     if (items.previousValue !== items.currentValue) {
@@ -63,30 +64,49 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
     if (typeof window !== 'undefined') {
       this.resizeSub = fromEvent(window, 'resize').subscribe(this.onResize);
     }
+
+    // TODO make configurable?
+    const direction = Hammer.DIRECTION_HORIZONTAL;
+
+    this.imageListHammer = new Hammer(this.imageList.nativeElement);
+    this.imageListHammer.get('pan').set({ direction });
+
+    this.zone.runOutsideAngular(() => {
+      this.imageListHammer.on('panstart', this.onPanStart);
+      this.imageListHammer.on('pan', this.onPan);
+      this.imageListHammer.on('panend', this.onPanEnd);
+    });
   }
 
   ngOnDestroy() {
     this.resizeSub && this.resizeSub.unsubscribe();
   }
 
-  onPanStart() {
+  onPanStart = () => {
     this.selectedItemX = this.getTranslateX(this.imageList.nativeElement);
-  }
+  };
 
-  onPan(e) {
+  onPan = (e: HammerInput) => {
+    // the first event fired in direction HORIZONTAL is panleft for some reason
+    // this hack filters it out
+    // https://github.com/hammerjs/hammer.js/issues/1132
+    if (e.center.x == 0 && e.center.y == 0) {
+      return;
+    }
+
     const imageList = this.imageList.nativeElement as HTMLUListElement;
 
     this.renderer.setStyle(imageList, 'transition', `transform 0s`);
     this.setTranslateX(e.deltaX + this.selectedItemX, imageList);
-  }
+  };
 
-  onPanEnd(e) {
+  onPanEnd = (e: HammerInput) => {
     const { items } = this;
     const imageList = this.imageList.nativeElement as HTMLUListElement;
 
     this.renderer.setStyle(imageList, 'transition', '');
 
-    if (Math.abs(e.deltaX) > 100) {
+    if (Math.abs(e.deltaX) > 80) {
       const nextItemIndexDelta = e.deltaX > 0 ? -1 : 1;
       const nextItem =
         items[items.indexOf(this.selectedItem) + nextItemIndexDelta];
@@ -96,7 +116,7 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
       const x = this.itemWidth ? -oldItemIndex * this.itemWidth : 0;
       this.setTranslateX(x, imageList);
     }
-  }
+  };
 
   onResize = () => {
     this.positionSelectedItem();

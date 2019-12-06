@@ -14,12 +14,7 @@
 </div>
 <div class="viewer">
   <ul class="image-list" #imageList>
-    <li
-      *ngFor="let item of items"
-      (panstart)="onPanStart()"
-      (pan)="onPan($event)"
-      (panend)="onPanEnd($event)"
-    >
+    <li *ngFor="let item of items">
       <!-- <img [src]="item" alt="" /> -->
       <img [src]="item" alt="" draggable="false" ondragstart="return false" />
     </li>
