@@ -87,6 +87,16 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
   };
 
   onPan = (e: HammerInput) => {
+    // weed out events that are not really horizontal
+    if (
+      !(
+        e.direction & Hammer.DIRECTION_HORIZONTAL &&
+        e.offsetDirection & Hammer.DIRECTION_HORIZONTAL
+      )
+    ) {
+      return;
+    }
+
     // the first event fired in direction HORIZONTAL is panleft for some reason
     // this hack filters it out
     // https://github.com/hammerjs/hammer.js/issues/1132
@@ -106,15 +116,16 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
 
     this.renderer.setStyle(imageList, 'transition', '');
 
-    if (Math.abs(e.deltaX) > 80) {
+    if (
+      Math.abs(e.deltaX) > Math.abs(this.selectedItemX / 3) ||
+      Math.abs(e.velocityX) > 0.3
+    ) {
       const nextItemIndexDelta = e.deltaX > 0 ? -1 : 1;
       const nextItem =
         items[items.indexOf(this.selectedItem) + nextItemIndexDelta];
       this.selectItem(nextItem);
     } else {
-      const oldItemIndex = items.indexOf(this.selectedItem);
-      const x = this.itemWidth ? -oldItemIndex * this.itemWidth : 0;
-      this.setTranslateX(x, imageList);
+      this.positionSelectedItem();
     }
   };
 
