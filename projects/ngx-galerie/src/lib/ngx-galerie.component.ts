@@ -77,12 +77,25 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
       this.imagesHammer = new Hammer(this.images.nativeElement);
       this.imagesHammer.get('pan').set({ direction });
 
+      let i = 0;
+      let vertical = false;
+
       this.zone.runOutsideAngular(() => {
         this.imagesHammer.on('pan', (e: HammerInput) => {
-          this.onPan(e);
+          if (i == 1 && !(e.direction & Hammer.DIRECTION_HORIZONTAL)) {
+            vertical = true;
+          }
+
+          if (i && !vertical) {
+            this.onPan(e);
+          }
 
           if (e.isFinal) {
+            i = 0;
+            vertical = false;
             this.onPanEnd(e);
+          } else {
+            i++;
           }
         });
       });
@@ -97,11 +110,9 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
     if (e.eventType & Hammer.INPUT_CANCEL) {
       return;
     }
-    // weed out the smallest initial unwanted changes
-    if (Math.abs(e.deltaX) > 10) {
-      this.imagesTransition = false;
-      this.shiftImages(e.deltaX + -this.selectedItemIndex * this.itemWidth);
-    }
+
+    this.imagesTransition = false;
+    this.shiftImages(e.deltaX + -this.selectedItemIndex * this.itemWidth);
   };
 
   onPanEnd = (e: HammerInput) => {
