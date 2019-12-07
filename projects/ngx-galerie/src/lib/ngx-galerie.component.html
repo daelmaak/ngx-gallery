@@ -1,19 +1,24 @@
 <div [class]="'thumbnails ' + thumbsOrientation">
   <ul #thumbnailList>
     <li
-      *ngFor="let item of items"
+      *ngFor="let item of items; let i = index"
       class="thumbnail"
       [style.height.px]="thumbHeight"
       [style.width.px]="thumbWidth"
       [style.minWidth.px]="thumbWidth"
-      (click)="selectItem(item)"
+      (click)="select(i)"
     >
       <img [src]="item" alt="" />
     </li>
   </ul>
 </div>
-<div class="viewer">
-  <ul class="image-list" #imageList>
+<div class="viewer" #imageViewer>
+  <ul
+    class="images"
+    [class.images--no-transition]="!imagesTransition"
+    #images
+    [ngStyle]="imagesStyles"
+  >
     <li *ngFor="let item of items">
       <!-- <img [src]="item" alt="" /> -->
       <img [src]="item" alt="" draggable="false" ondragstart="return false" />

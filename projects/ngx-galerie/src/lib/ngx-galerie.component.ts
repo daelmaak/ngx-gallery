@@ -1,15 +1,14 @@
 import {
   Component,
-  OnInit,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  HostBinding,
-  ViewChild,
   ElementRef,
-  Renderer2,
+  HostBinding,
+  Input,
+  NgZone,
+  OnChanges,
   OnDestroy,
-  NgZone
+  OnInit,
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 
@@ -31,8 +30,11 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   thumbHeight = 80;
 
-  @ViewChild('imageList', { static: true })
-  imageList: ElementRef;
+  @ViewChild('images', { static: true })
+  images: ElementRef;
+
+  @ViewChild('imageViewer', { static: true })
+  imageViewer: ElementRef;
 
   @ViewChild('thumbnailList', { static: false })
   thumbnailList: ElementRef;
@@ -44,19 +46,21 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
     );
   }
 
-  imageListHammer: any;
   // TODO rework selection mechanism
-  selectedItem: string;
-  selectedItemX: number;
+  selectedItemIndex: number;
   itemWidth: number;
+
+  imagesHammer: HammerManager;
+  imagesStyles: any = {};
+  imagesTransition = true;
 
   private resizeSub: Subscription;
 
-  constructor(private renderer: Renderer2, private zone: NgZone) {}
+  constructor(private zone: NgZone) {}
 
   ngOnChanges({ items }: SimpleChanges) {
     if (items.previousValue !== items.currentValue) {
-      this.selectedItem = this.items[0];
+      this.selectedItemIndex = 0;
     }
   }
 
@@ -64,114 +68,82 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
     if (typeof window !== 'undefined') {
       this.resizeSub = fromEvent(window, 'resize').subscribe(this.onResize);
     }
+    setTimeout(this.onResize);
 
     // TODO make configurable?
     const direction = Hammer.DIRECTION_HORIZONTAL;
 
-    this.imageListHammer = new Hammer(this.imageList.nativeElement);
-    this.imageListHammer.get('pan').set({ direction });
+    if (typeof Hammer !== 'undefined') {
+      this.imagesHammer = new Hammer(this.images.nativeElement);
+      this.imagesHammer.get('pan').set({ direction });
 
-    this.zone.runOutsideAngular(() => {
-      this.imageListHammer.on('panstart', this.onPanStart);
-      this.imageListHammer.on('pan', this.onPan);
-      this.imageListHammer.on('panend', this.onPanEnd);
-    });
+      this.zone.runOutsideAngular(() => {
+        this.imagesHammer.on('pan', (e: HammerInput) => {
+          this.onPan(e);
+
+          if (e.isFinal) {
+            this.onPanEnd(e);
+          }
+        });
+      });
+    }
   }
 
   ngOnDestroy() {
     this.resizeSub && this.resizeSub.unsubscribe();
   }
 
-  onPanStart = () => {
-    this.selectedItemX = this.getTranslateX(this.imageList.nativeElement);
-  };
-
   onPan = (e: HammerInput) => {
-    // weed out events that are not really horizontal
-    if (
-      !(
-        e.direction & Hammer.DIRECTION_HORIZONTAL &&
-        e.offsetDirection & Hammer.DIRECTION_HORIZONTAL
-      )
-    ) {
+    if (e.eventType & Hammer.INPUT_CANCEL) {
       return;
     }
-
-    // the first event fired in direction HORIZONTAL is panleft for some reason
-    // this hack filters it out
-    // https://github.com/hammerjs/hammer.js/issues/1132
-    if (e.center.x == 0 && e.center.y == 0) {
-      return;
+    // weed out the smallest initial unwanted changes
+    if (Math.abs(e.deltaX) > 10) {
+      this.imagesTransition = false;
+      this.shiftImages(e.deltaX + -this.selectedItemIndex * this.itemWidth);
     }
-
-    const imageList = this.imageList.nativeElement as HTMLUListElement;
-
-    this.renderer.setStyle(imageList, 'transition', `transform 0s`);
-    this.setTranslateX(e.deltaX + this.selectedItemX, imageList);
   };
 
   onPanEnd = (e: HammerInput) => {
-    const { items } = this;
-    const imageList = this.imageList.nativeElement as HTMLUListElement;
+    this.imagesTransition = true;
 
-    this.renderer.setStyle(imageList, 'transition', '');
-
-    if (
-      Math.abs(e.deltaX) > Math.abs(this.selectedItemX / 3) ||
+    if (e.eventType & Hammer.INPUT_CANCEL) {
+      this.center();
+    } else if (
+      Math.abs(e.deltaX) > Math.abs(this.itemWidth / 3) ||
       Math.abs(e.velocityX) > 0.3
     ) {
-      const nextItemIndexDelta = e.deltaX > 0 ? -1 : 1;
-      const nextItem =
-        items[items.indexOf(this.selectedItem) + nextItemIndexDelta];
-      this.selectItem(nextItem);
+      e.deltaX > 0 ? this.prev() : this.next();
     } else {
-      this.positionSelectedItem();
+      // no item to be selected, center the current
+      this.center();
     }
   };
 
-  onResize = () => {
-    this.positionSelectedItem();
+  prev() {
+    this.select(this.selectedItemIndex - 1);
+  }
+
+  next() {
+    this.select(this.selectedItemIndex + 1);
+  }
+  private onResize = () => {
+    this.itemWidth = this.imageViewer.nativeElement.offsetWidth;
+    this.center();
   };
 
-  selectItem(item: string) {
-    this.selectedItem = item;
-    this.positionSelectedItem();
+  private select(index: number) {
+    this.selectedItemIndex = index;
+    this.center();
   }
 
-  private positionSelectedItem() {
-    this.extractItemWidth();
-
-    const selectedItemIndex = this.items.indexOf(this.selectedItem);
-
-    this.setTranslateX(
-      -selectedItemIndex * this.itemWidth,
-      this.imageList.nativeElement
-    );
+  private center() {
+    this.shiftImages(-this.selectedItemIndex * this.itemWidth);
   }
 
-  private extractItemWidth() {
-    const imageList = this.imageList.nativeElement as HTMLUListElement;
-
-    const { width, marginLeft, marginRight } = getComputedStyle(
-      imageList.querySelector('li')
-    );
-
-    this.itemWidth =
-      parseInt(width) + parseInt(marginLeft) + parseInt(marginRight);
-  }
-
-  private extractItemWidthIfNeeded() {
-    if (!this.itemWidth) {
-      this.extractItemWidth();
-    }
-  }
-
-  private getTranslateX(el: HTMLElement): number {
-    const match = el.style.transform.match(/translate3d\((-?\d+)/);
-    return match && +match[1];
-  }
-
-  private setTranslateX(x: number, el: HTMLElement) {
-    this.renderer.setStyle(el, 'transform', `translate3D(${x}px, 0px, 0px)`);
+  private shiftImages(x: number) {
+    this.imagesStyles = {
+      transform: `translate3D(${x}px, 0px, 0px)`
+    };
   }
 }
