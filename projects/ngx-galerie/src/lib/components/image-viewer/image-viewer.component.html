@@ -1,0 +1,10 @@
+<ul
+  class="images"
+  [class.images--no-transition]="!imagesTransition"
+  [ngStyle]="imagesStyles"
+>
+  <li *ngFor="let item of items">
+    <!-- <img [src]="item" alt="" /> -->
+    <img [src]="item" alt="" draggable="false" ondragstart="return false" />
+  </li>
+</ul>

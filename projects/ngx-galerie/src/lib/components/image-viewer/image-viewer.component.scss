@@ -1,0 +1,27 @@
+:host {
+  overflow: hidden;
+}
+
+.images {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s;
+  will-change: transform;
+
+  &--no-transition {
+    transition: transform 0s;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    flex: 1 0 100%;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}

@@ -5,15 +5,9 @@
   [thumbHeight]="thumbHeight"
   [thumbWidth]="thumbWidth"
 ></ngx-thumbnails>
-<div class="viewer" #imageViewer>
-  <ul
-    class="images"
-    [class.images--no-transition]="!imagesTransition"
-    [ngStyle]="imagesStyles"
-  >
-    <li *ngFor="let item of items">
-      <!-- <img [src]="item" alt="" /> -->
-      <img [src]="item" alt="" draggable="false" ondragstart="return false" />
-    </li>
-  </ul>
-</div>
+
+<ngx-image-viewer
+  [items]="items"
+  [selectedItemIndex]="selectedItemIndex"
+  (selection)="selectedItemIndex = $event"
+></ngx-image-viewer>
