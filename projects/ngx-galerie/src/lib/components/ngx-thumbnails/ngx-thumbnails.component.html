@@ -1,0 +1,12 @@
+<ul #thumbnailList>
+  <li
+    *ngFor="let item of items; let i = index"
+    class="thumbnail"
+    [style.height.px]="thumbHeight"
+    [style.width.px]="thumbWidth"
+    [style.minWidth.px]="thumbWidth"
+    (click)="selection.emit(i)"
+  >
+    <img [src]="item" alt="" />
+  </li>
+</ul>

@@ -19,6 +19,7 @@ import {
   take,
   takeWhile
 } from 'rxjs/operators';
+import { Orientation } from './core/orientation';
 
 @Component({
   selector: 'ngx-galerie',
@@ -30,7 +31,7 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
   items: string[];
 
   @Input()
-  thumbsOrientation: 'top' | 'bottom' | 'left' | 'right' = 'left';
+  thumbsOrientation: Orientation = 'left';
 
   @Input()
   thumbWidth = 120;
