@@ -1,15 +1,22 @@
 import {
-  Component,
-  OnInit,
+  AfterViewInit,
   ChangeDetectionStrategy,
-  Input,
-  HostBinding,
-  Output,
+  Component,
+  ElementRef,
   EventEmitter,
+  HostBinding,
+  Input,
   OnChanges,
-  SimpleChanges
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChildren
 } from '@angular/core';
-import { Orientation } from '../../core/orientation';
+import {
+  OrientationFlag,
+  Orientation,
+  orientations
+} from '../../core/orientation';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -17,29 +24,73 @@ import { Orientation } from '../../core/orientation';
   styleUrls: ['./thumbnails.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ThumbnailsComponent implements OnChanges, OnInit {
+export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
   @Input()
   items: string[];
 
   @Input()
-  selectedItem: string;
+  selectedItem: number;
 
   @Input()
   @HostBinding('class')
   orientation: Orientation;
 
   @Input()
-  thumbHeight: number;
+  arrows: boolean;
 
   @Input()
-  thumbWidth: number;
+  @HostBinding('class.scroll')
+  scroll: boolean;
 
   @Output()
   selection = new EventEmitter<string>();
 
-  constructor() {}
+  @ViewChildren('li')
+  itemEls: ElementRef[];
 
-  ngOnChanges({ selectedItem }: SimpleChanges) {}
+  private mainAxisLength: number;
+  private orientationFlag: OrientationFlag;
+  private showStartArrow = true;
+  private showEndArrow = true;
+
+  constructor(private elRef: ElementRef) {}
+
+  ngOnChanges({ orientation, selectedItem }: SimpleChanges) {
+    if (orientation && orientation.currentValue != null) {
+      this.orientationFlag = orientations[orientation.currentValue];
+    }
+    if (selectedItem && selectedItem.currentValue != null) {
+      const el = this.elRef.nativeElement as HTMLElement;
+      const itemEl = el.querySelectorAll('li').item(selectedItem.currentValue);
+
+      // TODO replace with custom smooth mechanism
+      itemEl && itemEl.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+  }
 
   ngOnInit() {}
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      const el = this.elRef.nativeElement as HTMLElement;
+      // TODO don't do both, also don't do at all if scrolling is turned off
+      el.scrollTop = 0;
+      el.scrollLeft = 0;
+
+      this.setMainAxisLength();
+      this.updateArrows();
+    });
+  }
+
+  private updateArrows() {
+    if (this.orientationFlag & OrientationFlag.VERTICAL) {
+    }
+  }
+
+  private setMainAxisLength() {
+    this.mainAxisLength =
+      this.orientationFlag & OrientationFlag.VERTICAL
+        ? this.elRef.nativeElement.offsetWidth
+        : this.elRef.nativeElement.offsetHeight;
+  }
 }

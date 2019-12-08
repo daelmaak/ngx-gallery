@@ -8,7 +8,9 @@ import {
   Input,
   Output,
   EventEmitter,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { fromEvent, Subject, Subscription } from 'rxjs';
 import {
@@ -26,12 +28,12 @@ import {
   styleUrls: ['./image-viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageViewerComponent implements OnInit, OnDestroy {
+export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   items: string[];
 
   @Input()
-  selectedItemIndex: number;
+  selectedItem: number;
 
   @Output()
   selection = new EventEmitter<number>();
@@ -49,6 +51,12 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     private elRef: ElementRef,
     private cd: ChangeDetectorRef
   ) {}
+
+  ngOnChanges({ selectedItem }: SimpleChanges) {
+    if (selectedItem && selectedItem.currentValue != null) {
+      this.center();
+    }
+  }
 
   ngOnInit() {
     if (typeof window !== 'undefined') {
@@ -106,7 +114,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     }
 
     this.imagesTransition = false;
-    this.shiftImages(e.deltaX + -this.selectedItemIndex * this.itemWidth);
+    this.shiftImages(e.deltaX + -this.selectedItem * this.itemWidth);
   };
 
   onPanEnd = (e: HammerInput) => {
@@ -126,11 +134,11 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   };
 
   prev() {
-    this.select(this.selectedItemIndex - 1);
+    this.select(this.selectedItem - 1);
   }
 
   next() {
-    this.select(this.selectedItemIndex + 1);
+    this.select(this.selectedItem + 1);
   }
 
   private onResize = () => {
@@ -139,13 +147,13 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   };
 
   private select(index: number) {
-    this.selectedItemIndex = index;
+    this.selectedItem = index;
     this.selection.emit(index);
     this.center();
   }
 
   private center() {
-    this.shiftImages(-this.selectedItemIndex * this.itemWidth);
+    this.shiftImages(-this.selectedItem * this.itemWidth);
   }
 
   private shiftImages(x: number) {

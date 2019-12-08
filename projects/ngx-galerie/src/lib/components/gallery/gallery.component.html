@@ -2,12 +2,13 @@
   [items]="items"
   [selectedItem]="selectedItemIndex"
   [orientation]="thumbsOrientation"
-  [thumbHeight]="thumbHeight"
-  [thumbWidth]="thumbWidth"
+  [arrows]="true"
+  [scroll]="thumbScroll"
+  (selection)="selectedItemIndex = $event"
 ></ngx-thumbnails>
 
 <ngx-image-viewer
   [items]="items"
-  [selectedItemIndex]="selectedItemIndex"
+  [selectedItem]="selectedItemIndex"
   (selection)="selectedItemIndex = $event"
 ></ngx-image-viewer>

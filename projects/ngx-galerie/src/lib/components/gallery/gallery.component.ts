@@ -1,15 +1,14 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostBinding,
   Input,
-  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild,
-  ChangeDetectionStrategy
+  ViewChild
 } from '@angular/core';
 import { Orientation } from '../../core/orientation';
 
@@ -27,10 +26,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   thumbsOrientation: Orientation = 'left';
 
   @Input()
-  thumbWidth = 120;
-
-  @Input()
-  thumbHeight = 80;
+  thumbScroll = true;
 
   @ViewChild('imageViewer', { static: true })
   imageViewer: ElementRef;

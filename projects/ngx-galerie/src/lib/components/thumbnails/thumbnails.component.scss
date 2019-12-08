@@ -1,17 +1,62 @@
 :host {
+  flex: 1 0 auto;
+  position: relative;
+
   &.top,
   &.bottom {
+    width: 100%;
+
     ul {
-      display: flex;
+      display: inline-block;
+      white-space: nowrap;
+      padding: 0 30px;
+    }
+
+    li {
+      display: inline-block;
     }
   }
+
+  &.left,
+  &.right {
+    height: 100%;
+
+    ul {
+      padding: 30px 0;
+    }
+  }
+
   &.bottom,
   &.right {
     order: 1;
   }
+
+  &.scroll {
+    // hide scrollbar
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+
+    &::-webkit-scrollbar {
+      /* WebKit */
+      width: 0;
+      height: 0;
+    }
+
+    &.top,
+    &.bottom {
+      overflow-x: scroll;
+    }
+
+    &.left,
+    &.right {
+      overflow-y: scroll;
+    }
+  }
 }
 
-.thumbnail {
+li {
+  width: 120px;
+  height: 80px;
   margin: 1px;
 
   img {

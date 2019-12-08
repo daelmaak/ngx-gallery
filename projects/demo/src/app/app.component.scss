@@ -6,8 +6,25 @@
 ngx-gallery {
   width: 700px;
   margin-top: 50px;
+  background: #424242;
 
   @media (max-width: 767px) {
     width: auto;
+  }
+}
+
+.second {
+  background: white;
+  width: 900px;
+  height: 500px;
+
+  @media (max-width: 767px) {
+    width: auto;
+  }
+
+  &::ng-deep ngx-thumbnails li {
+    width: 50px !important;
+    height: 50px !important;
+    margin: 20px 8px;
   }
 }
