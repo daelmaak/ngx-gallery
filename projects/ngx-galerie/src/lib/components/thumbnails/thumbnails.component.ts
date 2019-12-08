@@ -13,11 +13,11 @@ import { Orientation } from '../../core/orientation';
 
 @Component({
   selector: 'ngx-thumbnails',
-  templateUrl: './ngx-thumbnails.component.html',
-  styleUrls: ['./ngx-thumbnails.component.scss'],
+  templateUrl: './thumbnails.component.html',
+  styleUrls: ['./thumbnails.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NgxThumbnailsComponent implements OnChanges, OnInit {
+export class ThumbnailsComponent implements OnChanges, OnInit {
   @Input()
   items: string[];
 

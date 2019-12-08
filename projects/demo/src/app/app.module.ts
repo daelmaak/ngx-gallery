@@ -2,17 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { NgxGalerieModule } from 'projects/ngx-galerie/src/public-api';
+import { GalleryModule } from 'projects/ngx-galerie/src/public-api';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    NgxGalerieModule
-  ],
+  declarations: [AppComponent],
+  imports: [BrowserModule, GalleryModule],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

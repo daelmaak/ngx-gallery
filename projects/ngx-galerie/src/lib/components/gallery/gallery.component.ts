@@ -19,14 +19,14 @@ import {
   take,
   takeWhile
 } from 'rxjs/operators';
-import { Orientation } from './core/orientation';
+import { Orientation } from '../../core/orientation';
 
 @Component({
-  selector: 'ngx-galerie',
-  templateUrl: './ngx-galerie.component.html',
-  styleUrls: ['./ngx-galerie.component.scss']
+  selector: 'ngx-gallery',
+  templateUrl: './gallery.component.html',
+  styleUrls: ['./gallery.component.scss']
 })
-export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
+export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   items: string[];
 
