@@ -10,7 +10,15 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { fromEvent, Subscription } from 'rxjs';
+import { fromEvent, Subject, Subscription } from 'rxjs';
+import {
+  filter,
+  repeat,
+  skip,
+  switchMap,
+  take,
+  takeWhile
+} from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-galerie',
@@ -30,9 +38,6 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   thumbHeight = 80;
 
-  @ViewChild('images', { static: true })
-  images: ElementRef;
-
   @ViewChild('imageViewer', { static: true })
   imageViewer: ElementRef;
 
@@ -50,10 +55,10 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
   selectedItemIndex: number;
   itemWidth: number;
 
-  imagesHammer: HammerManager;
   imagesStyles: any = {};
   imagesTransition = true;
 
+  private imagesHammerSub: Subscription;
   private resizeSub: Subscription;
 
   constructor(private zone: NgZone) {}
@@ -70,39 +75,47 @@ export class NgxGalerieComponent implements OnChanges, OnInit, OnDestroy {
     }
     setTimeout(this.onResize);
 
-    // TODO make configurable?
     const direction = Hammer.DIRECTION_HORIZONTAL;
 
     if (typeof Hammer !== 'undefined') {
-      this.imagesHammer = new Hammer(this.images.nativeElement);
-      this.imagesHammer.get('pan').set({ direction });
-
-      let i = 0;
-      let vertical = false;
+      const hammer = new Hammer(this.imageViewer.nativeElement);
+      hammer.get('pan').set({ direction, threshold: 5 });
 
       this.zone.runOutsideAngular(() => {
-        this.imagesHammer.on('pan', (e: HammerInput) => {
-          if (i == 1 && !(e.direction & Hammer.DIRECTION_HORIZONTAL)) {
-            vertical = true;
-          }
+        const hammerInput$ = new Subject<HammerInput>();
+        hammer.on('pan', (e: HammerInput) => hammerInput$.next(e));
 
-          if (i && !vertical) {
+        // This solves problem with Hammerjs, where although direction HORIZONTAL set and user touch-scrolls vertically,
+        // Hammer still emits like 5 events which can shift images to side.
+        // This code takes second event, which already knows the direction, and based on it determines, whether to accept the following
+        // events - because the whole touch movement is horizontal, or ignore them - because it is vertical
+        // Once a final event comes (touch movement is complete), the stream is restarted
+        this.imagesHammerSub = hammerInput$
+          .pipe(
+            skip(1),
+            take(1),
+            // if horizontal, accept all events, otherwise take only the final event
+            switchMap(e =>
+              e.direction & Hammer.DIRECTION_HORIZONTAL
+                ? hammerInput$
+                : hammerInput$.pipe(filter(e => e.isFinal))
+            ),
+            // complete the stream once the final event occurs, but still emit it
+            takeWhile(e => !e.isFinal, true),
+            repeat()
+          )
+          .subscribe(e => {
             this.onPan(e);
-          }
-
-          if (e.isFinal) {
-            i = 0;
-            vertical = false;
-            this.onPanEnd(e);
-          } else {
-            i++;
-          }
-        });
+            if (e.isFinal) {
+              this.onPanEnd(e);
+            }
+          });
       });
     }
   }
 
   ngOnDestroy() {
+    this.imagesHammerSub && this.imagesHammerSub.unsubscribe();
     this.resizeSub && this.resizeSub.unsubscribe();
   }
 
