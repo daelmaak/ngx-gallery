@@ -1,7 +1,5 @@
-<button *ngIf="showStartArrow" class="prev-thumbs">
-  <div class="chevron">
-    <div></div>
-  </div>
+<button *ngIf="showStartArrow" class="prev-thumbs" (click)="prev()">
+  <ngx-chevron></ngx-chevron>
 </button>
 
 <div class="thumbs-container" (scroll)="updateArrows()" #thumbsContainer>
@@ -16,8 +14,6 @@
   </ul>
 </div>
 
-<button *ngIf="showEndArrow" class="next-thumbs">
-  <div class="chevron">
-    <div></div>
-  </div>
+<button *ngIf="showEndArrow" class="next-thumbs" (click)="next()">
+  <ngx-chevron></ngx-chevron>
 </button>

@@ -4,14 +4,13 @@
 }
 
 ngx-gallery {
-  width: 700px;
   margin-top: 50px;
   background: #424242;
   margin: 20px auto 0;
+}
 
-  @media (max-width: 767px) {
-    width: auto;
-  }
+.first {
+  width: 500px;
 }
 
 .second {
@@ -27,5 +26,17 @@ ngx-gallery {
     width: 50px !important;
     height: 50px !important;
     margin: 20px 8px;
+  }
+}
+
+.third {
+  height: 400px;
+}
+
+.first,
+.second,
+.third {
+  @media (max-width: 767px) {
+    width: auto;
   }
 }
