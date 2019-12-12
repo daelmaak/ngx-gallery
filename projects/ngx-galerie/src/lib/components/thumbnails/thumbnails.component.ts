@@ -5,18 +5,16 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding,
+  HostListener,
   Input,
   OnChanges,
   OnInit,
   Output,
   SimpleChanges,
-  ViewChildren
+  ViewChild,
+  ChangeDetectorRef
 } from '@angular/core';
-import {
-  OrientationFlag,
-  Orientation,
-  orientations
-} from '../../core/orientation';
+import { Orientation } from '../../core/orientation';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -45,23 +43,29 @@ export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
   @Output()
   selection = new EventEmitter<string>();
 
-  @ViewChildren('li')
-  itemEls: ElementRef[];
+  @ViewChild('thumbsContainer', { static: true })
+  thumbsContainerRef: ElementRef<HTMLElement>;
 
-  private mainAxisLength: number;
-  private orientationFlag: OrientationFlag;
-  private showStartArrow = true;
-  private showEndArrow = true;
+  vertical: boolean;
+  showStartArrow = false;
+  showEndArrow = false;
 
-  constructor(private elRef: ElementRef) {}
+  private thumbsOverflow = 0;
+
+  constructor(
+    private cd: ChangeDetectorRef,
+    private elRef: ElementRef<HTMLElement>
+  ) {}
 
   ngOnChanges({ orientation, selectedItem }: SimpleChanges) {
     if (orientation && orientation.currentValue != null) {
-      this.orientationFlag = orientations[orientation.currentValue];
+      const newOrientation: Orientation = orientation.currentValue;
+      this.vertical = newOrientation === 'left' || newOrientation == 'right';
     }
     if (selectedItem && selectedItem.currentValue != null) {
-      const el = this.elRef.nativeElement as HTMLElement;
-      const itemEl = el.querySelectorAll('li').item(selectedItem.currentValue);
+      const itemEl = this.thumbsContainerRef.nativeElement
+        .querySelectorAll('li')
+        .item(selectedItem.currentValue);
 
       // TODO replace with custom smooth mechanism
       itemEl && itemEl.scrollIntoView({ block: 'nearest', inline: 'nearest' });
@@ -71,26 +75,36 @@ export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
   ngOnInit() {}
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      const el = this.elRef.nativeElement as HTMLElement;
-      // TODO don't do both, also don't do at all if scrolling is turned off
-      el.scrollTop = 0;
-      el.scrollLeft = 0;
+    // TODO don't do both, also don't do at all if scrolling is turned off
+    this.thumbsContainerRef.nativeElement.scrollTop = 10;
+    this.thumbsContainerRef.nativeElement.scrollLeft = 30;
 
-      this.setMainAxisLength();
+    setTimeout(() => {
+      this.updateThumbsOverflow();
       this.updateArrows();
+      this.cd.detectChanges();
     });
   }
 
-  private updateArrows() {
-    if (this.orientationFlag & OrientationFlag.VERTICAL) {
-    }
+  updateThumbsOverflow() {
+    const galleryEl = this.elRef.nativeElement;
+    const thumbsEl = this.thumbsContainerRef.nativeElement.querySelector('ul');
+
+    const galleryAxis = this.vertical
+      ? galleryEl.offsetHeight
+      : galleryEl.offsetWidth;
+    const thumbsAxis = this.vertical
+      ? thumbsEl.offsetHeight
+      : thumbsEl.offsetWidth;
+
+    this.thumbsOverflow = thumbsAxis - galleryAxis;
   }
 
-  private setMainAxisLength() {
-    this.mainAxisLength =
-      this.orientationFlag & OrientationFlag.VERTICAL
-        ? this.elRef.nativeElement.offsetWidth
-        : this.elRef.nativeElement.offsetHeight;
+  updateArrows() {
+    const scrollKey = this.vertical ? 'scrollTop' : 'scrollLeft';
+
+    this.showStartArrow = this.thumbsContainerRef.nativeElement[scrollKey] > 0;
+    this.showEndArrow =
+      this.thumbsContainerRef.nativeElement[scrollKey] < this.thumbsOverflow;
   }
 }

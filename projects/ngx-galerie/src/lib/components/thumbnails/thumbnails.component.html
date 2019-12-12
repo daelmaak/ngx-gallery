@@ -1,9 +1,23 @@
-<ul class="thumbnails">
-  <li
-    *ngFor="let item of items; let i = index"
-    class="thumbnail"
-    (click)="selection.emit(i)"
-  >
-    <img [src]="item" alt="" />
-  </li>
-</ul>
+<button *ngIf="showStartArrow" class="prev-thumbs">
+  <div class="chevron">
+    <div></div>
+  </div>
+</button>
+
+<div class="thumbs-container" (scroll)="updateArrows()" #thumbsContainer>
+  <ul class="thumbs">
+    <li
+      *ngFor="let item of items; let i = index"
+      class="thumb"
+      (click)="selection.emit(i)"
+    >
+      <img [src]="item" alt="" />
+    </li>
+  </ul>
+</div>
+
+<button *ngIf="showEndArrow" class="next-thumbs">
+  <div class="chevron">
+    <div></div>
+  </div>
+</button>

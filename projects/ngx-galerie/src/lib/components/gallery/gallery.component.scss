@@ -2,15 +2,24 @@
   display: flex;
   height: 500px;
   width: 500px;
-  overflow: hidden;
 
   &.column {
     flex-direction: column;
   }
 }
 
-:host::ng-deep ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+:host::ng-deep {
+  button {
+    border: none;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+ngx-image-viewer {
+  z-index: 1;
 }
