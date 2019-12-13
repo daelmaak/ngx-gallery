@@ -2,17 +2,15 @@
   <ngx-chevron></ngx-chevron>
 </button>
 
-<div class="thumbs-container" (scroll)="updateArrows()" #thumbsContainer>
-  <ul class="thumbs">
-    <li
-      *ngFor="let item of items; let i = index"
-      class="thumb"
-      (click)="selection.emit(i)"
-    >
-      <img [src]="item" alt="" />
-    </li>
-  </ul>
-</div>
+<ul class="thumbs" (scroll)="updateArrows()" #thumbs>
+  <li
+    *ngFor="let item of items; let i = index"
+    class="thumb"
+    (click)="selection.emit(i)"
+  >
+    <img [src]="item" alt="" />
+  </li>
+</ul>
 
 <button *ngIf="showEndArrow" class="next-thumbs" (click)="next()">
   <ngx-chevron></ngx-chevron>

@@ -1,9 +1,11 @@
 :host,
 svg {
-  width: 16px;
-  height: 16px;
+  $svg-dimension: 24px;
+  width: $svg-dimension;
+  height: $svg-dimension;
 }
 
 svg {
-  fill: gray;
+  fill: white;
+  filter: drop-shadow(0 0 1px black);
 }

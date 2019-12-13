@@ -23,7 +23,7 @@ import { Orientation } from '../../core/orientation';
 })
 export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
   @Input()
-  items: string[];
+  items: string[] = [];
 
   @Input()
   selectedItem: number;
@@ -42,15 +42,15 @@ export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
   @Output()
   selection = new EventEmitter<string>();
 
-  @ViewChild('thumbsContainer', { static: true })
-  thumbsContainerRef: ElementRef<HTMLElement>;
+  @ViewChild('thumbs', { static: true })
+  thumbsRef: ElementRef<HTMLElement>;
 
   animationTime = 200;
   vertical: boolean;
   showStartArrow = false;
   showEndArrow = false;
 
-  private mainAxisLength: number;
+  private thumbMainAxis: number;
   private thumbsOverflow = 0;
 
   constructor(
@@ -61,10 +61,10 @@ export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
   ngOnChanges({ orientation, selectedItem }: SimpleChanges) {
     if (orientation && orientation.currentValue != null) {
       const newOrientation: Orientation = orientation.currentValue;
-      this.vertical = newOrientation === 'left' || newOrientation == 'right';
+      this.vertical = newOrientation === 'left' || newOrientation === 'right';
     }
     if (selectedItem && selectedItem.currentValue != null) {
-      const itemEl = this.thumbsContainerRef.nativeElement
+      const itemEl = this.thumbsRef.nativeElement
         .querySelectorAll('li')
         .item(selectedItem.currentValue);
 
@@ -77,11 +77,11 @@ export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // TODO don't do both, also don't do at all if scrolling is turned off
-    this.thumbsContainerRef.nativeElement.scrollTop = 0;
-    this.thumbsContainerRef.nativeElement.scrollLeft = 0;
+    this.thumbsRef.nativeElement.scrollTop = 0;
+    this.thumbsRef.nativeElement.scrollLeft = 0;
 
     setTimeout(() => {
-      this.updateMainAxisLength();
+      this.updateThumbMainAxis();
       this.updateThumbsOverflow();
       this.updateArrows();
       this.cd.detectChanges();
@@ -89,54 +89,56 @@ export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
   }
 
   next() {
-    this.move(200);
+    this.move(this.thumbMainAxis * 2);
   }
 
   prev() {
-    this.move(-200);
+    this.move(-this.thumbMainAxis * 2);
   }
 
-  updateMainAxisLength() {
-    const galleryEl = this.elRef.nativeElement;
+  updateThumbMainAxis() {
+    if (this.items.length <= 1) {
+      return;
+    }
 
-    this.mainAxisLength = this.vertical
-      ? galleryEl.offsetHeight
-      : galleryEl.offsetWidth;
+    const thumbsEl = this.thumbsRef.nativeElement.querySelectorAll(
+      'li'
+    );
+    const key = this.vertical ? 'y' : 'x';
+
+    this.thumbMainAxis =
+      thumbsEl[1].getBoundingClientRect()[key] -
+      thumbsEl[0].getBoundingClientRect()[key];
   }
 
   updateThumbsOverflow() {
-    const thumbsEl = this.thumbsContainerRef.nativeElement.querySelector('ul');
+    const galleryAxis = this.vertical
+      ? this.elRef.nativeElement.offsetHeight
+      : this.elRef.nativeElement.offsetWidth;
 
-    const thumbsAxis = this.vertical
-      ? thumbsEl.offsetHeight
-      : thumbsEl.offsetWidth;
-
-    this.thumbsOverflow = thumbsAxis - this.mainAxisLength;
+    this.thumbsOverflow = this.thumbMainAxis * this.items.length - galleryAxis;
   }
 
   // TODO debounce
   updateArrows() {
     const scrollKey = this.vertical ? 'scrollTop' : 'scrollLeft';
 
-    this.showStartArrow = this.thumbsContainerRef.nativeElement[scrollKey] > 0;
+    this.showStartArrow = this.thumbsRef.nativeElement[scrollKey] > 0;
     this.showEndArrow =
-      this.thumbsContainerRef.nativeElement[scrollKey] < this.thumbsOverflow;
+      this.thumbsRef.nativeElement[scrollKey] < this.thumbsOverflow;
   }
 
   private move(delta: number) {
     const scrollKey = this.vertical ? 'scrollTop' : 'scrollLeft';
-
-    // this.thumbsContainerRef.nativeElement[scrollKey] += this.mainAxisLength / 3;
-
     const steps = 20;
-    let accomplished = 0;
     const iterationTime = this.animationTime / steps;
     const iterationDelta = delta / steps;
+    let accomplished = 0;
 
     // TODO stream it maybe?
     const interval = setInterval(() => {
       accomplished++;
-      this.thumbsContainerRef.nativeElement[scrollKey] += iterationDelta;
+      this.thumbsRef.nativeElement[scrollKey] += iterationDelta;
       if (accomplished >= steps) {
         clearInterval(interval);
       }
