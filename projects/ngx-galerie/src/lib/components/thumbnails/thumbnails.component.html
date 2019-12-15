@@ -1,8 +1,8 @@
-<button *ngIf="showStartArrow" class="prev-thumbs" (click)="prev()">
+<button *ngIf="showStartArrow" class="prev-thumbs" (click)="arrowSlide(-1)">
   <ngx-chevron></ngx-chevron>
 </button>
 
-<ul class="thumbs" (scroll)="updateArrows()" #thumbs>
+<ul class="thumbs" #thumbs>
   <li
     *ngFor="let item of items; let i = index"
     class="thumb"
@@ -12,6 +12,6 @@
   </li>
 </ul>
 
-<button *ngIf="showEndArrow" class="next-thumbs" (click)="next()">
+<button *ngIf="showEndArrow" class="next-thumbs" (click)="arrowSlide(1)">
   <ngx-chevron></ngx-chevron>
 </button>

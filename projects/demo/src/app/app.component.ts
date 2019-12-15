@@ -17,7 +17,9 @@ export class AppComponent implements OnInit {
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.werfenweng.eu%2F_thumbnail_%2F436_11_Hochgebirgsrunde.jpg&f=1&nofb=1',
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.jE8bEuIvb0jhV1jPYBOwjgHaFj%26pid%3DApi&f=1',
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia2.s-nbcnews.com%2Fj%2Fnewscms%2F2017_23%2F2027541%2F170606-lucuma-fruit-ew-238p_7fe0368ac968a5fd2ef60eab1398c2d6.nbcnews-ux-2880-1000.jpg&f=1&nofb=1',
-      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.y-cFijq0bPXVSnnl88XKmQHaE7%26pid%3DApi&f=1'
+      'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.y-cFijq0bPXVSnnl88XKmQHaE7%26pid%3DApi&f=1',
+      'https://images.earthtouchnews.com/media/1951732/bigpicture_black-grouse_2019-05-02.jpg',
+      'https://www.museovirasto.fi/uploads/Kuvakokoelmat/_1600xAUTO_crop_center-center/HK19410320_2_www.jpg'
     ];
   }
 }

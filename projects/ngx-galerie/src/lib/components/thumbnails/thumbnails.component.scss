@@ -78,7 +78,7 @@ $arrow-btn-dimension: 30px;
     order: 1;
   }
 
-  &.scroll {
+  &.scrollable {
     .thumbs {
       // hide scrollbar
       scrollbar-width: none; /* Firefox */

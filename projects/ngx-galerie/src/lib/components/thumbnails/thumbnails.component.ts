@@ -1,18 +1,21 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   HostBinding,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild,
-  ChangeDetectorRef
+  ViewChild
 } from '@angular/core';
+import { fromEvent, interval, Subject } from 'rxjs';
+import { debounceTime, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { Orientation } from '../../core/orientation';
 
 @Component({
@@ -21,7 +24,8 @@ import { Orientation } from '../../core/orientation';
   styleUrls: ['./thumbnails.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
+export class ThumbnailsComponent
+  implements OnChanges, OnInit, AfterViewInit, OnDestroy {
   @Input()
   items: string[] = [];
 
@@ -36,7 +40,16 @@ export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
   arrows: boolean;
 
   @Input()
-  @HostBinding('class.scroll')
+  arrowSlideTime = 200;
+
+  @Input()
+  arrowSlideByLength: number;
+
+  @Input()
+  arrowSlideByQuantity: number;
+
+  @Input()
+  @HostBinding('class.scrollable')
   scroll: boolean;
 
   @Output()
@@ -45,13 +58,15 @@ export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
   @ViewChild('thumbs', { static: true })
   thumbsRef: ElementRef<HTMLElement>;
 
-  animationTime = 200;
   vertical: boolean;
   showStartArrow = false;
   showEndArrow = false;
 
   private thumbMainAxis: number;
   private thumbsOverflow = 0;
+
+  private destroy$ = new Subject();
+  private sliding$ = new Subject<number>();
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -73,37 +88,87 @@ export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    const steps = 60;
+
+    this.sliding$
+      .pipe(
+        switchMap(delta =>
+          interval(this.arrowSlideTime / steps).pipe(
+            take(steps),
+            map(_ => delta / steps)
+          )
+        ),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(stepDelta => {
+        const scrollKey = this.vertical ? 'scrollTop' : 'scrollLeft';
+        requestAnimationFrame(() => {
+          this.thumbsRef.nativeElement[scrollKey] += stepDelta;
+        });
+      });
+
+    fromEvent(this.thumbsRef.nativeElement, 'scroll')
+      .pipe(debounceTime(20), takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.arrows) {
+          this.updateArrows();
+          this.cd.detectChanges();
+        }
+      });
+
+    if (typeof window !== undefined) {
+      fromEvent(window, 'resize')
+        .pipe(debounceTime(100), takeUntil(this.destroy$))
+        .subscribe(this.update);
+    }
+  }
 
   ngAfterViewInit() {
     // TODO don't do both, also don't do at all if scrolling is turned off
     this.thumbsRef.nativeElement.scrollTop = 0;
     this.thumbsRef.nativeElement.scrollLeft = 0;
 
-    setTimeout(() => {
-      this.updateThumbMainAxis();
+    setTimeout(this.update);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(null);
+    this.destroy$.complete();
+  }
+
+  arrowSlide(direction: 1 | -1) {
+    let delta: number;
+
+    if (this.arrowSlideByLength) {
+      delta = this.arrowSlideByLength;
+    } else if (this.arrowSlideByQuantity) {
+      delta = this.arrowSlideByQuantity * this.thumbMainAxis;
+    } else {
+      // slide by the full height/width of the gallery
+      delta = this.vertical
+        ? this.elRef.nativeElement.offsetHeight
+        : this.elRef.nativeElement.offsetWidth;
+    }
+    this.sliding$.next(delta * direction);
+  }
+
+  private update = () => {
+    this.updateThumbMainAxis();
+
+    if (this.arrows) {
       this.updateThumbsOverflow();
       this.updateArrows();
       this.cd.detectChanges();
-    });
-  }
+    }
+  };
 
-  next() {
-    this.move(this.thumbMainAxis * 2);
-  }
-
-  prev() {
-    this.move(-this.thumbMainAxis * 2);
-  }
-
-  updateThumbMainAxis() {
+  private updateThumbMainAxis() {
     if (this.items.length <= 1) {
       return;
     }
 
-    const thumbsEl = this.thumbsRef.nativeElement.querySelectorAll(
-      'li'
-    );
+    const thumbsEl = this.thumbsRef.nativeElement.querySelectorAll('li');
     const key = this.vertical ? 'y' : 'x';
 
     this.thumbMainAxis =
@@ -111,7 +176,7 @@ export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
       thumbsEl[0].getBoundingClientRect()[key];
   }
 
-  updateThumbsOverflow() {
+  private updateThumbsOverflow() {
     const galleryAxis = this.vertical
       ? this.elRef.nativeElement.offsetHeight
       : this.elRef.nativeElement.offsetWidth;
@@ -119,29 +184,11 @@ export class ThumbnailsComponent implements OnChanges, OnInit, AfterViewInit {
     this.thumbsOverflow = this.thumbMainAxis * this.items.length - galleryAxis;
   }
 
-  // TODO debounce
-  updateArrows() {
+  private updateArrows() {
     const scrollKey = this.vertical ? 'scrollTop' : 'scrollLeft';
 
     this.showStartArrow = this.thumbsRef.nativeElement[scrollKey] > 0;
     this.showEndArrow =
       this.thumbsRef.nativeElement[scrollKey] < this.thumbsOverflow;
-  }
-
-  private move(delta: number) {
-    const scrollKey = this.vertical ? 'scrollTop' : 'scrollLeft';
-    const steps = 20;
-    const iterationTime = this.animationTime / steps;
-    const iterationDelta = delta / steps;
-    let accomplished = 0;
-
-    // TODO stream it maybe?
-    const interval = setInterval(() => {
-      accomplished++;
-      this.thumbsRef.nativeElement[scrollKey] += iterationDelta;
-      if (accomplished >= steps) {
-        clearInterval(interval);
-      }
-    }, iterationTime);
   }
 }

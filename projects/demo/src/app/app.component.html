@@ -5,9 +5,14 @@
 ></ngx-gallery>
 
 <ngx-gallery
+  class="third"
+  [items]="images"
+  [thumbsArrowSlideTime]="500"
+></ngx-gallery>
+
+<ngx-gallery
   class="second"
   thumbsOrientation="left"
   [items]="images"
+  [thumbsArrows]="false"
 ></ngx-gallery>
-
-<ngx-gallery class="third" [items]="images"></ngx-gallery>

@@ -28,6 +28,18 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   thumbScroll = true;
 
+  @Input()
+  thumbsArrows = true;
+
+  @Input()
+  thumbsArrowSlideTime: number;
+
+  @Input()
+  thumbsArrowSlideByLength: number;
+
+  @Input()
+  thumbsArrowSlideByQuantity: number;
+
   @ViewChild('imageViewer', { static: true })
   imageViewer: ElementRef;
 
@@ -37,7 +49,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   @HostBinding('class.column')
   get galleryCollumn() {
     return (
-      this.thumbsOrientation == 'top' || this.thumbsOrientation == 'bottom'
+      this.thumbsOrientation === 'top' || this.thumbsOrientation === 'bottom'
     );
   }
 
