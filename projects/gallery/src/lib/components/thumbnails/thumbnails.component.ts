@@ -137,7 +137,7 @@ export class ThumbnailsComponent
     this.destroy$.complete();
   }
 
-  arrowSlide(direction: 1 | -1) {
+  arrowSlide(direction: number) {
     let delta: number;
 
     if (this.arrowSlideByLength) {

@@ -3,38 +3,38 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-galerie": {
+    "gallery": {
       "projectType": "library",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "root": "projects/ngx-galerie",
-      "sourceRoot": "projects/ngx-galerie/src",
+      "root": "projects/gallery",
+      "sourceRoot": "projects/gallery/src",
       "prefix": "ngx",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/ngx-galerie/tsconfig.lib.json",
-            "project": "projects/ngx-galerie/ng-package.json"
+            "tsConfig": "projects/gallery/tsconfig.lib.json",
+            "project": "projects/gallery/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngx-galerie/src/test.ts",
-            "tsConfig": "projects/ngx-galerie/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-galerie/karma.conf.js"
+            "main": "projects/gallery/src/test.ts",
+            "tsConfig": "projects/gallery/tsconfig.spec.json",
+            "karmaConfig": "projects/gallery/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/ngx-galerie/tsconfig.lib.json",
-              "projects/ngx-galerie/tsconfig.spec.json"
+              "projects/gallery/tsconfig.lib.json",
+              "projects/gallery/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -158,5 +158,5 @@
       }
     }
   },
-  "defaultProject": "ngx-galerie"
+  "defaultProject": "gallery"
 }

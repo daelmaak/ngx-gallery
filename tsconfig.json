@@ -11,20 +11,11 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
     "paths": {
-      "ngx-galerie": [
-        "dist/ngx-galerie"
-      ],
-      "ngx-galerie/*": [
-        "dist/ngx-galerie/*"
-      ]
+      "gallery": ["dist/gallery"],
+      "gallery/*": ["dist/gallery/*"]
     }
   },
   "angularCompilerOptions": {

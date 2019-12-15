@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { GalleryModule } from 'projects/ngx-galerie/src/public-api';
+import { GalleryModule } from 'projects/gallery/src/public-api';
 
 @NgModule({
   declarations: [AppComponent],
