@@ -105,6 +105,12 @@ $arrow-btn-dimension: 30px;
       }
     }
   }
+
+  &:not(.scrollable) {
+    .thumbs {
+      overflow: hidden;
+    }
+  }
 }
 
 li {
@@ -130,4 +136,9 @@ li {
   padding: 0;
   overflow: hidden;
   outline: 0;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.6);
+  }
 }

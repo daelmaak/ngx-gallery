@@ -7,12 +7,20 @@
 <ngx-gallery
   class="third"
   [items]="images"
-  [thumbsArrowSlideTime]="500"
+  [thumbsArrowSlideTime]="100"
+  [thumbsArrowSlideByQuantity]="2"
+></ngx-gallery>
+
+<ngx-gallery
+  class="third"
+  [items]="images"
+  [thumbsArrowSlideTime]="300"
+  [thumbScroll]="false"
 ></ngx-gallery>
 
 <ngx-gallery
   class="second"
-  thumbsOrientation="left"
   [items]="images"
+  thumbsOrientation="left"
   [thumbsArrows]="false"
 ></ngx-gallery>
