@@ -72,7 +72,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
       this.zone.runOutsideAngular(() => {
         const hammerInput$ = new Subject<HammerInput>();
-        hammer.on('pan', (e: HammerInput) => hammerInput$.next(e));
+        hammer.on(
+          'pan',
+          // TODO should I limit the swiping just to mobile?
+          (e: HammerInput) => e.pointerType !== 'mouse' && hammerInput$.next(e)
+        );
 
         // This solves problem with Hammerjs, where although direction HORIZONTAL set and user touch-scrolls vertically,
         // Hammer still emits like 5 events which can shift images to side.
@@ -85,9 +89,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
             take(1),
             // if horizontal, accept all events, otherwise take only the final event
             switchMap(e =>
-              e.direction & Hammer.DIRECTION_HORIZONTAL
+              e.direction & Hammer.DIRECTION_HORIZONTAL ||
+              e.offsetDirection & Hammer.DIRECTION_HORIZONTAL
                 ? hammerInput$
-                : hammerInput$.pipe(filter(e => e.isFinal))
+                : hammerInput$.pipe(filter(ev => ev.isFinal))
             ),
             // complete the stream once the final event occurs, but still emit it
             takeWhile(e => !e.isFinal, true),
