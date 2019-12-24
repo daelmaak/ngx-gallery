@@ -1,19 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { DetailViewService } from 'projects/detail-view/src/public-api';
+import { OverlayRef } from '@angular/cdk/overlay';
+import { fromEvent, merge } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'ngx-detail-view',
+  template: `
+    <ngx-gallery [items]="items"></ngx-gallery>
+  `,
+  styleUrls: ['./detail-view.component.scss']
 })
-export class AppComponent implements OnInit {
-  // TODO more urls for different image viewer sizes
-  images: string[];
+export class DetailViewComponent implements OnInit {
+  items: string[];
+  overlayRef: OverlayRef;
 
-  constructor(private detailView: DetailViewService) {}
+  constructor() {}
 
   ngOnInit() {
-    this.images = [
+    this.items = [
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fjackhaig.files.wordpress.com%2F2012%2F09%2Fimag0408.jpg&f=1&nofb=1',
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.fklm-tours.com%2Fwp-content%2Fuploads%2F2017%2F11%2FLandscapes-at-the-Semien-Mountains-1.jpg&f=1&nofb=1',
       'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F1.bp.blogspot.com%2F-uUwHOcti87o%2FUQfYd3nDGrI%2FAAAAAAAAhOo%2FGpWmN3lX8pM%2Fs1600%2F864271721_3b663f4dc7_b.jpg&f=1&nofb=1',
@@ -24,9 +28,13 @@ export class AppComponent implements OnInit {
       'https://images.earthtouchnews.com/media/1951732/bigpicture_black-grouse_2019-05-02.jpg',
       'https://www.museovirasto.fi/uploads/Kuvakokoelmat/_1600xAUTO_crop_center-center/HK19410320_2_www.jpg'
     ];
-  }
 
-  open() {
-    this.detailView.open();
+    const escapes$ = this.overlayRef
+      .keydownEvents()
+      .pipe(filter<KeyboardEvent>(e => e.key === 'Escape'));
+
+    const backdropClicks$ = this.overlayRef.backdropClick();
+
+    merge(escapes$, backdropClicks$).subscribe(_ => this.overlayRef.dispose());
   }
 }

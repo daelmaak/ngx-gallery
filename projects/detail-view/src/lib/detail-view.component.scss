@@ -1,0 +1,10 @@
+// TODO hack to make it global, watch release of this https://github.com/ng-packagr/ng-packagr/pull/1465/commits/d63de2a3c712296c0cea750ce116cf7cf156f694
+::ng-deep {
+  @import '~@angular/cdk/overlay-prebuilt';
+}
+
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
