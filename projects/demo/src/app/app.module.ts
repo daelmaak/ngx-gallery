@@ -2,8 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { DetailViewModule } from 'detail-view';
-import { GalleryModule } from 'gallery';
+import { GalleryModule } from 'projects/gallery/src/public-api';
+import { DetailViewModule } from 'projects/detail-view/src/public-api';
 
 @NgModule({
   declarations: [AppComponent],
