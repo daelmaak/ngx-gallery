@@ -40,3 +40,9 @@ ngx-gallery {
     width: auto;
   }
 }
+
+::ng-deep {
+  ngx-detail-view ngx-gallery {
+    width: 600px !important;
+  }
+}
