@@ -157,33 +157,33 @@
         }
       }
     },
-    "detail-view": {
+    "gallery-detail": {
       "projectType": "library",
-      "root": "projects/detail-view",
-      "sourceRoot": "projects/detail-view/src",
+      "root": "projects/gallery-detail",
+      "sourceRoot": "projects/gallery-detail/src",
       "prefix": "ngx",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/detail-view/tsconfig.lib.json",
-            "project": "projects/detail-view/ng-package.json"
+            "tsConfig": "projects/gallery-detail/tsconfig.lib.json",
+            "project": "projects/gallery-detail/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/detail-view/src/test.ts",
-            "tsConfig": "projects/detail-view/tsconfig.spec.json",
-            "karmaConfig": "projects/detail-view/karma.conf.js"
+            "main": "projects/gallery-detail/src/test.ts",
+            "tsConfig": "projects/gallery-detail/tsconfig.spec.json",
+            "karmaConfig": "projects/gallery-detail/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/detail-view/tsconfig.lib.json",
-              "projects/detail-view/tsconfig.spec.json"
+              "projects/gallery-detail/tsconfig.lib.json",
+              "projects/gallery-detail/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }

@@ -1,5 +1,5 @@
 {
-  "name": "detail-view",
+  "name": "gallery-detail",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^8.2.14",

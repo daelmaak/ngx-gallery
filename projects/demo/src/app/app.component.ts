@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DetailViewService } from 'projects/detail-view/src/public-api';
+import { GalleryDetailService } from 'projects/gallery-detail/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   // TODO more urls for different image viewer sizes
   images: string[];
 
-  constructor(private detailView: DetailViewService) {}
+  constructor(private galleryDetail: GalleryDetailService) {}
 
   ngOnInit() {
     this.images = [
@@ -27,6 +27,6 @@ export class AppComponent implements OnInit {
   }
 
   open() {
-    this.detailView.open();
+    this.galleryDetail.open();
   }
 }

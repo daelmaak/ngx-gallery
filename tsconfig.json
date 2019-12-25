@@ -25,11 +25,11 @@
       "gallery/*": [
         "dist/gallery/*"
       ],
-      "detail-view": [
-        "dist/detail-view"
+      "gallery-detail": [
+        "dist/gallery-detail"
       ],
-      "detail-view/*": [
-        "dist/detail-view/*"
+      "gallery-detail/*": [
+        "dist/gallery-detail/*"
       ]
     }
   },

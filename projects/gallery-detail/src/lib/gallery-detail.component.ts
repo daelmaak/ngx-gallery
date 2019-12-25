@@ -4,13 +4,13 @@ import { fromEvent, merge } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
-  selector: 'ngx-detail-view',
+  selector: 'ngx-gallery-detail',
   template: `
     <ngx-gallery [items]="items"></ngx-gallery>
   `,
-  styleUrls: ['./detail-view.component.scss']
+  styleUrls: ['./gallery-detail.component.scss']
 })
-export class DetailViewComponent implements OnInit {
+export class GalleryDetailComponent implements OnInit {
   items: string[];
   overlayRef: OverlayRef;
 

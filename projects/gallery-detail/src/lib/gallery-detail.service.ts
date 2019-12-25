@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Overlay, GlobalPositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
-import { DetailViewComponent } from './detail-view.component';
+import { GalleryDetailComponent } from './gallery-detail.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DetailViewService {
+export class GalleryDetailService {
   constructor(private overlay: Overlay) {}
 
   open(component?: ComponentType<any>) {
@@ -16,7 +16,7 @@ export class DetailViewService {
         .centerVertically(),
       hasBackdrop: true
     });
-    const componentPortal = new ComponentPortal(DetailViewComponent);
+    const componentPortal = new ComponentPortal(GalleryDetailComponent);
     const componentRef = overlayRef.attach(componentPortal);
 
     componentRef.instance.overlayRef = overlayRef;

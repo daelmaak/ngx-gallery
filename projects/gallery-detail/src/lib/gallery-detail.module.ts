@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
-import { DetailViewComponent } from './detail-view.component';
+import { GalleryDetailComponent } from './gallery-detail.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 // TODO change to outer import import ... from 'gallery'
 import { GalleryModule } from 'projects/gallery/src/public-api';
 
 @NgModule({
-  declarations: [DetailViewComponent],
-  entryComponents: [DetailViewComponent],
+  declarations: [GalleryDetailComponent],
+  entryComponents: [GalleryDetailComponent],
   imports: [OverlayModule, GalleryModule],
-  exports: [DetailViewComponent]
+  exports: [GalleryDetailComponent]
 })
-export class DetailViewModule {}
+export class GalleryDetailModule {}
