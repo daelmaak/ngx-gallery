@@ -8,7 +8,9 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import { Orientation } from '../../core/orientation';
 
@@ -39,6 +41,12 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   thumbsArrowSlideByQuantity: number;
+
+  @Output()
+  imageClick = new EventEmitter<Event>();
+
+  @Output()
+  thumbClick = new EventEmitter<Event>();
 
   @ViewChild('imageViewer', { static: true })
   imageViewer: ElementRef;

@@ -36,6 +36,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   selectedItem: number;
 
   @Output()
+  imageClick = new EventEmitter<Event>();
+
+  @Output()
   selection = new EventEmitter<number>();
 
   itemWidth: number;

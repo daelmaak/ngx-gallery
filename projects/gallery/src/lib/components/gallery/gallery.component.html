@@ -7,11 +7,13 @@
   [arrowSlideByLength]="thumbsArrowSlideByLength"
   [arrowSlideByQuantity]="thumbsArrowSlideByQuantity"
   [scroll]="thumbScroll"
+  (thumbClick)="thumbClick.emit($event)"
   (selection)="selectedItemIndex = $event"
 ></ngx-thumbnails>
 
 <ngx-image-viewer
   [items]="items"
   [selectedItem]="selectedItemIndex"
+  (imageClick)="imageClick.emit($event)"
   (selection)="selectedItemIndex = $event"
 ></ngx-image-viewer>

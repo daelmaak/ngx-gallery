@@ -2,7 +2,6 @@
   class="first"
   thumbsOrientation="bottom"
   [items]="images"
-  (click)="open()"
 ></ngx-gallery>
 
 <ngx-gallery
@@ -10,6 +9,7 @@
   [items]="images"
   [thumbsArrowSlideTime]="100"
   [thumbsArrowSlideByQuantity]="2"
+  (imageClick)="open()"
 ></ngx-gallery>
 
 <ngx-gallery

@@ -6,7 +6,7 @@
   <li
     *ngFor="let item of items; let i = index"
     class="thumb"
-    (click)="selection.emit(i)"
+    (click)="selection.emit(i); thumbClick.emit($event)"
   >
     <img [src]="item" alt="" />
   </li>

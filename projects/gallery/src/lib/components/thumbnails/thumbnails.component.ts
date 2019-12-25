@@ -53,6 +53,9 @@ export class ThumbnailsComponent
   scroll: boolean;
 
   @Output()
+  thumbClick = new EventEmitter<Event>();
+
+  @Output()
   selection = new EventEmitter<string>();
 
   @ViewChild('thumbs', { static: true })
