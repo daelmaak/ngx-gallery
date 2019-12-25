@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { GalleryDetailService } from 'projects/gallery-detail/src/public-api';
+import {
+  GalleryDetailService,
+  GalleryDetailRef
+} from 'projects/gallery-detail/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +12,7 @@ import { GalleryDetailService } from 'projects/gallery-detail/src/public-api';
 export class AppComponent implements OnInit {
   // TODO more urls for different image viewer sizes
   images: string[];
+  galleryDetailRef: GalleryDetailRef;
 
   constructor(private galleryDetail: GalleryDetailService) {}
 
@@ -26,7 +30,12 @@ export class AppComponent implements OnInit {
     ];
   }
 
-  open() {
-    this.galleryDetail.open();
+  openThird(index: number) {
+    this.galleryDetail.open(index, {
+      items: this.images,
+      thumbsOrientation: 'bottom',
+      hasBackdrop: true,
+      panelClass: ['gallery-detail-third', 'fullscreen']
+    });
   }
 }

@@ -5,11 +5,12 @@
 ></ngx-gallery>
 
 <ngx-gallery
+  #gallery3
   class="third"
   [items]="images"
   [thumbsArrowSlideTime]="100"
   [thumbsArrowSlideByQuantity]="2"
-  (imageClick)="open()"
+  (imageClick)="openThird(gallery3.selectedItemIndex)"
 ></ngx-gallery>
 
 <ngx-gallery

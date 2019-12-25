@@ -1,15 +1,15 @@
 import {
-  Component,
-  OnInit,
   ChangeDetectionStrategy,
-  NgZone,
-  OnDestroy,
-  ElementRef,
-  Input,
-  Output,
-  EventEmitter,
   ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  NgZone,
   OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
   SimpleChanges
 } from '@angular/core';
 import { fromEvent, Subject, Subscription } from 'rxjs';
@@ -42,7 +42,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   selection = new EventEmitter<number>();
 
   itemWidth: number;
-
   imagesStyles: any = {};
   imagesTransition = true;
 

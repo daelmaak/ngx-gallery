@@ -2,15 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   HostBinding,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
-  SimpleChanges,
-  ViewChild,
   Output,
-  EventEmitter
+  ViewChild
 } from '@angular/core';
 import { Orientation } from '../../core/orientation';
 
@@ -20,9 +18,13 @@ import { Orientation } from '../../core/orientation';
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
+export class GalleryComponent implements OnInit, OnDestroy {
   @Input()
   items: string[];
+
+  // TODO rework selection mechanism
+  @Input()
+  selectedItemIndex = 0;
 
   @Input()
   thumbsOrientation: Orientation = 'left';
@@ -61,16 +63,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
     );
   }
 
-  // TODO rework selection mechanism
-  selectedItemIndex: number;
-
   constructor() {}
-
-  ngOnChanges({ items }: SimpleChanges) {
-    if (items.previousValue !== items.currentValue) {
-      this.selectedItemIndex = 0;
-    }
-  }
 
   ngOnInit() {}
 

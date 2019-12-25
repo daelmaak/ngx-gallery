@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Overlay, GlobalPositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
 import { GalleryDetailComponent } from './gallery-detail.component';
+import { GalleryDetailRef } from './gallery-detail-ref';
+import { GalleryDetailConfig } from './gallery-detail-config';
 
 @Injectable({
   providedIn: 'root'
@@ -9,16 +11,34 @@ import { GalleryDetailComponent } from './gallery-detail.component';
 export class GalleryDetailService {
   constructor(private overlay: Overlay) {}
 
-  open(component?: ComponentType<any>) {
+  open(selectedItemIndex = 0, config?: GalleryDetailConfig): GalleryDetailRef {
     const overlayRef = this.overlay.create({
       positionStrategy: new GlobalPositionStrategy()
         .centerHorizontally()
         .centerVertically(),
-      hasBackdrop: true
+      hasBackdrop:
+        config && typeof config.hasBackdrop !== 'undefined'
+          ? config.hasBackdrop
+          : true,
+      panelClass: config && config.panelClass
     });
     const componentPortal = new ComponentPortal(GalleryDetailComponent);
     const componentRef = overlayRef.attach(componentPortal);
+    const galleryDetailRef = new GalleryDetailRef(overlayRef);
 
-    componentRef.instance.overlayRef = overlayRef;
+    componentRef.instance.selectedItemIndex = selectedItemIndex;
+    componentRef.instance.galleryDetailRef = galleryDetailRef;
+
+    if (config) {
+      if (config.thumbsOrientation) {
+        componentRef.instance.thumbsOrientation = config.thumbsOrientation;
+      }
+
+      if (config.items) {
+        galleryDetailRef.load(config.items);
+      }
+    }
+
+    return galleryDetailRef;
   }
 }
