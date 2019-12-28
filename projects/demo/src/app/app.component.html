@@ -1,7 +1,9 @@
 <ngx-gallery
+  #gallery1
   class="first"
   thumbsOrientation="bottom"
   [items]="images"
+  (imageClick)="openFirst(gallery1.selectedItemIndex)"
 ></ngx-gallery>
 
 <ngx-gallery

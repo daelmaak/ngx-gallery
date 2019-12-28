@@ -30,6 +30,15 @@ export class AppComponent implements OnInit {
     ];
   }
 
+  openFirst(index: number) {
+    this.galleryDetail.open(index, {
+      items: this.images,
+      thumbsOrientation: 'bottom',
+      hasBackdrop: true,
+      panelClass: ['gallery-detail-first']
+    });
+  }
+
   openThird(index: number) {
     this.galleryDetail.open(index, {
       items: this.images,

@@ -42,6 +42,13 @@ ngx-gallery {
 }
 
 ::ng-deep {
+  .gallery-detail-first {
+    ngx-gallery {
+      width: 700px;
+      height: 600px;
+    }
+  }
+
   .gallery-detail-third {
     ngx-gallery {
       width: 100%;
