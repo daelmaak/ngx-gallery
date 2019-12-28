@@ -95,6 +95,7 @@ $arrow-btn-dimension: 30px;
     &.bottom {
       .thumbs {
         overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
       }
     }
 
@@ -102,6 +103,7 @@ $arrow-btn-dimension: 30px;
     &.right {
       .thumbs {
         overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
       }
     }
   }
