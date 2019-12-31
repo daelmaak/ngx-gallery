@@ -41,10 +41,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Output()
   selection = new EventEmitter<number>();
 
-  itemWidth: number;
+  imagesShown = false;
   imagesStyles: any = {};
-  imagesTransition = true;
+  imagesTransition = false;
 
+  private itemWidth: number;
   private imagesHammerSub: Subscription;
   private resizeSub: Subscription;
 
@@ -55,7 +56,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   ) {}
 
   ngOnChanges({ selectedItem }: SimpleChanges) {
-    if (selectedItem && selectedItem.currentValue != null) {
+    if (selectedItem && !selectedItem.firstChange) {
       this.center();
     }
   }
@@ -64,7 +65,17 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     if (typeof window !== 'undefined') {
       this.resizeSub = fromEvent(window, 'resize').subscribe(this.onResize);
     }
-    setTimeout(this.onResize);
+    setTimeout(() => {
+      this.onResize();
+      // Show images only after the image list is centered
+      this.imagesShown = true;
+      // NOTE: detect new translate3D of the image list and the unveiling of the images...
+      this.cd.detectChanges();
+
+      // ...but disregard the image transition being switched on for now, so that it doesn't trigger
+      // immediately after component creation. This change will be picked up later.
+      this.imagesTransition = true;
+    });
 
     const direction = Hammer.DIRECTION_HORIZONTAL;
 
