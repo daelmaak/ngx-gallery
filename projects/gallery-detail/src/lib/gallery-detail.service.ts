@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Overlay, GlobalPositionStrategy } from '@angular/cdk/overlay';
-import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
-import { GalleryDetailComponent } from './gallery-detail.component';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { GalleryDetailComponent } from './components/gallery-detail/gallery-detail.component';
 import { GalleryDetailRef } from './gallery-detail-ref';
 import { GalleryDetailConfig } from './gallery-detail-config';
 

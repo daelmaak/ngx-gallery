@@ -6,12 +6,13 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { merge, Subscription } from 'rxjs';
-import { GalleryDetailRef } from './gallery-detail-ref';
+import { GalleryDetailRef } from '../../gallery-detail-ref';
 import { Orientation } from 'projects/gallery/src/lib/core/orientation';
 
 @Component({
   selector: 'ngx-gallery-detail',
   template: `
+    <ngx-close-icon (click)="close()"></ngx-close-icon>
     <ngx-gallery
       [items]="(galleryDetailRef?.state | async)?.items"
       [selectedItemIndex]="selectedItemIndex || 0"
@@ -45,5 +46,9 @@ export class GalleryDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.closeSub && this.closeSub.unsubscribe();
+  }
+
+  close() {
+    this.galleryDetailRef.close();
   }
 }
