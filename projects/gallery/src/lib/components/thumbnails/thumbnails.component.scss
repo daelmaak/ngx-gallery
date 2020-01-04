@@ -1,5 +1,4 @@
 $shadow-color: #424242;
-$thumb-arrow-bg-color: white;
 $arrow-btn-dimension: 30px;
 
 :host {
@@ -32,17 +31,13 @@ $arrow-btn-dimension: 30px;
     .prev-thumbs {
       left: 0;
 
-      ngx-chevron {
-        transform: rotate(-90deg);
+      ngx-chevron-icon {
+        transform: rotate(180deg);
       }
     }
 
     .next-thumbs {
       right: 0;
-
-      ngx-chevron {
-        transform: rotate(90deg);
-      }
     }
   }
 
@@ -62,13 +57,17 @@ $arrow-btn-dimension: 30px;
 
     .prev-thumbs {
       top: 0;
+
+      ngx-chevron-icon {
+        transform: rotate(-90deg);
+      }
     }
 
     .next-thumbs {
       bottom: 0;
 
-      ngx-chevron {
-        transform: rotate(180deg);
+      ngx-chevron-icon {
+        transform: rotate(90deg);
       }
     }
   }

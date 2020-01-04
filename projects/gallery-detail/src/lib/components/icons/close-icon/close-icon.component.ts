@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'ngx-chevron',
-  templateUrl: './chevron.component.html',
-  styleUrls: ['./chevron.component.scss'],
+  selector: 'ngx-close-icon',
+  templateUrl: './close-icon.component.html',
+  styleUrls: ['./close-icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChevronComponent implements OnInit {
+export class CloseIconComponent implements OnInit {
 
   constructor() { }
 

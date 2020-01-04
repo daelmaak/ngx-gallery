@@ -1,17 +1,17 @@
 <button *ngIf="showStartArrow" class="prev-thumbs" (click)="arrowSlide(-1)">
-  <ngx-chevron></ngx-chevron>
+  <ngx-chevron-icon></ngx-chevron-icon>
 </button>
 
 <ul class="thumbs" #thumbs>
   <li
     *ngFor="let item of items; let i = index"
     class="thumb"
-    (click)="selection.emit(i)"
+    (click)="selection.emit(i); thumbClick.emit($event)"
   >
     <img [src]="item" alt="" />
   </li>
 </ul>
 
 <button *ngIf="showEndArrow" class="next-thumbs" (click)="arrowSlide(1)">
-  <ngx-chevron></ngx-chevron>
+  <ngx-chevron-icon></ngx-chevron-icon>
 </button>

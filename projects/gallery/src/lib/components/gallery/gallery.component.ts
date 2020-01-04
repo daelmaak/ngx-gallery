@@ -2,12 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   HostBinding,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
-  SimpleChanges,
+  Output,
   ViewChild
 } from '@angular/core';
 import { Orientation } from '../../core/orientation';
@@ -18,18 +18,22 @@ import { Orientation } from '../../core/orientation';
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
+export class GalleryComponent implements OnInit, OnDestroy {
   @Input()
   items: string[];
 
+  // TODO rework selection mechanism
   @Input()
-  thumbsOrientation: Orientation = 'left';
+  selectedItemIndex = 0;
 
   @Input()
-  thumbScroll = true;
+  thumbsOrientation: Orientation;
 
   @Input()
-  thumbsArrows = true;
+  thumbsScroll: boolean;
+
+  @Input()
+  thumbsArrows: boolean;
 
   @Input()
   thumbsArrowSlideTime: number;
@@ -39,6 +43,12 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   thumbsArrowSlideByQuantity: number;
+
+  @Output()
+  imageClick = new EventEmitter<Event>();
+
+  @Output()
+  thumbClick = new EventEmitter<Event>();
 
   @ViewChild('imageViewer', { static: true })
   imageViewer: ElementRef;
@@ -53,18 +63,13 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
     );
   }
 
-  // TODO rework selection mechanism
-  selectedItemIndex: number;
-
   constructor() {}
 
-  ngOnChanges({ items }: SimpleChanges) {
-    if (items.previousValue !== items.currentValue) {
-      this.selectedItemIndex = 0;
-    }
+  ngOnInit() {
+    this.thumbsScroll === undefined && (this.thumbsScroll = true);
+    this.thumbsArrows === undefined && (this.thumbsArrows = true);
+    this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
   }
-
-  ngOnInit() {}
 
   ngOnDestroy() {}
 }

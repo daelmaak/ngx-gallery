@@ -1,0 +1,16 @@
+:host {
+  display: inline-block;
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  z-index: 100;
+  cursor: pointer;
+
+  svg {
+    $svg-dimension: 30px;
+    width: $svg-dimension;
+    height: $svg-dimension;
+    fill: white;
+    filter: drop-shadow(0 0 1px black);
+  }
+}

@@ -8,11 +8,14 @@
   display: flex;
   width: 100%;
   height: 100%;
-  transition: transform 0.3s;
   will-change: transform;
 
-  &--no-transition {
-    transition: transform 0s;
+  &--hidden li {
+    opacity: 0;
+  }
+
+  &--transition {
+    transition: transform 0.3s;
   }
 
   li {
@@ -21,6 +24,7 @@
     flex: 1 0 100%;
   }
 
+  // TODO don't use imgs, use background
   img {
     width: 100%;
     height: 100%;

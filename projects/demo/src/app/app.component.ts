@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  GalleryDetailService,
+  GalleryDetailRef
+} from 'projects/gallery-detail/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +12,9 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   // TODO more urls for different image viewer sizes
   images: string[];
+  galleryDetailRef: GalleryDetailRef;
+
+  constructor(private galleryDetail: GalleryDetailService) {}
 
   ngOnInit() {
     this.images = [
@@ -21,5 +28,27 @@ export class AppComponent implements OnInit {
       'https://images.earthtouchnews.com/media/1951732/bigpicture_black-grouse_2019-05-02.jpg',
       'https://www.museovirasto.fi/uploads/Kuvakokoelmat/_1600xAUTO_crop_center-center/HK19410320_2_www.jpg'
     ];
+  }
+
+  openFirst(index: number) {
+    this.galleryDetail
+      .open(index, {
+        thumbsOrientation: 'bottom',
+        hasBackdrop: true,
+        panelClass: ['gallery-detail-first'],
+        documentScroll: true,
+        thumbsArrowSlideTime: 100
+      })
+      .load(this.images);
+  }
+
+  openThird(index: number) {
+    this.galleryDetail
+      .open(index, {
+        thumbsOrientation: 'bottom',
+        hasBackdrop: true,
+        panelClass: ['gallery-detail-third', 'fullscreen']
+      })
+      .load(this.images);
   }
 }
