@@ -31,20 +31,24 @@ export class AppComponent implements OnInit {
   }
 
   openFirst(index: number) {
-    this.galleryDetail.open(index, {
-      items: this.images,
-      thumbsOrientation: 'bottom',
-      hasBackdrop: true,
-      panelClass: ['gallery-detail-first']
-    });
+    this.galleryDetail
+      .open(index, {
+        thumbsOrientation: 'bottom',
+        hasBackdrop: true,
+        panelClass: ['gallery-detail-first'],
+        documentScroll: true,
+        thumbsArrowSlideTime: 100
+      })
+      .load(this.images);
   }
 
   openThird(index: number) {
-    this.galleryDetail.open(index, {
-      items: this.images,
-      thumbsOrientation: 'bottom',
-      hasBackdrop: true,
-      panelClass: ['gallery-detail-third', 'fullscreen']
-    });
+    this.galleryDetail
+      .open(index, {
+        thumbsOrientation: 'bottom',
+        hasBackdrop: true,
+        panelClass: ['gallery-detail-third', 'fullscreen']
+      })
+      .load(this.images);
   }
 }

@@ -40,7 +40,7 @@ export class ThumbnailsComponent
   arrows: boolean;
 
   @Input()
-  arrowSlideTime = 200;
+  arrowSlideTime: number;
 
   @Input()
   arrowSlideByLength: number;
@@ -92,14 +92,17 @@ export class ThumbnailsComponent
   }
 
   ngOnInit() {
-    const steps = 60;
+    this.arrowSlideTime === undefined && (this.arrowSlideTime = 200);
 
+    const fps = 60;
+
+    // TODO use requestAnimationFrame without the interval
     this.sliding$
       .pipe(
         switchMap(delta =>
-          interval(this.arrowSlideTime / steps).pipe(
-            take(steps),
-            map(_ => delta / steps)
+          interval(this.arrowSlideTime / fps).pipe(
+            take(fps),
+            map(_ => delta / fps)
           )
         ),
         takeUntil(this.destroy$)
@@ -111,6 +114,7 @@ export class ThumbnailsComponent
         });
       });
 
+    // TODO unsubscribe
     fromEvent(this.thumbsRef.nativeElement, 'scroll')
       .pipe(debounceTime(20), takeUntil(this.destroy$))
       .subscribe(() => {

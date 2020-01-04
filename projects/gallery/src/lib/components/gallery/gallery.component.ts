@@ -27,13 +27,13 @@ export class GalleryComponent implements OnInit, OnDestroy {
   selectedItemIndex = 0;
 
   @Input()
-  thumbsOrientation: Orientation = 'left';
+  thumbsOrientation: Orientation;
 
   @Input()
-  thumbScroll = true;
+  thumbsScroll: boolean;
 
   @Input()
-  thumbsArrows = true;
+  thumbsArrows: boolean;
 
   @Input()
   thumbsArrowSlideTime: number;
@@ -65,7 +65,11 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.thumbsScroll === undefined && (this.thumbsScroll = true);
+    this.thumbsArrows === undefined && (this.thumbsArrows = true);
+    this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
+  }
 
   ngOnDestroy() {}
 }
