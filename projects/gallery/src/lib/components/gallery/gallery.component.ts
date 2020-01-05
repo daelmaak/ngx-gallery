@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { Orientation } from '../../core/orientation';
 import { GalleryItem } from '../../core/gallery-item';
+import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 
 @Component({
   selector: 'ngx-gallery',
@@ -51,11 +52,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @Output()
   thumbClick = new EventEmitter<Event>();
 
-  @ViewChild('imageViewer', { static: true })
-  imageViewer: ElementRef;
-
-  @ViewChild('thumbnailList', { static: false })
-  thumbnailList: ElementRef;
+  @ViewChild(ImageViewerComponent, { static: false })
+  imageViewer: ImageViewerComponent;
 
   @HostBinding('class.column')
   get galleryCollumn() {
@@ -73,4 +71,12 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {}
+
+  next() {
+    this.imageViewer.next();
+  }
+
+  prev() {
+    this.imageViewer.prev();
+  }
 }

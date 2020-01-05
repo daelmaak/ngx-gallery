@@ -11,7 +11,6 @@ import { GalleryItem } from 'projects/gallery/src/lib/core/gallery-item';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  // TODO more urls for different image viewer sizes
   images: GalleryItem[];
   galleryDetailRef: GalleryDetailRef;
 

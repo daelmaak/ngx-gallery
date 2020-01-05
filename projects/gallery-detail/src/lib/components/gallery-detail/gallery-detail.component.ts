@@ -3,9 +3,12 @@ import {
   Component,
   Input,
   OnDestroy,
-  OnInit
+  OnInit,
+  ViewChild
 } from '@angular/core';
-import { merge, Subscription } from 'rxjs';
+import { GalleryComponent } from 'projects/gallery/src/public-api';
+import { merge } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { GalleryDetailConfig } from '../../gallery-detail-config';
 import { GalleryDetailRef } from '../../gallery-detail-ref';
 
@@ -36,20 +39,31 @@ export class GalleryDetailComponent implements OnInit, OnDestroy {
   @Input()
   config: GalleryDetailConfig;
 
-  private closeSub: Subscription;
+  @ViewChild(GalleryComponent, { static: false })
+  gallery: GalleryComponent;
 
   constructor() {}
 
   ngOnInit() {
-    this.closeSub = merge(
-      this.galleryDetailRef.escapes$,
-      this.galleryDetailRef.backdropClicks$
-    ).subscribe(_ => this.galleryDetailRef.close());
+    const escapes$ = this.galleryDetailRef.keydowns$.pipe(
+      filter<KeyboardEvent>(e => e.key === 'Escape')
+    );
+    merge(this.galleryDetailRef.backdropClicks$, escapes$).subscribe(_ =>
+      this.galleryDetailRef.close()
+    );
+
+    const arrowKeydowns$ = this.galleryDetailRef.keydowns$.pipe(
+      filter<KeyboardEvent>(
+        e => e.key === 'ArrowRight' || e.key === 'ArrowLeft'
+      )
+    );
+    arrowKeydowns$.subscribe(e =>
+      // TODO check if the key name is cross browser compatible
+      e.key === 'ArrowLeft' ? this.gallery.prev() : this.gallery.next()
+    );
   }
 
-  ngOnDestroy() {
-    this.closeSub && this.closeSub.unsubscribe();
-  }
+  ngOnDestroy() {}
 
   close() {
     this.galleryDetailRef.close();

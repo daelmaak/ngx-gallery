@@ -10,13 +10,11 @@ export class GalleryDetailRef {
 
   // TODO probably move to gallery detail componetn
   backdropClicks$: Observable<Event>;
-  escapes$: Observable<Event>;
+  keydowns$: Observable<Event>;
 
   constructor(private overlayRef: OverlayRef) {
     this.backdropClicks$ = overlayRef.backdropClick();
-    this.escapes$ = this.overlayRef
-      .keydownEvents()
-      .pipe(filter<KeyboardEvent>(e => e.key === 'Escape'));
+    this.keydowns$ = this.overlayRef.keydownEvents();
 
     this._state = new BehaviorSubject<GalleryDetailState>({ items: [] });
     this.state = this._state.asObservable();
