@@ -8,7 +8,7 @@
     class="thumb"
     (click)="selection.emit(i); thumbClick.emit($event)"
   >
-    <img [src]="item" alt="" />
+    <img [src]="item.thumbSrc || item.src" alt="" />
   </li>
 </ul>
 

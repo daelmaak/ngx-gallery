@@ -5,6 +5,6 @@
   [ngStyle]="imagesStyles"
 >
   <li *ngFor="let item of items" (click)="imageClick.emit($event)">
-    <img [src]="item" alt="" draggable="false" ondragstart="return false" />
+    <img [src]="item.src" alt="" draggable="false" ondragstart="return false" />
   </li>
 </ul>

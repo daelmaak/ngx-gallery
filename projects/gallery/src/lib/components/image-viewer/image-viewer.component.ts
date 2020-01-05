@@ -21,6 +21,7 @@ import {
   take,
   takeWhile
 } from 'rxjs/operators';
+import { GalleryItem } from '../../core/gallery-item';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -30,7 +31,7 @@ import {
 })
 export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
-  items: string[];
+  items: GalleryItem[];
 
   @Input()
   selectedItem: number;

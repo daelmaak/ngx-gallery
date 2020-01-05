@@ -17,6 +17,7 @@ import {
 import { fromEvent, interval, Subject } from 'rxjs';
 import { debounceTime, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { Orientation } from '../../core/orientation';
+import { GalleryItem } from '../../core/gallery-item';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -27,7 +28,7 @@ import { Orientation } from '../../core/orientation';
 export class ThumbnailsComponent
   implements OnChanges, OnInit, AfterViewInit, OnDestroy {
   @Input()
-  items: string[] = [];
+  items: GalleryItem[] = [];
 
   @Input()
   selectedItem: number;
@@ -56,7 +57,7 @@ export class ThumbnailsComponent
   thumbClick = new EventEmitter<Event>();
 
   @Output()
-  selection = new EventEmitter<string>();
+  selection = new EventEmitter<GalleryItem>();
 
   @ViewChild('thumbs', { static: true })
   thumbsRef: ElementRef<HTMLElement>;

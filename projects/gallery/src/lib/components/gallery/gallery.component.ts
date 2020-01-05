@@ -11,6 +11,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { Orientation } from '../../core/orientation';
+import { GalleryItem } from '../../core/gallery-item';
 
 @Component({
   selector: 'ngx-gallery',
@@ -20,7 +21,7 @@ import { Orientation } from '../../core/orientation';
 })
 export class GalleryComponent implements OnInit, OnDestroy {
   @Input()
-  items: string[];
+  items: GalleryItem[];
 
   // TODO rework selection mechanism
   @Input()

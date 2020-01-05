@@ -2,6 +2,7 @@ import { OverlayRef } from '@angular/cdk/overlay';
 import { GalleryDetailState } from './gallery-detail-state';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { GalleryItem } from 'projects/gallery/src/lib/core/gallery-item';
 
 export class GalleryDetailRef {
   private _state: BehaviorSubject<GalleryDetailState>;
@@ -25,7 +26,7 @@ export class GalleryDetailRef {
     this.overlayRef.dispose();
   }
 
-  load(items: string[]) {
+  load(items: GalleryItem[]) {
     this._state.next({
       items
     });
