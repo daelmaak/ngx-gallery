@@ -1,3 +1,4 @@
+<ngx-chevron-icon *ngIf="arrows" (click)="prev()"></ngx-chevron-icon>
 <ul
   class="images"
   [class.images--hidden]="!imagesShown"
@@ -8,3 +9,4 @@
     <img [src]="item.src" alt="" draggable="false" ondragstart="return false" />
   </li>
 </ul>
+<ngx-chevron-icon *ngIf="arrows" (click)="next()"></ngx-chevron-icon>

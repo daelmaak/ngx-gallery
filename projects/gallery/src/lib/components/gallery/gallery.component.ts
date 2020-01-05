@@ -28,6 +28,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   selectedItemIndex = 0;
 
   @Input()
+  arrows: boolean;
+
+  @Input()
   thumbsOrientation: Orientation;
 
   @Input()

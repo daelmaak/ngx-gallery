@@ -1,4 +1,5 @@
 :host {
+  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -29,5 +30,29 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+}
+
+ngx-chevron-icon {
+  $icon-dimension: 32px;
+
+  position: absolute;
+  top: 50%;
+  z-index: 100;
+  cursor: pointer;
+
+  &:first-of-type {
+    left: 10px;
+    transform: rotate(180deg);
+  }
+
+  &:last-of-type {
+    right: 10px;
+  }
+
+  &,
+  &::ng-deep svg {
+    height: $icon-dimension;
+    width: $icon-dimension;
   }
 }
