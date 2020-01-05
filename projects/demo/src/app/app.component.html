@@ -2,7 +2,7 @@
   #gallery1
   class="first"
   [items]="images"
-  thumbsOrientation="bottom"
+  thumbsOrientation="left"
   [arrows]="true"
   (imageClick)="openFirst(gallery1.selectedItemIndex)"
 ></ngx-gallery>
@@ -11,8 +11,8 @@
   #gallery3
   class="third"
   [items]="images"
-  [thumbsArrowSlideTime]="100"
-  [thumbsArrowSlideByQuantity]="2"
+  [thumbsArrowSlideTime]="150"
+  [thumbsArrowSlideByLength]="200"
   (imageClick)="openThird(gallery3.selectedItemIndex)"
 ></ngx-gallery>
 

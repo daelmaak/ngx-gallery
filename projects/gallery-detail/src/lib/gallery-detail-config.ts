@@ -12,5 +12,4 @@ export interface GalleryDetailConfig {
   thumbsArrows?: boolean;
   thumbsArrowSlideTime?: number;
   thumbsArrowSlideByLength?: number;
-  thumbsArrowSlideByQuantity?: number;
 }

@@ -21,7 +21,6 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
       [thumbsArrows]="config.thumbsArrows"
       [thumbsArrowSlideTime]="config.thumbsArrowSlideTime"
       [thumbsArrowSlideByLength]="config.thumbsArrowSlideByLength"
-      [thumbsArrowSlideByQuantity]="config.thumbsArrowSlideByQuantity"
     ></ngx-gallery>
   `,
   styleUrls: ['./gallery-detail.component.scss'],

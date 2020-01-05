@@ -14,10 +14,17 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { fromEvent, interval, Subject } from 'rxjs';
-import { debounceTime, map, switchMap, take, takeUntil } from 'rxjs/operators';
-import { Orientation } from '../../core/orientation';
+import { animationFrameScheduler, fromEvent, interval, Subject } from 'rxjs';
+import {
+  debounceTime,
+  map,
+  switchMap,
+  takeUntil,
+  takeWhile
+} from 'rxjs/operators';
 import { GalleryItem } from '../../core/gallery-item';
+import { Orientation } from '../../core/orientation';
+import { animationFrame } from 'rxjs/internal/scheduler/animationFrame';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -47,9 +54,6 @@ export class ThumbnailsComponent
   arrowSlideByLength: number;
 
   @Input()
-  arrowSlideByQuantity: number;
-
-  @Input()
   @HostBinding('class.scrollable')
   scroll: boolean;
 
@@ -66,11 +70,24 @@ export class ThumbnailsComponent
   showStartArrow = false;
   showEndArrow = false;
 
-  private thumbMainAxis: number;
-  private thumbsOverflow = 0;
-
   private destroy$ = new Subject();
   private sliding$ = new Subject<number>();
+
+  private get scrollKey(): string {
+    return this.vertical ? 'scrollTop' : 'scrollLeft';
+  }
+
+  private get thumbContainerMainAxis(): number {
+    return this.vertical
+      ? this.elRef.nativeElement.offsetHeight
+      : this.elRef.nativeElement.offsetWidth;
+  }
+
+  private get thumbListMainAxis(): number {
+    return this.vertical
+      ? this.thumbsRef.nativeElement.scrollHeight
+      : this.thumbsRef.nativeElement.scrollWidth;
+  }
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -95,27 +112,41 @@ export class ThumbnailsComponent
   ngOnInit() {
     this.arrowSlideTime === undefined && (this.arrowSlideTime = 200);
 
-    const fps = 60;
-
-    // TODO use requestAnimationFrame without the interval
+    // NOTE: This stream requests animation frames in a periodical fashion so that it can update scroll position of thumbnails
+    // before each paint. The scroll value is updated proportionally to the time elapsed since the animation's start.
+    // The period of requested frames should match the display's refresh rate as recommended in W3C spec. Essentially, this stream
+    // requests animation frames in the same way as recursive calls to requestAnimationFrame().
     this.sliding$
       .pipe(
-        switchMap(delta =>
-          interval(this.arrowSlideTime / fps).pipe(
-            take(fps),
-            map(_ => delta / fps)
-          )
-        ),
+        switchMap(totalScroll => {
+          const negative = totalScroll < 0;
+          totalScroll = Math.abs(totalScroll);
+
+          const startTime = Date.now();
+          let currentScroll = 0;
+
+          return interval(0, animationFrame).pipe(
+            map(_ => {
+              const suggestedScroll = Math.ceil(
+                ((Date.now() - startTime) / this.arrowSlideTime) * totalScroll
+              );
+              const frameScroll = Math.min(
+                suggestedScroll - currentScroll,
+                totalScroll - currentScroll
+              );
+              currentScroll = suggestedScroll;
+
+              return negative ? -frameScroll : frameScroll;
+            }),
+            takeWhile(_ => currentScroll < totalScroll, true)
+          );
+        }),
         takeUntil(this.destroy$)
       )
-      .subscribe(stepDelta => {
-        const scrollKey = this.vertical ? 'scrollTop' : 'scrollLeft';
-        requestAnimationFrame(() => {
-          this.thumbsRef.nativeElement[scrollKey] += stepDelta;
-        });
+      .subscribe(frameScroll => {
+        this.thumbsRef.nativeElement[this.scrollKey] += frameScroll;
       });
 
-    // TODO unsubscribe
     fromEvent(this.thumbsRef.nativeElement, 'scroll')
       .pipe(debounceTime(20), takeUntil(this.destroy$))
       .subscribe(() => {
@@ -124,7 +155,6 @@ export class ThumbnailsComponent
           this.cd.detectChanges();
         }
       });
-
     if (typeof window !== undefined) {
       fromEvent(window, 'resize')
         .pipe(debounceTime(100), takeUntil(this.destroy$))
@@ -150,53 +180,30 @@ export class ThumbnailsComponent
 
     if (this.arrowSlideByLength) {
       delta = this.arrowSlideByLength;
-    } else if (this.arrowSlideByQuantity) {
-      delta = this.arrowSlideByQuantity * this.thumbMainAxis;
     } else {
-      // slide by the full height/width of the gallery
-      delta = this.vertical
-        ? this.elRef.nativeElement.offsetHeight
-        : this.elRef.nativeElement.offsetWidth;
+      // Note: Slide by the full height/width of the gallery
+      // or by the overflow of the thumbnails - to prevent unnecessary requestAnimationFrame calls while trying to scroll
+      // outside of the min/max scroll of the thumbnails
+      delta = Math.min(
+        this.thumbContainerMainAxis,
+        this.thumbListMainAxis - this.thumbContainerMainAxis
+      );
     }
     this.sliding$.next(delta * direction);
   }
 
   private update = () => {
-    this.updateThumbMainAxis();
-
     if (this.arrows) {
-      this.updateThumbsOverflow();
       this.updateArrows();
       this.cd.detectChanges();
     }
   };
 
-  private updateThumbMainAxis() {
-    if (this.items.length <= 1) {
-      return;
-    }
-
-    const thumbsEl = this.thumbsRef.nativeElement.querySelectorAll('li');
-    const key = this.vertical ? 'y' : 'x';
-
-    this.thumbMainAxis =
-      thumbsEl[1].getBoundingClientRect()[key] -
-      thumbsEl[0].getBoundingClientRect()[key];
-  }
-
-  private updateThumbsOverflow() {
-    const galleryAxis = this.vertical
-      ? this.elRef.nativeElement.offsetHeight
-      : this.elRef.nativeElement.offsetWidth;
-
-    this.thumbsOverflow = this.thumbMainAxis * this.items.length - galleryAxis;
-  }
-
   private updateArrows() {
-    const scrollKey = this.vertical ? 'scrollTop' : 'scrollLeft';
+    this.showStartArrow = this.thumbsRef.nativeElement[this.scrollKey] > 0;
 
-    this.showStartArrow = this.thumbsRef.nativeElement[scrollKey] > 0;
     this.showEndArrow =
-      this.thumbsRef.nativeElement[scrollKey] < this.thumbsOverflow;
+      this.thumbsRef.nativeElement[this.scrollKey] <
+      this.thumbListMainAxis - this.thumbContainerMainAxis;
   }
 }
