@@ -14,17 +14,17 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { animationFrameScheduler, fromEvent, interval, Subject } from 'rxjs';
+import { fromEvent, of, Subject, animationFrameScheduler } from 'rxjs';
 import {
   debounceTime,
   map,
+  repeat,
   switchMap,
   takeUntil,
   takeWhile
 } from 'rxjs/operators';
 import { GalleryItem } from '../../core/gallery-item';
 import { Orientation } from '../../core/orientation';
-import { animationFrame } from 'rxjs/internal/scheduler/animationFrame';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -125,7 +125,8 @@ export class ThumbnailsComponent
           const startTime = Date.now();
           let currentScroll = 0;
 
-          return interval(0, animationFrame).pipe(
+          return of(0, animationFrameScheduler).pipe(
+            repeat(),
             map(_ => {
               const suggestedScroll = Math.ceil(
                 ((Date.now() - startTime) / this.arrowSlideTime) * totalScroll
