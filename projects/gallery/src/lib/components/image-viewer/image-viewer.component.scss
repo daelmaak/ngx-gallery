@@ -36,15 +36,19 @@
 ngx-chevron-icon {
   $icon-dimension: 32px;
 
+  display: flex;
   position: absolute;
+  box-sizing: border-box;
+  // center horizontally
   top: 50%;
+  transform: translateY(-50%);
   z-index: 100;
   padding: 5px;
   cursor: pointer;
 
   &:first-of-type {
     left: 10px;
-    transform: rotate(180deg);
+    transform: rotate(180deg) translateY(50%);
   }
 
   &:last-of-type {
