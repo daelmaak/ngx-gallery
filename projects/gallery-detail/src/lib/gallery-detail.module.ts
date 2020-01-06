@@ -8,7 +8,6 @@ import { CloseIconComponent } from './components/icons/close-icon/close-icon.com
 @NgModule({
   declarations: [GalleryDetailComponent, CloseIconComponent],
   entryComponents: [GalleryDetailComponent],
-  imports: [CommonModule, OverlayModule, GalleryModule],
-  exports: [GalleryDetailComponent]
+  imports: [CommonModule, OverlayModule, GalleryModule]
 })
 export class GalleryDetailModule {}
