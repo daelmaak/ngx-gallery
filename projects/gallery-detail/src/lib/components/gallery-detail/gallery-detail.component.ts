@@ -19,6 +19,7 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
     <ngx-gallery
       [selectedItemIndex]="selectedItemIndex || 0"
       [items]="(galleryDetailRef?.state | async)?.items"
+      [arrows]="config.arrows"
       [thumbsOrientation]="config.thumbsOrientation"
       [thumbsScroll]="config.thumbsScroll"
       [thumbsArrows]="config.thumbsArrows"
@@ -46,21 +47,24 @@ export class GalleryDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const escapes$ = this.galleryDetailRef.keydowns$.pipe(
-      filter<KeyboardEvent>(e => e.key === 'Escape')
+      // TODO check if the key name is cross browser compatible https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
+      filter<KeyboardEvent>(e => e.key === 'Escape' || e.key === 'Esc')
     );
     merge(this.galleryDetailRef.backdropClicks$, escapes$).subscribe(_ =>
       this.galleryDetailRef.close()
     );
 
-    const arrowKeydowns$ = this.galleryDetailRef.keydowns$.pipe(
-      filter<KeyboardEvent>(
-        e => e.key === 'ArrowRight' || e.key === 'ArrowLeft'
-      )
-    );
-    arrowKeydowns$.subscribe(e =>
-      // TODO check if the key name is cross browser compatible
-      e.key === 'ArrowLeft' ? this.gallery.prev() : this.gallery.next()
-    );
+    if (this.config.keyboardNavigation !== false) {
+      const arrows$ = this.galleryDetailRef.keydowns$.pipe(
+        filter<KeyboardEvent>(
+          e => e.key === 'ArrowRight' || e.key === 'ArrowLeft'
+        )
+      );
+      arrows$.subscribe(e =>
+        // TODO check if the key name is cross browser compatible https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
+        e.key === 'ArrowLeft' ? this.gallery.prev() : this.gallery.next()
+      );
+    }
   }
 
   ngOnDestroy() {}

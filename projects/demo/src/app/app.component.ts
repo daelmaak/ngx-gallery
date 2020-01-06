@@ -62,7 +62,7 @@ export class AppComponent implements OnInit {
         hasBackdrop: true,
         panelClass: ['gallery-detail-first'],
         documentScroll: true,
-        thumbsArrowSlideTime: 300
+        thumbsArrowSlideTime: 150
       })
       .load(this.images);
   }

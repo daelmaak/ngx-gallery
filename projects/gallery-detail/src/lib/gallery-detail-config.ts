@@ -6,7 +6,9 @@ export interface GalleryDetailConfig {
   hasBackdrop?: boolean;
   panelClass?: string | string[];
   documentScroll?: boolean;
+  keyboardNavigation?: boolean;
   // gallery config
+  arrows?: boolean;
   thumbsOrientation?: Orientation;
   thumbsScroll?: boolean;
   thumbsArrows?: boolean;
