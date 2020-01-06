@@ -99,7 +99,11 @@ export class ThumbnailsComponent
       const newOrientation: Orientation = orientation.currentValue;
       this.vertical = newOrientation === 'left' || newOrientation === 'right';
     }
-    if (selectedItem && selectedItem.currentValue != null) {
+    if (
+      selectedItem &&
+      selectedItem.currentValue != null &&
+      !selectedItem.firstChange
+    ) {
       const itemEl = this.thumbsRef.nativeElement
         .querySelectorAll('li')
         .item(selectedItem.currentValue);
@@ -164,11 +168,9 @@ export class ThumbnailsComponent
   }
 
   ngAfterViewInit() {
-    // TODO don't do both, also don't do at all if scrolling is turned off
-    this.thumbsRef.nativeElement.scrollTop = 0;
-    this.thumbsRef.nativeElement.scrollLeft = 0;
-
-    setTimeout(this.update);
+    requestAnimationFrame(() => {
+      this.update();
+    });
   }
 
   ngOnDestroy() {

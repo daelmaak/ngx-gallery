@@ -69,7 +69,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     if (typeof window !== 'undefined') {
       this.resizeSub = fromEvent(window, 'resize').subscribe(this.onResize);
     }
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       this.onResize();
       // Show images only after the image list is centered
       this.imagesShown = true;
@@ -91,8 +91,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         const hammerInput$ = new Subject<HammerInput>();
         hammer.on(
           'pan',
-          // TODO should I limit the swiping just to mobile?
-          (e: HammerInput) => e.pointerType !== 'mouse' && hammerInput$.next(e)
+          // TODO should I limit the swiping just to mobile? It is limited to mobile now because when swiping with mouse,
+          // at the end of the swipe click happens and gallery detail gets opened
+          (e: HammerInput) => hammerInput$.next(e)
         );
 
         // This solves problem with Hammerjs, where although direction HORIZONTAL set and user touch-scrolls vertically,
