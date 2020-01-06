@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { GalleryComponent } from 'projects/gallery/src/public-api';
+import { GalleryComponent } from '@ngx-galerie/gallery';
 import { merge } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GalleryDetailConfig } from '../../gallery-detail-config';
@@ -47,7 +47,6 @@ export class GalleryDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const escapes$ = this.galleryDetailRef.keydowns$.pipe(
-      // TODO check if the key name is cross browser compatible https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
       filter<KeyboardEvent>(e => e.key === 'Escape' || e.key === 'Esc')
     );
     merge(this.galleryDetailRef.backdropClicks$, escapes$).subscribe(_ =>
@@ -55,14 +54,14 @@ export class GalleryDetailComponent implements OnInit, OnDestroy {
     );
 
     if (this.config.keyboardNavigation !== false) {
+      const allowedKeys = ['ArrowRight', 'ArrowLeft', 'Right', 'Left'];
       const arrows$ = this.galleryDetailRef.keydowns$.pipe(
-        filter<KeyboardEvent>(
-          e => e.key === 'ArrowRight' || e.key === 'ArrowLeft'
-        )
+        filter<KeyboardEvent>(e => allowedKeys.includes(e.key))
       );
       arrows$.subscribe(e =>
-        // TODO check if the key name is cross browser compatible https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
-        e.key === 'ArrowLeft' ? this.gallery.prev() : this.gallery.next()
+        e.key === 'ArrowLeft' || e.key === 'Left'
+          ? this.gallery.prev()
+          : this.gallery.next()
       );
     }
   }

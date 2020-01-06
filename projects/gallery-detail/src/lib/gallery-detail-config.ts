@@ -1,4 +1,4 @@
-import { Orientation } from 'projects/gallery/src/lib/core/orientation';
+import { Orientation } from '@ngx-galerie/gallery';
 
 export interface GalleryDetailConfig {
   // TODO should the overlay and gallery config be split?

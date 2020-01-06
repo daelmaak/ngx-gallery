@@ -24,7 +24,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @Input()
   items: GalleryItem[];
 
-  // TODO rework selection mechanism
   @Input()
   selectedItemIndex = 0;
 

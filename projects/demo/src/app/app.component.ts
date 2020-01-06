@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { GalleryItem } from '@ngx-galerie/gallery';
 import {
-  GalleryDetailService,
-  GalleryDetailRef
-} from 'projects/gallery-detail/src/public-api';
-import { GalleryItem } from 'projects/gallery/src/lib/core/gallery-item';
+  GalleryDetailRef,
+  GalleryDetailService
+} from '@ngx-galerie/gallery-detail';
 
 @Component({
   selector: 'app-root',

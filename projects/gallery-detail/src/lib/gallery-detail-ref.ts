@@ -1,14 +1,12 @@
 import { OverlayRef } from '@angular/cdk/overlay';
-import { GalleryDetailState } from './gallery-detail-state';
+import { GalleryItem } from '@ngx-galerie/gallery';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { GalleryItem } from 'projects/gallery/src/lib/core/gallery-item';
+import { GalleryDetailState } from './gallery-detail-state';
 
 export class GalleryDetailRef {
   private _state: BehaviorSubject<GalleryDetailState>;
   state: Observable<GalleryDetailState>;
 
-  // TODO probably move to gallery detail componetn
   backdropClicks$: Observable<Event>;
   keydowns$: Observable<Event>;
 

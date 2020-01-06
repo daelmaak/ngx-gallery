@@ -1,4 +1,4 @@
-import { GalleryItem } from 'projects/gallery/src/lib/core/gallery-item';
+import { GalleryItem } from '@ngx-galerie/gallery';
 
 export interface GalleryDetailState {
   items: GalleryItem[];

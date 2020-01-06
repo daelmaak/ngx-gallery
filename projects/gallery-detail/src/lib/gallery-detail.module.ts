@@ -1,9 +1,8 @@
-import { NgModule } from '@angular/core';
-import { GalleryDetailComponent } from './components/gallery-detail/gallery-detail.component';
 import { OverlayModule } from '@angular/cdk/overlay';
-// TODO change to outer import import ... from 'gallery'
-import { GalleryModule } from 'projects/gallery/src/public-api';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { GalleryModule } from '@ngx-galerie/gallery';
+import { GalleryDetailComponent } from './components/gallery-detail/gallery-detail.component';
 import { CloseIconComponent } from './components/icons/close-icon/close-icon.component';
 
 @NgModule({
