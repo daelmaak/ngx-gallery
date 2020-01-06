@@ -93,7 +93,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           'pan',
           // TODO should I limit the swiping just to mobile? It is limited to mobile now because when swiping with mouse,
           // at the end of the swipe click happens and gallery detail gets opened
-          (e: HammerInput) => hammerInput$.next(e)
+          (e: HammerInput) => e.pointerType !== 'mouse' && hammerInput$.next(e)
         );
 
         // This solves problem with Hammerjs, where although direction HORIZONTAL set and user touch-scrolls vertically,
@@ -122,6 +122,25 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
               this.onPanEnd(e);
             }
           });
+
+        // TODO if mouse can swipe images, then there has to be mechanism telling clicks and swipes apart
+        // so that clicks don't happen after swiping
+        // fromEvent(this.elRef.nativeElement, 'mousedown')
+        //   .pipe(
+        //     switchMapTo(fromEvent(this.elRef.nativeElement, 'mousemove')),
+        //     skip(1),
+        //     switchMapTo(
+        //       fromEvent<MouseEvent>(this.elRef.nativeElement, 'click', {
+        //         capture: true
+        //       })
+        //     ),
+        //     take(1),
+        //     repeat()
+        //   )
+        //   .subscribe(e => {
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        //   });
       });
     }
   }
