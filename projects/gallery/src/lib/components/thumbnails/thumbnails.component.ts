@@ -154,12 +154,7 @@ export class ThumbnailsComponent
 
     fromEvent(this.thumbsRef.nativeElement, 'scroll')
       .pipe(debounceTime(20), takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.arrows) {
-          this.updateArrows();
-          this.cd.detectChanges();
-        }
-      });
+      .subscribe(this.update);
     if (typeof window !== undefined) {
       fromEvent(window, 'resize')
         .pipe(debounceTime(100), takeUntil(this.destroy$))
