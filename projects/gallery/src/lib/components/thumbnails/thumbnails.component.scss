@@ -118,6 +118,7 @@ li {
   width: 120px;
   height: 80px;
   margin: 1px;
+  position: relative;
 
   img {
     object-fit: cover;
@@ -133,13 +134,15 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   padding: 0;
   overflow: hidden;
   outline: 0;
   cursor: pointer;
+  z-index: 10;
+  opacity: 0.6;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.6);
+    opacity: 0.9;
   }
 }
