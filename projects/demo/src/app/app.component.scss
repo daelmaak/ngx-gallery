@@ -5,7 +5,7 @@
 
 ngx-gallery {
   margin-top: 50px;
-  background: #424242;
+  background: #222121;
   margin: 20px auto 0;
 }
 
@@ -23,14 +23,32 @@ ngx-gallery {
   }
 
   &::ng-deep ngx-thumbnails li {
-    width: 50px !important;
-    height: 50px !important;
-    margin: 20px 8px;
+    width: 120px;
+    height: 120px;
+    margin: 1px 10px 0 0;
+
+    &.selected::after {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      width: 100%;
+      background: #d08888;
+      box-shadow: 0 -1px 2px #3c3b3b;
+    }
   }
 }
 
 .third {
-  height: 300px;
+  height: 400px;
+  width: 600px;
+
+  ::ng-deep {
+    .thumb {
+    }
+  }
 }
 
 .first,
