@@ -32,8 +32,7 @@ import { Orientation } from '../../core/orientation';
   styleUrls: ['./thumbnails.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ThumbnailsComponent
-  implements OnChanges, OnInit, AfterViewInit, OnDestroy {
+export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   items: GalleryItem[] = [];
 
@@ -52,6 +51,9 @@ export class ThumbnailsComponent
 
   @Input()
   arrowSlideByLength: number;
+
+  @Input()
+  blockDocumentScroll: boolean;
 
   @Input()
   @HostBinding('class.scrollable')
@@ -116,23 +118,23 @@ export class ThumbnailsComponent
   ngOnInit() {
     this.arrowSlideTime === undefined && (this.arrowSlideTime = 200);
 
-    this.initArrowScroll();
+    if (this.arrows && typeof window !== undefined) {
+      this.initArrowScroll();
 
-    fromEvent(this.thumbsRef.nativeElement, 'scroll')
-      .pipe(debounceTime(20), takeUntil(this.destroy$))
-      .subscribe(this.update);
+      fromEvent(this.thumbsRef.nativeElement, 'scroll')
+        .pipe(debounceTime(20), takeUntil(this.destroy$))
+        .subscribe(this.updateArrows);
 
-    if (typeof window !== undefined) {
       fromEvent(window, 'resize')
         .pipe(debounceTime(100), takeUntil(this.destroy$))
-        .subscribe(this.update);
-    }
-  }
+        .subscribe(this.updateArrows);
 
-  ngAfterViewInit() {
-    requestAnimationFrame(() => {
-      this.update();
-    });
+      requestAnimationFrame(this.updateArrows);
+    }
+
+    if (this.blockDocumentScroll) {
+      this.initDocumentScrollBlocking();
+    }
   }
 
   ngOnDestroy() {
@@ -155,6 +157,28 @@ export class ThumbnailsComponent
       );
     }
     this.sliding$.next(delta * direction);
+  }
+
+  private initDocumentScrollBlocking() {
+    fromEvent(this.thumbsRef.nativeElement, 'wheel')
+      .pipe(takeUntil<WheelEvent>(this.destroy$))
+      .subscribe(e => {
+        const thumbList = this.thumbsRef.nativeElement;
+
+        if (e.deltaY < 0 && thumbList.scrollTop === 0) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+
+        if (
+          e.deltaY > 0 &&
+          thumbList.offsetHeight + thumbList.scrollTop >= thumbList.scrollHeight
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      });
   }
 
   private initArrowScroll() {
@@ -196,18 +220,13 @@ export class ThumbnailsComponent
       });
   }
 
-  private update = () => {
-    if (this.arrows) {
-      this.updateArrows();
-      this.cd.detectChanges();
-    }
-  };
-
-  private updateArrows() {
+  private updateArrows = () => {
     this.showStartArrow = this.thumbsRef.nativeElement[this.scrollKey] > 0;
 
     this.showEndArrow =
       this.thumbsRef.nativeElement[this.scrollKey] <
       this.thumbListMainAxis - this.thumbContainerMainAxis;
-  }
+
+    this.cd.detectChanges();
+  };
 }

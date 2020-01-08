@@ -1,4 +1,3 @@
-$shadow-color: #424242;
 $arrow-btn-dimension: 30px;
 
 :host {
@@ -119,6 +118,10 @@ li {
   height: 80px;
   margin: 1px;
   position: relative;
+
+  &:not(.selected) {
+    opacity: 0.6;
+  }
 
   img {
     object-fit: cover;

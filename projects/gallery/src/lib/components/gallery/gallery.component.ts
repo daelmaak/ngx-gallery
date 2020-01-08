@@ -45,6 +45,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @Input()
   thumbsArrowSlideByLength: number;
 
+  @Input()
+  thumbsBlockDocumentScroll: boolean;
+
   @Output()
   imageClick = new EventEmitter<Event>();
 
