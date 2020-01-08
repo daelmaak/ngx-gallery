@@ -118,6 +118,7 @@ li {
   height: 80px;
   margin: 1px;
   position: relative;
+  cursor: pointer;
 
   &:not(.selected) {
     opacity: 0.6;
