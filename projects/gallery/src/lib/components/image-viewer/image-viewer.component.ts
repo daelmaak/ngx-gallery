@@ -189,6 +189,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   };
 
   private select(index: number) {
+    if (index < 0) {
+      index = this.items.length - 1;
+    } else if (index >= this.items.length) {
+      index = 0;
+    }
+
     this.selectedItem = index;
     this.selection.emit(index);
     this.center();

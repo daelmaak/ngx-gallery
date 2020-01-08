@@ -116,45 +116,12 @@ export class ThumbnailsComponent
   ngOnInit() {
     this.arrowSlideTime === undefined && (this.arrowSlideTime = 200);
 
-    // NOTE: This stream requests animation frames in a periodical fashion so that it can update scroll position of thumbnails
-    // before each paint. The scroll value is updated proportionally to the time elapsed since the animation's start.
-    // The period of requested frames should match the display's refresh rate as recommended in W3C spec. Essentially, this stream
-    // requests animation frames in the same way as recursive calls to requestAnimationFrame().
-    this.sliding$
-      .pipe(
-        switchMap(totalScroll => {
-          const negative = totalScroll < 0;
-          totalScroll = Math.abs(totalScroll);
-
-          const startTime = Date.now();
-          let currentScroll = 0;
-
-          return of(0, animationFrameScheduler).pipe(
-            repeat(),
-            map(_ => {
-              const suggestedScroll = Math.ceil(
-                ((Date.now() - startTime) / this.arrowSlideTime) * totalScroll
-              );
-              const frameScroll = Math.min(
-                suggestedScroll - currentScroll,
-                totalScroll - currentScroll
-              );
-              currentScroll = suggestedScroll;
-
-              return negative ? -frameScroll : frameScroll;
-            }),
-            takeWhile(_ => currentScroll < totalScroll, true)
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(frameScroll => {
-        this.thumbsRef.nativeElement[this.scrollKey] += frameScroll;
-      });
+    this.initArrowScroll();
 
     fromEvent(this.thumbsRef.nativeElement, 'scroll')
       .pipe(debounceTime(20), takeUntil(this.destroy$))
       .subscribe(this.update);
+
     if (typeof window !== undefined) {
       fromEvent(window, 'resize')
         .pipe(debounceTime(100), takeUntil(this.destroy$))
@@ -188,6 +155,45 @@ export class ThumbnailsComponent
       );
     }
     this.sliding$.next(delta * direction);
+  }
+
+  private initArrowScroll() {
+    // NOTE: This stream requests animation frames in a periodical fashion so that it can update scroll position of thumbnails
+    // before each paint. The scroll value is updated proportionally to the time elapsed since the animation's start.
+    // The period of requested frames should match the display's refresh rate as recommended in W3C spec. Essentially, this stream
+    // requests animation frames in the same way as recursive calls to requestAnimationFrame().
+    // TODO run outside of angular zone
+    this.sliding$
+      .pipe(
+        switchMap(totalScroll => {
+          const negative = totalScroll < 0;
+          totalScroll = Math.abs(totalScroll);
+
+          const startTime = Date.now();
+          let currentScroll = 0;
+
+          return of(0, animationFrameScheduler).pipe(
+            repeat(),
+            map(_ => {
+              const suggestedScroll = Math.ceil(
+                ((Date.now() - startTime) / this.arrowSlideTime) * totalScroll
+              );
+              const frameScroll = Math.min(
+                suggestedScroll - currentScroll,
+                totalScroll - currentScroll
+              );
+              currentScroll = suggestedScroll;
+
+              return negative ? -frameScroll : frameScroll;
+            }),
+            takeWhile(_ => currentScroll < totalScroll, true)
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(frameScroll => {
+        this.thumbsRef.nativeElement[this.scrollKey] += frameScroll;
+      });
   }
 
   private update = () => {
