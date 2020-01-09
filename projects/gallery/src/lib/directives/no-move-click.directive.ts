@@ -10,8 +10,13 @@ export class NoMoveClickDirective implements OnInit, OnDestroy {
    * Threshold for mouse movement extremes after which clicks are blocked
    */
   @Input()
-  ngxNoMoveClick = 10;
+  set ngxNoMoveClick(threshold: number) {
+    if (Number.isInteger(threshold)) {
+      this.threshold = threshold;
+    }
+  }
 
+  private threshold = 10;
   private clickSub: Subscription;
 
   constructor(private elRef: ElementRef<HTMLElement>) {}
@@ -41,9 +46,7 @@ export class NoMoveClickDirective implements OnInit, OnDestroy {
             takeWhile(ev => ev.type !== 'click', true),
             last(),
             filter(
-              _ =>
-                maxDeltaX > this.ngxNoMoveClick ||
-                maxDeltaY > this.ngxNoMoveClick
+              _ => maxDeltaX > this.threshold || maxDeltaY > this.threshold
             )
           );
         })
