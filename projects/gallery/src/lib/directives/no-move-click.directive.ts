@@ -1,37 +1,52 @@
-import { Directive, ElementRef, OnInit, OnDestroy } from '@angular/core';
-import { fromEvent, Subscription } from 'rxjs';
-import {
-  switchMapTo,
-  skip,
-  take,
-  repeat,
-  tap,
-  takeUntil
-} from 'rxjs/operators';
+import { Directive, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { fromEvent, merge, Subscription } from 'rxjs';
+import { filter, last, switchMap, takeWhile, tap } from 'rxjs/operators';
 
 @Directive({
   selector: '[ngxNoMoveClick]'
 })
 export class NoMoveClickDirective implements OnInit, OnDestroy {
+  /**
+   * Threshold for mouse movement extremes after which clicks are blocked
+   */
+  @Input()
+  ngxNoMoveClick = 10;
+
   private clickSub: Subscription;
 
   constructor(private elRef: ElementRef<HTMLElement>) {}
 
   ngOnInit() {
-    this.clickSub = fromEvent(this.elRef.nativeElement, 'mousedown')
+    const el = this.elRef.nativeElement;
+
+    // This stream waits for mousedown, then switches to mousemoves while the mouse is still down.
+    // It then looks what was the maximum delta distance from the mousedown event.
+    // If this delta exceeds configured threshold, the click that follows is cancelled.
+    this.clickSub = fromEvent<MouseEvent>(el, 'mousedown')
       .pipe(
-        tap(console.log),
-        switchMapTo(fromEvent(this.elRef.nativeElement, 'mousemove')),
-        tap(console.log),
-        skip(3),
-        switchMapTo(
-          fromEvent<MouseEvent>(this.elRef.nativeElement, 'click', {
-            capture: true
-          })
-        ),
-        take(1),
-        takeUntil(fromEvent(window, 'click').pipe(tap(console.log))),
-        repeat()
+        switchMap(e => {
+          const startX = e.clientX;
+          const startY = e.clientY;
+          let maxDeltaX = 0;
+          let maxDeltaY = 0;
+
+          return merge(
+            fromEvent<MouseEvent>(el, 'mousemove'),
+            fromEvent<MouseEvent>(el, 'click', { capture: true })
+          ).pipe(
+            tap(ev => {
+              maxDeltaX = Math.max(maxDeltaX, Math.abs(startX - ev.clientX));
+              maxDeltaY = Math.max(maxDeltaY, Math.abs(startY - ev.clientY));
+            }),
+            takeWhile(ev => ev.type !== 'click', true),
+            last(),
+            filter(
+              _ =>
+                maxDeltaX > this.ngxNoMoveClick ||
+                maxDeltaY > this.ngxNoMoveClick
+            )
+          );
+        })
       )
       .subscribe(e => {
         e.preventDefault();
