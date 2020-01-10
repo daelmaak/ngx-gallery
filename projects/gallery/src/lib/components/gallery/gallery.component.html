@@ -5,6 +5,7 @@
   [arrows]="thumbsArrows"
   [arrowSlideTime]="thumbsArrowSlideTime"
   [arrowSlideByLength]="thumbsArrowSlideByLength"
+  [imageFit]="thumbsImageFit"
   [blockDocumentScroll]="thumbsBlockDocumentScroll"
   [scroll]="thumbsScroll"
   (thumbClick)="thumbClick.emit($event)"
@@ -16,6 +17,7 @@
   [items]="items"
   [selectedItem]="selectedItemIndex"
   [arrows]="arrows"
+  [imageFit]="imageFit"
   (imageClick)="imageClick.emit($event)"
   (selection)="selectedItemIndex = $event"
 ></ngx-image-viewer>

@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   EventEmitter,
   HostBinding,
   Input,
@@ -10,9 +9,10 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import { Orientation } from '../../core/orientation';
 import { GalleryItem } from '../../core/gallery-item';
+import { Orientation } from '../../core/orientation';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
+import { ImageFit } from '../../core/image-fit';
 
 @Component({
   selector: 'ngx-gallery',
@@ -31,6 +31,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
+  imageFit: ImageFit;
+
+  @Input()
   thumbsOrientation: Orientation;
 
   @Input()
@@ -47,6 +50,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @Input()
   thumbsBlockDocumentScroll: boolean;
+
+  @Input()
+  thumbsImageFit: ImageFit;
 
   @Output()
   imageClick = new EventEmitter<Event>();

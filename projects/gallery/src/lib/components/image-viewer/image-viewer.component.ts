@@ -22,6 +22,7 @@ import {
   takeWhile
 } from 'rxjs/operators';
 import { GalleryItem } from '../../core/gallery-item';
+import { ImageFit } from '../../core/image-fit';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -39,14 +40,25 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   arrows: boolean;
 
+  @Input()
+  set imageFit(fit: ImageFit) {
+    this.imageStyles = {
+      ...this.imageStyles,
+      backgroundSize: fit || this.imageStyles.backgroundSize
+    };
+  }
+
   @Output()
   imageClick = new EventEmitter<Event>();
 
   @Output()
   selection = new EventEmitter<number>();
 
+  imageStyles = {
+    backgroundSize: 'contain'
+  };
+  imageListStyles: any;
   imagesShown = false;
-  imagesStyles: any = {};
   imagesTransition = false;
 
   private itemWidth: number;
@@ -181,7 +193,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private shiftImages(x: number) {
-    this.imagesStyles = {
+    this.imageListStyles = {
       transform: `translate3D(${x}px, 0px, 0px)`
     };
     this.cd.detectChanges();

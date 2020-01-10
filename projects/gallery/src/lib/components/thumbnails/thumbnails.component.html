@@ -9,7 +9,11 @@
     [class.selected]="i === selectedItem"
     (click)="selection.emit(i); thumbClick.emit($event)"
   >
-    <img [src]="item.thumbSrc || item.src" alt="" />
+    <div
+      class="image"
+      [ngStyle]="imageStyles"
+      [style.backgroundImage]="'url(' + (item.thumbSrc || item.src) + ')'"
+    ></div>
   </li>
 </ul>
 

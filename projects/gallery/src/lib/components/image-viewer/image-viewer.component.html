@@ -3,10 +3,14 @@
   class="images"
   [class.images--hidden]="!imagesShown"
   [class.images--transition]="imagesTransition"
-  [ngStyle]="imagesStyles"
+  [ngStyle]="imageListStyles"
 >
   <li *ngFor="let item of items" (click)="imageClick.emit($event)">
-    <img [src]="item.src" alt="" draggable="false" ondragstart="return false" />
+    <div
+      class="image"
+      [ngStyle]="imageStyles"
+      [style.backgroundImage]="'url(' + item.src + ')'"
+    ></div>
   </li>
 </ul>
 <ngx-chevron-icon *ngIf="arrows" (click)="next()"></ngx-chevron-icon>

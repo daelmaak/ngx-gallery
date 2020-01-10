@@ -25,6 +25,7 @@ import {
 } from 'rxjs/operators';
 import { GalleryItem } from '../../core/gallery-item';
 import { Orientation } from '../../core/orientation';
+import { ImageFit } from '../../core/image-fit';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -53,6 +54,14 @@ export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
   arrowSlideByLength: number;
 
   @Input()
+  set imageFit(fit: ImageFit) {
+    this.imageStyles = {
+      ...this.imageStyles,
+      backgroundSize: fit || this.imageStyles.backgroundSize
+    };
+  }
+
+  @Input()
   blockDocumentScroll: boolean;
 
   @Input()
@@ -68,9 +77,12 @@ export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChild('thumbs', { static: true })
   thumbsRef: ElementRef<HTMLElement>;
 
-  vertical: boolean;
+  imageStyles = {
+    backgroundSize: 'cover'
+  };
   showStartArrow = false;
   showEndArrow = false;
+  vertical: boolean;
 
   private destroy$ = new Subject();
   private sliding$ = new Subject<number>();
