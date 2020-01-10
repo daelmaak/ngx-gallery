@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { GalleryComponent } from '@ngx-galerie/gallery';
+import { GalleryComponent } from 'projects/gallery/src/public-api';
 import { merge } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GalleryDetailConfig } from '../../gallery-detail-config';
