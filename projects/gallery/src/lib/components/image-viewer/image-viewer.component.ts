@@ -10,7 +10,8 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  TemplateRef
 } from '@angular/core';
 import { fromEvent, Subject, Subscription } from 'rxjs';
 import {
@@ -47,6 +48,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       backgroundSize: fit || this.imageStyles.backgroundSize
     };
   }
+
+  @Input()
+  imageTemplate: TemplateRef<any>;
 
   @Input()
   loop: boolean;

@@ -12,7 +12,8 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  TemplateRef
 } from '@angular/core';
 import { fromEvent, of, Subject, animationFrameScheduler } from 'rxjs';
 import {
@@ -67,6 +68,9 @@ export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   @HostBinding('class.scrollable')
   scroll: boolean;
+
+  @Input()
+  thumbTemplate: TemplateRef<any>;
 
   @Output()
   thumbClick = new EventEmitter<Event>();

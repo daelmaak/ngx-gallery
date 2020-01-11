@@ -10,10 +10,19 @@
     (click)="selection.emit(i); thumbClick.emit($event)"
   >
     <div
+      *ngIf="!thumbTemplate; else customTemplate"
       class="image"
       [ngStyle]="imageStyles"
       [style.backgroundImage]="'url(' + (item.thumbSrc || item.src) + ')'"
     ></div>
+    <ng-template #customTemplate>
+      <ng-container
+        *ngTemplateOutlet="
+          thumbTemplate;
+          context: { index: i, selectedIndex: selectedItem, item: item }
+        "
+      ></ng-container>
+    </ng-template>
   </li>
 </ul>
 

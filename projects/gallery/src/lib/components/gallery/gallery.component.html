@@ -8,6 +8,7 @@
   [imageFit]="thumbsImageFit"
   [blockDocumentScroll]="thumbsBlockDocumentScroll"
   [scroll]="thumbsScroll"
+  [thumbTemplate]="thumbTemplate"
   (thumbClick)="thumbClick.emit($event)"
   (selection)="selectedItemIndex = $event"
 ></ngx-thumbnails>
@@ -18,6 +19,7 @@
   [selectedItem]="selectedItemIndex"
   [arrows]="arrows"
   [imageFit]="imageFit"
+  [imageTemplate]="imageTemplate"
   [loop]="loop"
   (imageClick)="imageClick.emit($event)"
   (selection)="selectedItemIndex = $event"

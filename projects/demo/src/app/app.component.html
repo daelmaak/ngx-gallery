@@ -28,8 +28,38 @@
 <ngx-gallery
   class="second"
   [items]="images"
+  [imageTemplate]="itemTemplate2"
   [loop]="false"
+  [thumbTemplate]="thumbTemplate2"
   [thumbsBlockDocumentScroll]="true"
   thumbsOrientation="left"
   [thumbsArrows]="false"
 ></ngx-gallery>
+
+<ng-template
+  #itemTemplate2
+  let-index="index"
+  let-selectedIndex="selectedIndex"
+  let-item="item"
+>
+  <img
+    class="image-2"
+    [src]="item.src"
+    draggable="false"
+    ondragstart="return false"
+  />
+</ng-template>
+
+<ng-template
+  #thumbTemplate2
+  let-index="index"
+  let-selectedIndex="selectedIndex"
+  let-item="item"
+>
+  <img
+    class="thumb-2"
+    [src]="item.thumbSrc || item.src"
+    draggable="false"
+    ondragstart="return false"
+  />
+</ng-template>

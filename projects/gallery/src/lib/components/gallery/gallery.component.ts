@@ -7,7 +7,8 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild
+  ViewChild,
+  TemplateRef
 } from '@angular/core';
 import { GalleryItem } from '../../core/gallery-item';
 import { Orientation } from '../../core/orientation';
@@ -34,7 +35,13 @@ export class GalleryComponent implements OnInit, OnDestroy {
   imageFit: ImageFit;
 
   @Input()
+  imageTemplate: TemplateRef<any>;
+
+  @Input()
   loop: boolean;
+
+  @Input()
+  thumbTemplate: TemplateRef<any>;
 
   @Input()
   thumbsOrientation: Orientation;
