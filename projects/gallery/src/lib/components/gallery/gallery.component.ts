@@ -34,6 +34,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   imageFit: ImageFit;
 
   @Input()
+  loop: boolean;
+
+  @Input()
   thumbsOrientation: Orientation;
 
   @Input()
@@ -77,6 +80,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.thumbsArrows === undefined && (this.thumbsArrows = true);
     this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
     this.arrows === undefined && (this.arrows = true);
+    this.loop === undefined && (this.loop = true);
   }
 
   ngOnDestroy() {}

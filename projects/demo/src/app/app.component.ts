@@ -72,7 +72,8 @@ export class AppComponent implements OnInit {
       .open(index, {
         thumbsOrientation: 'left',
         hasBackdrop: true,
-        panelClass: ['gallery-detail-third', 'fullscreen']
+        panelClass: ['gallery-detail-third', 'fullscreen'],
+        loop: false
       })
       .load(this.images);
   }

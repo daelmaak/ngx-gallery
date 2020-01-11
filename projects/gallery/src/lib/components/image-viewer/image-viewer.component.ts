@@ -48,6 +48,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     };
   }
 
+  @Input()
+  loop: boolean;
+
   @Output()
   imageClick = new EventEmitter<Event>();
 
@@ -64,6 +67,16 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   private itemWidth: number;
   private imagesHammerSub: Subscription;
   private resizeSub: Subscription;
+
+  get showPrevArrow() {
+    return this.arrows && (this.selectedItem > 0 || this.loop);
+  }
+
+  get showNextArrow() {
+    return (
+      this.arrows && (this.selectedItem < this.items.length - 1 || this.loop)
+    );
+  }
 
   constructor(
     private zone: NgZone,
@@ -177,6 +190,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   };
 
   private select(index: number) {
+    if (!this.loop && (index < 0 || index >= this.items.length)) {
+      this.center();
+      return;
+    }
+
     if (index < 0) {
       index = this.items.length - 1;
     } else if (index >= this.items.length) {

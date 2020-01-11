@@ -51,12 +51,12 @@ ngx-chevron-icon {
     opacity: 1;
   }
 
-  &:first-of-type {
+  &.prev {
     left: 10px;
     transform: rotate(180deg) translateY(50%);
   }
 
-  &:last-of-type {
+  &.next {
     right: 10px;
   }
 

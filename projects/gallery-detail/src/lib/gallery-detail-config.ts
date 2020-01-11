@@ -9,6 +9,7 @@ export interface GalleryDetailConfig {
   keyboardNavigation?: boolean;
   // gallery config
   arrows?: boolean;
+  loop?: boolean;
   thumbsOrientation?: Orientation;
   thumbsScroll?: boolean;
   thumbsArrows?: boolean;

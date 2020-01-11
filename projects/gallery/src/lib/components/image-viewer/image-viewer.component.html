@@ -1,4 +1,8 @@
-<ngx-chevron-icon *ngIf="arrows" (click)="prev()"></ngx-chevron-icon>
+<ngx-chevron-icon
+  *ngIf="showPrevArrow"
+  class="prev"
+  (click)="prev()"
+></ngx-chevron-icon>
 <ul
   class="images"
   [class.images--hidden]="!imagesShown"
@@ -13,4 +17,8 @@
     ></div>
   </li>
 </ul>
-<ngx-chevron-icon *ngIf="arrows" (click)="next()"></ngx-chevron-icon>
+<ngx-chevron-icon
+  *ngIf="showNextArrow"
+  class="next"
+  (click)="next()"
+></ngx-chevron-icon>
