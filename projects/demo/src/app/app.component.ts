@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { GalleryItem } from 'projects/gallery/src/public-api';
 import {
   GalleryDetailRef,
@@ -13,6 +13,9 @@ import {
 export class AppComponent implements OnInit {
   images: GalleryItem[];
   galleryDetailRef: GalleryDetailRef;
+
+  @ViewChild('detailImageTemplate2', { static: false })
+  detailImageTemplate2: TemplateRef<any>;
 
   constructor(private galleryDetail: GalleryDetailService) {}
 
@@ -59,10 +62,17 @@ export class AppComponent implements OnInit {
     this.galleryDetail
       .open(index, {
         thumbsOrientation: 'bottom',
-        hasBackdrop: true,
         panelClass: ['gallery-detail-first'],
         documentScroll: true,
         thumbsArrowSlideTime: 150
+      })
+      .load(this.images);
+  }
+
+  openSecond() {
+    this.galleryDetail
+      .open(0, {
+        imageTemplate: this.detailImageTemplate2
       })
       .load(this.images);
   }
@@ -71,7 +81,6 @@ export class AppComponent implements OnInit {
     this.galleryDetail
       .open(index, {
         thumbsOrientation: 'left',
-        hasBackdrop: true,
         panelClass: ['gallery-detail-third', 'fullscreen'],
         loop: false
       })
