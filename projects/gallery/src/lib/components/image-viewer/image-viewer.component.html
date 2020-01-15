@@ -3,6 +3,7 @@
   class="prev"
   (click)="prev()"
 ></ngx-chevron-icon>
+
 <ul
   class="images"
   [class.images--hidden]="!imagesShown"
@@ -29,8 +30,14 @@
     </ng-template>
   </li>
 </ul>
+
 <ngx-chevron-icon
   *ngIf="showNextArrow"
   class="next"
   (click)="next()"
 ></ngx-chevron-icon>
+
+<ngx-image-counter
+  [itemQuantity]="items?.length"
+  [selectedItem]="selectedItem"
+></ngx-image-counter>

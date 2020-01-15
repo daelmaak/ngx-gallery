@@ -5,6 +5,7 @@ import { GalleryComponent } from './components/gallery/gallery.component';
 import { ImageViewerComponent } from './components/image-viewer/image-viewer.component';
 import { ChevronIconComponent } from './components/icons/chevron/chevron-icon.component';
 import { NoMoveClickDirective } from './directives/no-move-click.directive';
+import { ImageCounterComponent } from './components/image-counter/image-counter.component';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { NoMoveClickDirective } from './directives/no-move-click.directive';
     ThumbnailsComponent,
     ImageViewerComponent,
     ChevronIconComponent,
-    NoMoveClickDirective
+    NoMoveClickDirective,
+    ImageCounterComponent
   ],
   imports: [CommonModule],
   exports: [GalleryComponent]

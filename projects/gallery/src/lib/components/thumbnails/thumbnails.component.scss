@@ -120,6 +120,10 @@ $arrow-btn-dimension: 30px;
   &:not(.selected) {
     opacity: 0.6;
   }
+
+  &:hover {
+    opacity: 1;
+  }
 }
 
 .image {
