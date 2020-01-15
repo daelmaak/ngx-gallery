@@ -1,5 +1,5 @@
-import { Orientation } from 'projects/gallery/src/public-api';
 import { TemplateRef } from '@angular/core';
+import { Orientation, ImageFit } from 'projects/gallery/src/public-api';
 
 export interface GalleryDetailConfig {
   // TODO should the overlay and gallery config be split?
@@ -10,6 +10,8 @@ export interface GalleryDetailConfig {
   keyboardNavigation?: boolean;
   // gallery config
   arrows?: boolean;
+  imageCounter?: boolean;
+  imageFit?: ImageFit;
   imageTemplate?: TemplateRef<any>;
   loop?: boolean;
   thumbTemplate?: TemplateRef<any>;

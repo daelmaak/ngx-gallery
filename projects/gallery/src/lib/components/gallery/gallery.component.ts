@@ -32,6 +32,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
+  imageCounter: boolean;
+
+  @Input()
   imageFit: ImageFit;
 
   @Input()

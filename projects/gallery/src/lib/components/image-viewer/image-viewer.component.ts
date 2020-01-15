@@ -42,6 +42,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
+  imageCounter: boolean;
+
+  @Input()
   set imageFit(fit: ImageFit) {
     this.imageStyles = {
       ...this.imageStyles,
@@ -95,6 +98,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.imageCounter === undefined && (this.imageCounter = true);
+
     if (typeof window !== 'undefined') {
       this.resizeSub = fromEvent(window, 'resize').subscribe(this.onResize);
     }

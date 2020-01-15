@@ -20,6 +20,8 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
       [selectedItemIndex]="selectedItemIndex || 0"
       [items]="(galleryDetailRef?.state | async)?.items"
       [arrows]="config.arrows"
+      [imageCounter]="config.imageCounter"
+      [imageFit]="config.imageFit"
       [imageTemplate]="config.imageTemplate"
       [loop]="config.loop"
       [thumbTemplate]="config.thumbTemplate"
