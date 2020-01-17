@@ -80,7 +80,7 @@ export class AppComponent implements OnInit {
   openThird(index: number) {
     this.galleryDetail
       .open(index, {
-        thumbsOrientation: 'left',
+        thumbsOrientation: 'bottom',
         panelClass: ['gallery-detail-third', 'fullscreen'],
         loop: false
       })
