@@ -1,13 +1,18 @@
 :host {
   display: inline-block;
   position: fixed;
-  top: 25px;
-  right: 25px;
+  top: 20px;
+  right: 20px;
   z-index: 100;
   cursor: pointer;
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
 
   svg {
-    $svg-dimension: 30px;
+    $svg-dimension: 26px;
     width: $svg-dimension;
     height: $svg-dimension;
     fill: white;
