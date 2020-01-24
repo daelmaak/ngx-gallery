@@ -5,10 +5,10 @@
 ></ngx-chevron-icon>
 
 <ul
+  #imageList
   class="images"
   [class.images--hidden]="!imagesShown"
   [class.images--transition]="imagesTransition"
-  [ngStyle]="imageListStyles"
 >
   <li
     *ngFor="let item of items; let i = index"
