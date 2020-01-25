@@ -10,7 +10,7 @@
   [scroll]="thumbsScroll"
   [thumbTemplate]="thumbTemplate"
   (thumbClick)="thumbClick.emit($event)"
-  (selection)="selectedItemIndex = $event"
+  (selection)="selectedItemIndex = $event; select($event)"
 ></ngx-thumbnails>
 
 <ngx-image-viewer

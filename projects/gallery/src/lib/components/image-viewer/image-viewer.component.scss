@@ -11,15 +11,24 @@
   height: 100%;
   will-change: transform;
   overflow: auto;
-  scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
+
+  // hide the scrollbar
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+
+  &::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+  }
 
   &--hidden li {
     opacity: 0;
   }
 
   &--transition {
-    transition: transform 0.3s;
+    scroll-behavior: smooth;
   }
 
   li {
@@ -29,6 +38,11 @@
     width: 100%;
     scroll-snap-align: center;
     scroll-snap-stop: always;
+  }
+
+  .border-item {
+    // TODO inline it so that JS can change it
+    width: 50px;
   }
 }
 

@@ -5,17 +5,21 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  NgZone,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { fromEvent, Subject } from 'rxjs';
-import { takeUntil, debounceTime } from 'rxjs/operators';
+import { animationFrameScheduler, fromEvent, of, Subject } from 'rxjs';
+import {
+  debounceTime,
+  map,
+  observeOn,
+  repeat,
+  takeUntil,
+  takeWhile
+} from 'rxjs/operators';
 import { GalleryItem } from '../../core/gallery-item';
 import { ImageFit } from '../../core/image-fit';
 
@@ -25,15 +29,15 @@ import { ImageFit } from '../../core/image-fit';
   styleUrls: ['./image-viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
+export class ImageViewerComponent implements OnInit, OnDestroy {
   @Input()
   items: GalleryItem[];
 
   @Input()
-  selectedItem: number;
+  arrows: boolean;
 
   @Input()
-  arrows: boolean;
+  selectedItem: number;
 
   @Input()
   imageCounter: boolean;
@@ -58,9 +62,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Output()
   selection = new EventEmitter<number>();
 
-  @ViewChild('imageList', { static: true }) imageListEl: ElementRef<
-    HTMLElement
-  >;
+  @ViewChild('imageList', { static: true }) imageList: ElementRef<HTMLElement>;
 
   imageStyles = {
     backgroundSize: 'contain'
@@ -70,6 +72,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private destroy$ = new Subject();
   private itemWidth: number;
+  private smoothScrollBehaviorSupported =
+    typeof CSS !== 'undefined' && CSS.supports('scroll-behavior: smooth');
 
   get showPrevArrow() {
     return this.arrows && (this.selectedItem > 0 || this.loop);
@@ -82,32 +86,39 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   constructor(
-    private zone: NgZone,
     private elRef: ElementRef<HTMLElement>,
     private cd: ChangeDetectorRef
   ) {}
 
-  ngOnChanges({ selectedItem }: SimpleChanges) {
-    if (selectedItem && !selectedItem.firstChange) {
-      this.center();
-    }
-  }
-
   ngOnInit() {
     this.imageCounter === undefined && (this.imageCounter = true);
 
-    // TODO mitigate lack of smooth scroll-behavior in Safari
-
     // determining selected items upon native scroll in the image list
-    fromEvent(this.imageListEl.nativeElement, 'scroll')
-      .pipe(debounceTime(20), takeUntil(this.destroy$))
+    fromEvent(this.imageList.nativeElement, 'scroll')
+      .pipe(
+        debounceTime(50),
+        takeUntil(this.destroy$),
+        observeOn(animationFrameScheduler)
+      )
       .subscribe(_ => {
-        this.selectedItem = Math.floor(
-          this.imageListEl.nativeElement.scrollLeft / this.itemWidth
-        );
-        if (this.selectedItem < 0) {
+        const scrollLeft = this.imageList.nativeElement.scrollLeft;
+
+        if (this.loop && scrollLeft < 50) {
+          this.selectedItem = this.items.length - 1;
+          this.center();
+        } else if (
+          this.loop &&
+          scrollLeft > (this.items.length - 1) * this.itemWidth + 50
+        ) {
           this.selectedItem = 0;
+          this.center();
+        } else {
+          this.selectedItem = Math.floor(
+            (this.loop ? scrollLeft - 50 : scrollLeft) / this.itemWidth
+          );
         }
+        this.selection.emit(this.selectedItem);
+
         this.cd.detectChanges();
       });
 
@@ -116,17 +127,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe(this.onResize);
     }
-    requestAnimationFrame(() => {
-      this.onResize();
-      // Show images only after the image list is centered
-      this.imagesShown = true;
-      // NOTE: detect new translate3D of the image list and the unveiling of the images...
-      this.cd.detectChanges();
 
-      // ...but disregard the image transition being switched on for now, so that it doesn't trigger
-      // immediately after component creation. This change will be picked up later.
-      this.imagesTransition = true;
-    });
+    this.onResize();
   }
 
   ngOnDestroy() {
@@ -142,12 +144,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.select(this.selectedItem + 1);
   }
 
-  private onResize = () => {
-    this.itemWidth = this.elRef.nativeElement.offsetWidth;
-    this.center();
-  };
-
-  private select(index: number) {
+  select(index: number) {
     if (!this.loop && (index < 0 || index >= this.items.length)) {
       this.center();
       return;
@@ -165,10 +162,69 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private center() {
-    this.shiftImages(this.selectedItem * this.itemWidth);
+    let shift = this.selectedItem * this.itemWidth;
+
+    if (this.loop) {
+      shift += 50;
+    }
+
+    this.shiftImages(shift);
   }
 
+  private onResize = () => {
+    // TODO comments on why requestAnimationFrame twice
+    // otherwise gallery doesn't work correctly on phone landscape - portrait mode switching
+    requestAnimationFrame(() => {
+      this.imagesTransition = false;
+      this.cd.detectChanges();
+
+      requestAnimationFrame(() => {
+        this.itemWidth = this.elRef.nativeElement.offsetWidth;
+        this.center();
+        this.imagesShown = true;
+        this.imagesTransition = true;
+        this.cd.detectChanges();
+      });
+    });
+  };
+
   private shiftImages(x: number) {
-    this.elRef.nativeElement.querySelector('ul').scrollLeft = x;
+    const imageListEl = this.imageList.nativeElement;
+
+    if (!this.smoothScrollBehaviorSupported && this.imagesTransition) {
+      this.shiftImagesManually(x);
+    } else {
+      imageListEl.scrollLeft = x;
+    }
+  }
+
+  private shiftImagesManually(x: number) {
+    const imageListEl = this.imageList.nativeElement;
+    const startTime = Date.now();
+    const timeout = 800;
+    const startScroll = imageListEl.scrollLeft;
+    const scrollDelta = Math.abs(startScroll - x);
+    const negative = startScroll > x;
+
+    of(0, animationFrameScheduler)
+      .pipe(
+        repeat(),
+        map(_ => {
+          const timeEllapsedRatio = (Date.now() - startTime) / timeout;
+          const suggestedScroll =
+            startScroll +
+            (negative
+              ? -scrollDelta * timeEllapsedRatio
+              : scrollDelta * timeEllapsedRatio);
+
+          return negative
+            ? Math.max(x, Math.ceil(suggestedScroll))
+            : Math.min(x, Math.ceil(suggestedScroll));
+        }),
+        takeWhile(_ => timeout > Date.now() - startTime, true)
+      )
+      .subscribe(scroll => {
+        imageListEl.scrollLeft = scroll;
+      });
   }
 }

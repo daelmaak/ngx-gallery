@@ -102,4 +102,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
   prev() {
     this.imageViewer.prev();
   }
+
+  select(index: number) {
+    this.imageViewer.select(index);
+  }
 }

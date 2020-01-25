@@ -10,6 +10,7 @@
   [class.images--hidden]="!imagesShown"
   [class.images--transition]="imagesTransition"
 >
+  <li *ngIf="loop" class="border-item"></li>
   <li
     *ngFor="let item of items; let i = index"
     (click)="imageClick.emit($event)"
@@ -29,6 +30,7 @@
       ></ng-container>
     </ng-template>
   </li>
+  <li *ngIf="loop" class="border-item"></li>
 </ul>
 
 <ngx-chevron-icon
