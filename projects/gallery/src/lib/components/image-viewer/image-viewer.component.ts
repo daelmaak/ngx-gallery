@@ -15,8 +15,9 @@ import { animationFrameScheduler, fromEvent, of, Subject } from 'rxjs';
 import {
   debounceTime,
   map,
-  observeOn,
   repeat,
+  switchMapTo,
+  take,
   takeUntil,
   takeWhile
 } from 'rxjs/operators';
@@ -93,33 +94,42 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.imageCounter === undefined && (this.imageCounter = true);
 
+    if (this.loop) {
+      // monitoring if scrolled to the the borders, if yes, loop
+      const el = this.elRef.nativeElement;
+
+      fromEvent<TouchEvent>(el, 'touchstart')
+        .pipe(
+          switchMapTo(fromEvent(el, 'touchmove').pipe(take(1))),
+          switchMapTo(fromEvent(el, 'touchend')),
+          takeUntil(this.destroy$)
+        )
+        .subscribe(_ => {
+          const scrollLeft = this.imageList.nativeElement.scrollLeft;
+
+          if (scrollLeft < 50) {
+            this.selectedItem = this.items.length - 1;
+            this.center();
+          } else if (
+            scrollLeft >
+            (this.items.length - 1) * this.itemWidth + 50
+          ) {
+            this.selectedItem = 0;
+            this.center();
+          }
+        });
+    }
+
     // determining selected items upon native scroll in the image list
     fromEvent(this.imageList.nativeElement, 'scroll')
-      .pipe(
-        debounceTime(50),
-        takeUntil(this.destroy$),
-        observeOn(animationFrameScheduler)
-      )
+      .pipe(debounceTime(100), takeUntil(this.destroy$))
       .subscribe(_ => {
         const scrollLeft = this.imageList.nativeElement.scrollLeft;
+        const selectedPrecise =
+          (this.loop ? scrollLeft - 50 : scrollLeft) / this.itemWidth;
 
-        if (this.loop && scrollLeft < 50) {
-          this.selectedItem = this.items.length - 1;
-          this.center();
-        } else if (
-          this.loop &&
-          scrollLeft > (this.items.length - 1) * this.itemWidth + 50
-        ) {
-          this.selectedItem = 0;
-          this.center();
-        } else {
-          this.selectedItem = Math.floor(
-            (this.loop ? scrollLeft - 50 : scrollLeft) / this.itemWidth
-          );
-        }
+        this.selectedItem = Math.round(selectedPrecise);
         this.selection.emit(this.selectedItem);
-
-        this.cd.detectChanges();
       });
 
     if (typeof window !== 'undefined') {
@@ -137,14 +147,14 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   }
 
   prev() {
-    this.select(this.selectedItem - 1);
+    this.select(this.selectedItem - 1, 250);
   }
 
   next() {
-    this.select(this.selectedItem + 1);
+    this.select(this.selectedItem + 1, 250);
   }
 
-  select(index: number) {
+  select(index: number, desiredSpeed?: number) {
     if (!this.loop && (index < 0 || index >= this.items.length)) {
       this.center();
       return;
@@ -152,23 +162,23 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
 
     if (index < 0) {
       index = this.items.length - 1;
+      desiredSpeed = 900;
     } else if (index >= this.items.length) {
       index = 0;
+      desiredSpeed = 900;
     }
-
     this.selectedItem = index;
     this.selection.emit(index);
-    this.center();
+    this.center(desiredSpeed);
   }
 
-  private center() {
+  private center(desiredSpeed?: number) {
     let shift = this.selectedItem * this.itemWidth;
 
     if (this.loop) {
       shift += 50;
     }
-
-    this.shiftImages(shift);
+    this.shiftImages(shift, desiredSpeed);
   }
 
   private onResize = () => {
@@ -188,23 +198,23 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     });
   };
 
-  private shiftImages(x: number) {
+  private shiftImages(x: number, desiredSpeed?: number) {
     const imageListEl = this.imageList.nativeElement;
 
     if (!this.smoothScrollBehaviorSupported && this.imagesTransition) {
-      this.shiftImagesManually(x);
+      this.shiftImagesManually(x, desiredSpeed);
     } else {
       imageListEl.scrollLeft = x;
     }
   }
 
-  private shiftImagesManually(x: number) {
+  private shiftImagesManually(x: number, desiredSpeed?: number) {
     const imageListEl = this.imageList.nativeElement;
     const startTime = Date.now();
-    const timeout = 800;
     const startScroll = imageListEl.scrollLeft;
     const scrollDelta = Math.abs(startScroll - x);
     const negative = startScroll > x;
+    const timeout = desiredSpeed != null ? desiredSpeed : 900;
 
     of(0, animationFrameScheduler)
       .pipe(
