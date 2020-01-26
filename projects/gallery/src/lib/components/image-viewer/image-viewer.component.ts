@@ -15,15 +15,14 @@ import {
   animationFrameScheduler,
   BehaviorSubject,
   fromEvent,
+  interval,
   Observable,
-  of,
   Subject
 } from 'rxjs';
 import {
   debounceTime,
   filter,
   map,
-  repeat,
   startWith,
   switchMapTo,
   take,
@@ -269,13 +268,12 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     const scrollDelta = Math.abs(startScroll - x);
     const negative = startScroll > x;
     let timeout =
-      200 + Math.floor((scrollDelta - this.itemWidth) / this.itemWidth) * 100;
+      300 + Math.floor((scrollDelta - this.itemWidth) / this.itemWidth) * 100;
 
     timeout = Math.min(timeout, 1200);
 
-    of(0, animationFrameScheduler)
+    interval(0, animationFrameScheduler)
       .pipe(
-        repeat(),
         map(_ => {
           const timeEllapsedRatio = (Date.now() - startTime) / timeout;
           const suggestedScroll =
