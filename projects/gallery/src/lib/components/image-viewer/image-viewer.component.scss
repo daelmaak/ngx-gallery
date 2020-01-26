@@ -10,19 +10,34 @@
   width: 100%;
   height: 100%;
   will-change: transform;
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+
+  // hide the scrollbar
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+
+  &::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+  }
 
   &--hidden li {
     opacity: 0;
   }
 
   &--transition {
-    transition: transform 0.3s;
+    scroll-behavior: smooth;
   }
 
   li {
     display: flex;
     align-items: center;
-    flex: 1 0 100%;
+    flex: none;
+    width: 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always; // prevents from scrolling by too many items on Android
   }
 }
 
@@ -50,7 +65,7 @@ ngx-chevron-icon {
   top: 50%;
   transform: translateY(-50%);
   z-index: 100;
-  padding: 5px;
+  padding: 15px 6px;
   cursor: pointer;
   opacity: 0.6;
 

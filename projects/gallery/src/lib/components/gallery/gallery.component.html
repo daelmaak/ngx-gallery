@@ -1,6 +1,6 @@
 <ngx-thumbnails
   [items]="items"
-  [selectedItem]="selectedItemIndex"
+  [selectedItem]="selectedItem"
   [orientation]="thumbsOrientation"
   [arrows]="thumbsArrows"
   [arrowSlideTime]="thumbsArrowSlideTime"
@@ -10,18 +10,18 @@
   [scroll]="thumbsScroll"
   [thumbTemplate]="thumbTemplate"
   (thumbClick)="thumbClick.emit($event)"
-  (selection)="selectedItemIndex = $event"
+  (selection)="selectedItem = $event; select($event)"
 ></ngx-thumbnails>
 
 <ngx-image-viewer
   ngxNoMoveClick
   [items]="items"
-  [selectedItem]="selectedItemIndex"
+  [selectedItem]="selectedItem"
   [arrows]="arrows"
   [imageCounter]="imageCounter"
   [imageFit]="imageFit"
   [imageTemplate]="imageTemplate"
   [loop]="loop"
   (imageClick)="imageClick.emit($event)"
-  (selection)="selectedItemIndex = $event"
+  (selection)="selectedItem = $event"
 ></ngx-image-viewer>

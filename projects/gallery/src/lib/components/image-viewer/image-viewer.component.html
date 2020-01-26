@@ -5,11 +5,12 @@
 ></ngx-chevron-icon>
 
 <ul
+  #imageList
   class="images"
   [class.images--hidden]="!imagesShown"
   [class.images--transition]="imagesTransition"
-  [ngStyle]="imageListStyles"
 >
+  <li *ngIf="loop" class="fringe-item" [style.width.px]="fringeItemWidth"></li>
   <li
     *ngFor="let item of items; let i = index"
     (click)="imageClick.emit($event)"
@@ -17,7 +18,7 @@
     <div
       *ngIf="!imageTemplate; else customTemplate"
       class="image"
-      [ngStyle]="imageStyles"
+      [style.backgroundSize]="imageFit"
       [style.backgroundImage]="'url(' + item.src + ')'"
     ></div>
     <ng-template #customTemplate>
@@ -29,6 +30,7 @@
       ></ng-container>
     </ng-template>
   </li>
+  <li *ngIf="loop" class="fringe-item" [style.width.px]="fringeItemWidth"></li>
 </ul>
 
 <ngx-chevron-icon

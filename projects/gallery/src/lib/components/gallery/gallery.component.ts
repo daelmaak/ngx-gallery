@@ -26,7 +26,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   items: GalleryItem[];
 
   @Input()
-  selectedItemIndex = 0;
+  selectedItem = 0;
 
   @Input()
   arrows: boolean;
@@ -101,5 +101,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   prev() {
     this.imageViewer.prev();
+  }
+
+  select(index: number) {
+    this.imageViewer.select(index);
   }
 }

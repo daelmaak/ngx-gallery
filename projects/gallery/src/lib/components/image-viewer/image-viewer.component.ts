@@ -5,22 +5,30 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  NgZone,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
-  TemplateRef
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
-import { fromEvent, Subject, Subscription } from 'rxjs';
 import {
+  animationFrameScheduler,
+  BehaviorSubject,
+  fromEvent,
+  interval,
+  Observable,
+  Subject
+} from 'rxjs';
+import {
+  debounceTime,
   filter,
-  repeat,
-  skip,
-  switchMap,
+  map,
+  startWith,
+  switchMapTo,
   take,
-  takeWhile
+  takeUntil,
+  takeWhile,
+  tap
 } from 'rxjs/operators';
 import { GalleryItem } from '../../core/gallery-item';
 import { ImageFit } from '../../core/image-fit';
@@ -31,26 +39,21 @@ import { ImageFit } from '../../core/image-fit';
   styleUrls: ['./image-viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
+export class ImageViewerComponent implements OnInit, OnDestroy {
   @Input()
   items: GalleryItem[];
-
-  @Input()
-  selectedItem: number;
 
   @Input()
   arrows: boolean;
 
   @Input()
+  selectedItem: number;
+
+  @Input()
   imageCounter: boolean;
 
   @Input()
-  set imageFit(fit: ImageFit) {
-    this.imageStyles = {
-      ...this.imageStyles,
-      backgroundSize: fit || this.imageStyles.backgroundSize
-    };
-  }
+  imageFit: ImageFit;
 
   @Input()
   imageTemplate: TemplateRef<any>;
@@ -64,16 +67,19 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Output()
   selection = new EventEmitter<number>();
 
-  imageStyles = {
-    backgroundSize: 'contain'
-  };
-  imageListStyles: any;
+  @ViewChild('imageList', { static: true }) imageListRef: ElementRef<
+    HTMLElement
+  >;
+
+  fringeItemWidth = 50;
   imagesShown = false;
   imagesTransition = false;
 
+  private scrolling$ = new BehaviorSubject(false);
+  private destroy$ = new Subject();
   private itemWidth: number;
-  private imagesHammerSub: Subscription;
-  private resizeSub: Subscription;
+  private smoothScrollBehaviorSupported =
+    typeof CSS !== 'undefined' && CSS.supports('scroll-behavior: smooth');
 
   get showPrevArrow() {
     return this.arrows && (this.selectedItem > 0 || this.loop);
@@ -86,119 +92,41 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   constructor(
-    private zone: NgZone,
-    private elRef: ElementRef,
+    private hostRef: ElementRef<HTMLElement>,
     private cd: ChangeDetectorRef
   ) {}
 
-  ngOnChanges({ selectedItem }: SimpleChanges) {
-    if (selectedItem && !selectedItem.firstChange) {
-      this.center();
-    }
-  }
-
   ngOnInit() {
     this.imageCounter === undefined && (this.imageCounter = true);
+    this.imageFit == null && (this.imageFit = 'contain');
 
     if (typeof window !== 'undefined') {
-      this.resizeSub = fromEvent(window, 'resize').subscribe(this.onResize);
+      fromEvent(window, 'resize')
+        .pipe(startWith(null), takeUntil(this.destroy$))
+        .subscribe(this.onResize);
     }
-    requestAnimationFrame(() => {
-      this.onResize();
-      // Show images only after the image list is centered
-      this.imagesShown = true;
-      // NOTE: detect new translate3D of the image list and the unveiling of the images...
-      this.cd.detectChanges();
 
-      // ...but disregard the image transition being switched on for now, so that it doesn't trigger
-      // immediately after component creation. This change will be picked up later.
-      this.imagesTransition = true;
-    });
-
-    const direction = Hammer.DIRECTION_HORIZONTAL;
-
-    if (typeof Hammer !== 'undefined') {
-      const hammer = new Hammer(this.elRef.nativeElement);
-      hammer.get('pan').set({ direction, threshold: 5 });
-
-      this.zone.runOutsideAngular(() => {
-        const hammerInput$ = new Subject<HammerInput>();
-        hammer.on('pan', (e: HammerInput) => hammerInput$.next(e));
-
-        // This solves problem with Hammerjs, where although direction HORIZONTAL set and user touch-scrolls vertically,
-        // Hammer still emits like 5 events which can shift images to side.
-        // This code takes second event, which already knows the direction, and based on it determines, whether to accept the following
-        // events - because the whole touch movement is horizontal, or ignore them - because it is vertical
-        // Once a final event comes (touch movement is complete), the stream is restarted
-        this.imagesHammerSub = hammerInput$
-          .pipe(
-            skip(1),
-            take(1),
-            // if horizontal, accept all events, otherwise take only the final event
-            switchMap(e =>
-              e.direction & Hammer.DIRECTION_HORIZONTAL ||
-              e.offsetDirection & Hammer.DIRECTION_HORIZONTAL
-                ? hammerInput$
-                : hammerInput$.pipe(filter(ev => ev.isFinal))
-            ),
-            // complete the stream once the final event occurs, but still emit it
-            takeWhile(e => !e.isFinal, true),
-            repeat()
-          )
-          .subscribe(e => {
-            this.onPan(e);
-            if (e.isFinal) {
-              this.onPanEnd(e);
-            }
-          });
-      });
+    if (this.loop) {
+      this.initFringeLooping();
     }
+
+    this.initOnScrollItemSelection();
   }
 
   ngOnDestroy() {
-    this.imagesHammerSub && this.imagesHammerSub.unsubscribe();
-    this.resizeSub && this.resizeSub.unsubscribe();
+    this.destroy$.next(null);
+    this.destroy$.complete();
   }
 
-  onPan = (e: HammerInput) => {
-    if (e.eventType & Hammer.INPUT_CANCEL) {
-      return;
-    }
-
-    this.imagesTransition = false;
-    this.shiftImages(e.deltaX + -this.selectedItem * this.itemWidth);
-  };
-
-  onPanEnd = (e: HammerInput) => {
-    this.imagesTransition = true;
-
-    if (e.eventType & Hammer.INPUT_CANCEL) {
-      this.center();
-    } else if (
-      Math.abs(e.deltaX) > Math.abs(this.itemWidth / 3) ||
-      Math.abs(e.velocityX) > 0.3
-    ) {
-      e.deltaX > 0 ? this.prev() : this.next();
-    } else {
-      // no item to be selected, center the current
-      this.center();
-    }
-  };
-
   prev() {
-    this.select(this.selectedItem - 1);
+    this.afterScroll().subscribe(_ => this.select(this.selectedItem - 1));
   }
 
   next() {
-    this.select(this.selectedItem + 1);
+    this.afterScroll().subscribe(_ => this.select(this.selectedItem + 1));
   }
 
-  private onResize = () => {
-    this.itemWidth = this.elRef.nativeElement.offsetWidth;
-    this.center();
-  };
-
-  private select(index: number) {
+  select(index: number) {
     if (!this.loop && (index < 0 || index >= this.items.length)) {
       this.center();
       return;
@@ -210,19 +138,158 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       index = 0;
     }
 
-    this.selectedItem = index;
-    this.selection.emit(index);
-    this.center();
+    this.afterScroll().subscribe(_ => {
+      this.selectedItem = index;
+      this.selection.emit(index);
+      this.center();
+    });
+  }
+
+  private afterScroll(): Observable<any> {
+    return this.scrolling$.pipe(
+      filter(scrolling => !scrolling),
+      take(1)
+    );
   }
 
   private center() {
-    this.shiftImages(-this.selectedItem * this.itemWidth);
+    let shift = this.selectedItem * this.itemWidth;
+
+    if (this.loop) {
+      shift += this.fringeItemWidth;
+    }
+    this.shiftImages(shift);
   }
 
+  private getSelectedItemFromScrollPosition(): number {
+    const scrollLeft = this.imageListRef.nativeElement.scrollLeft;
+    const selectedPrecise =
+      (this.loop ? scrollLeft - this.fringeItemWidth : scrollLeft) /
+      this.itemWidth;
+
+    return Math.round(selectedPrecise);
+  }
+
+  /**
+   * Inits monitor of user scrolling to the fringes of the image list.
+   * If scroll to the fringe detected, image list will loop
+   */
+  private initFringeLooping() {
+    fromEvent(this.hostRef.nativeElement, 'touchstart')
+      .pipe(
+        switchMapTo(
+          fromEvent(this.hostRef.nativeElement, 'touchmove').pipe(take(1))
+        ),
+        switchMapTo(fromEvent(document, 'touchend')),
+        switchMapTo(
+          fromEvent(this.imageListRef.nativeElement, 'scroll').pipe(
+            startWith(null), // substitute for scroll event on Android, where no more scroll events are emitted after touchend
+            debounceTime(60),
+            take(1)
+          )
+        ),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(_ => {
+        const scrollLeft = this.imageListRef.nativeElement.scrollLeft;
+        if (scrollLeft < this.fringeItemWidth) {
+          this.selectedItem = this.items.length - 1;
+          this.cd.markForCheck();
+          this.center();
+        } else if (
+          scrollLeft >
+          (this.items.length - 1) * this.itemWidth + this.fringeItemWidth
+        ) {
+          this.selectedItem = 0;
+          this.cd.markForCheck();
+          this.center();
+        }
+      });
+  }
+
+  /**
+   * Determines selected item upon native scroll in the image list
+   */
+  private initOnScrollItemSelection() {
+    fromEvent(this.imageListRef.nativeElement, 'scroll')
+      .pipe(
+        tap(_ => this.scrolling$.next(true)),
+        // determine the scroll end. 100ms should be enough
+        debounceTime(100),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(_ => {
+        this.selectedItem = this.getSelectedItemFromScrollPosition();
+        this.scrolling$.next(false);
+        this.selection.emit(this.selectedItem);
+      });
+  }
+
+  private onResize = () => {
+    // NOTE: This combination of requested frames solves problem when switching between landscape and portrait
+    // Because the image list is based on pure scroll, turning phone changes scroll position because image width changes.
+    // That way, the selected image is no longer centered.
+    //
+    // The approach below first turns off image smooth transition before the incoming frame. That allows the second
+    // requestAnimationFrame to take advantage of it, center the image and turn on the smooth transition before a second paint.
+    // Given this process only requires 2 frames and there is no image transition in between, it looks very snappy to the user.
+    requestAnimationFrame(() => {
+      this.imagesTransition = false;
+      this.cd.detectChanges();
+
+      requestAnimationFrame(() => {
+        this.itemWidth = this.hostRef.nativeElement.offsetWidth;
+        this.center();
+        this.imagesShown = true;
+        this.imagesTransition = true;
+        this.cd.detectChanges();
+      });
+    });
+  };
+
   private shiftImages(x: number) {
-    this.imageListStyles = {
-      transform: `translate3D(${x}px, 0px, 0px)`
-    };
-    this.cd.detectChanges();
+    const imageListEl = this.imageListRef.nativeElement;
+
+    if (!this.smoothScrollBehaviorSupported && this.imagesTransition) {
+      this.shiftImagesManually(x);
+    } else {
+      imageListEl.scrollLeft = x;
+    }
+  }
+
+  /**
+   * Substitutes missing scroll-behavior: smooth capabilities
+   * @param x - scrollLeft
+   */
+  private shiftImagesManually(x: number) {
+    const imageListEl = this.imageListRef.nativeElement;
+    const startTime = Date.now();
+    const startScroll = imageListEl.scrollLeft;
+    const scrollDelta = Math.abs(startScroll - x);
+    const negative = startScroll > x;
+    let timeout =
+      300 + Math.floor((scrollDelta - this.itemWidth) / this.itemWidth) * 100;
+
+    timeout = Math.min(timeout, 1200);
+
+    interval(0, animationFrameScheduler)
+      .pipe(
+        map(_ => {
+          const timeEllapsedRatio = (Date.now() - startTime) / timeout;
+          const suggestedScroll =
+            startScroll +
+            (negative
+              ? -scrollDelta * timeEllapsedRatio
+              : scrollDelta * timeEllapsedRatio);
+
+          return negative
+            ? Math.max(x, Math.ceil(suggestedScroll))
+            : Math.min(x, Math.ceil(suggestedScroll));
+        }),
+        takeWhile(_ => timeout > Date.now() - startTime, true)
+      )
+      .subscribe(scroll => {
+        imageListEl.scrollLeft = scroll;
+      });
   }
 }

@@ -17,7 +17,7 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
   template: `
     <ngx-close-icon (click)="close()"></ngx-close-icon>
     <ngx-gallery
-      [selectedItemIndex]="selectedItemIndex || 0"
+      [selectedItem]="selectedItem || 0"
       [items]="(galleryDetailRef?.state | async)?.items"
       [arrows]="config.arrows"
       [imageCounter]="config.imageCounter"
@@ -37,7 +37,7 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
 })
 export class GalleryDetailComponent implements OnInit, OnDestroy {
   @Input()
-  selectedItemIndex: number;
+  selectedItem: number;
 
   @Input()
   galleryDetailRef: GalleryDetailRef;

@@ -11,6 +11,10 @@ ngx-gallery {
 
 .first {
   width: 700px;
+
+  @media (max-width: 767px) {
+    width: auto;
+  }
 }
 
 .second {
@@ -64,6 +68,10 @@ ngx-gallery {
     ngx-gallery {
       width: 700px;
       height: 600px;
+
+      @media (max-width: 767px) {
+        width: auto;
+      }
     }
   }
 
