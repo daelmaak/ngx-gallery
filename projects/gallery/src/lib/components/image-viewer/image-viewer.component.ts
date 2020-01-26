@@ -147,14 +147,14 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   }
 
   prev() {
-    this.select(this.selectedItem - 1, 250);
+    this.select(this.selectedItem - 1);
   }
 
   next() {
-    this.select(this.selectedItem + 1, 250);
+    this.select(this.selectedItem + 1);
   }
 
-  select(index: number, desiredSpeed?: number) {
+  select(index: number) {
     if (!this.loop && (index < 0 || index >= this.items.length)) {
       this.center();
       return;
@@ -162,23 +162,21 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
 
     if (index < 0) {
       index = this.items.length - 1;
-      desiredSpeed = 900;
     } else if (index >= this.items.length) {
       index = 0;
-      desiredSpeed = 900;
     }
     this.selectedItem = index;
     this.selection.emit(index);
-    this.center(desiredSpeed);
+    this.center();
   }
 
-  private center(desiredSpeed?: number) {
+  private center() {
     let shift = this.selectedItem * this.itemWidth;
 
     if (this.loop) {
       shift += 50;
     }
-    this.shiftImages(shift, desiredSpeed);
+    this.shiftImages(shift);
   }
 
   private onResize = () => {
@@ -198,23 +196,26 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     });
   };
 
-  private shiftImages(x: number, desiredSpeed?: number) {
+  private shiftImages(x: number) {
     const imageListEl = this.imageList.nativeElement;
 
     if (!this.smoothScrollBehaviorSupported && this.imagesTransition) {
-      this.shiftImagesManually(x, desiredSpeed);
+      this.shiftImagesManually(x);
     } else {
       imageListEl.scrollLeft = x;
     }
   }
 
-  private shiftImagesManually(x: number, desiredSpeed?: number) {
+  private shiftImagesManually(x: number) {
     const imageListEl = this.imageList.nativeElement;
     const startTime = Date.now();
     const startScroll = imageListEl.scrollLeft;
     const scrollDelta = Math.abs(startScroll - x);
     const negative = startScroll > x;
-    const timeout = desiredSpeed != null ? desiredSpeed : 900;
+    let timeout =
+      200 + Math.floor((scrollDelta - this.itemWidth) / this.itemWidth) * 100;
+
+    timeout = Math.min(timeout, 1200);
 
     of(0, animationFrameScheduler)
       .pipe(
