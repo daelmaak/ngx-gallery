@@ -106,17 +106,17 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.imageCounter === undefined && (this.imageCounter = true);
 
-    if (this.loop) {
-      this.initFringeLooping();
-    }
-
-    this.initOnScrollItemSelection();
-
     if (typeof window !== 'undefined') {
       fromEvent(window, 'resize')
         .pipe(startWith(null), takeUntil(this.destroy$))
         .subscribe(this.onResize);
     }
+
+    if (this.loop) {
+      this.initFringeLooping();
+    }
+
+    this.initOnScrollItemSelection();
   }
 
   ngOnDestroy() {
@@ -167,7 +167,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     this.shiftImages(shift);
   }
 
-  private getSelectedItemIndexFromScrollPosition(): number {
+  private getSelectedItemFromScrollPosition(): number {
     const scrollLeft = this.imageList.nativeElement.scrollLeft;
     const selectedPrecise =
       (this.loop ? scrollLeft - 50 : scrollLeft) / this.itemWidth;
@@ -223,7 +223,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(_ => {
-        this.selectedItem = this.getSelectedItemIndexFromScrollPosition();
+        this.selectedItem = this.getSelectedItemFromScrollPosition();
         this.scrolling$.next(false);
         this.selection.emit(this.selectedItem);
       });

@@ -15,7 +15,7 @@ import { GalleryDetailRef } from './gallery-detail-ref';
 export class GalleryDetailService {
   constructor(private overlay: Overlay) {}
 
-  open(selectedItemIndex = 0, config?: GalleryDetailConfig): GalleryDetailRef {
+  open(selectedItem = 0, config?: GalleryDetailConfig): GalleryDetailRef {
     const overlayConfig: OverlayConfig = {
       positionStrategy: new GlobalPositionStrategy()
         .centerHorizontally()
@@ -37,7 +37,7 @@ export class GalleryDetailService {
 
     const galleryDetailRef = new GalleryDetailRef(overlayRef);
 
-    componentRef.instance.selectedItemIndex = selectedItemIndex;
+    componentRef.instance.selectedItem = selectedItem;
     componentRef.instance.galleryDetailRef = galleryDetailRef;
     componentRef.instance.config = config;
 

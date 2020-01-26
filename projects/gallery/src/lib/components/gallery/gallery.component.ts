@@ -26,7 +26,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   items: GalleryItem[];
 
   @Input()
-  selectedItemIndex = 0;
+  selectedItem = 0;
 
   @Input()
   arrows: boolean;

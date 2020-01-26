@@ -7,7 +7,7 @@
   thumbsOrientation="bottom"
   [arrows]="true"
   [loop]="true"
-  (imageClick)="openFirst(gallery1.selectedItemIndex)"
+  (imageClick)="openFirst(gallery1.selectedItem)"
 ></ngx-gallery>
 
 <ngx-gallery
@@ -15,9 +15,10 @@
   class="third"
   [imageCounter]="false"
   [items]="images"
+  [selectedItem]="5"
   [thumbsArrowSlideTime]="150"
   [thumbsArrowSlideByLength]="200"
-  (imageClick)="openThird(gallery3.selectedItemIndex)"
+  (imageClick)="openThird(gallery3.selectedItem)"
 ></ngx-gallery>
 
 <ngx-gallery
