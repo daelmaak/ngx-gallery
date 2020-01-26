@@ -11,15 +11,26 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { animationFrameScheduler, fromEvent, of, Subject } from 'rxjs';
+import {
+  animationFrameScheduler,
+  BehaviorSubject,
+  fromEvent,
+  merge,
+  Observable,
+  of,
+  Subject
+} from 'rxjs';
 import {
   debounceTime,
+  filter,
   map,
   repeat,
+  startWith,
   switchMapTo,
   take,
   takeUntil,
-  takeWhile
+  takeWhile,
+  tap
 } from 'rxjs/operators';
 import { GalleryItem } from '../../core/gallery-item';
 import { ImageFit } from '../../core/image-fit';
@@ -71,6 +82,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   imagesShown = false;
   imagesTransition = false;
 
+  private scrolling$ = new BehaviorSubject(false);
   private destroy$ = new Subject();
   private itemWidth: number;
   private smoothScrollBehaviorSupported =
@@ -95,50 +107,16 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     this.imageCounter === undefined && (this.imageCounter = true);
 
     if (this.loop) {
-      // monitoring if scrolled to the the borders, if yes, loop
-      const el = this.elRef.nativeElement;
-
-      fromEvent<TouchEvent>(el, 'touchstart')
-        .pipe(
-          switchMapTo(fromEvent(el, 'touchmove').pipe(take(1))),
-          switchMapTo(fromEvent(el, 'touchend')),
-          takeUntil(this.destroy$)
-        )
-        .subscribe(_ => {
-          const scrollLeft = this.imageList.nativeElement.scrollLeft;
-
-          if (scrollLeft < 50) {
-            this.selectedItem = this.items.length - 1;
-            this.center();
-          } else if (
-            scrollLeft >
-            (this.items.length - 1) * this.itemWidth + 50
-          ) {
-            this.selectedItem = 0;
-            this.center();
-          }
-        });
+      this.initFringeLooping();
     }
 
-    // determining selected items upon native scroll in the image list
-    fromEvent(this.imageList.nativeElement, 'scroll')
-      .pipe(debounceTime(100), takeUntil(this.destroy$))
-      .subscribe(_ => {
-        const scrollLeft = this.imageList.nativeElement.scrollLeft;
-        const selectedPrecise =
-          (this.loop ? scrollLeft - 50 : scrollLeft) / this.itemWidth;
-
-        this.selectedItem = Math.round(selectedPrecise);
-        this.selection.emit(this.selectedItem);
-      });
+    this.initOnScrollItemSelection();
 
     if (typeof window !== 'undefined') {
       fromEvent(window, 'resize')
-        .pipe(takeUntil(this.destroy$))
+        .pipe(startWith(null), takeUntil(this.destroy$))
         .subscribe(this.onResize);
     }
-
-    this.onResize();
   }
 
   ngOnDestroy() {
@@ -147,11 +125,11 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   }
 
   prev() {
-    this.select(this.selectedItem - 1);
+    this.afterScroll().subscribe(_ => this.select(this.selectedItem - 1));
   }
 
   next() {
-    this.select(this.selectedItem + 1);
+    this.afterScroll().subscribe(_ => this.select(this.selectedItem + 1));
   }
 
   select(index: number) {
@@ -165,9 +143,19 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     } else if (index >= this.items.length) {
       index = 0;
     }
-    this.selectedItem = index;
-    this.selection.emit(index);
-    this.center();
+
+    this.afterScroll().subscribe(_ => {
+      this.selectedItem = index;
+      this.selection.emit(index);
+      this.center();
+    });
+  }
+
+  private afterScroll(): Observable<any> {
+    return this.scrolling$.pipe(
+      filter(scrolling => !scrolling),
+      take(1)
+    );
   }
 
   private center() {
@@ -179,9 +167,76 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     this.shiftImages(shift);
   }
 
+  private getSelectedItemIndexFromScrollPosition(): number {
+    const scrollLeft = this.imageList.nativeElement.scrollLeft;
+    const selectedPrecise =
+      (this.loop ? scrollLeft - 50 : scrollLeft) / this.itemWidth;
+
+    return Math.round(selectedPrecise);
+  }
+
+  /**
+   * Inits monitor of user scrolling to the fringes of the image list.
+   * If scroll to the fringe detected, image list will loop
+   */
+  private initFringeLooping() {
+    fromEvent(this.elRef.nativeElement, 'touchstart')
+      .pipe(
+        switchMapTo(
+          fromEvent(this.elRef.nativeElement, 'touchmove').pipe(take(1))
+        ),
+        // the merge below is there due to differences between iOS and Android
+        // the former emits scroll events after touchend, whereas the latter emits touchend after scroll events
+        switchMapTo(
+          merge(
+            fromEvent(document, 'touchend'),
+            fromEvent(this.imageList.nativeElement, 'scroll')
+          )
+        ),
+        debounceTime(50),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(_ => {
+        const scrollLeft = this.imageList.nativeElement.scrollLeft;
+
+        if (scrollLeft < 50) {
+          this.selectedItem = this.items.length - 1;
+          this.cd.markForCheck();
+          this.center();
+        } else if (scrollLeft > (this.items.length - 1) * this.itemWidth + 50) {
+          this.selectedItem = 0;
+          this.cd.markForCheck();
+          this.center();
+        }
+      });
+  }
+
+  /**
+   * Determines selected item upon native scroll in the image list
+   */
+  private initOnScrollItemSelection() {
+    fromEvent(this.imageList.nativeElement, 'scroll')
+      .pipe(
+        tap(_ => this.scrolling$.next(true)),
+        // determine the scroll end. 100ms should be enough
+        debounceTime(100),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(_ => {
+        this.selectedItem = this.getSelectedItemIndexFromScrollPosition();
+        this.scrolling$.next(false);
+        this.selection.emit(this.selectedItem);
+      });
+  }
+
   private onResize = () => {
-    // TODO comments on why requestAnimationFrame twice
-    // otherwise gallery doesn't work correctly on phone landscape - portrait mode switching
+    // NOTE: This combination of requested frames solves problem when switching between landscape and portrait
+    // Because the image list is based on pure scroll, turning phone changes scroll position because image width changes.
+    // That way, the selected image is no longer centered.
+    //
+    // The approach below first turns off image smooth transition before the incoming frame. That allows the second
+    // requestAnimationFrame to take advantage of it, center the image and turn on the smooth transition before a second paint.
+    // Given this process only requires 2 frames and there is no image transition in between, it looks very snappy to the user.
     requestAnimationFrame(() => {
       this.imagesTransition = false;
       this.cd.detectChanges();
@@ -206,6 +261,10 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Substitutes missing scroll-behavior: smooth capabilities
+   * @param x - scrollLeft
+   */
   private shiftImagesManually(x: number) {
     const imageListEl = this.imageList.nativeElement;
     const startTime = Date.now();
