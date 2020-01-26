@@ -15,7 +15,6 @@ import {
   animationFrameScheduler,
   BehaviorSubject,
   fromEvent,
-  merge,
   Observable,
   of,
   Subject
@@ -55,12 +54,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   imageCounter: boolean;
 
   @Input()
-  set imageFit(fit: ImageFit) {
-    this.imageStyles = {
-      ...this.imageStyles,
-      backgroundSize: fit || this.imageStyles.backgroundSize
-    };
-  }
+  imageFit: ImageFit;
 
   @Input()
   imageTemplate: TemplateRef<any>;
@@ -74,11 +68,11 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   @Output()
   selection = new EventEmitter<number>();
 
-  @ViewChild('imageList', { static: true }) imageList: ElementRef<HTMLElement>;
+  @ViewChild('imageList', { static: true }) imageListRef: ElementRef<
+    HTMLElement
+  >;
 
-  imageStyles = {
-    backgroundSize: 'contain'
-  };
+  fringeItemWidth = 50;
   imagesShown = false;
   imagesTransition = false;
 
@@ -99,12 +93,13 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private elRef: ElementRef<HTMLElement>,
+    private hostRef: ElementRef<HTMLElement>,
     private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.imageCounter === undefined && (this.imageCounter = true);
+    this.imageFit == null && (this.imageFit = 'contain');
 
     if (typeof window !== 'undefined') {
       fromEvent(window, 'resize')
@@ -162,15 +157,16 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     let shift = this.selectedItem * this.itemWidth;
 
     if (this.loop) {
-      shift += 50;
+      shift += this.fringeItemWidth;
     }
     this.shiftImages(shift);
   }
 
   private getSelectedItemFromScrollPosition(): number {
-    const scrollLeft = this.imageList.nativeElement.scrollLeft;
+    const scrollLeft = this.imageListRef.nativeElement.scrollLeft;
     const selectedPrecise =
-      (this.loop ? scrollLeft - 50 : scrollLeft) / this.itemWidth;
+      (this.loop ? scrollLeft - this.fringeItemWidth : scrollLeft) /
+      this.itemWidth;
 
     return Math.round(selectedPrecise);
   }
@@ -180,30 +176,31 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
    * If scroll to the fringe detected, image list will loop
    */
   private initFringeLooping() {
-    fromEvent(this.elRef.nativeElement, 'touchstart')
+    fromEvent(this.hostRef.nativeElement, 'touchstart')
       .pipe(
         switchMapTo(
-          fromEvent(this.elRef.nativeElement, 'touchmove').pipe(take(1))
+          fromEvent(this.hostRef.nativeElement, 'touchmove').pipe(take(1))
         ),
-        // the merge below is there due to differences between iOS and Android
-        // the former emits scroll events after touchend, whereas the latter emits touchend after scroll events
+        switchMapTo(fromEvent(document, 'touchend')),
         switchMapTo(
-          merge(
-            fromEvent(document, 'touchend'),
-            fromEvent(this.imageList.nativeElement, 'scroll')
+          fromEvent(this.imageListRef.nativeElement, 'scroll').pipe(
+            startWith(null), // substitute for scroll event on Android, where no more scroll events are emitted after touchend
+            debounceTime(60),
+            take(1)
           )
         ),
-        debounceTime(50),
         takeUntil(this.destroy$)
       )
       .subscribe(_ => {
-        const scrollLeft = this.imageList.nativeElement.scrollLeft;
-
-        if (scrollLeft < 50) {
+        const scrollLeft = this.imageListRef.nativeElement.scrollLeft;
+        if (scrollLeft < this.fringeItemWidth) {
           this.selectedItem = this.items.length - 1;
           this.cd.markForCheck();
           this.center();
-        } else if (scrollLeft > (this.items.length - 1) * this.itemWidth + 50) {
+        } else if (
+          scrollLeft >
+          (this.items.length - 1) * this.itemWidth + this.fringeItemWidth
+        ) {
           this.selectedItem = 0;
           this.cd.markForCheck();
           this.center();
@@ -215,7 +212,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
    * Determines selected item upon native scroll in the image list
    */
   private initOnScrollItemSelection() {
-    fromEvent(this.imageList.nativeElement, 'scroll')
+    fromEvent(this.imageListRef.nativeElement, 'scroll')
       .pipe(
         tap(_ => this.scrolling$.next(true)),
         // determine the scroll end. 100ms should be enough
@@ -242,7 +239,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
       this.cd.detectChanges();
 
       requestAnimationFrame(() => {
-        this.itemWidth = this.elRef.nativeElement.offsetWidth;
+        this.itemWidth = this.hostRef.nativeElement.offsetWidth;
         this.center();
         this.imagesShown = true;
         this.imagesTransition = true;
@@ -252,7 +249,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   };
 
   private shiftImages(x: number) {
-    const imageListEl = this.imageList.nativeElement;
+    const imageListEl = this.imageListRef.nativeElement;
 
     if (!this.smoothScrollBehaviorSupported && this.imagesTransition) {
       this.shiftImagesManually(x);
@@ -266,7 +263,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
    * @param x - scrollLeft
    */
   private shiftImagesManually(x: number) {
-    const imageListEl = this.imageList.nativeElement;
+    const imageListEl = this.imageListRef.nativeElement;
     const startTime = Date.now();
     const startScroll = imageListEl.scrollLeft;
     const scrollDelta = Math.abs(startScroll - x);

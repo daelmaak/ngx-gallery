@@ -37,12 +37,7 @@
     flex: none;
     width: 100%;
     scroll-snap-align: center;
-    scroll-snap-stop: always;
-  }
-
-  .border-item {
-    // TODO inline it so that JS can change it
-    width: 50px;
+    scroll-snap-stop: always; // prevents from scrolling by too many items on Android
   }
 }
 

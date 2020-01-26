@@ -14,8 +14,6 @@ export class AppComponent implements OnInit {
   images: GalleryItem[];
   galleryDetailRef: GalleryDetailRef;
 
-  debug = 'scrollBehavior' in document.documentElement.style;
-
   @ViewChild('detailImageTemplate2', { static: false })
   detailImageTemplate2: TemplateRef<any>;
 
