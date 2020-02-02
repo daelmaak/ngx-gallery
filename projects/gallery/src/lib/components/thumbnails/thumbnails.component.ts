@@ -15,7 +15,7 @@ import {
   ViewChild,
   TemplateRef
 } from '@angular/core';
-import { fromEvent, of, Subject, animationFrameScheduler } from 'rxjs';
+import { fromEvent, of, Subject, animationFrameScheduler, merge } from 'rxjs';
 import {
   debounceTime,
   map,
@@ -27,6 +27,7 @@ import {
 import { GalleryItem } from '../../core/gallery-item';
 import { Orientation } from '../../core/orientation';
 import { ImageFit } from '../../core/image-fit';
+import { OverscrollBehavior } from '../../core/overscroll-behavior';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -34,7 +35,8 @@ import { ImageFit } from '../../core/image-fit';
   styleUrls: ['./thumbnails.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
+export class ThumbnailsComponent
+  implements OnChanges, OnInit, AfterViewInit, OnDestroy {
   @Input()
   items: GalleryItem[] = [];
 
@@ -63,11 +65,7 @@ export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   @Input()
-  blockDocumentScroll: boolean;
-
-  @Input()
-  @HostBinding('class.scrollable')
-  scroll: boolean;
+  overscrollBehavior: OverscrollBehavior;
 
   @Input()
   thumbTemplate: TemplateRef<any>;
@@ -79,7 +77,7 @@ export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
   selection = new EventEmitter<GalleryItem>();
 
   @ViewChild('thumbs', { static: true })
-  thumbsRef: ElementRef<HTMLElement>;
+  thumbListRef: ElementRef<HTMLElement>;
 
   imageStyles = {
     backgroundSize: 'cover'
@@ -90,6 +88,8 @@ export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
 
   private destroy$ = new Subject();
   private sliding$ = new Subject<number>();
+  private overscrollBehaviorContainSupported =
+    typeof CSS !== 'undefined' && CSS.supports('overscroll-behavior: contain');
 
   private get scrollKey(): string {
     return this.vertical ? 'scrollTop' : 'scrollLeft';
@@ -103,8 +103,8 @@ export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
 
   private get thumbListMainAxis(): number {
     return this.vertical
-      ? this.thumbsRef.nativeElement.scrollHeight
-      : this.thumbsRef.nativeElement.scrollWidth;
+      ? this.thumbListRef.nativeElement.scrollHeight
+      : this.thumbListRef.nativeElement.scrollWidth;
   }
 
   constructor(
@@ -122,35 +122,38 @@ export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
       selectedItem.currentValue != null &&
       !selectedItem.firstChange
     ) {
-      const itemEl = this.thumbsRef.nativeElement
-        .querySelectorAll('li')
-        .item(selectedItem.currentValue);
-
-      // TODO replace with custom smooth mechanism
-      itemEl && itemEl.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      this.centerThumb(selectedItem.currentValue);
     }
   }
 
   ngOnInit() {
     this.arrowSlideTime === undefined && (this.arrowSlideTime = 200);
+    this.overscrollBehavior == null && (this.overscrollBehavior = 'auto');
 
     if (this.arrows && typeof window !== undefined) {
       this.initArrowScroll();
 
-      fromEvent(this.thumbsRef.nativeElement, 'scroll')
-        .pipe(debounceTime(20), takeUntil(this.destroy$))
-        .subscribe(this.updateArrows);
-
-      fromEvent(window, 'resize')
-        .pipe(debounceTime(100), takeUntil(this.destroy$))
+      merge(
+        fromEvent(this.thumbListRef.nativeElement, 'scroll'),
+        fromEvent(window, 'resize')
+      )
+        .pipe(debounceTime(50))
         .subscribe(this.updateArrows);
 
       requestAnimationFrame(this.updateArrows);
     }
 
-    if (this.blockDocumentScroll) {
-      this.initDocumentScrollBlocking();
+    // TODO change from CSS.supports to 'cssProp' in document.body.style because IE doesn't support it
+    if (
+      this.overscrollBehavior === 'contain' &&
+      !this.overscrollBehaviorContainSupported
+    ) {
+      this.initManualOverscrollContain();
     }
+  }
+
+  ngAfterViewInit() {
+    this.centerThumb(this.selectedItem);
   }
 
   ngOnDestroy() {
@@ -175,21 +178,46 @@ export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
     this.sliding$.next(delta * direction);
   }
 
-  private initDocumentScrollBlocking() {
-    fromEvent(this.thumbsRef.nativeElement, 'wheel')
-      .pipe(takeUntil<WheelEvent>(this.destroy$))
-      .subscribe(e => {
-        const thumbList = this.thumbsRef.nativeElement;
+  centerThumb(index: number) {
+    const itemEls = this.thumbListRef.nativeElement.querySelectorAll('li');
+    const nextItemEl = itemEls.item(index);
 
-        if (e.deltaY < 0 && thumbList.scrollTop === 0) {
-          e.preventDefault();
-          e.stopPropagation();
-          return;
-        }
+    const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = nextItemEl;
+
+    // TODO maybe find better name than offset
+    const itemOffset = this.vertical ? offsetTop : offsetLeft;
+    const itemMainAxis = this.vertical ? offsetHeight : offsetWidth;
+
+    const thumbListScrollPortAxis = this.thumbContainerMainAxis;
+    const thumbListScroll = this.thumbListRef.nativeElement[this.scrollKey];
+
+    const nextScrollDelta =
+      itemOffset +
+      itemMainAxis / 2 -
+      thumbListScrollPortAxis / 2 -
+      thumbListScroll;
+
+    if (
+      thumbListScroll + thumbListScrollPortAxis < itemOffset + itemMainAxis ||
+      thumbListScroll > itemOffset
+    ) {
+      this.sliding$.next(nextScrollDelta);
+    }
+  }
+
+  private initManualOverscrollContain() {
+    fromEvent<WheelEvent>(this.thumbListRef.nativeElement, 'wheel')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(e => {
+        const {
+          offsetHeight,
+          scrollTop,
+          scrollHeight
+        } = this.thumbListRef.nativeElement;
 
         if (
-          e.deltaY > 0 &&
-          thumbList.offsetHeight + thumbList.scrollTop >= thumbList.scrollHeight
+          (e.deltaY < 0 && scrollTop === 0) ||
+          (e.deltaY > 0 && offsetHeight + scrollTop >= scrollHeight)
         ) {
           e.preventDefault();
           e.stopPropagation();
@@ -202,45 +230,45 @@ export class ThumbnailsComponent implements OnChanges, OnInit, OnDestroy {
     // before each paint. The scroll value is updated proportionally to the time elapsed since the animation's start.
     // The period of requested frames should match the display's refresh rate as recommended in W3C spec. Essentially, this stream
     // requests animation frames in the same way as recursive calls to requestAnimationFrame().
-    // TODO run outside of angular zone
     this.sliding$
       .pipe(
-        switchMap(totalScroll => {
-          const negative = totalScroll < 0;
-          totalScroll = Math.abs(totalScroll);
+        switchMap(totalScrollDelta => {
+          const negative = totalScrollDelta < 0;
+          totalScrollDelta = Math.abs(totalScrollDelta);
 
           const startTime = Date.now();
+          const totalTime = (totalScrollDelta / 200) * this.arrowSlideTime;
           let currentScroll = 0;
 
           return of(0, animationFrameScheduler).pipe(
             repeat(),
             map(_ => {
               const suggestedScroll = Math.ceil(
-                ((Date.now() - startTime) / this.arrowSlideTime) * totalScroll
+                ((Date.now() - startTime) / totalTime) * totalScrollDelta
               );
               const frameScroll = Math.min(
                 suggestedScroll - currentScroll,
-                totalScroll - currentScroll
+                totalScrollDelta - currentScroll
               );
               currentScroll = suggestedScroll;
 
               return negative ? -frameScroll : frameScroll;
             }),
-            takeWhile(_ => currentScroll < totalScroll, true)
+            takeWhile(_ => currentScroll < totalScrollDelta, true)
           );
         }),
         takeUntil(this.destroy$)
       )
       .subscribe(frameScroll => {
-        this.thumbsRef.nativeElement[this.scrollKey] += frameScroll;
+        this.thumbListRef.nativeElement[this.scrollKey] += frameScroll;
       });
   }
 
   private updateArrows = () => {
-    this.showStartArrow = this.thumbsRef.nativeElement[this.scrollKey] > 0;
+    this.showStartArrow = this.thumbListRef.nativeElement[this.scrollKey] > 0;
 
     this.showEndArrow =
-      this.thumbsRef.nativeElement[this.scrollKey] <
+      this.thumbListRef.nativeElement[this.scrollKey] <
       this.thumbListMainAxis - this.thumbContainerMainAxis;
 
     this.cd.detectChanges();

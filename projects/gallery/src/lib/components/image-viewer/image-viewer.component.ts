@@ -61,6 +61,15 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   @Input()
   loop: boolean;
 
+  @Input()
+  set scrollBehavior(val: ScrollBehavior) {
+    this._scrollBehavior = val || 'smooth';
+  }
+
+  get scrollBehavior() {
+    return this.imagesTransition ? this._scrollBehavior : 'auto';
+  }
+
   @Output()
   imageClick = new EventEmitter<Event>();
 
@@ -78,6 +87,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   private scrolling$ = new BehaviorSubject(false);
   private destroy$ = new Subject();
   private itemWidth: number;
+  private _scrollBehavior: ScrollBehavior;
   private smoothScrollBehaviorSupported =
     typeof CSS !== 'undefined' && CSS.supports('scroll-behavior: smooth');
 
@@ -99,6 +109,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.imageCounter === undefined && (this.imageCounter = true);
     this.imageFit == null && (this.imageFit = 'contain');
+    this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
 
     if (typeof window !== 'undefined') {
       fromEvent(window, 'resize')
@@ -250,7 +261,10 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   private shiftImages(x: number) {
     const imageListEl = this.imageListRef.nativeElement;
 
-    if (!this.smoothScrollBehaviorSupported && this.imagesTransition) {
+    if (
+      !this.smoothScrollBehaviorSupported &&
+      this.scrollBehavior === 'smooth'
+    ) {
       this.shiftImagesManually(x);
     } else {
       imageListEl.scrollLeft = x;

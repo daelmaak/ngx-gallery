@@ -26,10 +26,10 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
       [loop]="config.loop"
       [thumbTemplate]="config.thumbTemplate"
       [thumbsOrientation]="config.thumbsOrientation"
-      [thumbsScroll]="config.thumbsScroll"
       [thumbsArrows]="config.thumbsArrows"
       [thumbsArrowSlideTime]="config.thumbsArrowSlideTime"
       [thumbsArrowSlideByLength]="config.thumbsArrowSlideByLength"
+      [thumbsOverscrollBehavior]="config.thumbsOverscrollBehavior"
     ></ngx-gallery>
   `,
   styleUrls: ['./gallery-detail.component.scss'],

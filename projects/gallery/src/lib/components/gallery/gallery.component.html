@@ -6,8 +6,7 @@
   [arrowSlideTime]="thumbsArrowSlideTime"
   [arrowSlideByLength]="thumbsArrowSlideByLength"
   [imageFit]="thumbsImageFit"
-  [blockDocumentScroll]="thumbsBlockDocumentScroll"
-  [scroll]="thumbsScroll"
+  [overscrollBehavior]="thumbsOverscrollBehavior"
   [thumbTemplate]="thumbTemplate"
   (thumbClick)="thumbClick.emit($event)"
   (selection)="selectedItem = $event; select($event)"
@@ -22,6 +21,7 @@
   [imageFit]="imageFit"
   [imageTemplate]="imageTemplate"
   [loop]="loop"
+  [scrollBehavior]="scrollBehavior"
   (imageClick)="imageClick.emit($event)"
   (selection)="selectedItem = $event"
 ></ngx-image-viewer>
