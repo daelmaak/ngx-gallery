@@ -57,12 +57,18 @@ export class ThumbnailsComponent
   arrowSlideByLength: number;
 
   @Input()
+  autoScroll: boolean;
+
+  @Input()
   set imageFit(fit: ImageFit) {
     this.imageStyles = {
       ...this.imageStyles,
       backgroundSize: fit || this.imageStyles.backgroundSize
     };
   }
+
+  @Input()
+  scrollBehavior: ScrollBehavior;
 
   @Input()
   overscrollBehavior: OverscrollBehavior;
@@ -120,7 +126,8 @@ export class ThumbnailsComponent
     if (
       selectedItem &&
       selectedItem.currentValue != null &&
-      !selectedItem.firstChange
+      !selectedItem.firstChange &&
+      this.autoScroll
     ) {
       this.centerThumb(selectedItem.currentValue);
     }
@@ -128,10 +135,12 @@ export class ThumbnailsComponent
 
   ngOnInit() {
     this.arrowSlideTime === undefined && (this.arrowSlideTime = 200);
+    this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
     this.overscrollBehavior == null && (this.overscrollBehavior = 'auto');
+    this.autoScroll === undefined && (this.autoScroll = true);
 
     if (this.arrows && typeof window !== undefined) {
-      this.initArrowScroll();
+      this.initManualScroll();
 
       merge(
         fromEvent(this.thumbListRef.nativeElement, 'scroll'),
@@ -225,43 +234,59 @@ export class ThumbnailsComponent
       });
   }
 
-  private initArrowScroll() {
-    // NOTE: This stream requests animation frames in a periodical fashion so that it can update scroll position of thumbnails
-    // before each paint. The scroll value is updated proportionally to the time elapsed since the animation's start.
-    // The period of requested frames should match the display's refresh rate as recommended in W3C spec. Essentially, this stream
-    // requests animation frames in the same way as recursive calls to requestAnimationFrame().
-    this.sliding$
-      .pipe(
-        switchMap(totalScrollDelta => {
-          const negative = totalScrollDelta < 0;
-          totalScrollDelta = Math.abs(totalScrollDelta);
+  private initManualScroll() {
+    if (
+      this.scrollBehavior === 'smooth' &&
+      !('scrollBehavior' in document.body.style)
+    ) {
+      // Emulating native scroll-behavior: smooth
+      //
+      // NOTE: This stream requests animation frames in a periodical fashion so that it can update scroll position of thumbnails
+      // before each paint. The scroll value is updated proportionally to the time elapsed since the animation's start.
+      // The period of requested frames should match the display's refresh rate as recommended in W3C spec. Essentially, this stream
+      // requests animation frames in the same way as recursive calls to requestAnimationFrame().
+      this.sliding$
+        .pipe(
+          switchMap(totalScrollDelta => {
+            const negative = totalScrollDelta < 0;
+            totalScrollDelta = Math.abs(totalScrollDelta);
 
-          const startTime = Date.now();
-          const totalTime = (totalScrollDelta / 200) * this.arrowSlideTime;
-          let currentScroll = 0;
+            const startTime = Date.now();
+            const totalTime = (totalScrollDelta / 200) * this.arrowSlideTime;
+            let currentScroll = 0;
 
-          return of(0, animationFrameScheduler).pipe(
-            repeat(),
-            map(_ => {
-              const suggestedScroll = Math.ceil(
-                ((Date.now() - startTime) / totalTime) * totalScrollDelta
-              );
-              const frameScroll = Math.min(
-                suggestedScroll - currentScroll,
-                totalScrollDelta - currentScroll
-              );
-              currentScroll = suggestedScroll;
+            return of(0, animationFrameScheduler).pipe(
+              repeat(),
+              map(_ => {
+                const suggestedScroll = Math.ceil(
+                  ((Date.now() - startTime) / totalTime) * totalScrollDelta
+                );
+                const frameScroll = Math.min(
+                  suggestedScroll - currentScroll,
+                  totalScrollDelta - currentScroll
+                );
+                currentScroll = suggestedScroll;
 
-              return negative ? -frameScroll : frameScroll;
-            }),
-            takeWhile(_ => currentScroll < totalScrollDelta, true)
-          );
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(frameScroll => {
-        this.thumbListRef.nativeElement[this.scrollKey] += frameScroll;
-      });
+                return negative ? -frameScroll : frameScroll;
+              }),
+              takeWhile(_ => currentScroll < totalScrollDelta, true)
+            );
+          }),
+          takeUntil(this.destroy$)
+        )
+        .subscribe(frameScroll => {
+          this.thumbListRef.nativeElement[this.scrollKey] += frameScroll;
+        });
+    } else {
+      this.sliding$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          totalScrollDelta =>
+            (this.thumbListRef.nativeElement[
+              this.scrollKey
+            ] += totalScrollDelta)
+        );
+    }
   }
 
   private updateArrows = () => {

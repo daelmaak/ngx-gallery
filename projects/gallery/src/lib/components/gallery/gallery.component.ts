@@ -33,6 +33,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
+  autoScroll: boolean;
+
+  @Input()
   imageCounter: boolean;
 
   @Input()
@@ -61,6 +64,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @Input()
   thumbsArrowSlideByLength: number;
+
+  @Input()
+  thumbsScrollBehavior: ScrollBehavior;
 
   @Input()
   thumbsOverscrollBehavior: OverscrollBehavior;
