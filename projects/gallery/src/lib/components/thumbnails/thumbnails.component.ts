@@ -73,7 +73,7 @@ export class ThumbnailsComponent
   }
 
   get scrollBehavior() {
-    return this.smoothScroll ? this._scrollBehavior : 'auto';
+    return this.smoothScrollAllowed ? this._scrollBehavior : 'auto';
   }
 
   @Input()
@@ -102,7 +102,7 @@ export class ThumbnailsComponent
   private sliding$ = new Subject<number>();
 
   private _scrollBehavior: ScrollBehavior;
-  private smoothScroll = false;
+  private smoothScrollAllowed = false;
   private overscrollBehaviorSupported =
     'overscrollBehavior' in document.body.style;
 
@@ -172,7 +172,7 @@ export class ThumbnailsComponent
 
   ngAfterViewInit() {
     this.centerThumb(this.selectedItem);
-    this.smoothScroll = true;
+    this.smoothScrollAllowed = true;
   }
 
   ngOnDestroy() {

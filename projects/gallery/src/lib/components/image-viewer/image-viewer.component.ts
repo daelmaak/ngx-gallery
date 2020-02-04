@@ -67,7 +67,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   }
 
   get scrollBehavior() {
-    return this.smoothScroll ? this._scrollBehavior : 'auto';
+    return this.smoothScrollAllowed ? this._scrollBehavior : 'auto';
   }
 
   @Output()
@@ -88,7 +88,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
 
   private itemWidth: number;
   private _scrollBehavior: ScrollBehavior;
-  private smoothScroll = false;
+  private smoothScrollAllowed = false;
   private scrollBehaviorSupported = 'scrollBehavior' in document.body.style;
 
   get showPrevArrow() {
@@ -245,14 +245,14 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     // requestAnimationFrame to take advantage of it, center the image and turn on the smooth transition before a second paint.
     // Given this process only requires 2 frames and there is no image transition in between, it looks very snappy to the user.
     requestAnimationFrame(() => {
-      this.smoothScroll = false;
+      this.smoothScrollAllowed = false;
       this.cd.detectChanges();
 
       requestAnimationFrame(() => {
         this.itemWidth = this.hostRef.nativeElement.offsetWidth;
         this.center();
         this.imagesShown = true;
-        this.smoothScroll = true;
+        this.smoothScrollAllowed = true;
         this.cd.detectChanges();
       });
     });
