@@ -16,6 +16,7 @@ export interface GalleryDetailConfig {
   imageTemplate?: TemplateRef<any>;
   loop?: boolean;
   thumbTemplate?: TemplateRef<any>;
+  thumbsAutoScroll?: boolean;
   thumbsOrientation?: Orientation;
   thumbsArrows?: boolean;
   thumbsArrowSlideTime?: number;

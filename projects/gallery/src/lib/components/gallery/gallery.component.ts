@@ -33,9 +33,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
-  autoScroll: boolean;
-
-  @Input()
   imageCounter: boolean;
 
   @Input()
@@ -52,6 +49,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @Input()
   thumbTemplate: TemplateRef<any>;
+
+  @Input()
+  thumbsAutoScroll: boolean;
 
   @Input()
   thumbsOrientation: Orientation;
