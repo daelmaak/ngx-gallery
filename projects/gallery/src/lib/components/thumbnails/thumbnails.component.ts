@@ -161,7 +161,6 @@ export class ThumbnailsComponent
       requestAnimationFrame(this.updateArrows);
     }
 
-    // TODO change from CSS.supports to 'cssProp' in document.body.style because IE doesn't support it
     if (
       this.overscrollBehavior === 'contain' &&
       !this.overscrollBehaviorSupported
