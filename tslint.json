@@ -53,6 +53,7 @@
     "template-no-negated-async": true,
     "use-lifecycle-interface": true,
     "semicolon": [true, "always", "ignore-bound-class-methods"],
-    "use-pipe-transform-interface": true
+    "use-pipe-transform-interface": true,
+    "variable-name": [true, "allow-leading-underscore"]
   }
 }

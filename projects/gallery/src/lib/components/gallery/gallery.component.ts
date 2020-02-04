@@ -14,6 +14,7 @@ import { GalleryItem } from '../../core/gallery-item';
 import { Orientation } from '../../core/orientation';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { ImageFit } from '../../core/image-fit';
+import { OverscrollBehavior } from '../../core/overscroll-behavior';
 
 @Component({
   selector: 'ngx-gallery',
@@ -44,13 +45,16 @@ export class GalleryComponent implements OnInit, OnDestroy {
   loop: boolean;
 
   @Input()
+  scrollBehavior: ScrollBehavior;
+
+  @Input()
   thumbTemplate: TemplateRef<any>;
 
   @Input()
-  thumbsOrientation: Orientation;
+  thumbsAutoScroll: boolean;
 
   @Input()
-  thumbsScroll: boolean;
+  thumbsOrientation: Orientation;
 
   @Input()
   thumbsArrows: boolean;
@@ -62,7 +66,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
   thumbsArrowSlideByLength: number;
 
   @Input()
-  thumbsBlockDocumentScroll: boolean;
+  thumbsScrollBehavior: ScrollBehavior;
+
+  @Input()
+  thumbsOverscrollBehavior: OverscrollBehavior;
 
   @Input()
   thumbsImageFit: ImageFit;
@@ -86,7 +93,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
-    this.thumbsScroll === undefined && (this.thumbsScroll = true);
     this.thumbsArrows === undefined && (this.thumbsArrows = true);
     this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
     this.arrows === undefined && (this.arrows = true);

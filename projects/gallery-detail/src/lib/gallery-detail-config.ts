@@ -1,5 +1,6 @@
 import { TemplateRef } from '@angular/core';
 import { Orientation, ImageFit } from 'projects/gallery/src/public-api';
+import { OverscrollBehavior } from 'projects/gallery/src/lib/core/overscroll-behavior';
 
 export interface GalleryDetailConfig {
   // TODO should the overlay and gallery config be split?
@@ -15,9 +16,10 @@ export interface GalleryDetailConfig {
   imageTemplate?: TemplateRef<any>;
   loop?: boolean;
   thumbTemplate?: TemplateRef<any>;
+  thumbsAutoScroll?: boolean;
   thumbsOrientation?: Orientation;
-  thumbsScroll?: boolean;
   thumbsArrows?: boolean;
   thumbsArrowSlideTime?: number;
   thumbsArrowSlideByLength?: number;
+  thumbsOverscrollBehavior?: OverscrollBehavior;
 }

@@ -61,6 +61,15 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   @Input()
   loop: boolean;
 
+  @Input()
+  set scrollBehavior(val: ScrollBehavior) {
+    this._scrollBehavior = val || 'smooth';
+  }
+
+  get scrollBehavior() {
+    return this.smoothScrollAllowed ? this._scrollBehavior : 'auto';
+  }
+
   @Output()
   imageClick = new EventEmitter<Event>();
 
@@ -73,13 +82,14 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
 
   fringeItemWidth = 50;
   imagesShown = false;
-  imagesTransition = false;
 
   private scrolling$ = new BehaviorSubject(false);
   private destroy$ = new Subject();
+
   private itemWidth: number;
-  private smoothScrollBehaviorSupported =
-    typeof CSS !== 'undefined' && CSS.supports('scroll-behavior: smooth');
+  private _scrollBehavior: ScrollBehavior;
+  private smoothScrollAllowed = false;
+  private scrollBehaviorSupported = 'scrollBehavior' in document.body.style;
 
   get showPrevArrow() {
     return this.arrows && (this.selectedItem > 0 || this.loop);
@@ -99,6 +109,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.imageCounter === undefined && (this.imageCounter = true);
     this.imageFit == null && (this.imageFit = 'contain');
+    this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
 
     if (typeof window !== 'undefined') {
       fromEvent(window, 'resize')
@@ -234,14 +245,14 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     // requestAnimationFrame to take advantage of it, center the image and turn on the smooth transition before a second paint.
     // Given this process only requires 2 frames and there is no image transition in between, it looks very snappy to the user.
     requestAnimationFrame(() => {
-      this.imagesTransition = false;
+      this.smoothScrollAllowed = false;
       this.cd.detectChanges();
 
       requestAnimationFrame(() => {
         this.itemWidth = this.hostRef.nativeElement.offsetWidth;
         this.center();
         this.imagesShown = true;
-        this.imagesTransition = true;
+        this.smoothScrollAllowed = true;
         this.cd.detectChanges();
       });
     });
@@ -250,7 +261,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   private shiftImages(x: number) {
     const imageListEl = this.imageListRef.nativeElement;
 
-    if (!this.smoothScrollBehaviorSupported && this.imagesTransition) {
+    if (!this.scrollBehaviorSupported && this.scrollBehavior === 'smooth') {
       this.shiftImagesManually(x);
     } else {
       imageListEl.scrollLeft = x;

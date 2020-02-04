@@ -2,7 +2,7 @@
   <ngx-chevron-icon></ngx-chevron-icon>
 </button>
 
-<ul class="thumbs" #thumbs>
+<ul class="thumbs" [style.overscrollBehavior]="overscrollBehavior" #thumbs>
   <li
     *ngFor="let item of items; let i = index"
     class="thumb"

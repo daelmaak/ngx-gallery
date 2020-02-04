@@ -8,7 +8,7 @@
   #imageList
   class="images"
   [class.images--hidden]="!imagesShown"
-  [class.images--transition]="imagesTransition"
+  [style.scrollBehavior]="scrollBehavior"
 >
   <li *ngIf="loop" class="fringe-item" [style.width.px]="fringeItemWidth"></li>
   <li
