@@ -67,7 +67,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   }
 
   get scrollBehavior() {
-    return this.imagesTransition ? this._scrollBehavior : 'auto';
+    return this.smoothScroll ? this._scrollBehavior : 'auto';
   }
 
   @Output()
@@ -82,14 +82,14 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
 
   fringeItemWidth = 50;
   imagesShown = false;
-  imagesTransition = false;
 
   private scrolling$ = new BehaviorSubject(false);
   private destroy$ = new Subject();
+
   private itemWidth: number;
   private _scrollBehavior: ScrollBehavior;
-  private smoothScrollBehaviorSupported =
-    typeof CSS !== 'undefined' && CSS.supports('scroll-behavior: smooth');
+  private smoothScroll = false;
+  private scrollBehaviorSupported = 'scrollBehavior' in document.body.style;
 
   get showPrevArrow() {
     return this.arrows && (this.selectedItem > 0 || this.loop);
@@ -245,14 +245,14 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     // requestAnimationFrame to take advantage of it, center the image and turn on the smooth transition before a second paint.
     // Given this process only requires 2 frames and there is no image transition in between, it looks very snappy to the user.
     requestAnimationFrame(() => {
-      this.imagesTransition = false;
+      this.smoothScroll = false;
       this.cd.detectChanges();
 
       requestAnimationFrame(() => {
         this.itemWidth = this.hostRef.nativeElement.offsetWidth;
         this.center();
         this.imagesShown = true;
-        this.imagesTransition = true;
+        this.smoothScroll = true;
         this.cd.detectChanges();
       });
     });
@@ -261,10 +261,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   private shiftImages(x: number) {
     const imageListEl = this.imageListRef.nativeElement;
 
-    if (
-      !this.smoothScrollBehaviorSupported &&
-      this.scrollBehavior === 'smooth'
-    ) {
+    if (!this.scrollBehaviorSupported && this.scrollBehavior === 'smooth') {
       this.shiftImagesManually(x);
     } else {
       imageListEl.scrollLeft = x;
