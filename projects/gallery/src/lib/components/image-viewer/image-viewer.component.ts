@@ -83,7 +83,6 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   fringeItemWidth = 50;
   imagesShown = false;
 
-  private scrolling$ = new BehaviorSubject(false);
   private destroy$ = new Subject();
 
   private itemWidth: number;
@@ -117,10 +116,6 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
         .subscribe(this.onResize);
     }
 
-    if (this.loop) {
-      this.initFringeLooping();
-    }
-
     this.initOnScrollItemSelection();
   }
 
@@ -130,11 +125,11 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   }
 
   prev() {
-    this.afterScroll().subscribe(_ => this.select(this.selectedItem - 1));
+    this.select(this.selectedItem - 1);
   }
 
   next() {
-    this.afterScroll().subscribe(_ => this.select(this.selectedItem + 1));
+    this.select(this.selectedItem + 1);
   }
 
   select(index: number) {
@@ -149,18 +144,9 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
       index = 0;
     }
 
-    this.afterScroll().subscribe(_ => {
-      this.selectedItem = index;
-      this.selection.emit(index);
-      this.center();
-    });
-  }
-
-  private afterScroll(): Observable<any> {
-    return this.scrolling$.pipe(
-      filter(scrolling => !scrolling),
-      take(1)
-    );
+    this.selectedItem = index;
+    this.selection.emit(index);
+    this.center();
   }
 
   private center() {
@@ -178,61 +164,45 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
       (this.loop ? scrollLeft - this.fringeItemWidth : scrollLeft) /
       this.itemWidth;
 
+    if (selectedPrecise < 0) {
+      return -1;
+    }
+
+    if (Math.ceil(selectedPrecise) >= this.items.length) {
+      return this.items.length;
+    }
+
     return Math.round(selectedPrecise);
   }
 
   /**
-   * Inits monitor of user scrolling to the fringes of the image list.
-   * If scroll to the fringe detected, image list will loop
+   * Determines selected item upon native scroll in the image list
+   * If the selected item is out of range, the image list will be looped
    */
-  private initFringeLooping() {
-    fromEvent(this.hostRef.nativeElement, 'touchstart')
+  private initOnScrollItemSelection() {
+    const listEl = this.imageListRef.nativeElement;
+    fromEvent(listEl, 'touchstart')
       .pipe(
+        switchMapTo(fromEvent(document.body, 'touchend').pipe(take(1))),
         switchMapTo(
-          fromEvent(this.hostRef.nativeElement, 'touchmove').pipe(take(1))
-        ),
-        switchMapTo(fromEvent(document, 'touchend')),
-        switchMapTo(
-          fromEvent(this.imageListRef.nativeElement, 'scroll').pipe(
-            startWith(null), // substitute for scroll event on Android, where no more scroll events are emitted after touchend
-            debounceTime(60),
-            take(1)
+          fromEvent(listEl, 'scroll').pipe(
+            // if there are no more scroll events to come, simulate one
+            startWith(null),
+            takeUntil(fromEvent(document.body, 'touchstart')),
+            debounceTime(50)
           )
         ),
         takeUntil(this.destroy$)
       )
       .subscribe(_ => {
-        const scrollLeft = this.imageListRef.nativeElement.scrollLeft;
-        if (scrollLeft < this.fringeItemWidth) {
-          this.selectedItem = this.items.length - 1;
-          this.cd.markForCheck();
-          this.center();
-        } else if (
-          scrollLeft >
-          (this.items.length - 1) * this.itemWidth + this.fringeItemWidth
-        ) {
-          this.selectedItem = 0;
-          this.cd.markForCheck();
-          this.center();
-        }
-      });
-  }
+        const selectedItem = this.getSelectedItemFromScrollPosition();
 
-  /**
-   * Determines selected item upon native scroll in the image list
-   */
-  private initOnScrollItemSelection() {
-    fromEvent(this.imageListRef.nativeElement, 'scroll')
-      .pipe(
-        tap(_ => this.scrolling$.next(true)),
-        // determine the scroll end. 100ms should be enough
-        debounceTime(100),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(_ => {
-        this.selectedItem = this.getSelectedItemFromScrollPosition();
-        this.scrolling$.next(false);
-        this.selection.emit(this.selectedItem);
+        if (selectedItem < 0 || selectedItem >= this.items.length) {
+          this.select(selectedItem);
+        } else {
+          this.selectedItem = selectedItem;
+          this.selection.emit(selectedItem);
+        }
       });
   }
 
