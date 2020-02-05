@@ -4,12 +4,7 @@
   (click)="prev()"
 ></ngx-chevron-icon>
 
-<ul
-  #imageList
-  class="images"
-  [class.images--hidden]="!imagesShown"
-  [style.scrollBehavior]="scrollBehavior"
->
+<ul #imageList class="images" [class.images--hidden]="!imagesShown">
   <li *ngIf="loop" class="fringe-item" [style.width.px]="fringeItemWidth"></li>
   <li
     *ngFor="let item of items; let i = index"
