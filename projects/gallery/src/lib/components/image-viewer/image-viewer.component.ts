@@ -231,7 +231,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   private shiftImages(x: number) {
     const imageListEl = this.imageListRef.nativeElement;
 
-    if (imageListEl.scrollTo) {
+    if (this.scrollBehaviorSupported) {
       imageListEl.scrollTo({ left: x, behavior: this.scrollBehavior });
     } else if (this.scrollBehavior === 'smooth') {
       this.shiftImagesManually(x);
