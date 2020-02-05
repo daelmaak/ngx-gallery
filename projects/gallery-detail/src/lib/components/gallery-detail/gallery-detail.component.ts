@@ -2,9 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  ElementRef
 } from '@angular/core';
 import { GalleryComponent } from 'projects/gallery/src/public-api';
 import { merge } from 'rxjs';
@@ -17,6 +17,7 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
   template: `
     <ngx-close-icon (click)="close()"></ngx-close-icon>
     <ngx-gallery
+      tabindex="0"
       [selectedItem]="selectedItem || 0"
       [items]="(galleryDetailRef?.state | async)?.items"
       [arrows]="config.arrows"
@@ -36,7 +37,7 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
   styleUrls: ['./gallery-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GalleryDetailComponent implements OnInit, OnDestroy {
+export class GalleryDetailComponent implements OnInit {
   @Input()
   selectedItem: number;
 
@@ -46,10 +47,8 @@ export class GalleryDetailComponent implements OnInit, OnDestroy {
   @Input()
   config: GalleryDetailConfig;
 
-  @ViewChild(GalleryComponent, { static: false })
-  gallery: GalleryComponent;
-
-  constructor() {}
+  @ViewChild(GalleryComponent, { static: true, read: ElementRef })
+  galleryEl: ElementRef<HTMLElement>;
 
   ngOnInit() {
     const escapes$ = this.galleryDetailRef.keydowns$.pipe(
@@ -59,20 +58,9 @@ export class GalleryDetailComponent implements OnInit, OnDestroy {
       this.galleryDetailRef.close()
     );
 
-    if (this.config.keyboardNavigation !== false) {
-      const allowedKeys = ['ArrowRight', 'ArrowLeft', 'Right', 'Left'];
-      const arrows$ = this.galleryDetailRef.keydowns$.pipe(
-        filter<KeyboardEvent>(e => allowedKeys.includes(e.key))
-      );
-      arrows$.subscribe(e =>
-        e.key === 'ArrowLeft' || e.key === 'Left'
-          ? this.gallery.prev()
-          : this.gallery.next()
-      );
-    }
+    // focus so that the gallery detail can be navigated by keyboard
+    this.galleryEl.nativeElement.focus();
   }
-
-  ngOnDestroy() {}
 
   close() {
     this.galleryDetailRef.close();

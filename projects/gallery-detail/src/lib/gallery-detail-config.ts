@@ -8,7 +8,6 @@ export interface GalleryDetailConfig {
   hasBackdrop?: boolean;
   panelClass?: string | string[];
   documentScroll?: boolean;
-  keyboardNavigation?: boolean;
   // gallery config
   arrows?: boolean;
   imageCounter?: boolean;

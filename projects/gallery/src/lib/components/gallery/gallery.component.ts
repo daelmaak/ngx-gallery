@@ -8,7 +8,8 @@ import {
   OnInit,
   Output,
   ViewChild,
-  TemplateRef
+  TemplateRef,
+  HostListener
 } from '@angular/core';
 import { GalleryItem } from '../../core/gallery-item';
 import { Orientation } from '../../core/orientation';
@@ -101,10 +102,12 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {}
 
+  @HostListener('keydown.arrowright')
   next() {
     this.imageViewer.next();
   }
 
+  @HostListener('keydown.arrowleft')
   prev() {
     this.imageViewer.prev();
   }
