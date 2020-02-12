@@ -49,6 +49,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   scrollBehavior: ScrollBehavior;
 
   @Input()
+  thumbs: boolean;
+
+  @Input()
   thumbTemplate: TemplateRef<any>;
 
   @Input()
@@ -98,6 +101,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
     this.arrows === undefined && (this.arrows = true);
     this.loop === undefined && (this.loop = true);
+    this.thumbs === undefined && (this.thumbs = true);
   }
 
   ngOnDestroy() {}

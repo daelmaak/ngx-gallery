@@ -25,6 +25,7 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
       [imageFit]="config.imageFit"
       [imageTemplate]="config.imageTemplate"
       [loop]="config.loop"
+      [thumbs]="config.thumbs"
       [thumbTemplate]="config.thumbTemplate"
       [thumbsAutoScroll]="config.thumbsAutoScroll"
       [thumbsOrientation]="config.thumbsOrientation"

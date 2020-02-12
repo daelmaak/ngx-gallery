@@ -48,11 +48,10 @@ ngx-gallery {
 .third {
   height: 400px;
   width: 600px;
+}
 
-  ::ng-deep {
-    .thumb {
-    }
-  }
+.fourth {
+  width: 100%;
 }
 
 .first,
@@ -93,6 +92,16 @@ ngx-gallery {
 
     .thumb {
       margin: 0 5px;
+    }
+  }
+
+  .gallery-detail-fourth {
+    width: 100%;
+    height: 100%;
+
+    ngx-gallery {
+      width: 100%;
+      height: 100%;
     }
   }
 }

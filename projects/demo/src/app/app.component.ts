@@ -86,4 +86,14 @@ export class AppComponent implements OnInit {
       })
       .load(this.images);
   }
+
+  openFourth(index: number) {
+    this.galleryDetail
+      .open(index, {
+        thumbs: false,
+        panelClass: ['gallery-detail-fourth', 'fullscreen'],
+        loop: true
+      })
+      .load(this.images);
+  }
 }

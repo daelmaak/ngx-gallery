@@ -42,6 +42,14 @@
   (imageClick)="openSecond()"
 ></ngx-gallery>
 
+<ngx-gallery
+  class="fourth"
+  [items]="images"
+  [loop]="false"
+  [thumbs]="false"
+  (imageClick)="openFourth()"
+></ngx-gallery>
+
 <ng-template
   #itemTemplate2
   let-index="index"
