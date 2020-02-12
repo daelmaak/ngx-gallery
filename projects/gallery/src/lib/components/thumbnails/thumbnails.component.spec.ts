@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ThumbnailsComponent } from './thumbnails.component';
+import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
 
 describe('ThumbnailsComponent', () => {
   let component: ThumbnailsComponent;
@@ -8,7 +9,7 @@ describe('ThumbnailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ThumbnailsComponent]
+      declarations: [ThumbnailsComponent, ChevronIconComponent]
     }).compileComponents();
   }));
 

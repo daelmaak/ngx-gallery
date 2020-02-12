@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImageViewerComponent } from './image-viewer.component';
+import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
+import { ImageCounterComponent } from '../image-counter/image-counter.component';
 
 describe('ImageViewerComponent', () => {
   let component: ImageViewerComponent;
@@ -8,9 +10,12 @@ describe('ImageViewerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImageViewerComponent ]
-    })
-    .compileComponents();
+      declarations: [
+        ImageViewerComponent,
+        ChevronIconComponent,
+        ImageCounterComponent
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

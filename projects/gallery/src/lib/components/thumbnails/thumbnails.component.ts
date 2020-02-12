@@ -198,6 +198,10 @@ export class ThumbnailsComponent
   }
 
   centerThumb(index: number) {
+    if (!this.items || this.items.length <= 1) {
+      return;
+    }
+
     const itemEls = this.thumbListRef.nativeElement.querySelectorAll('li');
     const nextItemEl = itemEls.item(index);
 
