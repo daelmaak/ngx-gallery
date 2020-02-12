@@ -4,4 +4,4 @@ Overlay detail gallery, based on ngx-imagery/gallery
 
 ## Installation
 
-`npm i @ngx-imagery/gallery-detail`
+`npm i -S @ngx-imagery/gallery-detail`
