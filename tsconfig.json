@@ -14,10 +14,10 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
     "paths": {
-      "@ngx-galerie/gallery": ["dist/gallery"],
-      "@ngx-galerie/gallery/*": ["dist/gallery/*"],
-      "@ngx-galerie/gallery-detail": ["dist/gallery-detail"],
-      "@ngx-galerie/gallery-detail/*": ["dist/gallery-detail/*"]
+      "@ngx-imagery/gallery": ["dist/gallery"],
+      "@ngx-imagery/gallery/*": ["dist/gallery/*"],
+      "@ngx-imagery/gallery-detail": ["dist/gallery-detail"],
+      "@ngx-imagery/gallery-detail/*": ["dist/gallery-detail/*"]
     }
   },
   "angularCompilerOptions": {

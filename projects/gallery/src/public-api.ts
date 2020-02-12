@@ -1,5 +1,5 @@
 /*
- * Public API Surface of ngx-galerie
+ * Public API Surface of ngx-imagery
  */
 
 export * from './lib/gallery.service';
