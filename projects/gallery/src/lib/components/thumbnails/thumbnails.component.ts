@@ -103,6 +103,7 @@ export class ThumbnailsComponent
 
   private _scrollBehavior: ScrollBehavior;
   private smoothScrollAllowed = false;
+  private scrollBehaviorSupported = 'scrollBehavior' in document.body.style;
   private overscrollBehaviorSupported =
     'overscrollBehavior' in document.body.style;
 
@@ -251,7 +252,7 @@ export class ThumbnailsComponent
     this.sliding$
       .pipe(
         switchMap(totalScrollDelta => {
-          if (this.scrollBehavior === 'auto') {
+          if (this.scrollBehaviorSupported || this.scrollBehavior === 'auto') {
             return of(totalScrollDelta);
           }
           // Emulating native scroll-behavior: smooth

@@ -189,7 +189,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
             // if there are no more scroll events to come, simulate one
             startWith(null),
             takeUntil(fromEvent(document.body, 'touchstart')),
-            debounceTime(50)
+            debounceTime(150)
           )
         ),
         takeUntil(this.destroy$)
@@ -231,9 +231,7 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   private shiftImages(x: number) {
     const imageListEl = this.imageListRef.nativeElement;
 
-    if (this.scrollBehaviorSupported) {
-      imageListEl.scrollTo({ left: x, behavior: this.scrollBehavior });
-    } else if (this.scrollBehavior === 'smooth') {
+    if (!this.scrollBehaviorSupported && this.scrollBehavior === 'smooth') {
       this.shiftImagesManually(x);
     } else {
       imageListEl.scrollLeft = x;
