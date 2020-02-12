@@ -1,5 +1,7 @@
 # ngx-imagery
 
+**Still in alpha!**
+
 High performance, easy to use gallery.
 
 ## Installation
