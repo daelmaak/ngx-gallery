@@ -1,6 +1,8 @@
 import { OverlayRef } from '@angular/cdk/overlay';
-import { GalleryItem } from 'projects/gallery/src/public-api';
 import { BehaviorSubject, Observable } from 'rxjs';
+
+import { GalleryItem } from '@ngx-imagery/gallery';
+
 import { GalleryDetailState } from './gallery-detail-state';
 
 export class GalleryDetailRef {

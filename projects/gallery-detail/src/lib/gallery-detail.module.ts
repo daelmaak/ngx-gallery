@@ -1,7 +1,9 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { GalleryModule } from 'projects/gallery/src/public-api';
+
+import { GalleryModule } from '@ngx-imagery/gallery';
+
 import { GalleryDetailComponent } from './components/gallery-detail/gallery-detail.component';
 import { CloseIconComponent } from './components/icons/close-icon/close-icon.component';
 

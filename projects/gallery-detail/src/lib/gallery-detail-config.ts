@@ -1,6 +1,9 @@
 import { TemplateRef } from '@angular/core';
-import { Orientation, ImageFit } from 'projects/gallery/src/public-api';
-import { OverscrollBehavior } from 'projects/gallery/src/lib/core/overscroll-behavior';
+import {
+  Orientation,
+  ImageFit,
+  OverscrollBehavior
+} from '@ngx-imagery/gallery';
 
 export interface GalleryDetailConfig {
   // TODO should the overlay and gallery config be split?

@@ -8,3 +8,4 @@ export * from './lib/gallery.module';
 export * from './lib/core/gallery-item';
 export * from './lib/core/orientation';
 export * from './lib/core/image-fit';
+export * from './lib/core/overscroll-behavior';

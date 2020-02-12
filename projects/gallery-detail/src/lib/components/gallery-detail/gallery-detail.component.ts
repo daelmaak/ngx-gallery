@@ -1,14 +1,16 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   Input,
   OnInit,
-  ViewChild,
-  ElementRef
+  ViewChild
 } from '@angular/core';
-import { GalleryComponent } from 'projects/gallery/src/public-api';
 import { merge } from 'rxjs';
 import { filter } from 'rxjs/operators';
+
+import { GalleryComponent } from '@ngx-imagery/gallery';
+
 import { GalleryDetailConfig } from '../../gallery-detail-config';
 import { GalleryDetailRef } from '../../gallery-detail-ref';
 
