@@ -1,6 +1,14 @@
 {
   "name": "ngx-imagery",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Daniel Macak",
+    "email": "daniel.macak@email.cz"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -41,6 +49,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "ng-mocks": "^9.0.0",
     "ng-packagr": "^5.4.0",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",

@@ -1,8 +1,19 @@
 {
   "name": "@ngx-imagery/gallery-detail",
   "version": "0.1.0",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Daniel Macak",
+    "email": "daniel.macak@email.cz"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "peerDependencies": {
-    "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14"
+    "@angular/common": ">=8.0.0",
+    "@angular/core": ">=8.0.0",
+    "@angular/cdk/overlay": ">=8.0.0",
+    "@ngx-imagery/gallery": "^0.1.0",
+    "rxjs": ">=6.0.0"
   }
 }
