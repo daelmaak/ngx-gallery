@@ -9,6 +9,10 @@
   "engines": {
     "node": ">=10.0.0"
   },
+  "scripts": {
+    "build": "ng build --project=gallery-detail",
+    "test": "ng test --project=gallery-detail"
+  },
   "peerDependencies": {
     "@angular/common": ">=8.0.0",
     "@angular/core": ">=8.0.0",
