@@ -11,7 +11,7 @@ Performant and easy to use, responsive image galllery
 
 ## Installation
 
-`npm i -S @ngx-imagery/gallery`
+`npm i -S @ngx-imagery/gallery@0.1.0-alpha.1`
 
 ## Usage
 
