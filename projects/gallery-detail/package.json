@@ -6,6 +6,14 @@
     "name": "Daniel Macak",
     "email": "daniel.macak@email.cz"
   },
+  "keywords": [
+    "gallery",
+    "detail",
+    "overlay",
+    "angular",
+    "image",
+    "picture"
+  ],
   "engines": {
     "node": ">=10.0.0"
   },
