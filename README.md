@@ -26,6 +26,21 @@ import { GalleryModule } from '@ngx-imagery/gallery';
 ...
 ```
 
+In your component class
+
+```
+import { GalleryItem } from '@ngx-imagery/gallery';
+
+@Component({...})
+export class AppComponent {
+  images: GalleryItem[] = [
+      {
+        src: '/assets/kitten1.jpg'
+      }
+  ]
+}
+```
+
 In your component template
 
 ```
