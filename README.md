@@ -33,3 +33,5 @@ In your component template
 ```
 
 ## Docs
+
+- [Gallery API](https://github.com/daelmaak/ngx-imagery/wiki/Gallery-API)

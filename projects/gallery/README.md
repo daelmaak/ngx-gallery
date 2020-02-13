@@ -31,3 +31,7 @@ In your component template
 ```
 <ngx-gallery [items]="images"></ngx-gallery>
 ```
+
+## Docs
+
+- [Gallery API](https://github.com/daelmaak/ngx-imagery/wiki/Gallery-API)
