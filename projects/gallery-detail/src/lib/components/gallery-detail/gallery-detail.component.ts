@@ -32,7 +32,6 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
       [thumbsAutoScroll]="config.thumbsAutoScroll"
       [thumbsOrientation]="config.thumbsOrientation"
       [thumbsArrows]="config.thumbsArrows"
-      [thumbsArrowSlideTime]="config.thumbsArrowSlideTime"
       [thumbsArrowSlideByLength]="config.thumbsArrowSlideByLength"
       [thumbsOverscrollBehavior]="config.thumbsOverscrollBehavior"
     ></ngx-gallery>

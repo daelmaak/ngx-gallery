@@ -11,25 +11,17 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import {
-  animationFrameScheduler,
-  BehaviorSubject,
-  fromEvent,
-  interval,
-  Observable,
-  Subject
-} from 'rxjs';
+import { animationFrameScheduler, fromEvent, interval, Subject } from 'rxjs';
 import {
   debounceTime,
-  filter,
   map,
   startWith,
   switchMapTo,
   take,
   takeUntil,
-  takeWhile,
-  tap
+  takeWhile
 } from 'rxjs/operators';
+
 import { GalleryItem } from '../../core/gallery-item';
 import { ImageFit } from '../../core/image-fit';
 
@@ -90,13 +82,17 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   private smoothScrollAllowed = false;
   private scrollBehaviorSupported = 'scrollBehavior' in document.body.style;
 
+  get showArrow() {
+    return this.arrows && this.items && this.items.length > 1;
+  }
+
   get showPrevArrow() {
-    return this.arrows && (this.selectedItem > 0 || this.loop);
+    return this.showArrow && (this.selectedItem > 0 || this.loop);
   }
 
   get showNextArrow() {
     return (
-      this.arrows && (this.selectedItem < this.items.length - 1 || this.loop)
+      this.showArrow && (this.selectedItem < this.items.length - 1 || this.loop)
     );
   }
 
@@ -133,6 +129,10 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   }
 
   select(index: number) {
+    if (this.selectedItem === index) {
+      return;
+    }
+
     if (!this.loop && (index < 0 || index >= this.items.length)) {
       this.center();
       return;

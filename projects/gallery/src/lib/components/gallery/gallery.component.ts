@@ -52,9 +52,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
   thumbs: boolean;
 
   @Input()
-  thumbTemplate: TemplateRef<any>;
-
-  @Input()
   thumbsAutoScroll: boolean;
 
   @Input()
@@ -62,9 +59,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @Input()
   thumbsArrows: boolean;
-
-  @Input()
-  thumbsArrowSlideTime: number;
 
   @Input()
   thumbsArrowSlideByLength: number;
@@ -78,11 +72,17 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @Input()
   thumbsImageFit: ImageFit;
 
+  @Input()
+  thumbTemplate: TemplateRef<any>;
+
   @Output()
   imageClick = new EventEmitter<Event>();
 
   @Output()
   thumbClick = new EventEmitter<Event>();
+
+  @Output()
+  selection = new EventEmitter<GalleryItem>();
 
   @ViewChild(ImageViewerComponent, { static: false })
   imageViewer: ImageViewerComponent;
@@ -118,5 +118,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   select(index: number) {
     this.imageViewer.select(index);
+    this.selectedItem = index;
+    this.selection.emit(this.items[index]);
   }
 }

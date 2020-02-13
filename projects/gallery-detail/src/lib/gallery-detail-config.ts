@@ -22,7 +22,6 @@ export interface GalleryDetailConfig {
   thumbsAutoScroll?: boolean;
   thumbsOrientation?: Orientation;
   thumbsArrows?: boolean;
-  thumbsArrowSlideTime?: number;
   thumbsArrowSlideByLength?: number;
   thumbsOverscrollBehavior?: OverscrollBehavior;
 }

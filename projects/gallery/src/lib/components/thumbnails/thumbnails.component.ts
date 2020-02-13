@@ -51,9 +51,6 @@ export class ThumbnailsComponent
   arrows: boolean;
 
   @Input()
-  arrowSlideTime: number;
-
-  @Input()
   arrowSlideByLength: number;
 
   @Input()
@@ -90,7 +87,6 @@ export class ThumbnailsComponent
 
   @ViewChild('thumbs', { static: true })
   thumbListRef: ElementRef<HTMLElement>;
-
   imageStyles = {
     backgroundSize: 'cover'
   };
@@ -144,7 +140,6 @@ export class ThumbnailsComponent
   }
 
   ngOnInit() {
-    this.arrowSlideTime === undefined && (this.arrowSlideTime = 200);
     this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
     this.overscrollBehavior == null && (this.overscrollBehavior = 'auto');
     this.autoScroll === undefined && (this.autoScroll = true);
@@ -249,30 +244,32 @@ export class ThumbnailsComponent
   }
 
   private initManualScroll() {
-    // NOTE: This stream requests animation frames in a periodical fashion so that it can update scroll position of thumbnails
-    // before each paint. The scroll value is updated proportionally to the time elapsed since the animation's start.
-    // The period of requested frames should match the display's refresh rate as recommended in W3C spec. Essentially, this stream
-    // requests animation frames in the same way as recursive calls to requestAnimationFrame().
     this.sliding$
       .pipe(
         switchMap(totalScrollDelta => {
           if (this.scrollBehaviorSupported || this.scrollBehavior === 'auto') {
             return of(totalScrollDelta);
           }
-          // Emulating native scroll-behavior: smooth
+
           const negative = totalScrollDelta < 0;
           totalScrollDelta = Math.abs(totalScrollDelta);
 
           const startTime = Date.now();
+          const baseArrowSlideTime = 200;
           let totalTime =
-            (Math.log10(totalScrollDelta) - 1.1) * this.arrowSlideTime;
+            (Math.log10(totalScrollDelta) - 1.1) * baseArrowSlideTime;
 
           if (totalTime < 0) {
-            totalTime = this.arrowSlideTime;
+            totalTime = baseArrowSlideTime;
           }
 
           let currentScroll = 0;
 
+          // Emulating native scroll-behavior: smooth
+          // NOTE: This stream requests animation frames in a periodical fashion so that it can update scroll position of thumbnails
+          // before each paint. The scroll value is updated proportionally to the time elapsed since the animation's start.
+          // The period of requested frames should match the display's refresh rate as recommended in W3C spec. Essentially, this stream
+          // requests animation frames in the same way as recursive calls to requestAnimationFrame().
           return of(0, animationFrameScheduler).pipe(
             repeat(),
             map(_ => {

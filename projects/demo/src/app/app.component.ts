@@ -63,8 +63,7 @@ export class AppComponent implements OnInit {
       .open(index, {
         thumbsOrientation: 'bottom',
         panelClass: ['gallery-detail-first'],
-        documentScroll: true,
-        thumbsArrowSlideTime: 150
+        documentScroll: true
       })
       .load(this.images);
   }
