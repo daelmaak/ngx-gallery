@@ -1,6 +1,6 @@
 {
   "name": "@ngx-imagery/gallery-detail",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.0",
   "license": "Apache-2.0",
   "author": {
     "name": "Daniel Macak",
@@ -19,6 +19,7 @@
   },
   "scripts": {
     "build": "ng build --project=gallery-detail",
+    "prepare": "npm run build",
     "test": "ng test --project=gallery-detail"
   },
   "peerDependencies": {
