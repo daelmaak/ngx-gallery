@@ -11,9 +11,9 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
     "start:demo": "ng serve --host 0.0.0.0 demo",
     "build": "ng build && ng build --project=gallery-detail",
+    "build:demo": "ng build --project=demo --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
