@@ -150,24 +150,21 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
   }
 
   private center() {
-    let shift = this.selectedItem * this.itemWidth;
+    const shift = this.selectedItem * this.itemWidth + this.fringeItemWidth;
 
-    if (this.loop) {
-      shift += this.fringeItemWidth;
-    }
     this.shiftImages(shift);
   }
 
   private getSelectedItemFromScrollPosition(): number {
     const scrollLeft = this.imageListRef.nativeElement.scrollLeft;
-    const selectedPrecise =
-      (this.loop ? scrollLeft - this.fringeItemWidth : scrollLeft) /
-      this.itemWidth;
+    let selectedPrecise = (scrollLeft - this.fringeItemWidth) / this.itemWidth;
 
     if (selectedPrecise < 0) {
       return -1;
     }
 
+    // tolerance for some devices which don't give precise scroll left
+    selectedPrecise = (scrollLeft - this.fringeItemWidth - 10) / this.itemWidth;
     if (Math.ceil(selectedPrecise) >= this.items.length) {
       return this.items.length;
     }
