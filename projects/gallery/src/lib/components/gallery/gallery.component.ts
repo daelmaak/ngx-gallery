@@ -9,7 +9,8 @@ import {
   Output,
   ViewChild,
   TemplateRef,
-  HostListener
+  HostListener,
+  ElementRef
 } from '@angular/core';
 import { GalleryItem } from '../../core/gallery-item';
 import { Orientation } from '../../core/orientation';
@@ -87,6 +88,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @ViewChild(ImageViewerComponent, { static: false })
   imageViewer: ImageViewerComponent;
 
+  @ViewChild(ImageViewerComponent, { static: false, read: ElementRef })
+  imageViewerEl: ElementRef<HTMLElement>;
+
   @HostBinding('class.column')
   get galleryCollumn() {
     return (
@@ -105,6 +109,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {}
+
+  focus() {
+    this.imageViewerEl.nativeElement.focus();
+  }
 
   @HostListener('keydown.arrowright')
   next() {

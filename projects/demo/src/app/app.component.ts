@@ -1,5 +1,13 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { GalleryItem } from 'projects/gallery/src/public-api';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  TemplateRef,
+  ViewChildren,
+  QueryList,
+  AfterViewInit
+} from '@angular/core';
+import { GalleryItem, GalleryComponent } from 'projects/gallery/src/public-api';
 import {
   GalleryDetailRef,
   GalleryDetailService
@@ -10,9 +18,11 @@ import {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   images: GalleryItem[];
   galleryDetailRef: GalleryDetailRef;
+
+  @ViewChildren(GalleryComponent) galleries: QueryList<GalleryComponent>;
 
   @ViewChild('detailImageTemplate2', { static: false })
   detailImageTemplate2: TemplateRef<any>;
@@ -56,6 +66,10 @@ export class AppComponent implements OnInit {
         thumbSrc: '/assets/landscape1-thumb.jpg'
       }
     ];
+  }
+
+  ngAfterViewInit() {
+    this.galleries.first.focus();
   }
 
   openFirst(index: number) {
