@@ -3,18 +3,44 @@
   min-height: 1000px;
 }
 
-ngx-gallery {
-  margin-top: 50px;
-  background: #222121;
-  margin: 20px auto 0;
+header {
+  width: 100%;
 }
 
-.first {
-  width: 700px;
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 10px 15px;
 
   @media (max-width: 767px) {
-    width: auto;
+    max-width: 100%;
   }
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+section {
+  margin-bottom: 15px;
+}
+
+mat-checkbox {
+  display: block;
+}
+
+mat-radio-button {
+  margin-left: 20px;
+}
+
+mat-form-field {
+  label {
+    white-space: nowrap;
+  }
+}
+
+ngx-gallery {
+  width: 100%;
 }
 
 .second {
@@ -54,7 +80,6 @@ ngx-gallery {
   width: 100%;
 }
 
-.first,
 .second,
 .third {
   @media (max-width: 767px) {

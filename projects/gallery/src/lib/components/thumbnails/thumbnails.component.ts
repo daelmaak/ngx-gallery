@@ -15,7 +15,14 @@ import {
   ViewChild,
   TemplateRef
 } from '@angular/core';
-import { fromEvent, of, Subject, animationFrameScheduler, merge } from 'rxjs';
+import {
+  fromEvent,
+  of,
+  Subject,
+  animationFrameScheduler,
+  merge,
+  Subscription
+} from 'rxjs';
 import {
   debounceTime,
   map,
@@ -96,6 +103,7 @@ export class ThumbnailsComponent
 
   private destroy$ = new Subject();
   private sliding$ = new Subject<number>();
+  private arrowUpdatesSub: Subscription;
 
   private _scrollBehavior: ScrollBehavior;
   private smoothScrollAllowed = false;
@@ -124,7 +132,7 @@ export class ThumbnailsComponent
     private elRef: ElementRef<HTMLElement>
   ) {}
 
-  ngOnChanges({ orientation, selectedItem }: SimpleChanges) {
+  ngOnChanges({ arrows, orientation, selectedItem }: SimpleChanges) {
     if (orientation && orientation.currentValue != null) {
       const newOrientation: Orientation = orientation.currentValue;
       this.vertical = newOrientation === 'left' || newOrientation === 'right';
@@ -137,6 +145,15 @@ export class ThumbnailsComponent
     ) {
       this.centerThumb(selectedItem.currentValue);
     }
+    if (arrows) {
+      if (arrows.currentValue) {
+        this.initArrowUpdates();
+      } else {
+        this.showStartArrow = false;
+        this.showEndArrow = false;
+        this.arrowUpdatesSub.unsubscribe();
+      }
+    }
   }
 
   ngOnInit() {
@@ -145,16 +162,7 @@ export class ThumbnailsComponent
     this.autoScroll === undefined && (this.autoScroll = true);
 
     if (this.arrows && typeof window !== undefined) {
-      this.initManualScroll();
-
-      merge(
-        fromEvent(this.thumbListRef.nativeElement, 'scroll'),
-        fromEvent(window, 'resize')
-      )
-        .pipe(debounceTime(50), takeUntil(this.destroy$))
-        .subscribe(this.updateArrows);
-
-      requestAnimationFrame(this.updateArrows);
+      this.initImperativeScroll();
     }
 
     if (
@@ -223,6 +231,17 @@ export class ThumbnailsComponent
     }
   }
 
+  private initArrowUpdates() {
+    this.arrowUpdatesSub = merge(
+      fromEvent(this.thumbListRef.nativeElement, 'scroll'),
+      fromEvent(window, 'resize')
+    )
+      .pipe(debounceTime(50), takeUntil(this.destroy$))
+      .subscribe(this.updateArrows);
+
+    requestAnimationFrame(this.updateArrows);
+  }
+
   private initManualOverscrollContain() {
     fromEvent<WheelEvent>(this.thumbListRef.nativeElement, 'wheel')
       .pipe(takeUntil(this.destroy$))
@@ -243,7 +262,7 @@ export class ThumbnailsComponent
       });
   }
 
-  private initManualScroll() {
+  private initImperativeScroll() {
     this.sliding$
       .pipe(
         switchMap(totalScrollDelta => {

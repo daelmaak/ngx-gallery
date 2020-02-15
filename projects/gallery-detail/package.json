@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "ng build --project=gallery-detail",
-    "prepare": "npm run build",
+    "prepublishOnly": "npm run build && cd ../../dist/gallery-detail",
     "test": "ng test --project=gallery-detail"
   },
   "peerDependencies": {

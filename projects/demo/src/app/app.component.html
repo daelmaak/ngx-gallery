@@ -1,15 +1,128 @@
-<ngx-gallery
-  #gallery1
-  class="first"
-  [items]="images"
-  [thumbsAutoScroll]="true"
-  thumbsOrientation="bottom"
-  [arrows]="true"
-  [loop]="true"
-  (imageClick)="openFirst(gallery1.selectedItem)"
-></ngx-gallery>
+<header class="mat-elevation-z2">
+  <mat-toolbar>
+    <h2>ngx-imagery</h2>
+  </mat-toolbar>
+</header>
 
-<ngx-gallery
+<main>
+  <form>
+    <section>
+      <mat-checkbox name="arrows" [(ngModel)]="arrows">Arrows</mat-checkbox>
+    </section>
+
+    <section>
+      <mat-checkbox name="imageCounter" [(ngModel)]="imageCounter"
+        >Image counter</mat-checkbox
+      >
+    </section>
+
+    <section>
+      <label>Image fit:</label>
+      <mat-radio-group name="imageFit" [(ngModel)]="imageFit">
+        <mat-radio-button value="contain">contain</mat-radio-button>
+        <mat-radio-button value="cover">cover</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
+      <mat-checkbox name="loop" [(ngModel)]="loop">Loop</mat-checkbox>
+    </section>
+
+    <section>
+      <label>Scroll behavior:</label>
+      <mat-radio-group name="scrollBehavior" [(ngModel)]="scrollBehavior">
+        <mat-radio-button value="smooth">smooth</mat-radio-button>
+        <mat-radio-button value="auto">auto</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
+      <mat-checkbox name="thumbs" [(ngModel)]="thumbs">Thumbnails</mat-checkbox>
+    </section>
+
+    <section>
+      <mat-checkbox name="thumbsAutoScroll" [(ngModel)]="thumbsAutoScroll"
+        >Thumbs autoscroll</mat-checkbox
+      >
+    </section>
+
+    <section>
+      <label>Thumbnails orientation:</label>
+      <mat-radio-group name="thumbsOrientation" [(ngModel)]="thumbsOrientation">
+        <mat-radio-button value="top">top</mat-radio-button>
+        <mat-radio-button value="bottom">bottom</mat-radio-button>
+        <mat-radio-button value="left">left</mat-radio-button>
+        <mat-radio-button value="right">right</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
+      <mat-checkbox name="thumbsArrows" [(ngModel)]="thumbsArrows"
+        >Thumbnail arrows</mat-checkbox
+      >
+      <mat-form-field>
+        <label>Slide thumbnails by length</label>
+        <input
+          name="thumbsArrowsSlideByLength"
+          matInput
+          [(ngModel)]="thumbsArrowSlideByLength"
+        />
+      </mat-form-field>
+    </section>
+
+    <section>
+      <label>Thumbnails scroll behavior:</label>
+      <mat-radio-group
+        name="thumbsScrollBehavior"
+        [(ngModel)]="thumbsScrollBehavior"
+      >
+        <mat-radio-button value="smooth">smooth</mat-radio-button>
+        <mat-radio-button value="auto">auto</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
+      <label>Thumbnails overscroll behavior:</label>
+      <mat-radio-group
+        name="thumbsOverscrollBehavior"
+        [(ngModel)]="thumbsOverscrollBehavior"
+      >
+        <mat-radio-button value="contain">contain</mat-radio-button>
+        <mat-radio-button value="auto">auto</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
+      <label>Thumbnail image fit:</label>
+      <mat-radio-group name="thumbsImageFit" [(ngModel)]="thumbsImageFit">
+        <mat-radio-button value="contain">contain</mat-radio-button>
+        <mat-radio-button value="cover">cover</mat-radio-button>
+      </mat-radio-group>
+    </section>
+  </form>
+
+  <ngx-gallery
+    #gallery1
+    class="first"
+    [items]="images"
+    [arrows]="arrows"
+    [imageCounter]="imageCounter"
+    [imageFit]="imageFit"
+    [loop]="loop"
+    [scrollBehavior]="scrollBehavior"
+    [thumbs]="thumbs"
+    [thumbsAutoScroll]="thumbsAutoScroll"
+    [thumbsOrientation]="thumbsOrientation"
+    [thumbsArrows]="thumbsArrows"
+    [thumbsArrowSlideByLength]="thumbsArrowSlideByLength"
+    [thumbsScrollBehavior]="thumbsScrollBehavior"
+    [thumbsOverscrollBehavior]="thumbsOverscrollBehavior"
+    [thumbsImageFit]="thumbsImageFit"
+    (imageClick)="openFirst(gallery1.selectedItem)"
+  ></ngx-gallery>
+</main>
+
+<!-- <ngx-gallery
   #gallery3
   class="third"
   [imageCounter]="false"
@@ -46,7 +159,7 @@
   [loop]="false"
   [thumbs]="false"
   (imageClick)="openFourth($event)"
-></ngx-gallery>
+></ngx-gallery> -->
 
 <ng-template
   #itemTemplate2

@@ -7,7 +7,13 @@ import {
   QueryList,
   AfterViewInit
 } from '@angular/core';
-import { GalleryItem, GalleryComponent } from 'projects/gallery/src/public-api';
+import {
+  GalleryItem,
+  GalleryComponent,
+  ImageFit,
+  Orientation,
+  OverscrollBehavior
+} from 'projects/gallery/src/public-api';
 import {
   GalleryDetailRef,
   GalleryDetailService
@@ -22,10 +28,21 @@ export class AppComponent implements OnInit, AfterViewInit {
   images: GalleryItem[];
   galleryDetailRef: GalleryDetailRef;
 
-  @ViewChildren(GalleryComponent) galleries: QueryList<GalleryComponent>;
+  arrows = true;
+  imageCounter = true;
+  imageFit: ImageFit = 'contain';
+  loop = true;
+  scrollBehavior: ScrollBehavior = 'smooth';
+  thumbs = true;
+  thumbsAutoScroll = true;
+  thumbsOrientation: Orientation = 'bottom';
+  thumbsArrows = true;
+  thumbsArrowSlideByLength = 0;
+  thumbsScrollBehavior: ScrollBehavior = 'smooth';
+  thumbsOverscrollBehavior: OverscrollBehavior = 'auto';
+  thumbsImageFit: ImageFit = 'cover';
 
-  @ViewChild('detailImageTemplate2', { static: false })
-  detailImageTemplate2: TemplateRef<any>;
+  @ViewChild(GalleryComponent, { static: false }) gallery: GalleryComponent;
 
   constructor(private galleryDetail: GalleryDetailService) {}
 
@@ -69,7 +86,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.galleries.first.focus();
+    // this.gallery.focus();
   }
 
   openFirst(index: number) {
@@ -82,31 +99,31 @@ export class AppComponent implements OnInit, AfterViewInit {
       .load(this.images);
   }
 
-  openSecond() {
-    this.galleryDetail
-      .open(0, {
-        imageTemplate: this.detailImageTemplate2
-      })
-      .load(this.images);
-  }
+  // openSecond() {
+  //   this.galleryDetail
+  //     .open(0, {
+  //       imageTemplate: this.detailImageTemplate2
+  //     })
+  //     .load(this.images);
+  // }
 
-  openThird(index: number) {
-    this.galleryDetail
-      .open(index, {
-        thumbsOrientation: 'bottom',
-        panelClass: ['gallery-detail-third', 'fullscreen'],
-        loop: false
-      })
-      .load(this.images);
-  }
+  // openThird(index: number) {
+  //   this.galleryDetail
+  //     .open(index, {
+  //       thumbsOrientation: 'bottom',
+  //       panelClass: ['gallery-detail-third', 'fullscreen'],
+  //       loop: false
+  //     })
+  //     .load(this.images);
+  // }
 
-  openFourth(index: number) {
-    this.galleryDetail
-      .open(index, {
-        thumbs: false,
-        panelClass: ['gallery-detail-fourth', 'fullscreen'],
-        loop: true
-      })
-      .load(this.images);
-  }
+  // openFourth(index: number) {
+  //   this.galleryDetail
+  //     .open(index, {
+  //       thumbs: false,
+  //       panelClass: ['gallery-detail-fourth', 'fullscreen'],
+  //       loop: true
+  //     })
+  //     .load(this.images);
+  // }
 }
