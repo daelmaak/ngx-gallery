@@ -2,6 +2,8 @@
 
 Performant and easy to use, responsive image galllery
 
+[**DEMO**](https://daelmaak.github.io/ngx-imagery/)
+
 ## Why another gallery?
 
 - High performance due to leverage of native scroll
