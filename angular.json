@@ -70,7 +70,6 @@
           },
           "configurations": {
             "production": {
-              "deployUrl": "/ngx-imagery/",
               "fileReplacements": [
                 {
                   "replace": "projects/demo/src/environments/environment.ts",
