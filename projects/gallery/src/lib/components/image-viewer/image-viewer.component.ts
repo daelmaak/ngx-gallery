@@ -178,14 +178,18 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
    */
   private initOnScrollItemSelection() {
     const listEl = this.imageListRef.nativeElement;
-    fromEvent(listEl, 'touchstart')
+    const options = { passive: true };
+
+    fromEvent(listEl, 'touchstart', options)
       .pipe(
-        switchMapTo(fromEvent(document.body, 'touchend').pipe(take(1))),
         switchMapTo(
-          fromEvent(listEl, 'scroll').pipe(
+          fromEvent(document.body, 'touchend', options).pipe(take(1))
+        ),
+        switchMapTo(
+          fromEvent(listEl, 'scroll', options).pipe(
             // if there are no more scroll events to come, simulate one
             startWith(null),
-            takeUntil(fromEvent(document.body, 'touchstart')),
+            takeUntil(fromEvent(document.body, 'touchstart', options)),
             debounceTime(150)
           )
         ),

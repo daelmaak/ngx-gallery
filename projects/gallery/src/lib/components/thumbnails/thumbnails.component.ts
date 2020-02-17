@@ -233,7 +233,7 @@ export class ThumbnailsComponent
 
   private initArrowUpdates() {
     this.arrowUpdatesSub = merge(
-      fromEvent(this.thumbListRef.nativeElement, 'scroll'),
+      fromEvent(this.thumbListRef.nativeElement, 'scroll', { passive: true }),
       fromEvent(window, 'resize')
     )
       .pipe(debounceTime(50), takeUntil(this.destroy$))
