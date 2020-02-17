@@ -43,6 +43,19 @@ ngx-gallery {
   width: 100%;
 }
 
+.github-link {
+  $dimension: 32px;
+
+  width: $dimension;
+  height: $dimension;
+  margin-left: auto;
+
+  img {
+    width: $dimension;
+    height: $dimension;
+  }
+}
+
 .second {
   background: white;
   width: 900px;
