@@ -17,6 +17,7 @@ import { Orientation, OrientationFlag } from '../../core/orientation';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { ImageFit } from '../../core/image-fit';
 import { OverscrollBehavior } from '../../core/overscroll-behavior';
+import { ImageLoading } from '../../core/image-loading';
 
 @Component({
   selector: 'ngx-gallery',
@@ -33,6 +34,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @Input()
   arrows: boolean;
+
+  @Input()
+  imageLoading: ImageLoading;
 
   @Input()
   imageCounter: boolean;
@@ -116,6 +120,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.arrows === undefined && (this.arrows = true);
     this.loop === undefined && (this.loop = true);
     this.thumbs === undefined && (this.thumbs = true);
+    this.imageLoading == null && (this.imageLoading = 'auto');
   }
 
   ngOnDestroy() {}

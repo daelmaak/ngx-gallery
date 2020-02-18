@@ -24,7 +24,13 @@ import {
   takeWhile
 } from 'rxjs/operators';
 
-import { GalleryItem, ImageFit, Orientation, SUPPORT } from '../../core';
+import {
+  GalleryItem,
+  ImageFit,
+  Orientation,
+  SUPPORT,
+  ImageLoading
+} from '../../core';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -47,6 +53,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   imageFit: ImageFit;
+
+  @Input()
+  imageLoading: ImageLoading;
 
   @Input()
   imageTemplate: TemplateRef<any>;

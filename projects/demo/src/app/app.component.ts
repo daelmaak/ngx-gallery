@@ -16,6 +16,7 @@ import {
   GalleryComponent,
   GalleryItem,
   ImageFit,
+  ImageLoading,
   Orientation,
   OverscrollBehavior
 } from 'projects/gallery/src/public-api';
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   arrows = true;
   imageCounter = true;
   imageFit: ImageFit = 'contain';
+  imageLoading: ImageLoading = 'lazy';
   loop = true;
   scrollBehavior: ScrollBehavior = 'smooth';
   thumbs = true;

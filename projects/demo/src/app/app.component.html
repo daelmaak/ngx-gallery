@@ -28,6 +28,15 @@
     </section>
 
     <section>
+      <label>Image loading:</label>
+      <mat-radio-group name="imageLoading" [(ngModel)]="imageLoading">
+        <mat-radio-button value="auto">auto</mat-radio-button>
+        <mat-radio-button value="eager">eager</mat-radio-button>
+        <mat-radio-button value="lazy">lazy</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
       <mat-checkbox name="loop" [(ngModel)]="loop">Loop</mat-checkbox>
     </section>
 
@@ -128,6 +137,7 @@
     [arrows]="arrows"
     [imageCounter]="imageCounter"
     [imageFit]="imageFit"
+    [imageLoading]="imageLoading"
     [loop]="loop"
     [scrollBehavior]="scrollBehavior"
     [thumbs]="thumbs"

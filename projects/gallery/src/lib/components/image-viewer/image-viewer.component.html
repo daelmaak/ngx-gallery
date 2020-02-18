@@ -18,12 +18,12 @@
     *ngFor="let item of items; let i = index"
     (click)="imageClick.emit($event)"
   >
-    <div
+    <img
       *ngIf="!imageTemplate; else customTemplate"
-      class="image"
-      [style.backgroundSize]="imageFit"
-      [style.backgroundImage]="'url(' + item.src + ')'"
-    ></div>
+      [src]="item.src"
+      [attr.loading]="imageLoading"
+      [style.objectFit]="imageFit"
+    />
     <ng-template #customTemplate>
       <ng-container
         *ngTemplateOutlet="
