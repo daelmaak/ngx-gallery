@@ -52,7 +52,7 @@
 
   .animation {
     width: 60px;
-    height: 61px;
+    height: 62px;
     max-width: 100%;
     border-radius: 100%;
     background: white;
@@ -71,10 +71,10 @@
 
     @keyframes rotate {
       0% {
-        transform: rotate3d(0, 0, 1, 0);
+        transform: rotate(0deg);
       }
       100% {
-        transform: rotate3d(0, 0, 1, 360deg);
+        transform: rotate(359deg);
       }
     }
   }
