@@ -107,7 +107,7 @@
   <ngx-gallery
     #gallery1
     class="first"
-    [items]="images"
+    [items]="images | async"
     [arrows]="arrows"
     [imageCounter]="imageCounter"
     [imageFit]="imageFit"

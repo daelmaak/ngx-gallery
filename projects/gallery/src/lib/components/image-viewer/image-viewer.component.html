@@ -11,6 +11,9 @@
   [style.scrollBehavior]="scrollBehavior"
 >
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
+  <li *ngIf="!items || !items.length" class="loading">
+    <div class="animation"></div>
+  </li>
   <li
     *ngFor="let item of items; let i = index"
     (click)="imageClick.emit($event)"

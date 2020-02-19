@@ -1,23 +1,18 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  TemplateRef,
-  ViewChildren,
-  QueryList,
-  AfterViewInit
-} from '@angular/core';
-import {
-  GalleryItem,
-  GalleryComponent,
-  ImageFit,
-  Orientation,
-  OverscrollBehavior
-} from 'projects/gallery/src/public-api';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
+
 import {
   GalleryDetailRef,
   GalleryDetailService
 } from 'projects/gallery-detail/src/public-api';
+import {
+  GalleryComponent,
+  GalleryItem,
+  ImageFit,
+  Orientation,
+  OverscrollBehavior
+} from 'projects/gallery/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +20,7 @@ import {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  images: GalleryItem[];
+  images: Observable<GalleryItem[]>;
   galleryDetailRef: GalleryDetailRef;
 
   arrows = true;
@@ -35,7 +30,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   scrollBehavior: ScrollBehavior = 'smooth';
   thumbs = true;
   thumbsAutoScroll = true;
-  thumbsOrientation: Orientation = 'bottom';
+  thumbsOrientation: Orientation = 'left';
   thumbsArrows = true;
   thumbsArrowSlideByLength = 0;
   thumbsScrollBehavior: ScrollBehavior = 'smooth';
@@ -47,7 +42,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(private galleryDetail: GalleryDetailService) {}
 
   ngOnInit() {
-    this.images = [
+    this.images = of([
       {
         src: './assets/mountains1.jpg',
         thumbSrc: './assets/mountains1-thumb.jpg'
@@ -82,21 +77,21 @@ export class AppComponent implements OnInit, AfterViewInit {
         src: './assets/landscape1.jpg',
         thumbSrc: './assets/landscape1-thumb.jpg'
       }
-    ];
+    ]).pipe(delay(1000));
   }
 
   ngAfterViewInit() {
     // this.gallery.focus();
   }
 
-  openFirst(index: number) {
+  async openFirst(index: number) {
     this.galleryDetail
       .open(index, {
         thumbsOrientation: 'bottom',
         panelClass: ['gallery-detail-first'],
         documentScroll: true
       })
-      .load(this.images);
+      .load(await this.images.toPromise());
   }
 
   // openSecond() {

@@ -8,6 +8,8 @@
   [style.scrollBehavior]="scrollBehavior"
   [style.overscrollBehavior]="overscrollBehavior"
 >
+  <!-- placeholder before images come -->
+  <li *ngIf="!items || !items.length" class="thumb"></li>
   <li
     *ngFor="let item of items; let i = index"
     class="thumb"

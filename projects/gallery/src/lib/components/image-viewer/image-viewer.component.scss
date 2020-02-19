@@ -44,6 +44,42 @@
   background-position: center;
 }
 
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+
+  .animation {
+    width: 60px;
+    height: 61px;
+    max-width: 100%;
+    border-radius: 100%;
+    background: white;
+    animation: rotate 1s infinite;
+
+    &::after {
+      content: '';
+      display: block;
+      background-color: #222;
+      width: 16px;
+      height: 16px;
+      margin-left: 10px;
+      margin-top: 10px;
+      border-radius: 100%;
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate3d(0, 0, 1, 0);
+      }
+      100% {
+        transform: rotate3d(0, 0, 1, 360deg);
+      }
+    }
+  }
+}
+
 ngx-image-counter {
   position: absolute;
   top: 0;
