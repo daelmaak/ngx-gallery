@@ -13,7 +13,7 @@ import {
   ElementRef
 } from '@angular/core';
 import { GalleryItem } from '../../core/gallery-item';
-import { Orientation } from '../../core/orientation';
+import { Orientation, OrientationFlag } from '../../core/orientation';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { ImageFit } from '../../core/image-fit';
 import { OverscrollBehavior } from '../../core/overscroll-behavior';
@@ -96,6 +96,16 @@ export class GalleryComponent implements OnInit, OnDestroy {
     return (
       this.thumbsOrientation === 'top' || this.thumbsOrientation === 'bottom'
     );
+  }
+
+  get galleryMainAxis(): OrientationFlag {
+    if (
+      this.thumbsOrientation === 'top' ||
+      this.thumbsOrientation === 'bottom'
+    ) {
+      return OrientationFlag.HORIZONTAL;
+    }
+    return OrientationFlag.VERTICAL;
   }
 
   constructor() {}

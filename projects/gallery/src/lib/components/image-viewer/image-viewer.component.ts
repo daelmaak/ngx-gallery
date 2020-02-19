@@ -9,7 +9,9 @@ import {
   OnInit,
   Output,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { animationFrameScheduler, fromEvent, interval, Subject } from 'rxjs';
 import {
@@ -24,6 +26,7 @@ import {
 
 import { GalleryItem } from '../../core/gallery-item';
 import { ImageFit } from '../../core/image-fit';
+import { Orientation } from '../../core/orientation';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -31,7 +34,7 @@ import { ImageFit } from '../../core/image-fit';
   styleUrls: ['./image-viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageViewerComponent implements OnInit, OnDestroy {
+export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   items: GalleryItem[];
 
@@ -52,6 +55,9 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
 
   @Input()
   loop: boolean;
+
+  @Input()
+  galleryMainAxis: Orientation;
 
   @Input()
   set scrollBehavior(val: ScrollBehavior) {
@@ -100,6 +106,18 @@ export class ImageViewerComponent implements OnInit, OnDestroy {
     private hostRef: ElementRef<HTMLElement>,
     private cd: ChangeDetectorRef
   ) {}
+
+  ngOnChanges({ galleryMainAxis }: SimpleChanges) {
+    if (galleryMainAxis && !galleryMainAxis.firstChange) {
+      // if image-viewer - thumbnails layout changed from vertical to horizontal or vice versa
+      if (!(galleryMainAxis.currentValue & galleryMainAxis.previousValue)) {
+        requestAnimationFrame(() => {
+          this.itemWidth = this.hostRef.nativeElement.offsetWidth;
+          this.center();
+        });
+      }
+    }
+  }
 
   ngOnInit() {
     this.imageCounter === undefined && (this.imageCounter = true);
