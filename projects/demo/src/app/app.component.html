@@ -102,11 +102,28 @@
         <mat-radio-button value="cover">cover</mat-radio-button>
       </mat-radio-group>
     </section>
+
+    <hr />
+
+    <section class="image-loading-latency">
+      <mat-form-field>
+        <label>Image loading latency</label>
+        <input
+          name="imageLoadingLatency"
+          matInput
+          [(ngModel)]="imageLoadingLatency"
+        />
+      </mat-form-field>
+      <button mat-raised-button (click)="confirmImageLoadingLatency()">
+        Confirm latency
+      </button>
+    </section>
   </form>
 
   <ngx-gallery
     #gallery1
     class="first"
+    *ngIf="displayGallery"
     [items]="images | async"
     [arrows]="arrows"
     [imageCounter]="imageCounter"
@@ -124,45 +141,6 @@
     (imageClick)="openFirst(gallery1.selectedItem)"
   ></ngx-gallery>
 </main>
-
-<!-- <ngx-gallery
-  #gallery3
-  class="third"
-  [imageCounter]="false"
-  [items]="images"
-  [selectedItem]="5"
-  scrollBehavior="auto"
-  thumbsOrientation="bottom"
-  [thumbsArrowSlideByLength]="200"
-  (imageClick)="openThird(gallery3.selectedItem)"
-></ngx-gallery>
-
-<ngx-gallery
-  class="third"
-  [items]="images"
-  imageFit="cover"
-  thumbsImageFit="contain"
-  thumbsOverscrollBehavior="contain"
-></ngx-gallery>
-
-<ngx-gallery
-  class="second"
-  [items]="images"
-  [imageTemplate]="itemTemplate2"
-  [loop]="false"
-  [thumbTemplate]="thumbTemplate2"
-  thumbsOrientation="left"
-  [thumbsArrows]="false"
-  (imageClick)="openSecond()"
-></ngx-gallery>
-
-<ngx-gallery
-  class="fourth"
-  [items]="images"
-  [loop]="false"
-  [thumbs]="false"
-  (imageClick)="openFourth($event)"
-></ngx-gallery> -->
 
 <ng-template
   #itemTemplate2

@@ -1,6 +1,12 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import { defer, Observable, of } from 'rxjs';
+import { delay, switchMap } from 'rxjs/operators';
 
 import {
   GalleryDetailRef,
@@ -37,9 +43,15 @@ export class AppComponent implements OnInit, AfterViewInit {
   thumbsOverscrollBehavior: OverscrollBehavior = 'auto';
   thumbsImageFit: ImageFit = 'cover';
 
+  displayGallery = true;
+  imageLoadingLatency = 0;
+
   @ViewChild(GalleryComponent, { static: false }) gallery: GalleryComponent;
 
-  constructor(private galleryDetail: GalleryDetailService) {}
+  constructor(
+    private galleryDetail: GalleryDetailService,
+    private cd: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.images = of([
@@ -77,7 +89,11 @@ export class AppComponent implements OnInit, AfterViewInit {
         src: './assets/landscape1.jpg',
         thumbSrc: './assets/landscape1-thumb.jpg'
       }
-    ]).pipe(delay(1000));
+    ]).pipe(
+      switchMap(items =>
+        defer(() => of(items).pipe(delay(this.imageLoadingLatency)))
+      )
+    );
   }
 
   ngAfterViewInit() {
@@ -94,31 +110,10 @@ export class AppComponent implements OnInit, AfterViewInit {
       .load(await this.images.toPromise());
   }
 
-  // openSecond() {
-  //   this.galleryDetail
-  //     .open(0, {
-  //       imageTemplate: this.detailImageTemplate2
-  //     })
-  //     .load(this.images);
-  // }
-
-  // openThird(index: number) {
-  //   this.galleryDetail
-  //     .open(index, {
-  //       thumbsOrientation: 'bottom',
-  //       panelClass: ['gallery-detail-third', 'fullscreen'],
-  //       loop: false
-  //     })
-  //     .load(this.images);
-  // }
-
-  // openFourth(index: number) {
-  //   this.galleryDetail
-  //     .open(index, {
-  //       thumbs: false,
-  //       panelClass: ['gallery-detail-fourth', 'fullscreen'],
-  //       loop: true
-  //     })
-  //     .load(this.images);
-  // }
+  confirmImageLoadingLatency() {
+    this.displayGallery = false;
+    this.cd.detectChanges();
+    this.displayGallery = true;
+    this.cd.detectChanges();
+  }
 }

@@ -56,50 +56,6 @@ ngx-gallery {
   }
 }
 
-.second {
-  background: white;
-  width: 900px;
-  height: 450px;
-
-  @media (max-width: 767px) {
-    width: auto;
-  }
-
-  &::ng-deep ngx-thumbnails li {
-    width: 120px;
-    height: 120px;
-    margin: 1px 10px 0 0;
-
-    &.selected::after {
-      content: '';
-      display: block;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 3px;
-      width: 100%;
-      background: #d08888;
-      box-shadow: 0 -1px 2px #3c3b3b;
-    }
-  }
-}
-
-.third {
-  height: 400px;
-  width: 600px;
-}
-
-.fourth {
-  width: 100%;
-}
-
-.second,
-.third {
-  @media (max-width: 767px) {
-    width: auto;
-  }
-}
-
 ::ng-deep {
   .gallery-detail-first {
     ngx-gallery {
@@ -111,47 +67,9 @@ ngx-gallery {
       }
     }
   }
-
-  .gallery-detail-third {
-    width: 100%;
-    height: 100%;
-
-    ngx-gallery {
-      width: 100%;
-      height: 100%;
-    }
-
-    ngx-thumbnails {
-      margin-top: 50px;
-      max-width: 1100px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .thumb {
-      margin: 0 5px;
-    }
-  }
-
-  .gallery-detail-fourth {
-    width: 100%;
-    height: 100%;
-
-    ngx-gallery {
-      width: 100%;
-      height: 100%;
-    }
-  }
 }
 
-.image-2 {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.thumb-2 {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+section.image-loading-latency {
+  display: flex;
+  align-items: center;
 }
