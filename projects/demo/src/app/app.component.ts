@@ -16,7 +16,7 @@ import {
   GalleryComponent,
   GalleryItem,
   ImageFit,
-  ImageLoading,
+  Loading,
   Orientation,
   OverscrollBehavior
 } from 'projects/gallery/src/public-api';
@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   arrows = true;
   imageCounter = true;
   imageFit: ImageFit = 'contain';
-  imageLoading: ImageLoading = 'lazy';
+  imageLoading: Loading = 'lazy';
   loop = true;
   scrollBehavior: ScrollBehavior = 'smooth';
   thumbs = true;
@@ -112,7 +112,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       .load(await this.images.toPromise());
   }
 
-  confirmImageLoadingLatency() {
+  reloadGallery() {
     this.displayGallery = false;
     this.cd.detectChanges();
     this.displayGallery = true;

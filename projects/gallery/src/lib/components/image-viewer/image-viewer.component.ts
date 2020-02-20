@@ -29,7 +29,7 @@ import {
   ImageFit,
   Orientation,
   SUPPORT,
-  ImageLoading
+  Loading
 } from '../../core';
 
 @Component({
@@ -55,7 +55,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   imageFit: ImageFit;
 
   @Input()
-  imageLoading: ImageLoading;
+  imageLoading: Loading;
 
   @Input()
   imageTemplate: TemplateRef<any>;
@@ -89,10 +89,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   imagesShown = false;
 
   private destroy$ = new Subject();
+  private lazyImageObserver: IntersectionObserver;
 
   private itemWidth: number;
-  private _scrollBehavior: ScrollBehavior;
   private smoothScrollAllowed = false;
+  private _scrollBehavior: ScrollBehavior;
 
   get showArrow() {
     return this.arrows && this.items && this.items.length > 1;
@@ -106,6 +107,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     return (
       this.showArrow && (this.selectedItem < this.items.length - 1 || this.loop)
     );
+  }
+
+  get nativeLoading() {
+    return this.imageLoading !== 'lazy' || SUPPORT.nativeMediaLoading;
   }
 
   constructor(
@@ -126,6 +131,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     // late initialization; in case the gallery items come later
     if (items && !items.firstChange) {
       this.onResize();
+      this.initLazyMediaLoading();
     }
   }
 
@@ -140,12 +146,17 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         .subscribe(this.onResize);
     }
 
+    this.initLazyMediaLoading();
     this.initOnScrollItemSelection();
   }
 
   ngOnDestroy() {
     this.destroy$.next(null);
     this.destroy$.complete();
+
+    if (this.lazyImageObserver) {
+      this.lazyImageObserver.disconnect();
+    }
   }
 
   prev() {
@@ -198,6 +209,59 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     return Math.round(selectedPrecise);
+  }
+
+  addImagesToLazyLoadQueue() {
+    this.lazyImageObserver.disconnect();
+
+    requestAnimationFrame(() => {
+      // image elements should be rendered now
+      this.imageListRef.nativeElement
+        .querySelectorAll('.item')
+        .forEach(el => this.lazyImageObserver.observe(el));
+    });
+  }
+
+  lazyLoad(
+    entries: IntersectionObserverEntry[],
+    observer: IntersectionObserver
+  ) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const lazyImage = entry.target as HTMLImageElement;
+        lazyImage.src = lazyImage.dataset.src;
+        observer.unobserve(lazyImage);
+      }
+    });
+  }
+
+  private initLazyMediaLoading() {
+    if (
+      !SUPPORT.intersectionObserver ||
+      SUPPORT.nativeMediaLoading ||
+      this.imageLoading !== 'lazy' ||
+      !this.items ||
+      !this.items.length
+    ) {
+      return;
+    }
+
+    const listEl = this.imageListRef.nativeElement;
+
+    if (!this.lazyImageObserver) {
+      this.lazyImageObserver = new IntersectionObserver(this.lazyLoad, {
+        root: listEl,
+        threshold: 0.1
+      });
+    } else {
+      this.lazyImageObserver.disconnect();
+    }
+
+    requestAnimationFrame(() =>
+      listEl
+        .querySelectorAll('.item img')
+        .forEach(img => this.lazyImageObserver.observe(img))
+    );
   }
 
   /**

@@ -16,11 +16,13 @@
   </li>
   <li
     *ngFor="let item of items; let i = index"
+    class="item"
     (click)="imageClick.emit($event)"
   >
     <img
       *ngIf="!imageTemplate; else customTemplate"
-      [src]="item.src"
+      [src]="nativeLoading ? item.src : ''"
+      [attr.data-src]="item.src"
       [attr.loading]="imageLoading"
       [style.objectFit]="imageFit"
     />

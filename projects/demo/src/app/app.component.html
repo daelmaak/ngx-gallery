@@ -112,6 +112,17 @@
       </mat-radio-group>
     </section>
 
+    <section>
+      <label>Image loading strategy:</label>
+      <mat-radio-group name="imageLoading" [(ngModel)]="imageLoading">
+        <mat-radio-button value="auto">auto</mat-radio-button>
+        <mat-radio-button value="lazy">lazy</mat-radio-button>
+      </mat-radio-group>
+      <button mat-raised-button (click)="reloadGallery()">
+        Confirm loading strategy
+      </button>
+    </section>
+
     <hr />
 
     <section class="image-loading-latency">
@@ -123,7 +134,7 @@
           [(ngModel)]="imageLoadingLatency"
         />
       </mat-form-field>
-      <button mat-raised-button (click)="confirmImageLoadingLatency()">
+      <button mat-raised-button (click)="reloadGallery()">
         Confirm latency
       </button>
     </section>

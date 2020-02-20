@@ -12,12 +12,15 @@ import {
   HostListener,
   ElementRef
 } from '@angular/core';
-import { GalleryItem } from '../../core/gallery-item';
-import { Orientation, OrientationFlag } from '../../core/orientation';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
-import { ImageFit } from '../../core/image-fit';
-import { OverscrollBehavior } from '../../core/overscroll-behavior';
-import { ImageLoading } from '../../core/image-loading';
+import {
+  GalleryItem,
+  Loading,
+  ImageFit,
+  Orientation,
+  OverscrollBehavior,
+  OrientationFlag
+} from '../../core';
 
 @Component({
   selector: 'ngx-gallery',
@@ -36,7 +39,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
-  imageLoading: ImageLoading;
+  imageLoading: Loading;
 
   @Input()
   imageCounter: boolean;

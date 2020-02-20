@@ -69,7 +69,8 @@ ngx-gallery {
   }
 }
 
-section.image-loading-latency {
-  display: flex;
-  align-items: center;
+section {
+  button {
+    margin-left: 20px;
+  }
 }
