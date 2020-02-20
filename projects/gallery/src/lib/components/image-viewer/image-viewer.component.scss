@@ -56,7 +56,7 @@
     max-width: 100%;
     border-radius: 100%;
     background: white;
-    animation: rotate 1s infinite;
+    animation: rotate 1s infinite, fadein 1s linear;
 
     &::after {
       content: '';
@@ -70,11 +70,20 @@
     }
 
     @keyframes rotate {
-      0% {
+      from {
         transform: rotate(0deg);
       }
-      100% {
+      to {
         transform: rotate(359deg);
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
       }
     }
   }
