@@ -24,9 +24,7 @@ import {
   takeWhile
 } from 'rxjs/operators';
 
-import { GalleryItem } from '../../core/gallery-item';
-import { ImageFit } from '../../core/image-fit';
-import { Orientation } from '../../core/orientation';
+import { GalleryItem, ImageFit, Orientation, SUPPORT } from '../../core';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -86,7 +84,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   private itemWidth: number;
   private _scrollBehavior: ScrollBehavior;
   private smoothScrollAllowed = false;
-  private scrollBehaviorSupported = 'scrollBehavior' in document.body.style;
 
   get showArrow() {
     return this.arrows && this.items && this.items.length > 1;
@@ -250,7 +247,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   private shiftImages(x: number) {
     const imageListEl = this.imageListRef.nativeElement;
 
-    if (!this.scrollBehaviorSupported && this.scrollBehavior === 'smooth') {
+    if (!SUPPORT.scrollBehavior && this.scrollBehavior === 'smooth') {
       this.shiftImagesManually(x);
     } else {
       imageListEl.scrollLeft = x;
