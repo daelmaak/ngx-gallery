@@ -107,15 +107,19 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     private cd: ChangeDetectorRef
   ) {}
 
-  ngOnChanges({ galleryMainAxis }: SimpleChanges) {
+  ngOnChanges({ galleryMainAxis, items }: SimpleChanges) {
     if (galleryMainAxis && !galleryMainAxis.firstChange) {
-      // if image-viewer - thumbnails layout changed from vertical to horizontal or vice versa
+      // if image-viewer - thumbnails layout (main axis) changed from vertical to horizontal or vice versa
       if (!(galleryMainAxis.currentValue & galleryMainAxis.previousValue)) {
         requestAnimationFrame(() => {
           this.itemWidth = this.hostRef.nativeElement.offsetWidth;
           this.center();
         });
       }
+    }
+    // late initialization; in case the gallery items come later
+    if (items && !items.firstChange) {
+      this.onResize();
     }
   }
 
@@ -226,24 +230,20 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private onResize = () => {
-    // NOTE: This combination of requested frames solves problem when switching between landscape and portrait
-    // Because the image list is based on pure scroll, turning phone changes scroll position because image width changes.
-    // That way, the selected image is no longer centered.
-    //
-    // The approach below first turns off image smooth transition before the incoming frame. That allows the second
-    // requestAnimationFrame to take advantage of it, center the image and turn on the smooth transition before a second paint.
-    // Given this process only requires 2 frames and there is no image transition in between, it looks very snappy to the user.
     requestAnimationFrame(() => {
       this.smoothScrollAllowed = false;
       this.cd.detectChanges();
 
-      requestAnimationFrame(() => {
+      if (!this.items || !this.items.length) {
+        this.shiftImages(this.fringeItemWidth);
+      } else {
         this.itemWidth = this.hostRef.nativeElement.offsetWidth;
         this.center();
-        this.imagesShown = true;
-        this.smoothScrollAllowed = true;
-        this.cd.detectChanges();
-      });
+      }
+
+      this.imagesShown = true;
+      this.smoothScrollAllowed = true;
+      this.cd.detectChanges();
     });
   };
 
