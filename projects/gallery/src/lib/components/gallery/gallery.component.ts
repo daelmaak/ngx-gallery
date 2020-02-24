@@ -35,6 +35,12 @@ export class GalleryComponent implements OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
+  prevArrowTemplate: TemplateRef<any>;
+
+  @Input()
+  nextArrowTemplate: TemplateRef<any>;
+
+  @Input()
   imageCounter: boolean;
 
   @Input()
@@ -75,12 +81,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @Input()
   thumbTemplate: TemplateRef<any>;
-
-  @Input()
-  prevArrowTemplate: TemplateRef<any>;
-
-  @Input()
-  nextArrowTemplate: TemplateRef<any>;
 
   @Output()
   imageClick = new EventEmitter<Event>();

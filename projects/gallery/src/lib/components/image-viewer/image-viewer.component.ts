@@ -40,6 +40,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
+  prevArrowTemplate: TemplateRef<any>;
+
+  @Input()
+  nextArrowTemplate: TemplateRef<any>;
+
+  @Input()
   selectedItem: number;
 
   @Input()
@@ -65,12 +71,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   get scrollBehavior() {
     return this.smoothScrollAllowed ? this._scrollBehavior : 'auto';
   }
-
-  @Input()
-  prevArrowTemplate: TemplateRef<any>;
-
-  @Input()
-  nextArrowTemplate: TemplateRef<any>;
 
   @Output()
   imageClick = new EventEmitter<Event>();

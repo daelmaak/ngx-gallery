@@ -1,18 +1,8 @@
-<ng-container *ngIf="!prevArrowTemplate; else customPrevTemplate">
-  <ngx-chevron-icon
-  *ngIf="showPrevArrow"
-  class="prev"
-  (click)="prev()"
-></ngx-chevron-icon>
+<ng-container *ngIf="showPrevArrow">
+  <ng-container *ngIf="!prevArrowTemplate; else prevArrowTemplate">
+    <ngx-chevron-icon class="prev" (click)="prev()"></ngx-chevron-icon>
+  </ng-container>
 </ng-container>
-
-<!-- also use showPrevArrow? -->
-<ng-template #customPrevTemplate>
-  <ng-container
-    *ngTemplateOutlet="prevArrowTemplate;"
-    *ngIf="showPrevArrow"
-  ></ng-container>
-</ng-template>
 
 <ul
   #imageList
@@ -46,21 +36,11 @@
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
 </ul>
 
-<ng-container *ngIf="!nextArrowTemplate; else customNextTemplate">
-  <ngx-chevron-icon
-  *ngIf="showNextArrow"
-  class="next"
-  (click)="next()"
-></ngx-chevron-icon>
+<ng-container *ngIf="showNextArrow">
+  <ng-container *ngIf="!nextArrowTemplate; else nextArrowTemplate">
+    <ngx-chevron-icon class="next" (click)="next()"></ngx-chevron-icon>
+  </ng-container>
 </ng-container>
-
-<!-- also use showNextArrow? -->
-<ng-template #customNextTemplate>
-  <ng-container
-    *ngTemplateOutlet="nextArrowTemplate;"
-    *ngIf="showNextArrow"
-  ></ng-container>
-</ng-template>
 
 <ngx-image-counter
   *ngIf="imageCounter"
