@@ -62,6 +62,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this._scrollBehavior = val || 'smooth';
   }
 
+  @Input()
+  customPrevControl: TemplateRef<any>;
+
+  @Input()
+  customNextControl: TemplateRef<any>;
+
   get scrollBehavior() {
     return this.smoothScrollAllowed ? this._scrollBehavior : 'auto';
   }
