@@ -40,6 +40,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
+  prevArrowTemplate: TemplateRef<any>;
+
+  @Input()
+  nextArrowTemplate: TemplateRef<any>;
+
+  @Input()
   selectedItem: number;
 
   @Input()

@@ -35,6 +35,12 @@ export class GalleryComponent implements OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
+  prevArrowTemplate: TemplateRef<any>;
+
+  @Input()
+  nextArrowTemplate: TemplateRef<any>;
+
+  @Input()
   imageCounter: boolean;
 
   @Input()
