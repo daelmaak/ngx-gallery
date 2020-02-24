@@ -77,10 +77,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
   thumbTemplate: TemplateRef<any>;
 
   @Input()
-  customPrevControl: TemplateRef<any>;
+  prevArrowTemplate: TemplateRef<any>;
 
   @Input()
-  customNextControl: TemplateRef<any>;
+  nextArrowTemplate: TemplateRef<any>;
 
   @Output()
   imageClick = new EventEmitter<Event>();

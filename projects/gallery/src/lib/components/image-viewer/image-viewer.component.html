@@ -1,4 +1,4 @@
-<ng-container *ngIf="!customPrevControl; else customPrevTemplate">
+<ng-container *ngIf="!prevArrowTemplate; else customPrevTemplate">
   <ngx-chevron-icon
   *ngIf="showPrevArrow"
   class="prev"
@@ -9,9 +9,8 @@
 <!-- also use showPrevArrow? -->
 <ng-template #customPrevTemplate>
   <ng-container
-    *ngTemplateOutlet="
-      customPrevControl;
-    "
+    *ngTemplateOutlet="prevArrowTemplate;"
+    *ngIf="showPrevArrow"
   ></ng-container>
 </ng-template>
 
@@ -47,7 +46,7 @@
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
 </ul>
 
-<ng-container *ngIf="!customNextControl; else customNextTemplate">
+<ng-container *ngIf="!nextArrowTemplate; else customNextTemplate">
   <ngx-chevron-icon
   *ngIf="showNextArrow"
   class="next"
@@ -58,9 +57,8 @@
 <!-- also use showNextArrow? -->
 <ng-template #customNextTemplate>
   <ng-container
-    *ngTemplateOutlet="
-      customNextControl;
-    "
+    *ngTemplateOutlet="nextArrowTemplate;"
+    *ngIf="showNextArrow"
   ></ng-container>
 </ng-template>
 
