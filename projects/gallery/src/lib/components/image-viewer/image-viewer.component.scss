@@ -10,8 +10,12 @@
   display: flex;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: scroll;
   scroll-snap-type: x mandatory;
+
+  // forces browser to render image list in a dedicated layer
+  // https://stackoverflow.com/questions/24741502/can-i-do-anything-about-repaints-on-scroll-warning-in-chrome-for-overflowscr#_=_
+  will-change: transform;
 
   // hide the scrollbar
   scrollbar-width: none; /* Firefox */

@@ -98,10 +98,6 @@ $arrow-btn-dimension: 30px;
   position: relative;
   cursor: pointer;
 
-  &:not(.selected) {
-    // opacity: 0.6;
-  }
-
   &:hover {
     opacity: 1;
   }
