@@ -31,6 +31,7 @@ import {
   SUPPORT,
   Loading
 } from '../../core';
+import { GalleryItemInternal } from '../../core/gallery-item';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -222,17 +223,29 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     });
   }
 
-  lazyLoad(
+  lazyLoad = (
     entries: IntersectionObserverEntry[],
     observer: IntersectionObserver
-  ) {
+  ) => {
+    // TODO maybe debounce so that middle image don't get loaded unnecessarily
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const lazyImage = entry.target as HTMLImageElement;
-        lazyImage.src = lazyImage.dataset.src;
+
+        if (!lazyImage.getAttribute('src')) {
+          lazyImage.src = lazyImage.dataset.src;
+        }
+
         observer.unobserve(lazyImage);
       }
     });
+  };
+
+  onLazyLoaded(item: GalleryItemInternal) {
+    // TODO once new items come, merge new and old
+    // TODO create GalleryItemInternal to have _loaded property
+    item._loaded = true;
+    this.cd.detectChanges();
   }
 
   private initLazyMediaLoading() {

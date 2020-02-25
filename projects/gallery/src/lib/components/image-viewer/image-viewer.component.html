@@ -11,8 +11,10 @@
   [style.scrollBehavior]="scrollBehavior"
 >
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
-  <li *ngIf="!items || !items.length" class="loading">
-    <div class="animation"></div>
+  <li *ngIf="!items || !items.length">
+    <div class="loading">
+      <div class="animation"></div>
+    </div>
   </li>
   <li
     *ngFor="let item of items; let i = index"
@@ -25,6 +27,7 @@
       [attr.data-src]="item.src"
       [attr.loading]="imageLoading"
       [style.objectFit]="imageFit"
+      (load)="onLazyLoaded(item)"
     />
     <ng-template #customTemplate>
       <ng-container
@@ -34,6 +37,10 @@
         "
       ></ng-container>
     </ng-template>
+
+    <div class="loading" *ngIf="!item._loaded">
+      <div class="animation"></div>
+    </div>
   </li>
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
 </ul>
