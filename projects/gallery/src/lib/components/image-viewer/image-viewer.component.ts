@@ -229,7 +229,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   ) => {
     // TODO maybe debounce so that middle image don't get loaded unnecessarily
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
+      if (entry.isIntersecting && entry.intersectionRatio > 0) {
         const lazyImage = entry.target as HTMLImageElement;
 
         if (!lazyImage.getAttribute('src')) {
