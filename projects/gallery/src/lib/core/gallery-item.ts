@@ -6,4 +6,5 @@ export interface GalleryItem {
 
 export interface GalleryItemInternal extends GalleryItem {
   _loaded: boolean;
+  _loading: boolean;
 }

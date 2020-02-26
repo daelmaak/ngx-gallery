@@ -13,7 +13,7 @@
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
   <li *ngIf="!items || !items.length">
     <div class="loading">
-      <div class="animation"></div>
+      <div class="animation active"></div>
     </div>
   </li>
   <li
@@ -39,7 +39,10 @@
     </ng-template>
 
     <div class="loading" *ngIf="!item._loaded">
-      <div class="animation"></div>
+      <div
+        class="animation"
+        [class.active]="item._loading && !item._loaded"
+      ></div>
     </div>
   </li>
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>

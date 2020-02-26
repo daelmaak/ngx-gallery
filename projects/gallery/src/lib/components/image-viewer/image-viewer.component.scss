@@ -12,6 +12,7 @@
   height: 100%;
   overflow: auto;
   scroll-snap-type: x mandatory;
+  will-change: transform;
 
   // hide the scrollbar
   scrollbar-width: none; /* Firefox */
@@ -61,7 +62,10 @@ img {
     max-width: 100%;
     border-radius: 100%;
     background: white;
-    animation: rotate 1s infinite, fadein 1s linear;
+
+    &.active {
+      animation: rotate 1s infinite, fadein 1s linear;
+    }
 
     &::after {
       content: '';

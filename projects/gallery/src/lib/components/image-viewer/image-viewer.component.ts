@@ -24,13 +24,7 @@ import {
   takeWhile
 } from 'rxjs/operators';
 
-import {
-  GalleryItem,
-  ImageFit,
-  Orientation,
-  SUPPORT,
-  Loading
-} from '../../core';
+import { ImageFit, Orientation, SUPPORT, Loading } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 
 @Component({
@@ -41,7 +35,7 @@ import { GalleryItemInternal } from '../../core/gallery-item';
 })
 export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
-  items: GalleryItem[];
+  items: GalleryItemInternal[];
 
   @Input()
   arrows: boolean;
@@ -132,7 +126,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     // late initialization; in case the gallery items come later
     if (items && !items.firstChange) {
       this.onResize();
-      this.initLazyMediaLoading();
+      this.initLazyLoad();
     }
   }
 
@@ -147,7 +141,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         .subscribe(this.onResize);
     }
 
-    this.initLazyMediaLoading();
+    this.initLazyLoad();
     this.initOnScrollItemSelection();
   }
 
@@ -189,6 +183,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.center();
   }
 
+  onLazyLoaded(item: GalleryItemInternal) {
+    // TODO once new items come, merge new and old
+    item._loaded = true;
+    this.cd.detectChanges();
+  }
+
   private center() {
     const shift = this.selectedItem * this.itemWidth + this.fringeItemWidth;
 
@@ -212,43 +212,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     return Math.round(selectedPrecise);
   }
 
-  addImagesToLazyLoadQueue() {
-    this.lazyImageObserver.disconnect();
-
-    requestAnimationFrame(() => {
-      // image elements should be rendered now
-      this.imageListRef.nativeElement
-        .querySelectorAll('.item')
-        .forEach(el => this.lazyImageObserver.observe(el));
-    });
-  }
-
-  lazyLoad = (
-    entries: IntersectionObserverEntry[],
-    observer: IntersectionObserver
-  ) => {
-    // TODO maybe debounce so that middle image don't get loaded unnecessarily
-    entries.forEach(entry => {
-      if (entry.isIntersecting && entry.intersectionRatio > 0) {
-        const lazyImage = entry.target as HTMLImageElement;
-
-        if (!lazyImage.getAttribute('src')) {
-          lazyImage.src = lazyImage.dataset.src;
-        }
-
-        observer.unobserve(lazyImage);
-      }
-    });
-  };
-
-  onLazyLoaded(item: GalleryItemInternal) {
-    // TODO once new items come, merge new and old
-    // TODO create GalleryItemInternal to have _loaded property
-    item._loaded = true;
-    this.cd.detectChanges();
-  }
-
-  private initLazyMediaLoading() {
+  private initLazyLoad() {
     if (
       !SUPPORT.intersectionObserver ||
       SUPPORT.nativeMediaLoading ||
@@ -262,20 +226,48 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     const listEl = this.imageListRef.nativeElement;
 
     if (!this.lazyImageObserver) {
-      this.lazyImageObserver = new IntersectionObserver(this.lazyLoad, {
-        root: listEl,
-        threshold: 0.1
-      });
-    } else {
-      this.lazyImageObserver.disconnect();
+      this.lazyImageObserver = new IntersectionObserver(
+        this.onLazyLoadIntersection,
+        {
+          root: listEl,
+          threshold: 0.1
+        }
+      );
     }
-
-    requestAnimationFrame(() =>
-      listEl
-        .querySelectorAll('.item img')
-        .forEach(img => this.lazyImageObserver.observe(img))
-    );
+    this.observeImagesForLazyLoad();
   }
+
+  private observeImagesForLazyLoad() {
+    this.lazyImageObserver.disconnect();
+
+    requestAnimationFrame(() => {
+      // image elements should be rendered now
+      this.imageListRef.nativeElement
+        .querySelectorAll('.item img')
+        .forEach(el => this.lazyImageObserver.observe(el));
+    });
+  }
+
+  private onLazyLoadIntersection = (
+    entries: IntersectionObserverEntry[],
+    observer: IntersectionObserver
+  ) => {
+    // TODO maybe debounce so that middle image don't get loaded unnecessarily
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0) {
+        const lazyImage = entry.target as HTMLImageElement;
+
+        if (!lazyImage.getAttribute('src')) {
+          lazyImage.src = lazyImage.dataset.src;
+          this.items.find(
+            i => i.src === lazyImage.getAttribute('src')
+          )._loading = true;
+          this.cd.markForCheck();
+        }
+        observer.unobserve(lazyImage);
+      }
+    });
+  };
 
   /**
    * Determines selected item upon native scroll in the image list
