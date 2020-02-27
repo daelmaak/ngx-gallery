@@ -49,6 +49,17 @@
     </section>
 
     <section>
+      <label>Selection Scroll behavior:</label>
+      <mat-radio-group
+        name="selectionScrollBehavior"
+        [(ngModel)]="selectionScrollBehavior"
+      >
+        <mat-radio-button value="smooth">smooth</mat-radio-button>
+        <mat-radio-button value="auto">auto</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
       <mat-checkbox name="thumbs" [(ngModel)]="thumbs">Thumbnails</mat-checkbox>
     </section>
 
@@ -151,6 +162,7 @@
     [loading]="loading"
     [loop]="loop"
     [scrollBehavior]="scrollBehavior"
+    [selectionScrollBehavior]="selectionScrollBehavior"
     [scrollSnap]="true"
     [thumbs]="thumbs"
     [thumbsAutoScroll]="thumbsAutoScroll"

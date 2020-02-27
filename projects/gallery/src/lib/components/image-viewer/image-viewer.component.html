@@ -4,12 +4,7 @@
   (click)="prev()"
 ></ngx-chevron-icon>
 
-<ul
-  #imageList
-  class="images"
-  [class.images--hidden]="!imagesShown"
-  [style.scrollBehavior]="scrollBehavior"
->
+<ul #imageList class="images" [class.images--hidden]="!imagesShown">
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
   <li *ngIf="!items || !items.length">
     <div class="loading">

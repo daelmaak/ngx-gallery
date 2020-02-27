@@ -57,6 +57,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   scrollBehavior: ScrollBehavior;
 
   @Input()
+  selectionScrollBehavior: ScrollBehavior;
+
+  @Input()
   scrollSnap: boolean;
 
   @Input()
@@ -128,6 +131,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.thumbs === undefined && (this.thumbs = true);
     this.loading == null && (this.loading = 'auto');
     this.scrollSnap == null && (this.scrollSnap = true);
+    this.selectionScrollBehavior == null &&
+      (this.selectionScrollBehavior = 'auto');
   }
 
   ngOnDestroy() {}
@@ -146,8 +151,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.imageViewer.prev();
   }
 
-  select(index: number) {
-    this.imageViewer.select(index);
+  select(index: number, scrollBehavior = this.selectionScrollBehavior) {
+    this.imageViewer.select(index, scrollBehavior);
     this.selectedItem = index;
     this.selection.emit(this.items[index]);
   }

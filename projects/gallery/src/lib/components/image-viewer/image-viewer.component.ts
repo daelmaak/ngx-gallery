@@ -177,7 +177,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.select(this.selectedItem + 1);
   }
 
-  select(index: number, transition = true) {
+  select(index: number, scrollBehavior = this.scrollBehavior) {
     if (this.selectedItem === index) {
       return;
     }
@@ -195,7 +195,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     this.selectedItem = index;
     this.selection.emit(index);
-    this.center();
+    this.center(scrollBehavior);
   }
 
   onLazyLoadStarted(item: GalleryItemInternal) {
@@ -206,10 +206,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     item._loaded = true;
   }
 
-  private center() {
+  private center(scrollBehavior = this.scrollBehavior) {
     const shift = this.selectedItem * this.itemWidth + this.fringeItemWidth;
 
-    this.shiftImages(shift);
+    this.shiftImages(shift, scrollBehavior);
   }
 
   private getSelectedItemFromScrollPosition(): number {
@@ -336,12 +336,14 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     });
   };
 
-  private shiftImages(x: number) {
+  private shiftImages(x: number, scrollBehavior = this.scrollBehavior) {
     const imageListEl = this.imageListRef.nativeElement;
 
     if (this.scrollSnap) {
-      if (!SUPPORT.scrollBehavior && this.scrollBehavior === 'smooth') {
+      if (!SUPPORT.scrollBehavior && scrollBehavior === 'smooth') {
         this.shiftImagesManually(x);
+      } else if (imageListEl.scrollTo) {
+        imageListEl.scroll({ left: x, behavior: scrollBehavior });
       } else {
         imageListEl.scrollLeft = x;
       }

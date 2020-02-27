@@ -36,6 +36,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   loading: Loading = 'lazy';
   loop = true;
   scrollBehavior: ScrollBehavior = 'smooth';
+  selectionScrollBehavior: ScrollBehavior = 'auto';
   thumbs = true;
   thumbsAutoScroll = true;
   thumbsOrientation: Orientation = 'left';
