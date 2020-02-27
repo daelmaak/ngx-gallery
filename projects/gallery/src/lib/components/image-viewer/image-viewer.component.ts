@@ -128,6 +128,20 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     if (items && !items.firstChange) {
       this.onResize();
       this.initLazyLoad();
+
+      if (items.previousValue && items.currentValue) {
+        const prevItems = items.previousValue as GalleryItemInternal[];
+        const currItems = items.currentValue as GalleryItemInternal[];
+        this.items = currItems.map(c => {
+          const prevItem = prevItems.find(p => p.src === c.src);
+
+          if (prevItem) {
+            c._loaded = prevItem._loaded;
+            c._loading = prevItem._loading;
+          }
+          return c;
+        });
+      }
     }
   }
 
@@ -163,7 +177,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.select(this.selectedItem + 1);
   }
 
-  select(index: number) {
+  select(index: number, transition = true) {
     if (this.selectedItem === index) {
       return;
     }
@@ -189,7 +203,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   onLazyLoaded(item: GalleryItemInternal) {
-    // TODO once new items come, merge new and old
     item._loaded = true;
   }
 
