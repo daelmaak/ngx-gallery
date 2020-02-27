@@ -29,7 +29,7 @@
 
     <section>
       <label>Image loading:</label>
-      <mat-radio-group name="imageLoading" [(ngModel)]="imageLoading">
+      <mat-radio-group name="loading" [(ngModel)]="loading">
         <mat-radio-button value="auto">auto</mat-radio-button>
         <mat-radio-button value="eager">eager</mat-radio-button>
         <mat-radio-button value="lazy">lazy</mat-radio-button>
@@ -114,7 +114,7 @@
 
     <section>
       <label>Image loading strategy:</label>
-      <mat-radio-group name="imageLoading" [(ngModel)]="imageLoading">
+      <mat-radio-group name="loading" [(ngModel)]="loading">
         <mat-radio-button value="auto">auto</mat-radio-button>
         <mat-radio-button value="lazy">lazy</mat-radio-button>
       </mat-radio-group>
@@ -148,7 +148,7 @@
     [arrows]="arrows"
     [imageCounter]="imageCounter"
     [imageFit]="imageFit"
-    [imageLoading]="imageLoading"
+    [loading]="loading"
     [loop]="loop"
     [scrollBehavior]="scrollBehavior"
     [scrollSnap]="true"

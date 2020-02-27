@@ -39,7 +39,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
-  imageLoading: Loading;
+  loading: Loading;
 
   @Input()
   imageCounter: boolean;
@@ -126,7 +126,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.arrows === undefined && (this.arrows = true);
     this.loop === undefined && (this.loop = true);
     this.thumbs === undefined && (this.thumbs = true);
-    this.imageLoading == null && (this.imageLoading = 'auto');
+    this.loading == null && (this.loading = 'auto');
     this.scrollSnap == null && (this.scrollSnap = true);
   }
 

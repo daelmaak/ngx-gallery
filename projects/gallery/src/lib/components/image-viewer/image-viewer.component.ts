@@ -51,7 +51,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   imageFit: ImageFit;
 
   @Input()
-  imageLoading: Loading;
+  loading: Loading;
 
   @Input()
   imageTemplate: TemplateRef<any>;
@@ -219,7 +219,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   private initLazyLoad() {
     if (
       !SUPPORT.intersectionObserver ||
-      this.imageLoading !== 'lazy' ||
+      this.loading !== 'lazy' ||
       !this.items ||
       !this.items.length
     ) {

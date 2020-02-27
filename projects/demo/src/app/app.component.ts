@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   arrows = true;
   imageCounter = true;
   imageFit: ImageFit = 'contain';
-  imageLoading: Loading = 'lazy';
+  loading: Loading = 'lazy';
   loop = true;
   scrollBehavior: ScrollBehavior = 'smooth';
   thumbs = true;
