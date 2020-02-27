@@ -23,9 +23,9 @@
   >
     <img
       *ngIf="!imageTemplate; else customTemplate"
-      [src]="nativeLoading ? item.src : ''"
+      [src]="imageLoading === 'lazy' ? '' : item.src"
+      [class.lazy]="imageLoading === 'lazy' && !item._loaded"
       [attr.data-src]="item.src"
-      [attr.loading]="imageLoading"
       [style.objectFit]="imageFit"
       (load)="onLazyLoaded(item)"
     />
@@ -41,7 +41,9 @@
     <div class="loading" *ngIf="!item._loaded">
       <div
         class="animation"
-        [class.active]="item._loading && !item._loaded"
+        [class.active]="
+          (item._loading && !item._loaded) || imageLoading !== 'lazy'
+        "
       ></div>
     </div>
   </li>

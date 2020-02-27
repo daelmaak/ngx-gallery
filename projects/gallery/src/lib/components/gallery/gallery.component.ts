@@ -57,6 +57,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   scrollBehavior: ScrollBehavior;
 
   @Input()
+  scrollSnap: boolean;
+
+  @Input()
   thumbs: boolean;
 
   @Input()
@@ -124,6 +127,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.loop === undefined && (this.loop = true);
     this.thumbs === undefined && (this.thumbs = true);
     this.imageLoading == null && (this.imageLoading = 'auto');
+    this.scrollSnap == null && (this.scrollSnap = true);
   }
 
   ngOnDestroy() {}

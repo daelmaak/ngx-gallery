@@ -11,7 +11,8 @@ import {
   TemplateRef,
   ViewChild,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  HostBinding
 } from '@angular/core';
 import { animationFrameScheduler, fromEvent, interval, Subject } from 'rxjs';
 import {
@@ -70,6 +71,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     return this.smoothScrollAllowed ? this._scrollBehavior : 'auto';
   }
 
+  @HostBinding('class.scroll-snap')
+  @Input()
+  scrollSnap: boolean;
+
   @Output()
   imageClick = new EventEmitter<Event>();
 
@@ -102,10 +107,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     return (
       this.showArrow && (this.selectedItem < this.items.length - 1 || this.loop)
     );
-  }
-
-  get nativeLoading() {
-    return this.imageLoading !== 'lazy' || SUPPORT.nativeMediaLoading;
   }
 
   constructor(
@@ -183,10 +184,13 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.center();
   }
 
+  onLazyLoadStarted(item: GalleryItemInternal) {
+    item._loading = true;
+  }
+
   onLazyLoaded(item: GalleryItemInternal) {
     // TODO once new items come, merge new and old
     item._loaded = true;
-    this.cd.detectChanges();
   }
 
   private center() {
@@ -215,7 +219,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   private initLazyLoad() {
     if (
       !SUPPORT.intersectionObserver ||
-      SUPPORT.nativeMediaLoading ||
       this.imageLoading !== 'lazy' ||
       !this.items ||
       !this.items.length
@@ -223,7 +226,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       return;
     }
 
-    const listEl = this.imageListRef.nativeElement;
+    const listEl = this.hostRef.nativeElement;
 
     if (!this.lazyImageObserver) {
       this.lazyImageObserver = new IntersectionObserver(
@@ -259,9 +262,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
         if (!lazyImage.getAttribute('src')) {
           lazyImage.src = lazyImage.dataset.src;
-          this.items.find(
-            i => i.src === lazyImage.getAttribute('src')
-          )._loading = true;
+          this.items.find(i => i.src === lazyImage.dataset.src)._loading = true;
           this.cd.markForCheck();
         }
         observer.unobserve(lazyImage);
@@ -325,10 +326,14 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   private shiftImages(x: number) {
     const imageListEl = this.imageListRef.nativeElement;
 
-    if (!SUPPORT.scrollBehavior && this.scrollBehavior === 'smooth') {
-      this.shiftImagesManually(x);
+    if (this.scrollSnap) {
+      if (!SUPPORT.scrollBehavior && this.scrollBehavior === 'smooth') {
+        this.shiftImagesManually(x);
+      } else {
+        imageListEl.scrollLeft = x;
+      }
     } else {
-      imageListEl.scrollLeft = x;
+      this.imageListRef.nativeElement.style.transform = `translate3d(-${x}px, 0, 0)`;
     }
   }
 

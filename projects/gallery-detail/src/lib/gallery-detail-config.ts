@@ -17,6 +17,8 @@ export interface GalleryDetailConfig {
   imageFit?: ImageFit;
   imageTemplate?: TemplateRef<any>;
   loop?: boolean;
+  scrollBehavior?: ScrollBehavior;
+  scrollSnap?: boolean;
   thumbs?: boolean;
   thumbTemplate?: TemplateRef<any>;
   thumbsAutoScroll?: boolean;

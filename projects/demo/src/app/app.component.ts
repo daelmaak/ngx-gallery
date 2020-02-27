@@ -107,7 +107,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       .open(index, {
         thumbsOrientation: 'bottom',
         panelClass: ['gallery-detail-first'],
-        documentScroll: true
+        documentScroll: true,
+        scrollSnap: false
       })
       .load(await this.images.toPromise());
   }
