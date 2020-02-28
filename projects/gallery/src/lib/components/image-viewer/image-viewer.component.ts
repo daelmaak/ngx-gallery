@@ -128,10 +128,13 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           const prevItem = prevItems.find(p => p.src === c.src);
 
           if (prevItem) {
-            c._loaded = prevItem._loaded;
-            c._loading = prevItem._loading;
+            return {
+              ...c,
+              _loaded: prevItem._loaded,
+              _loading: prevItem._loading
+            };
           }
-          return c;
+          return { ...c };
         });
       }
     }
