@@ -63,13 +63,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   galleryMainAxis: Orientation;
 
   @Input()
-  set scrollBehavior(val: ScrollBehavior) {
-    this._scrollBehavior = val || 'smooth';
-  }
-
-  get scrollBehavior() {
-    return this.smoothScrollAllowed ? this._scrollBehavior : 'auto';
-  }
+  scrollBehavior: ScrollBehavior;
 
   @HostBinding('class.scroll-snap')
   @Input()
@@ -89,11 +83,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   imagesShown = false;
 
   private destroy$ = new Subject();
-  private lazyImageObserver: IntersectionObserver;
+  private lazyLoadObserver: IntersectionObserver;
 
   private itemWidth: number;
-  private smoothScrollAllowed = false;
-  private _scrollBehavior: ScrollBehavior;
 
   get showArrow() {
     return this.arrows && this.items && this.items.length > 1;
@@ -152,7 +144,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     if (typeof window !== 'undefined') {
       fromEvent(window, 'resize')
-        .pipe(startWith(null), takeUntil(this.destroy$))
+        .pipe(takeUntil(this.destroy$))
         .subscribe(this.onResize);
     }
 
@@ -164,8 +156,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.destroy$.next(null);
     this.destroy$.complete();
 
-    if (this.lazyImageObserver) {
-      this.lazyImageObserver.disconnect();
+    if (this.lazyLoadObserver) {
+      this.lazyLoadObserver.disconnect();
     }
   }
 
@@ -241,8 +233,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     const listEl = this.hostRef.nativeElement;
 
-    if (!this.lazyImageObserver) {
-      this.lazyImageObserver = new IntersectionObserver(
+    if (!this.lazyLoadObserver) {
+      this.lazyLoadObserver = new IntersectionObserver(
         this.onLazyLoadIntersection,
         {
           root: listEl,
@@ -254,21 +246,17 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private observeImagesForLazyLoad() {
-    this.lazyImageObserver.disconnect();
+    this.lazyLoadObserver.disconnect();
 
     requestAnimationFrame(() => {
       // image elements should be rendered now
       this.imageListRef.nativeElement
         .querySelectorAll('.item img')
-        .forEach(el => this.lazyImageObserver.observe(el));
+        .forEach(el => this.lazyLoadObserver.observe(el));
     });
   }
 
-  private onLazyLoadIntersection = (
-    entries: IntersectionObserverEntry[],
-    observer: IntersectionObserver
-  ) => {
-    // TODO maybe debounce so that middle image don't get loaded unnecessarily
+  private onLazyLoadIntersection = (entries: IntersectionObserverEntry[]) => {
     entries.forEach(entry => {
       if (entry.isIntersecting && entry.intersectionRatio > 0) {
         const lazyImage = entry.target as HTMLImageElement;
@@ -278,7 +266,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           this.items.find(i => i.src === lazyImage.dataset.src)._loading = true;
           this.cd.markForCheck();
         }
-        observer.unobserve(lazyImage);
+        this.lazyLoadObserver.unobserve(lazyImage);
       }
     });
   };
@@ -320,19 +308,17 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private onResize = () => {
     requestAnimationFrame(() => {
-      this.smoothScrollAllowed = false;
-      this.cd.detectChanges();
-
       if (!this.items || !this.items.length) {
-        this.shiftImages(this.fringeItemWidth);
+        this.shiftImages(this.fringeItemWidth, 'auto');
       } else {
         this.itemWidth = this.hostRef.nativeElement.offsetWidth;
-        this.center();
+        this.center('auto');
       }
 
-      this.imagesShown = true;
-      this.smoothScrollAllowed = true;
-      this.cd.detectChanges();
+      requestAnimationFrame(() => {
+        this.imagesShown = true;
+        this.cd.detectChanges();
+      });
     });
   };
 

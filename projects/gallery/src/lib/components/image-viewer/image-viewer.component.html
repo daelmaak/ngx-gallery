@@ -8,7 +8,7 @@
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
   <li *ngIf="!items || !items.length">
     <div class="loading">
-      <div class="animation active"></div>
+      <div class="animation initial"></div>
     </div>
   </li>
   <li
@@ -19,7 +19,7 @@
     <img
       *ngIf="!imageTemplate; else customTemplate"
       [src]="loading === 'lazy' ? '' : item.src"
-      [class.lazy]="loading === 'lazy' && !item._loaded"
+      [class.before-load]="loading === 'lazy' && !item._loaded"
       [attr.data-src]="item.src"
       [style.objectFit]="imageFit"
       (load)="onLazyLoaded(item)"

@@ -18,8 +18,11 @@
   }
 
   :host:not(.scroll-snap) & {
-    transition: transform 0.5s ease-out;
     transform: translate3d(-50px, 0, 0); // initial position
+  }
+
+  &:not(.images--hidden) {
+    transition: transform 0.5s ease-out;
   }
 
   // hide the scrollbar
@@ -53,7 +56,7 @@ img {
   opacity: 1;
   transition: opacity 0.3s ease-out;
 
-  &.lazy {
+  &.before-load {
     opacity: 0;
   }
 }
@@ -75,10 +78,16 @@ img {
     height: 62px;
     max-width: 100%;
     border-radius: 100%;
-    background: white;
+    background: #ececec;
+    opacity: 0;
 
     &.active {
       animation: rotate 1s infinite;
+      opacity: 1;
+    }
+
+    &.initial {
+      animation: rotate 1s infinite, fadein 1s ease-in;
     }
 
     &::after {
@@ -98,6 +107,15 @@ img {
       }
       to {
         transform: rotate(359deg);
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
       }
     }
   }

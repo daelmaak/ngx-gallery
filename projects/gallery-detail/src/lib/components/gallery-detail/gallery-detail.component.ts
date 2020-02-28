@@ -26,6 +26,7 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
       [imageCounter]="config.imageCounter"
       [imageFit]="config.imageFit"
       [imageTemplate]="config.imageTemplate"
+      [loading]="config.loading"
       [loop]="config.loop"
       [scrollBehavior]="config.scrollBehavior"
       [scrollSnap]="config.scrollSnap"
