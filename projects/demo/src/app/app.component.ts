@@ -30,6 +30,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   images: Observable<GalleryItem[]>;
   galleryDetailRef: GalleryDetailRef;
 
+  mobile = matchMedia('(max-width: 767px)').matches;
+
   arrows = true;
   imageCounter = true;
   imageFit: ImageFit = 'contain';
@@ -39,7 +41,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   selectionScrollBehavior: ScrollBehavior = 'auto';
   thumbs = true;
   thumbsAutoScroll = true;
-  thumbsOrientation: Orientation = 'left';
+  thumbsOrientation: Orientation = this.mobile ? 'bottom' : 'left';
   thumbsArrows = true;
   thumbsArrowSlideByLength = 0;
   thumbsScrollBehavior: ScrollBehavior = 'smooth';
