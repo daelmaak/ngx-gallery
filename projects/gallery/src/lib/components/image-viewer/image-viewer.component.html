@@ -22,7 +22,7 @@
       [class.before-load]="loading === 'lazy' && !item._loaded"
       [attr.data-src]="item.src"
       [style.objectFit]="imageFit"
-      (load)="onLazyLoaded(item)"
+      (load)="onItemLoaded(item)"
     />
     <ng-template #customTemplate>
       <ng-container

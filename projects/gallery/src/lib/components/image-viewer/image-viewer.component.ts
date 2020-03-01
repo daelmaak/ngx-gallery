@@ -193,12 +193,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.center(scrollBehavior);
   }
 
-  onLazyLoadStarted(item: GalleryItemInternal) {
-    item._loading = true;
-  }
-
-  onLazyLoaded(item: GalleryItemInternal) {
-    item._loaded = true;
+  onItemLoaded(item: GalleryItemInternal) {
+    // delayed to prevent fallback frames of not yet rendered images being shown
+    requestAnimationFrame(() => {
+      item._loaded = true;
+      this.cd.detectChanges();
+    });
   }
 
   private center(scrollBehavior = this.scrollBehavior) {
