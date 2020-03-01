@@ -12,11 +12,15 @@ import {
   HostListener,
   ElementRef
 } from '@angular/core';
-import { GalleryItem } from '../../core/gallery-item';
-import { Orientation, OrientationFlag } from '../../core/orientation';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
-import { ImageFit } from '../../core/image-fit';
-import { OverscrollBehavior } from '../../core/overscroll-behavior';
+import {
+  GalleryItem,
+  Loading,
+  ImageFit,
+  Orientation,
+  OverscrollBehavior,
+  OrientationFlag
+} from '../../core';
 
 @Component({
   selector: 'ngx-gallery',
@@ -35,10 +39,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
-  prevArrowTemplate: TemplateRef<any>;
-
-  @Input()
-  nextArrowTemplate: TemplateRef<any>;
+  loading: Loading;
 
   @Input()
   imageCounter: boolean;
@@ -54,6 +55,18 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @Input()
   scrollBehavior: ScrollBehavior;
+
+  @Input()
+  selectionScrollBehavior: ScrollBehavior;
+
+  @Input()
+  scrollSnap: boolean;
+  
+  @Input()
+  prevArrowTemplate: TemplateRef<any>;
+
+  @Input()
+  nextArrowTemplate: TemplateRef<any>;
 
   @Input()
   thumbs: boolean;
@@ -122,6 +135,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.arrows === undefined && (this.arrows = true);
     this.loop === undefined && (this.loop = true);
     this.thumbs === undefined && (this.thumbs = true);
+    this.loading == null && (this.loading = 'auto');
+    this.scrollSnap == null && (this.scrollSnap = true);
+    this.selectionScrollBehavior == null &&
+      (this.selectionScrollBehavior = 'auto');
   }
 
   ngOnDestroy() {}
@@ -140,8 +157,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.imageViewer.prev();
   }
 
-  select(index: number) {
-    this.imageViewer.select(index);
+  select(index: number, scrollBehavior = this.selectionScrollBehavior) {
+    this.imageViewer.select(index, scrollBehavior);
     this.selectedItem = index;
     this.selection.emit(this.items[index]);
   }

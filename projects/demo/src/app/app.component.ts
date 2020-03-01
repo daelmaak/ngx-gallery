@@ -16,6 +16,7 @@ import {
   GalleryComponent,
   GalleryItem,
   ImageFit,
+  Loading,
   Orientation,
   OverscrollBehavior
 } from 'projects/gallery/src/public-api';
@@ -29,14 +30,18 @@ export class AppComponent implements OnInit, AfterViewInit {
   images: Observable<GalleryItem[]>;
   galleryDetailRef: GalleryDetailRef;
 
+  mobile = matchMedia('(max-width: 767px)').matches;
+
   arrows = true;
   imageCounter = true;
   imageFit: ImageFit = 'contain';
+  loading: Loading = 'lazy';
   loop = true;
   scrollBehavior: ScrollBehavior = 'smooth';
+  selectionScrollBehavior: ScrollBehavior = 'auto';
   thumbs = true;
   thumbsAutoScroll = true;
-  thumbsOrientation: Orientation = 'left';
+  thumbsOrientation: Orientation = this.mobile ? 'bottom' : 'left';
   thumbsArrows = true;
   thumbsArrowSlideByLength = 0;
   thumbsScrollBehavior: ScrollBehavior = 'smooth';
@@ -105,12 +110,14 @@ export class AppComponent implements OnInit, AfterViewInit {
       .open(index, {
         thumbsOrientation: 'bottom',
         panelClass: ['gallery-detail-first'],
-        documentScroll: true
+        documentScroll: true,
+        loading: 'lazy',
+        scrollSnap: true
       })
       .load(await this.images.toPromise());
   }
 
-  confirmImageLoadingLatency() {
+  reloadGallery() {
     this.displayGallery = false;
     this.cd.detectChanges();
     this.displayGallery = true;

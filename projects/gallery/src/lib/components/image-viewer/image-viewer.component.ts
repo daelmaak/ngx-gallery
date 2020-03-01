@@ -11,7 +11,8 @@ import {
   TemplateRef,
   ViewChild,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  HostBinding
 } from '@angular/core';
 import { animationFrameScheduler, fromEvent, interval, Subject } from 'rxjs';
 import {
@@ -24,7 +25,8 @@ import {
   takeWhile
 } from 'rxjs/operators';
 
-import { GalleryItem, ImageFit, Orientation, SUPPORT } from '../../core';
+import { ImageFit, Orientation, SUPPORT, Loading } from '../../core';
+import { GalleryItemInternal } from '../../core/gallery-item';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -34,7 +36,7 @@ import { GalleryItem, ImageFit, Orientation, SUPPORT } from '../../core';
 })
 export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
-  items: GalleryItem[];
+  items: GalleryItemInternal[];
 
   @Input()
   arrows: boolean;
@@ -55,6 +57,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   imageFit: ImageFit;
 
   @Input()
+  loading: Loading;
+
+  @Input()
   imageTemplate: TemplateRef<any>;
 
   @Input()
@@ -64,13 +69,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   galleryMainAxis: Orientation;
 
   @Input()
-  set scrollBehavior(val: ScrollBehavior) {
-    this._scrollBehavior = val || 'smooth';
-  }
+  scrollBehavior: ScrollBehavior;
 
-  get scrollBehavior() {
-    return this.smoothScrollAllowed ? this._scrollBehavior : 'auto';
-  }
+  @HostBinding('class.scroll-snap')
+  @Input()
+  scrollSnap: boolean;
 
   @Output()
   imageClick = new EventEmitter<Event>();
@@ -83,13 +86,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   >;
 
   fringeItemWidth = 50;
-  imagesShown = false;
+  imagesHidden = true;
 
   private destroy$ = new Subject();
+  private lazyLoadObserver: IntersectionObserver;
 
   private itemWidth: number;
-  private _scrollBehavior: ScrollBehavior;
-  private smoothScrollAllowed = false;
 
   get showArrow() {
     return this.arrows && this.items && this.items.length > 1;
@@ -123,6 +125,24 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     // late initialization; in case the gallery items come later
     if (items && !items.firstChange) {
       this.onResize();
+      this.initLazyLoad();
+
+      if (items.previousValue && items.currentValue) {
+        const prevItems = items.previousValue as GalleryItemInternal[];
+        const currItems = items.currentValue as GalleryItemInternal[];
+        this.items = currItems.map(c => {
+          const prevItem = prevItems.find(p => p.src === c.src);
+
+          if (prevItem) {
+            return {
+              ...c,
+              _loaded: prevItem._loaded,
+              _loading: prevItem._loading
+            };
+          }
+          return { ...c };
+        });
+      }
     }
   }
 
@@ -137,12 +157,17 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         .subscribe(this.onResize);
     }
 
+    this.initLazyLoad();
     this.initOnScrollItemSelection();
   }
 
   ngOnDestroy() {
     this.destroy$.next(null);
     this.destroy$.complete();
+
+    if (this.lazyLoadObserver) {
+      this.lazyLoadObserver.disconnect();
+    }
   }
 
   prev() {
@@ -153,7 +178,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.select(this.selectedItem + 1);
   }
 
-  select(index: number) {
+  select(index: number, scrollBehavior = this.scrollBehavior) {
     if (this.selectedItem === index) {
       return;
     }
@@ -171,13 +196,21 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     this.selectedItem = index;
     this.selection.emit(index);
-    this.center();
+    this.center(scrollBehavior);
   }
 
-  private center() {
+  onItemLoaded(item: GalleryItemInternal) {
+    // delayed to prevent fallback frames of not yet rendered images being shown
+    requestAnimationFrame(() => {
+      item._loaded = true;
+      this.cd.detectChanges();
+    });
+  }
+
+  private center(scrollBehavior = this.scrollBehavior) {
     const shift = this.selectedItem * this.itemWidth + this.fringeItemWidth;
 
-    this.shiftImages(shift);
+    this.shiftImages(shift, scrollBehavior);
   }
 
   private getSelectedItemFromScrollPosition(): number {
@@ -196,6 +229,56 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     return Math.round(selectedPrecise);
   }
+
+  private initLazyLoad() {
+    if (
+      !SUPPORT.intersectionObserver ||
+      this.loading !== 'lazy' ||
+      !this.items ||
+      !this.items.length
+    ) {
+      return;
+    }
+
+    const listEl = this.hostRef.nativeElement;
+
+    if (!this.lazyLoadObserver) {
+      this.lazyLoadObserver = new IntersectionObserver(
+        this.onLazyLoadIntersection,
+        {
+          root: listEl,
+          threshold: 0.1
+        }
+      );
+    }
+    this.observeImagesForLazyLoad();
+  }
+
+  private observeImagesForLazyLoad() {
+    this.lazyLoadObserver.disconnect();
+
+    requestAnimationFrame(() => {
+      // image elements should be rendered now
+      this.imageListRef.nativeElement
+        .querySelectorAll('li img')
+        .forEach(el => this.lazyLoadObserver.observe(el));
+    });
+  }
+
+  private onLazyLoadIntersection = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0) {
+        const lazyImage = entry.target as HTMLImageElement;
+
+        if (!lazyImage.getAttribute('src')) {
+          lazyImage.src = lazyImage.dataset.src;
+          this.items.find(i => i.src === lazyImage.dataset.src)._loading = true;
+          this.cd.markForCheck();
+        }
+        this.lazyLoadObserver.unobserve(lazyImage);
+      }
+    });
+  };
 
   /**
    * Determines selected item upon native scroll in the image list
@@ -234,29 +317,33 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private onResize = () => {
     requestAnimationFrame(() => {
-      this.smoothScrollAllowed = false;
-      this.cd.detectChanges();
-
       if (!this.items || !this.items.length) {
-        this.shiftImages(this.fringeItemWidth);
+        this.shiftImages(this.fringeItemWidth, 'auto');
       } else {
         this.itemWidth = this.hostRef.nativeElement.offsetWidth;
-        this.center();
+        this.center('auto');
       }
 
-      this.imagesShown = true;
-      this.smoothScrollAllowed = true;
-      this.cd.detectChanges();
+      requestAnimationFrame(() => {
+        this.imagesHidden = false;
+        this.cd.detectChanges();
+      });
     });
   };
 
-  private shiftImages(x: number) {
+  private shiftImages(x: number, scrollBehavior = this.scrollBehavior) {
     const imageListEl = this.imageListRef.nativeElement;
 
-    if (!SUPPORT.scrollBehavior && this.scrollBehavior === 'smooth') {
-      this.shiftImagesManually(x);
+    if (this.scrollSnap) {
+      if (!SUPPORT.scrollBehavior && scrollBehavior === 'smooth') {
+        this.shiftImagesManually(x);
+      } else if (imageListEl.scrollTo) {
+        imageListEl.scroll({ left: x, behavior: scrollBehavior });
+      } else {
+        imageListEl.scrollLeft = x;
+      }
     } else {
-      imageListEl.scrollLeft = x;
+      this.imageListRef.nativeElement.style.transform = `translate3d(-${x}px, 0, 0)`;
     }
   }
 

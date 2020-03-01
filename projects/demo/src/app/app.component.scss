@@ -59,17 +59,23 @@ ngx-gallery {
 ::ng-deep {
   .gallery-detail-first {
     ngx-gallery {
-      width: 700px;
-      height: 600px;
+      width: 100vw;
+      height: 100vh;
 
       @media (max-width: 767px) {
         width: auto;
+      }
+
+      img {
+        height: 80%;
+        margin: 0 auto;
       }
     }
   }
 }
 
-section.image-loading-latency {
-  display: flex;
-  align-items: center;
+section {
+  button {
+    margin-left: 20px;
+  }
 }

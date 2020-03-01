@@ -1,7 +1,8 @@
 import { TemplateRef } from '@angular/core';
 import {
-  Orientation,
   ImageFit,
+  Loading,
+  Orientation,
   OverscrollBehavior
 } from '@ngx-imagery/gallery';
 
@@ -16,7 +17,10 @@ export interface GalleryDetailConfig {
   imageCounter?: boolean;
   imageFit?: ImageFit;
   imageTemplate?: TemplateRef<any>;
+  loading?: Loading;
   loop?: boolean;
+  scrollBehavior?: ScrollBehavior;
+  scrollSnap?: boolean;
   thumbs?: boolean;
   thumbTemplate?: TemplateRef<any>;
   thumbsAutoScroll?: boolean;
