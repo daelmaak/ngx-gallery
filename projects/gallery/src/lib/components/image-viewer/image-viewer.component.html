@@ -4,23 +4,22 @@
   (click)="prev()"
 ></ngx-chevron-icon>
 
-<ul #imageList class="images" [class.images--hidden]="!imagesShown">
+<ul #imageList [class.hidden]="imagesHidden">
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
-  <li *ngIf="!items || !items.length">
+  <li *ngIf="!items || !items.length" class="initial-item">
     <div class="loading">
-      <div class="animation initial"></div>
+      <div class="animation"></div>
     </div>
   </li>
   <li
     *ngFor="let item of items; let i = index"
-    class="item"
     (click)="imageClick.emit($event)"
   >
     <img
       *ngIf="!imageTemplate; else customTemplate"
       [src]="loading === 'lazy' ? '' : item.src"
-      [class.before-load]="loading === 'lazy' && !item._loaded"
       [attr.data-src]="item.src"
+      [class.before-load]="loading === 'lazy' && !item._loaded"
       [style.objectFit]="imageFit"
       (load)="onItemLoaded(item)"
     />

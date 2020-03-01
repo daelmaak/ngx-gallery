@@ -80,7 +80,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   >;
 
   fringeItemWidth = 50;
-  imagesShown = false;
+  imagesHidden = true;
 
   private destroy$ = new Subject();
   private lazyLoadObserver: IntersectionObserver;
@@ -147,7 +147,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     if (typeof window !== 'undefined') {
       fromEvent(window, 'resize')
-        .pipe(takeUntil(this.destroy$))
+        .pipe(startWith(null), takeUntil(this.destroy$))
         .subscribe(this.onResize);
     }
 
@@ -254,7 +254,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     requestAnimationFrame(() => {
       // image elements should be rendered now
       this.imageListRef.nativeElement
-        .querySelectorAll('.item img')
+        .querySelectorAll('li img')
         .forEach(el => this.lazyLoadObserver.observe(el));
     });
   }
@@ -319,7 +319,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
 
       requestAnimationFrame(() => {
-        this.imagesShown = true;
+        this.imagesHidden = false;
         this.cd.detectChanges();
       });
     });
