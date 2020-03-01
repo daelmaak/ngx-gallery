@@ -1,8 +1,8 @@
-<ngx-chevron-icon
-  *ngIf="showPrevArrow"
-  class="prev"
-  (click)="prev()"
-></ngx-chevron-icon>
+<ng-container *ngIf="showPrevArrow">
+  <ng-container *ngIf="!prevArrowTemplate; else prevArrowTemplate">
+    <ngx-chevron-icon class="prev" (click)="prev()"></ngx-chevron-icon>
+  </ng-container>
+</ng-container>
 
 <ul #imageList [class.hidden]="imagesHidden">
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
@@ -42,11 +42,11 @@
   <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
 </ul>
 
-<ngx-chevron-icon
-  *ngIf="showNextArrow"
-  class="next"
-  (click)="next()"
-></ngx-chevron-icon>
+<ng-container *ngIf="showNextArrow">
+  <ng-container *ngIf="!nextArrowTemplate; else nextArrowTemplate">
+    <ngx-chevron-icon class="next" (click)="next()"></ngx-chevron-icon>
+  </ng-container>
+</ng-container>
 
 <ngx-image-counter
   *ngIf="imageCounter"

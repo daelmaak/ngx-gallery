@@ -52,3 +52,20 @@ In your component template
 ## Docs
 
 - [Gallery API](https://github.com/daelmaak/ngx-imagery/wiki/Gallery-API)
+
+## Development
+
+### Build
+
+In the root of the project, run
+
+```
+npm ci
+npm run build
+```
+
+### Serve
+
+```
+npm run start:demo
+```
