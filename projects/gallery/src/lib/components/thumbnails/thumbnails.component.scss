@@ -1,3 +1,5 @@
+@import '../../core/mixins.scss';
+
 $arrow-btn-dimension: 30px;
 
 :host {
@@ -97,10 +99,6 @@ li {
   margin: 1px;
   position: relative;
   cursor: pointer;
-
-  &:hover {
-    opacity: 1;
-  }
 }
 
 img {
@@ -124,7 +122,9 @@ img {
   z-index: 10;
   opacity: 0.7;
 
-  &:hover {
-    opacity: 1;
+  @include supports-hover {
+    &:hover {
+      opacity: 1;
+    }
   }
 }
