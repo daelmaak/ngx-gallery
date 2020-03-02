@@ -79,3 +79,9 @@ section {
     margin-left: 20px;
   }
 }
+
+:host::ng-deep .image-loading-latency {
+  .mat-form-field-infix {
+    width: auto;
+  }
+}
