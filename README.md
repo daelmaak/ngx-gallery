@@ -6,7 +6,7 @@ Performant and easy to use, responsive image galllery
 
 ## Why another gallery?
 
-- High performance due to leverage of native scroll
+- Great performance and feel on mobile due to leverage of native scroll
 - Built with mobile first philosophy in mind
 - Very small - gallery itself has just 5kB gzipped!
 - Easy to use
