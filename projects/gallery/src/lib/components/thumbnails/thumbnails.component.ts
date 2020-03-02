@@ -234,7 +234,7 @@ export class ThumbnailsComponent
       .pipe(debounceTime(50), takeUntil(this.destroy$))
       .subscribe(this.updateArrows);
 
-    requestAnimationFrame(this.updateArrows);
+    setTimeout(this.updateArrows);
   }
 
   private initManualOverscrollContain() {
