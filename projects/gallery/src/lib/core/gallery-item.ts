@@ -1,6 +1,7 @@
 export interface GalleryItem {
   src: string;
   thumbSrc?: string;
+  alt?: string;
   data?: any;
 }
 

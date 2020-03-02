@@ -4,24 +4,22 @@
 
 <ul
   #thumbs
-  class="thumbs"
   [style.scrollBehavior]="scrollBehavior"
   [style.overscrollBehavior]="overscrollBehavior"
 >
-  <!-- placeholder before images come -->
-  <li *ngIf="!items || !items.length" class="thumb"></li>
+  <!-- placeholder before items come -->
+  <li *ngIf="!items || !items.length"></li>
   <li
     *ngFor="let item of items; let i = index"
-    class="thumb"
     [class.selected]="i === selectedItem"
     (click)="selection.emit(i); thumbClick.emit($event)"
   >
-    <div
+    <img
       *ngIf="!thumbTemplate; else customTemplate"
-      class="image"
-      [ngStyle]="imageStyles"
-      [style.backgroundImage]="'url(' + (item.thumbSrc || item.src) + ')'"
-    ></div>
+      [src]="item.thumbSrc || item.src"
+      [alt]="item.alt"
+      [style.objectFit]="imageFit"
+    />
     <ng-template #customTemplate>
       <ng-container
         *ngTemplateOutlet="

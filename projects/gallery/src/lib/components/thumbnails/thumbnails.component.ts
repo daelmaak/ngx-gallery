@@ -12,15 +12,15 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild,
-  TemplateRef
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
 import {
+  animationFrameScheduler,
   fromEvent,
+  merge,
   of,
   Subject,
-  animationFrameScheduler,
-  merge,
   Subscription
 } from 'rxjs';
 import {
@@ -31,11 +31,12 @@ import {
   takeUntil,
   takeWhile
 } from 'rxjs/operators';
+
+import { clientSide, SUPPORT } from '../../core';
 import { GalleryItem } from '../../core/gallery-item';
-import { Orientation } from '../../core/orientation';
 import { ImageFit } from '../../core/image-fit';
+import { Orientation } from '../../core/orientation';
 import { OverscrollBehavior } from '../../core/overscroll-behavior';
-import { SUPPORT, clientSide } from '../../core';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -65,12 +66,7 @@ export class ThumbnailsComponent
   autoScroll: boolean;
 
   @Input()
-  set imageFit(fit: ImageFit) {
-    this.imageStyles = {
-      ...this.imageStyles,
-      backgroundSize: fit || this.imageStyles.backgroundSize
-    };
-  }
+  imageFit: ImageFit;
 
   @Input()
   set scrollBehavior(val: ScrollBehavior) {
@@ -95,9 +91,6 @@ export class ThumbnailsComponent
 
   @ViewChild('thumbs', { static: true })
   thumbListRef: ElementRef<HTMLElement>;
-  imageStyles = {
-    backgroundSize: 'cover'
-  };
   showStartArrow = false;
   showEndArrow = false;
   vertical: boolean;
@@ -162,9 +155,10 @@ export class ThumbnailsComponent
   }
 
   ngOnInit() {
+    this.imageFit == null && (this.imageFit = 'cover');
+    this.autoScroll === undefined && (this.autoScroll = true);
     this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
     this.overscrollBehavior == null && (this.overscrollBehavior = 'auto');
-    this.autoScroll === undefined && (this.autoScroll = true);
 
     if (this.arrows && clientSide) {
       this.initImperativeScroll();

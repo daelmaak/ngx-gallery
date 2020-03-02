@@ -62,37 +62,46 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.images = of([
       {
         src: './assets/mountains1.jpg',
-        thumbSrc: './assets/mountains1-thumb.jpg'
+        thumbSrc: './assets/mountains1-thumb.jpg',
+        alt: 'Mountains 1'
       },
       {
         src: './assets/mountains2.jpg',
-        thumbSrc: './assets/mountains2-thumb.jpg'
+        thumbSrc: './assets/mountains2-thumb.jpg',
+        alt: 'Mountains 2'
       },
       {
         src: './assets/mountains3.jpg',
-        thumbSrc: './assets/mountains3-thumb.jpg'
+        thumbSrc: './assets/mountains3-thumb.jpg',
+        alt: 'Mountains 3'
       },
       {
         src: './assets/mountains4.jpg',
-        thumbSrc: './assets/mountains4-thumb.jpg'
+        thumbSrc: './assets/mountains4-thumb.jpg',
+        alt: 'Mountains 4'
       },
       {
-        src: './assets/fruit1.jpg'
+        src: './assets/fruit1.jpg',
+        alt: 'Fruit 1'
       },
       {
         src: './assets/fruit2.jpg',
-        thumbSrc: './assets/fruit2-thumb.jpg'
+        thumbSrc: './assets/fruit2-thumb.jpg',
+        alt: 'Fruit 2'
       },
       {
-        src: './assets/fruit3.jpg'
+        src: './assets/fruit3.jpg',
+        alt: 'Fruit 3'
       },
       {
         src: './assets/vogel1.jpg',
-        thumbSrc: './assets/vogel1-thumb.jpg'
+        thumbSrc: './assets/vogel1-thumb.jpg',
+        alt: 'Bird 1'
       },
       {
         src: './assets/landscape1.jpg',
-        thumbSrc: './assets/landscape1-thumb.jpg'
+        thumbSrc: './assets/landscape1-thumb.jpg',
+        alt: 'Landscape 1'
       }
     ]).pipe(
       switchMap(items =>

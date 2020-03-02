@@ -130,15 +130,15 @@ export class GalleryComponent implements OnInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
-    this.thumbsArrows === undefined && (this.thumbsArrows = true);
-    this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
     this.arrows === undefined && (this.arrows = true);
     this.loop === undefined && (this.loop = true);
-    this.thumbs === undefined && (this.thumbs = true);
     this.loading == null && (this.loading = 'auto');
     this.scrollSnap == null && (this.scrollSnap = true);
     this.selectionScrollBehavior == null &&
       (this.selectionScrollBehavior = 'auto');
+    this.thumbs === undefined && (this.thumbs = true);
+    this.thumbsArrows === undefined && (this.thumbsArrows = true);
+    this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
   }
 
   ngOnDestroy() {}

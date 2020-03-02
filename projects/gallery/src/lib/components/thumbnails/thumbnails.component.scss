@@ -9,14 +9,14 @@ $arrow-btn-dimension: 30px;
   &.bottom {
     width: 100%;
 
-    .thumbs {
+    ul {
       width: 100%;
       display: flex;
       overflow-x: scroll;
       -webkit-overflow-scrolling: touch;
     }
 
-    .thumb {
+    li {
       flex: 1 0 auto;
     }
 
@@ -44,7 +44,7 @@ $arrow-btn-dimension: 30px;
   &.right {
     height: 100%;
 
-    .thumbs {
+    ul {
       height: 100%;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
@@ -79,7 +79,7 @@ $arrow-btn-dimension: 30px;
   }
 }
 
-.thumbs {
+ul {
   // hide scrollbar
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
@@ -91,7 +91,7 @@ $arrow-btn-dimension: 30px;
   }
 }
 
-.thumb {
+li {
   width: 120px;
   height: 80px;
   margin: 1px;
@@ -103,7 +103,7 @@ $arrow-btn-dimension: 30px;
   }
 }
 
-.image {
+img {
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
