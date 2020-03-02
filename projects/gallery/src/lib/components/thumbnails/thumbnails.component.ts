@@ -130,7 +130,7 @@ export class ThumbnailsComponent
     private elRef: ElementRef<HTMLElement>
   ) {}
 
-  ngOnChanges({ arrows, orientation, selectedItem }: SimpleChanges) {
+  ngOnChanges({ arrows, items, orientation, selectedItem }: SimpleChanges) {
     if (orientation && orientation.currentValue != null) {
       const newOrientation: Orientation = orientation.currentValue;
       this.vertical = newOrientation === 'left' || newOrientation === 'right';
@@ -143,13 +143,20 @@ export class ThumbnailsComponent
     ) {
       this.centerThumb(selectedItem.currentValue);
     }
-    if (arrows) {
+    if (arrows && !arrows.firstChange) {
       if (arrows.currentValue) {
         this.initArrowUpdates();
       } else {
         this.showStartArrow = false;
         this.showEndArrow = false;
         this.arrowUpdatesSub.unsubscribe();
+      }
+    }
+    if (items && items.currentValue) {
+      if (!this.arrowUpdatesSub && this.arrows) {
+        this.initArrowUpdates();
+      } else if (this.arrows) {
+        this.updateArrows();
       }
     }
   }
@@ -234,7 +241,7 @@ export class ThumbnailsComponent
       .pipe(debounceTime(50), takeUntil(this.destroy$))
       .subscribe(this.updateArrows);
 
-    setTimeout(this.updateArrows);
+    this.updateArrows();
   }
 
   private initManualOverscrollContain() {
@@ -309,12 +316,14 @@ export class ThumbnailsComponent
   }
 
   private updateArrows = () => {
-    this.showStartArrow = this.thumbListRef.nativeElement[this.scrollKey] > 0;
+    setTimeout(() => {
+      this.showStartArrow = this.thumbListRef.nativeElement[this.scrollKey] > 0;
 
-    this.showEndArrow =
-      this.thumbListRef.nativeElement[this.scrollKey] <
-      this.thumbListMainAxis - this.thumbContainerMainAxis;
+      this.showEndArrow =
+        this.thumbListRef.nativeElement[this.scrollKey] <
+        this.thumbListMainAxis - this.thumbContainerMainAxis;
 
-    this.cd.detectChanges();
+      this.cd.detectChanges();
+    });
   };
 }
