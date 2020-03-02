@@ -20,6 +20,17 @@
     </section>
 
     <section>
+      <label>Image counter orientation:</label>
+      <mat-radio-group
+        name="imageCounterOrientation"
+        [(ngModel)]="imageCounterOrientation"
+      >
+        <mat-radio-button value="top">top</mat-radio-button>
+        <mat-radio-button value="bottom">bottom</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
       <label>Image fit:</label>
       <mat-radio-group name="imageFit" [(ngModel)]="imageFit">
         <mat-radio-button value="contain">contain</mat-radio-button>
@@ -158,6 +169,7 @@
     [items]="images | async"
     [arrows]="arrows"
     [imageCounter]="imageCounter"
+    [imageCounterOrientation]="imageCounterOrientation"
     [imageFit]="imageFit"
     [loading]="loading"
     [loop]="loop"

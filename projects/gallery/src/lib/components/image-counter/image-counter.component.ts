@@ -1,24 +1,28 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy,
-  Input
+  Input,
+  HostBinding
 } from '@angular/core';
+
+import { VerticalOrientation } from '../../core';
 
 @Component({
   selector: 'ngx-image-counter',
-  templateUrl: './image-counter.component.html',
+  template: `
+    <span>{{ selectedItem + 1 }}/{{ itemQuantity || 0 }}</span>
+  `,
   styleUrls: ['./image-counter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageCounterComponent implements OnInit {
+export class ImageCounterComponent {
   @Input()
   itemQuantity: number;
 
   @Input()
   selectedItem: number;
 
-  constructor() {}
-
-  ngOnInit() {}
+  @HostBinding('class')
+  @Input()
+  orientation: VerticalOrientation;
 }

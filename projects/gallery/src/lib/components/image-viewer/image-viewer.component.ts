@@ -30,7 +30,8 @@ import {
   ImageFit,
   Loading,
   Orientation,
-  SUPPORT
+  SUPPORT,
+  VerticalOrientation
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 
@@ -58,6 +59,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   imageCounter: boolean;
+
+  @Input()
+  imageCounterOrientation: VerticalOrientation;
 
   @Input()
   imageFit: ImageFit;
@@ -154,6 +158,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnInit() {
     this.imageCounter === undefined && (this.imageCounter = true);
+    this.imageCounterOrientation == null &&
+      (this.imageCounterOrientation = 'top');
     this.imageFit == null && (this.imageFit = 'contain');
     this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
 

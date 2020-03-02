@@ -18,7 +18,8 @@ import {
   ImageFit,
   Loading,
   Orientation,
-  OverscrollBehavior
+  OverscrollBehavior,
+  VerticalOrientation
 } from 'projects/gallery/src/public-api';
 
 @Component({
@@ -34,6 +35,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   arrows = true;
   imageCounter = true;
+  imageCounterOrientation: VerticalOrientation = 'top';
   imageFit: ImageFit = 'contain';
   loading: Loading = 'lazy';
   loop = true;

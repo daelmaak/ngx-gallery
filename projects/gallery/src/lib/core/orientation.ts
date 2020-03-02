@@ -1,5 +1,7 @@
 export type Orientation = 'top' | 'bottom' | 'left' | 'right';
 
+export type VerticalOrientation = 'top' | 'bottom';
+
 export const enum OrientationFlag {
   LEFT = 2,
   RIGHT = 4,

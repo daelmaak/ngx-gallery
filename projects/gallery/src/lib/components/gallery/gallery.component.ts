@@ -19,7 +19,8 @@ import {
   ImageFit,
   Orientation,
   OverscrollBehavior,
-  OrientationFlag
+  OrientationFlag,
+  VerticalOrientation
 } from '../../core';
 
 @Component({
@@ -43,6 +44,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @Input()
   imageCounter: boolean;
+
+  @Input()
+  imageCounterOrientation: VerticalOrientation;
 
   @Input()
   imageFit: ImageFit;
