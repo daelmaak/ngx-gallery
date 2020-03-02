@@ -35,7 +35,7 @@ import { GalleryItem } from '../../core/gallery-item';
 import { Orientation } from '../../core/orientation';
 import { ImageFit } from '../../core/image-fit';
 import { OverscrollBehavior } from '../../core/overscroll-behavior';
-import { SUPPORT } from '../../core';
+import { SUPPORT, clientSide } from '../../core';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -166,7 +166,7 @@ export class ThumbnailsComponent
     this.overscrollBehavior == null && (this.overscrollBehavior = 'auto');
     this.autoScroll === undefined && (this.autoScroll = true);
 
-    if (this.arrows && typeof window !== undefined) {
+    if (this.arrows && clientSide) {
       this.initImperativeScroll();
     }
 
@@ -234,12 +234,14 @@ export class ThumbnailsComponent
   }
 
   private initArrowUpdates() {
-    this.arrowUpdatesSub = merge(
-      fromEvent(this.thumbListRef.nativeElement, 'scroll', { passive: true }),
-      fromEvent(window, 'resize')
-    )
-      .pipe(debounceTime(50), takeUntil(this.destroy$))
-      .subscribe(this.updateArrows);
+    if (clientSide) {
+      this.arrowUpdatesSub = merge(
+        fromEvent(this.thumbListRef.nativeElement, 'scroll', { passive: true }),
+        fromEvent(window, 'resize')
+      )
+        .pipe(debounceTime(50), takeUntil(this.destroy$))
+        .subscribe(this.updateArrows);
+    }
 
     this.updateArrows();
   }

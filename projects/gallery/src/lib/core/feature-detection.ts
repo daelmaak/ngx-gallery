@@ -1,6 +1,8 @@
+export const clientSide = typeof window !== 'undefined';
+
 export const SUPPORT = {
-  overscrollBehavior: 'overscrollBehavior' in document.body.style,
-  scrollBehavior: 'scrollBehavior' in document.body.style,
-  nativeMediaLoading: 'loading' in Image.prototype,
-  intersectionObserver: 'IntersectionObserver' in window
+  overscrollBehavior: clientSide && 'overscrollBehavior' in document.body.style,
+  scrollBehavior: clientSide && 'scrollBehavior' in document.body.style,
+  nativeMediaLoading: clientSide && 'loading' in Image.prototype,
+  intersectionObserver: clientSide && 'IntersectionObserver' in window
 };

@@ -4,15 +4,15 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostBinding,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  TemplateRef,
-  ViewChild,
-  OnChanges,
   SimpleChanges,
-  HostBinding
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
 import { animationFrameScheduler, fromEvent, interval, Subject } from 'rxjs';
 import {
@@ -25,7 +25,13 @@ import {
   takeWhile
 } from 'rxjs/operators';
 
-import { ImageFit, Orientation, SUPPORT, Loading } from '../../core';
+import {
+  clientSide,
+  ImageFit,
+  Loading,
+  Orientation,
+  SUPPORT
+} from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 
 @Component({
@@ -151,14 +157,14 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.imageFit == null && (this.imageFit = 'contain');
     this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
 
-    if (typeof window !== 'undefined') {
+    if (clientSide) {
       fromEvent(window, 'resize')
         .pipe(startWith(null), takeUntil(this.destroy$))
         .subscribe(this.onResize);
-    }
 
-    this.initLazyLoad();
-    this.initOnScrollItemSelection();
+      this.initOnScrollItemSelection();
+      this.initLazyLoad();
+    }
   }
 
   ngOnDestroy() {

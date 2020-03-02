@@ -61,7 +61,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @Input()
   scrollSnap: boolean;
-  
+
   @Input()
   prevArrowTemplate: TemplateRef<any>;
 
