@@ -19,7 +19,7 @@
       *ngIf="!imageTemplate; else customTemplate"
       [src]="loading === 'lazy' ? '' : item.src"
       [alt]="item.alt"
-      [attr.data-src]="item.src"
+      [attr.data-src]="loading === 'lazy' ? item.src : ''"
       [class.before-load]="loading === 'lazy' && !item._loaded"
       [style.objectFit]="imageFit"
       (load)="onItemLoaded(item)"
