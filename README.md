@@ -67,5 +67,5 @@ npm run build
 ### Serve
 
 ```
-npm run start:demo
+npm start
 ```
