@@ -215,6 +215,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     // delayed to prevent fallback frames of not yet rendered images being shown
     requestAnimationFrame(() => {
       item._loaded = true;
+      item._loading = false;
       this.cd.detectChanges();
     });
   }

@@ -28,7 +28,12 @@
       <ng-container
         *ngTemplateOutlet="
           imageTemplate;
-          context: { index: i, selectedIndex: selectedItem, item: item }
+          context: {
+            index: i,
+            selectedIndex: selectedItem,
+            item: item,
+            loading: item._loading
+          }
         "
       ></ng-container>
     </ng-template>
