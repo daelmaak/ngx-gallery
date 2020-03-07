@@ -33,11 +33,11 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   mobile = matchMedia('(max-width: 767px)').matches;
 
-  arrows = true;
+  arrows = !this.mobile;
   imageCounter = true;
   imageCounterOrientation: VerticalOrientation = 'top';
   imageFit: ImageFit = 'contain';
-  loading: Loading = 'lazy';
+  loading: Loading = 'auto';
   loop = true;
   scrollBehavior: ScrollBehavior = 'smooth';
   selectionScrollBehavior: ScrollBehavior = 'auto';
@@ -123,7 +123,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         panelClass: ['gallery-detail-first'],
         documentScroll: true,
         loading: 'lazy',
-        scrollSnap: true
       })
       .load(await this.images.toPromise());
   }

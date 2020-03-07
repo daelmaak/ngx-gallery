@@ -1,4 +1,4 @@
-export * from './feature-detection';
+export * from './support';
 export { GalleryItem } from './gallery-item';
 export * from './image-fit';
 export * from './loading';

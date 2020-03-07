@@ -20,7 +20,6 @@ export interface GalleryDetailConfig {
   loading?: Loading;
   loop?: boolean;
   scrollBehavior?: ScrollBehavior;
-  scrollSnap?: boolean;
   thumbs?: boolean;
   thumbTemplate?: TemplateRef<any>;
   thumbsAutoScroll?: boolean;

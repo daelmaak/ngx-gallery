@@ -64,9 +64,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
   selectionScrollBehavior: ScrollBehavior;
 
   @Input()
-  scrollSnap: boolean;
-
-  @Input()
   prevArrowTemplate: TemplateRef<any>;
 
   @Input()
@@ -137,7 +134,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.arrows === undefined && (this.arrows = true);
     this.loop === undefined && (this.loop = true);
     this.loading == null && (this.loading = 'auto');
-    this.scrollSnap == null && (this.scrollSnap = true);
     this.selectionScrollBehavior == null &&
       (this.selectionScrollBehavior = 'auto');
     this.thumbs === undefined && (this.thumbs = true);
