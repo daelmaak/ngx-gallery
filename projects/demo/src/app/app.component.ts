@@ -122,7 +122,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         thumbsOrientation: 'bottom',
         panelClass: ['gallery-detail-first'],
         documentScroll: true,
-        loading: 'lazy',
+        loading: 'lazy'
       })
       .load(await this.images.toPromise());
   }

@@ -157,8 +157,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.imageViewer.prev();
   }
 
-  select(index: number, scrollBehavior = this.selectionScrollBehavior) {
-    this.imageViewer.select(index, scrollBehavior);
+  select(index: number) {
+    this.imageViewer.select(index);
     this.selectedItem = index;
     this.selection.emit(this.items[index]);
   }

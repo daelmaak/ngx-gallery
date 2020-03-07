@@ -4,7 +4,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  HostBinding,
   Input,
   OnChanges,
   OnDestroy,
@@ -14,17 +13,17 @@ import {
   TemplateRef,
   ViewChild
 } from '@angular/core';
-import { animationFrameScheduler, fromEvent, Subject, NEVER } from 'rxjs';
+import { animationFrameScheduler, fromEvent, Subject, merge } from 'rxjs';
 import {
   map,
   observeOn,
   startWith,
   switchMap,
-  switchMapTo,
-  take,
   takeUntil,
   tap,
-  last
+  last,
+  filter,
+  repeat
 } from 'rxjs/operators';
 
 import {
@@ -80,9 +79,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   galleryMainAxis: Orientation;
 
-  @Input()
-  scrollBehavior: ScrollBehavior;
-
   @Output()
   imageClick = new EventEmitter<Event>();
 
@@ -94,7 +90,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   >;
 
   imagesHidden = true;
-  drag = false;
+  noAnimation = false;
 
   private destroy$ = new Subject();
   private lazyLoadObserver: IntersectionObserver;
@@ -142,7 +138,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.imageCounterOrientation == null &&
       (this.imageCounterOrientation = 'top');
     this.imageFit == null && (this.imageFit = 'contain');
-    this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
 
     if (clientSide) {
       fromEvent(window, 'resize')
@@ -157,57 +152,53 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       const touchend$ = fromEvent<TouchEvent>(document, 'touchend');
 
       let horizontal = false;
-
-      if (UA.ios) {
-        touchmove$.pipe(takeUntil(this.destroy$)).subscribe(e => {
-          horizontal && e.preventDefault();
-          horizontal && e.stopPropagation();
-        });
-      }
-
-      touchstart$
+      let startTouch: Touch;
+      merge(touchstart$, touchmove$)
         .pipe(
-          switchMap(e =>
-            touchmove$.pipe(
-              take(1),
-              switchMap(ev => {
-                const deltaX = Math.abs(
-                  ev.touches[0].clientX - e.touches[0].clientX
-                );
-                const deltaY = Math.abs(
-                  ev.touches[0].clientY - e.touches[0].clientY
-                );
+          map((e, i) => {
+            if (e.touches.length > 1) {
+              return null;
+            }
 
-                horizontal = deltaX >= deltaY || deltaX > 6;
+            if (e.type === 'touchstart') {
+              startTouch = e.touches[0];
+              return null;
+            }
+            const moveTouch = e.touches[0];
+            const deltaX = Math.abs(moveTouch.clientX - startTouch.clientX);
 
-                if (horizontal) {
-                  ev.preventDefault();
-                  ev.stopPropagation();
-                }
+            if (i === 1) {
+              const deltaY = Math.abs(moveTouch.clientY - startTouch.clientY);
+              horizontal = deltaX * 2 > deltaY;
+            }
 
-                return horizontal ? touchmove$ : NEVER;
-              }),
-              map(ev => e.touches[0].clientX - ev.touches[0].clientX),
-              takeUntil(touchend$)
-            )
-          ),
+            if (horizontal) {
+              if (UA.ios) {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+              return startTouch.clientX - moveTouch.clientX;
+            }
+            return null;
+          }),
+          filter(e => e != null),
+          takeUntil(touchend$),
+          repeat(),
           observeOn(animationFrameScheduler),
           takeUntil(this.destroy$)
         )
         .subscribe(delta => {
           this.shiftImages(this.selectedItem * this.itemWidth + delta);
-          horizontal = false;
         });
 
       touchstart$
         .pipe(
           tap(_ => {
-            this.drag = true;
+            this.noAnimation = true;
             this.cd.detectChanges();
           }),
           switchMap(sE => {
             const sTime = Date.now();
-
             return touchmove$.pipe(
               takeUntil(touchend$),
               last(),
@@ -218,7 +209,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
             );
           }),
           tap(_ => {
-            this.drag = false;
+            this.noAnimation = false;
             this.cd.detectChanges();
           }),
           observeOn(animationFrameScheduler),
@@ -251,7 +242,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.select(this.selectedItem + 1);
   }
 
-  select(index: number, scrollBehavior = this.scrollBehavior) {
+  select(index: number) {
     if (this.selectedItem === index) {
       this.center();
       return;
@@ -270,7 +261,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     this.selectedItem = index;
     this.selection.emit(index);
-    this.center(scrollBehavior);
+    this.center();
   }
 
   onItemLoaded(item: GalleryItemInternal) {
@@ -282,19 +273,19 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     });
   }
 
-  private center(scrollBehavior = this.scrollBehavior) {
+  private center() {
     const shift = this.selectedItem * this.itemWidth;
 
-    this.shiftImages(shift, scrollBehavior);
+    this.shiftImages(shift);
   }
 
   private onResize = () => {
     requestAnimationFrame(() => {
       if (!this.items || !this.items.length) {
-        this.shiftImages(0, 'auto');
+        this.shiftImages(0);
       } else {
         this.itemWidth = this.hostRef.nativeElement.offsetWidth;
-        this.center('auto');
+        this.center();
       }
 
       requestAnimationFrame(() => {
@@ -304,7 +295,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     });
   };
 
-  private shiftImages(x: number, scrollBehavior = this.scrollBehavior) {
+  private shiftImages(x: number) {
     const imageListEl = this.imageListRef.nativeElement;
 
     imageListEl.style.transform = `translate3d(-${(this.listX = x)}px, 0, 0)`;
