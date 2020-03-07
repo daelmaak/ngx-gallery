@@ -41,6 +41,15 @@ mat-form-field {
 
 ngx-gallery {
   width: 100%;
+
+  ::ng-deep {
+    ngx-image-viewer {
+      img {
+        width: 90%;
+        margin: 0 auto;
+      }
+    }
+  }
 }
 
 .github-link {

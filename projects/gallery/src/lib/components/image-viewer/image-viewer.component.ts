@@ -23,7 +23,8 @@ import {
   switchMapTo,
   take,
   takeUntil,
-  tap
+  tap,
+  last
 } from 'rxjs/operators';
 
 import {
@@ -150,26 +151,25 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
       const imageListEl = this.imageListRef.nativeElement;
       const touchstart$ = fromEvent<TouchEvent>(imageListEl, 'touchstart');
-      const touchmove$ = fromEvent<TouchEvent>(window, 'touchmove', {
+      const touchmove$ = fromEvent<TouchEvent>(document, 'touchmove', {
         passive: !UA.ios
       });
-      const touchend$ = fromEvent<TouchEvent>(window, 'touchend');
+      const touchend$ = fromEvent<TouchEvent>(document, 'touchend');
 
       let horizontal = false;
 
       if (UA.ios) {
-        touchmove$
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(e => horizontal && e.preventDefault());
+        touchmove$.pipe(takeUntil(this.destroy$)).subscribe(e => {
+          horizontal && e.preventDefault();
+          horizontal && e.stopPropagation();
+        });
       }
 
       touchstart$
         .pipe(
-          tap(console.log),
           switchMap(e =>
             touchmove$.pipe(
               take(1),
-              tap(console.log),
               switchMap(ev => {
                 const deltaX = Math.abs(
                   ev.touches[0].clientX - e.touches[0].clientX
@@ -178,7 +178,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
                   ev.touches[0].clientY - e.touches[0].clientY
                 );
 
-                horizontal = deltaX >= deltaY;
+                horizontal = deltaX >= deltaY || deltaX > 6;
+
+                if (horizontal) {
+                  ev.preventDefault();
+                  ev.stopPropagation();
+                }
 
                 return horizontal ? touchmove$ : NEVER;
               }),
@@ -196,12 +201,22 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
       touchstart$
         .pipe(
-          tap(e => {
+          tap(_ => {
             this.drag = true;
             this.cd.detectChanges();
           }),
-          switchMapTo(touchmove$.pipe(take(1))),
-          switchMapTo(touchend$),
+          switchMap(sE => {
+            const sTime = Date.now();
+
+            return touchmove$.pipe(
+              takeUntil(touchend$),
+              last(),
+              map(eE => ({
+                time: Date.now() - sTime,
+                distance: sE.touches[0].clientX - eE.touches[0].clientX
+              }))
+            );
+          }),
           tap(_ => {
             this.drag = false;
             this.cd.detectChanges();
@@ -209,7 +224,13 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           observeOn(animationFrameScheduler),
           takeUntil(this.destroy$)
         )
-        .subscribe(e => this.select(Math.round(this.listX / this.itemWidth)));
+        .subscribe(({ time, distance }) => {
+          if (Math.abs(time / distance) < 2.5 && Math.abs(distance) > 20) {
+            this.select(this.selectedItem + Math.sign(distance));
+          } else {
+            this.select(Math.round(this.listX / this.itemWidth));
+          }
+        });
     }
   }
 

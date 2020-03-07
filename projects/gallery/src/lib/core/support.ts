@@ -8,5 +8,5 @@ export const SUPPORT = {
 };
 
 export const UA = {
-  ios: clientSide && !!window.navigator.userAgent.match(/iPhone/)
+  ios: clientSide && !!window.navigator.userAgent.match(/iP(ad|hone|od)/)
 };
