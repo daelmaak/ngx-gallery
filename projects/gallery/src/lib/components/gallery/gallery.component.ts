@@ -52,7 +52,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   imageFit: ImageFit;
 
   @Input()
-  imageTemplate: TemplateRef<any>;
+  itemTemplate: TemplateRef<any>;
 
   @Input()
   loop: boolean;

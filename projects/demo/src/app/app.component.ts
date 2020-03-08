@@ -37,7 +37,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   imageCounter = true;
   imageCounterOrientation: VerticalOrientation = 'top';
   imageFit: ImageFit = 'contain';
-  loading: Loading = 'auto';
+  loading: Loading = 'lazy';
   loop = true;
   scrollBehavior: ScrollBehavior = 'smooth';
   selectionScrollBehavior: ScrollBehavior = 'auto';

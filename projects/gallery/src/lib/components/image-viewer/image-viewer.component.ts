@@ -11,13 +11,14 @@ import {
   Output,
   SimpleChanges,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  QueryList,
+  ViewChildren
 } from '@angular/core';
 import { animationFrameScheduler, fromEvent, Subject, merge } from 'rxjs';
 import {
   map,
   observeOn,
-  startWith,
   switchMap,
   takeUntil,
   tap,
@@ -71,7 +72,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   loading: Loading;
 
   @Input()
-  imageTemplate: TemplateRef<any>;
+  itemTemplate: TemplateRef<any>;
 
   @Input()
   loop: boolean;
@@ -85,9 +86,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Output()
   selection = new EventEmitter<number>();
 
-  @ViewChild('imageList', { static: true }) imageListRef: ElementRef<
-    HTMLElement
-  >;
+  @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
+
+  @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
   imagesHidden = true;
   noAnimation = false;
@@ -97,6 +98,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private itemWidth: number;
   private listX = 0;
+
+  get lazyLoading() {
+    return this.loading === 'lazy';
+  }
 
   get showArrow() {
     return this.arrows && this.items && this.items.length > 1;
@@ -128,8 +133,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
     // late initialization; in case the gallery items come later
-    if (items && !items.firstChange) {
+    if (items && items.currentValue) {
       this.onResize();
+
+      if (this.lazyLoading) {
+        setTimeout(() => this.loadLazily(this.selectedItem));
+      }
     }
   }
 
@@ -140,16 +149,18 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.imageFit == null && (this.imageFit = 'contain');
 
     if (clientSide) {
-      fromEvent(window, 'resize')
-        .pipe(startWith(null), takeUntil(this.destroy$))
+      const opts = {
+        passive: !UA.ios
+      };
+
+      fromEvent(window, 'resize', opts)
+        .pipe(takeUntil(this.destroy$))
         .subscribe(this.onResize);
 
-      const imageListEl = this.imageListRef.nativeElement;
+      const imageListEl = this.itemListRef.nativeElement;
       const touchstart$ = fromEvent<TouchEvent>(imageListEl, 'touchstart');
-      const touchmove$ = fromEvent<TouchEvent>(document, 'touchmove', {
-        passive: !UA.ios
-      });
-      const touchend$ = fromEvent<TouchEvent>(document, 'touchend');
+      const touchmove$ = fromEvent<TouchEvent>(document, 'touchmove', opts);
+      const touchend$ = fromEvent<TouchEvent>(document, 'touchend', opts);
 
       let horizontal = false;
       let startTouch: Touch;
@@ -259,6 +270,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       index = 0;
     }
 
+    if (this.lazyLoading) {
+      this.loadLazily(index);
+    }
+
     this.selectedItem = index;
     this.selection.emit(index);
     this.center();
@@ -279,6 +294,19 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.shiftImages(shift);
   }
 
+  private loadLazily(index: number) {
+    if (this.itemsRef && !this.itemTemplate) {
+      const itemEl = this.itemsRef.toArray()[index].nativeElement;
+      const img = itemEl.querySelector('img');
+
+      if (!img.getAttribute('src')) {
+        img.src = img.dataset.src;
+        img.dataset.src = '';
+        this.items[index]._loading = true;
+      }
+    }
+  }
+
   private onResize = () => {
     requestAnimationFrame(() => {
       if (!this.items || !this.items.length) {
@@ -296,7 +324,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   };
 
   private shiftImages(x: number) {
-    const imageListEl = this.imageListRef.nativeElement;
+    const imageListEl = this.itemListRef.nativeElement;
 
     imageListEl.style.transform = `translate3d(-${(this.listX = x)}px, 0, 0)`;
   }
