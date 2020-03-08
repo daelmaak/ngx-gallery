@@ -13,12 +13,12 @@ import {
   TemplateRef,
   ViewChild,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  NgZone
 } from '@angular/core';
-import { animationFrameScheduler, fromEvent, Subject, merge } from 'rxjs';
+import { fromEvent, Subject, merge } from 'rxjs';
 import {
   map,
-  observeOn,
   switchMap,
   takeUntil,
   tap,
@@ -119,7 +119,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   constructor(
     private hostRef: ElementRef<HTMLElement>,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   ngOnChanges({ galleryMainAxis, items }: SimpleChanges) {
@@ -158,81 +159,88 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         .subscribe(this.onResize);
 
       const imageListEl = this.itemListRef.nativeElement;
-      const touchstart$ = fromEvent<TouchEvent>(imageListEl, 'touchstart');
+      const touchstart$ = fromEvent<TouchEvent>(
+        imageListEl,
+        'touchstart',
+        opts
+      );
       const touchmove$ = fromEvent<TouchEvent>(document, 'touchmove', opts);
       const touchend$ = fromEvent<TouchEvent>(document, 'touchend', opts);
 
-      let horizontal = false;
-      let startTouch: Touch;
-      merge(touchstart$, touchmove$)
-        .pipe(
-          map((e, i) => {
-            if (e.touches.length > 1) {
-              return null;
-            }
+      this.zone.runOutsideAngular(() => {
+        let horizontal = false;
+        let startTouch: Touch;
 
-            if (e.type === 'touchstart') {
-              startTouch = e.touches[0];
-              return null;
-            }
-            const moveTouch = e.touches[0];
-            const deltaX = Math.abs(moveTouch.clientX - startTouch.clientX);
-
-            if (i === 1) {
-              const deltaY = Math.abs(moveTouch.clientY - startTouch.clientY);
-              horizontal = deltaX * 2 > deltaY;
-            }
-
-            if (horizontal) {
-              if (UA.ios) {
-                e.preventDefault();
-                e.stopPropagation();
+        merge(touchstart$, touchmove$)
+          .pipe(
+            map((e, i) => {
+              console.log(e.type);
+              if (e.touches.length > 1) {
+                return null;
               }
-              return startTouch.clientX - moveTouch.clientX;
-            }
-            return null;
-          }),
-          filter(e => e != null),
-          takeUntil(touchend$),
-          repeat(),
-          observeOn(animationFrameScheduler),
-          takeUntil(this.destroy$)
-        )
-        .subscribe(delta => {
-          this.shiftImages(this.selectedItem * this.itemWidth + delta);
-        });
 
-      touchstart$
-        .pipe(
-          tap(_ => {
-            this.noAnimation = true;
+              if (i === 0) {
+                startTouch = e.touches[0];
+                return null;
+              }
+              const moveTouch = e.touches[0];
+
+              if (i === 1) {
+                const deltaX = Math.abs(moveTouch.clientX - startTouch.clientX);
+                const deltaY = Math.abs(moveTouch.clientY - startTouch.clientY);
+                horizontal = deltaX * 2 > deltaY;
+              }
+
+              if (horizontal) {
+                if (UA.ios) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+                return startTouch.clientX - moveTouch.clientX;
+              }
+              return null;
+            }),
+            filter(e => e != null),
+            takeUntil(touchend$),
+            repeat(),
+            takeUntil(this.destroy$)
+          )
+          .subscribe(delta => {
+            this.shiftImages(this.selectedItem * this.itemWidth + delta);
+          });
+
+        touchstart$
+          .pipe(
+            tap(_ => {
+              this.noAnimation = true;
+              this.cd.detectChanges();
+            }),
+            switchMap(sE => {
+              const sTime = Date.now();
+              return touchmove$.pipe(
+                takeUntil(touchend$),
+                last(),
+                map(eE => ({
+                  time: Date.now() - sTime,
+                  distance: sE.touches[0].clientX - eE.touches[0].clientX
+                }))
+              );
+            }),
+            tap(_ => {
+              this.noAnimation = false;
+              this.cd.markForCheck();
+            }),
+            takeUntil(this.destroy$)
+          )
+          .subscribe(({ time, distance }) => {
+            if (Math.abs(time / distance) < 2.5 && Math.abs(distance) > 20) {
+              this.select(this.selectedItem + Math.sign(distance));
+            } else {
+              this.select(Math.round(this.listX / this.itemWidth));
+            }
             this.cd.detectChanges();
-          }),
-          switchMap(sE => {
-            const sTime = Date.now();
-            return touchmove$.pipe(
-              takeUntil(touchend$),
-              last(),
-              map(eE => ({
-                time: Date.now() - sTime,
-                distance: sE.touches[0].clientX - eE.touches[0].clientX
-              }))
-            );
-          }),
-          tap(_ => {
-            this.noAnimation = false;
-            this.cd.detectChanges();
-          }),
-          observeOn(animationFrameScheduler),
-          takeUntil(this.destroy$)
-        )
-        .subscribe(({ time, distance }) => {
-          if (Math.abs(time / distance) < 2.5 && Math.abs(distance) > 20) {
-            this.select(this.selectedItem + Math.sign(distance));
-          } else {
-            this.select(Math.round(this.listX / this.itemWidth));
-          }
-        });
+          });
+      });
     }
   }
 
