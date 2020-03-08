@@ -16,16 +16,8 @@ import {
   ViewChildren,
   NgZone
 } from '@angular/core';
-import { fromEvent, Subject, merge } from 'rxjs';
-import {
-  map,
-  switchMap,
-  takeUntil,
-  tap,
-  last,
-  filter,
-  repeat
-} from 'rxjs/operators';
+import { fromEvent, Subject } from 'rxjs';
+import { map, switchMap, takeUntil, tap, last, filter } from 'rxjs/operators';
 
 import {
   clientSide,
@@ -158,51 +150,51 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe(this.onResize);
 
-      const imageListEl = this.itemListRef.nativeElement;
-      const touchstart$ = fromEvent<TouchEvent>(
-        imageListEl,
-        'touchstart',
-        opts
-      );
-      const touchmove$ = fromEvent<TouchEvent>(document, 'touchmove', opts);
-      const touchend$ = fromEvent<TouchEvent>(document, 'touchend', opts);
-
       this.zone.runOutsideAngular(() => {
+        const imageListEl = this.itemListRef.nativeElement;
+        const touchstart$ = fromEvent<TouchEvent>(
+          imageListEl,
+          'touchstart',
+          opts
+        );
+        const touchmove$ = fromEvent<TouchEvent>(
+          imageListEl,
+          'touchmove',
+          opts
+        );
+        const touchend$ = fromEvent<TouchEvent>(document, 'touchend', opts);
         let horizontal = false;
-        let startTouch: Touch;
 
-        merge(touchstart$, touchmove$)
-          .pipe(
-            map((e, i) => {
-              console.log(e.type);
-              if (e.touches.length > 1) {
-                return null;
-              }
-
-              if (i === 0) {
-                startTouch = e.touches[0];
-                return null;
-              }
-              const moveTouch = e.touches[0];
-
-              if (i === 1) {
-                const deltaX = Math.abs(moveTouch.clientX - startTouch.clientX);
-                const deltaY = Math.abs(moveTouch.clientY - startTouch.clientY);
-                horizontal = deltaX * 2 > deltaY;
-              }
-
+        if (UA.ios) {
+          fromEvent(document, 'touchmove', opts)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(e => {
               if (horizontal) {
-                if (UA.ios) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }
-                return startTouch.clientX - moveTouch.clientX;
+                e.preventDefault();
+                e.stopPropagation();
               }
-              return null;
+            });
+        }
+
+        touchstart$
+          .pipe(
+            filter(sE => sE.touches.length === 1),
+            switchMap(sE => {
+              const sTouch = sE.touches[0];
+              return touchmove$.pipe(
+                map((mE, i) => {
+                  const mTouch = mE.touches[0];
+                  if (i === 0) {
+                    const deltaX = Math.abs(mTouch.clientX - sTouch.clientX);
+                    const deltaY = Math.abs(mTouch.clientY - sTouch.clientY);
+                    horizontal = deltaX * 2 > deltaY;
+                  }
+                  return horizontal ? sTouch.clientX - mTouch.clientX : null;
+                }),
+                filter(e => e != null),
+                takeUntil(touchend$)
+              );
             }),
-            filter(e => e != null),
-            takeUntil(touchend$),
-            repeat(),
             takeUntil(this.destroy$)
           )
           .subscribe(delta => {
@@ -226,13 +218,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
                 }))
               );
             }),
-            tap(_ => {
-              this.noAnimation = false;
-              this.cd.markForCheck();
-            }),
             takeUntil(this.destroy$)
           )
           .subscribe(({ time, distance }) => {
+            this.noAnimation = false;
+
             if (Math.abs(time / distance) < 2.5 && Math.abs(distance) > 20) {
               this.select(this.selectedItem + Math.sign(distance));
             } else {
