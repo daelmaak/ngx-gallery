@@ -16,7 +16,7 @@ import {
   ViewChildren,
   NgZone
 } from '@angular/core';
-import { fromEvent, Subject } from 'rxjs';
+import { fromEvent, Subject, merge } from 'rxjs';
 import { map, switchMap, takeUntil, tap, last, filter } from 'rxjs/operators';
 
 import {
@@ -151,18 +151,26 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         .subscribe(this.onResize);
 
       this.zone.runOutsideAngular(() => {
-        const imageListEl = this.itemListRef.nativeElement;
-        const touchstart$ = fromEvent<TouchEvent>(
-          imageListEl,
-          'touchstart',
-          opts
+        const imageList = this.itemListRef.nativeElement;
+
+        const mousedown$ = fromEvent<MouseEvent>(imageList, 'mousedown', opts);
+        const touchstart$ = fromEvent(imageList, 'touchstart', opts).pipe(
+          filter<TouchEvent>(e => e.touches.length === 1),
+          map(e => e.touches[0])
         );
-        const touchmove$ = fromEvent<TouchEvent>(
-          imageListEl,
-          'touchmove',
-          opts
+        const startEvents$ = merge(mousedown$, touchstart$);
+
+        const mousemove$ = fromEvent<MouseEvent>(imageList, 'mousemove', opts);
+        const touchmove$ = fromEvent(imageList, 'touchmove', opts).pipe(
+          filter<TouchEvent>(e => e.touches.length === 1),
+          map(e => e.touches[0])
         );
+        const moveEvents$ = merge(mousemove$, touchmove$);
+
+        const mouseup$ = fromEvent<MouseEvent>(document, 'mouseup', opts);
         const touchend$ = fromEvent<TouchEvent>(document, 'touchend', opts);
+        const endEvents$ = merge(mouseup$, touchend$);
+
         let horizontal = false;
 
         if (UA.ios) {
@@ -176,23 +184,20 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
             });
         }
 
-        touchstart$
+        startEvents$
           .pipe(
-            filter(sE => sE.touches.length === 1),
             switchMap(sE => {
-              const sTouch = sE.touches[0];
-              return touchmove$.pipe(
+              return moveEvents$.pipe(
                 map((mE, i) => {
-                  const mTouch = mE.touches[0];
                   if (i === 0) {
-                    const deltaX = Math.abs(mTouch.clientX - sTouch.clientX);
-                    const deltaY = Math.abs(mTouch.clientY - sTouch.clientY);
+                    const deltaX = Math.abs(mE.clientX - sE.clientX);
+                    const deltaY = Math.abs(mE.clientY - sE.clientY);
                     horizontal = deltaX * 2 > deltaY;
                   }
-                  return horizontal ? sTouch.clientX - mTouch.clientX : null;
+                  return horizontal ? sE.clientX - mE.clientX : null;
                 }),
                 filter(e => e != null),
-                takeUntil(touchend$)
+                takeUntil(endEvents$)
               );
             }),
             takeUntil(this.destroy$)
@@ -201,7 +206,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
             this.shiftImages(this.selectedItem * this.itemWidth + delta);
           });
 
-        touchstart$
+        startEvents$
           .pipe(
             tap(_ => {
               this.noAnimation = true;
@@ -209,12 +214,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
             }),
             switchMap(sE => {
               const sTime = Date.now();
-              return touchmove$.pipe(
-                takeUntil(touchend$),
+              return moveEvents$.pipe(
+                takeUntil(endEvents$),
                 last(),
                 map(eE => ({
                   time: Date.now() - sTime,
-                  distance: sE.touches[0].clientX - eE.touches[0].clientX
+                  distance: sE.clientX - eE.clientX
                 }))
               );
             }),
