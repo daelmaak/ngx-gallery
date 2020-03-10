@@ -16,10 +16,9 @@ export interface GalleryDetailConfig {
   arrows?: boolean;
   imageCounter?: boolean;
   imageFit?: ImageFit;
-  imageTemplate?: TemplateRef<any>;
+  itemTemplate?: TemplateRef<any>;
   loading?: Loading;
   loop?: boolean;
-  scrollBehavior?: ScrollBehavior;
   thumbs?: boolean;
   thumbTemplate?: TemplateRef<any>;
   thumbsAutoScroll?: boolean;
