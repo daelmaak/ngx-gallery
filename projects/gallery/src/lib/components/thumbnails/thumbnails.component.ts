@@ -134,7 +134,7 @@ export class ThumbnailsComponent
       !selectedItem.firstChange &&
       this.autoScroll
     ) {
-      this.centerThumb(selectedItem.currentValue);
+      requestAnimationFrame(() => this.centerThumb(selectedItem.currentValue));
     }
     if (arrows && !arrows.firstChange) {
       if (arrows.currentValue) {

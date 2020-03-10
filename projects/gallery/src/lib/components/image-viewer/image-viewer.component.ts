@@ -16,8 +16,16 @@ import {
   ViewChildren,
   NgZone
 } from '@angular/core';
-import { fromEvent, Subject, merge } from 'rxjs';
-import { map, switchMap, takeUntil, tap, last, filter } from 'rxjs/operators';
+import { fromEvent, Subject, merge, NEVER } from 'rxjs';
+import {
+  map,
+  switchMap,
+  takeUntil,
+  tap,
+  last,
+  filter,
+  catchError
+} from 'rxjs/operators';
 
 import {
   clientSide,
@@ -188,11 +196,16 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           .pipe(
             switchMap(sE => {
               return moveEvents$.pipe(
-                map((mE, i) => {
-                  if (i === 0) {
+                map(mE => {
+                  let directionEventAppeared = false;
+                  if (!directionEventAppeared) {
                     const deltaX = Math.abs(mE.clientX - sE.clientX);
                     const deltaY = Math.abs(mE.clientY - sE.clientY);
-                    horizontal = deltaX * 2 > deltaY;
+
+                    if (deltaX || deltaY) {
+                      horizontal = deltaX * 2 > deltaY;
+                      directionEventAppeared = true;
+                    }
                   }
                   return horizontal ? sE.clientX - mE.clientX : null;
                 }),
@@ -217,6 +230,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
               return moveEvents$.pipe(
                 takeUntil(endEvents$),
                 last(),
+                // if there are no move events = click happened, do nothing
+                catchError(_ => NEVER),
                 map(eE => ({
                   time: Date.now() - sTime,
                   distance: sE.clientX - eE.clientX
@@ -228,7 +243,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           .subscribe(({ time, distance }) => {
             this.noAnimation = false;
 
-            if (Math.abs(time / distance) < 2.5 && Math.abs(distance) > 20) {
+            if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
               this.select(this.selectedItem + Math.sign(distance));
             } else {
               this.select(Math.round(this.listX / this.itemWidth));
