@@ -26,7 +26,6 @@
       [attr.data-src]="lazyLoading ? item.src : ''"
       [class.before-load]="lazyLoading && !item._loaded"
       [style.objectFit]="imageFit"
-      ondragstart="return false"
       (load)="onItemLoaded(item)"
     />
     <ng-template #customTemplate>
