@@ -13,6 +13,7 @@ import {
   ElementRef
 } from '@angular/core';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
+import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
 import {
   GalleryItem,
   Loading,
@@ -56,12 +57,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @Input()
   loop: boolean;
-
-  @Input()
-  scrollBehavior: ScrollBehavior;
-
-  @Input()
-  selectionScrollBehavior: ScrollBehavior;
 
   @Input()
   prevArrowTemplate: TemplateRef<any>;
@@ -108,6 +103,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @ViewChild(ImageViewerComponent, { static: false })
   imageViewer: ImageViewerComponent;
 
+  @ViewChild(ThumbnailsComponent, { static: false })
+  thumbnails: ThumbnailsComponent;
+
   @ViewChild(ImageViewerComponent, { static: false, read: ElementRef })
   imageViewerEl: ElementRef<HTMLElement>;
 
@@ -134,8 +132,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.arrows === undefined && (this.arrows = true);
     this.loop === undefined && (this.loop = true);
     this.loading == null && (this.loading = 'auto');
-    this.selectionScrollBehavior == null &&
-      (this.selectionScrollBehavior = 'auto');
     this.thumbs === undefined && (this.thumbs = true);
     this.thumbsArrows === undefined && (this.thumbsArrows = true);
     this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
@@ -159,8 +155,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   select(index: number) {
     this.imageViewer.select(index);
-    this.selectedItem = index;
-    this.selection.emit(this.items[index]);
+    this.thumbnails.select(index);
+    this._selectInternal(index);
   }
 
   _selectInternal(index: number) {

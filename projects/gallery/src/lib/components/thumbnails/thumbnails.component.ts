@@ -123,18 +123,10 @@ export class ThumbnailsComponent
     private elRef: ElementRef<HTMLElement>
   ) {}
 
-  ngOnChanges({ arrows, items, orientation, selectedItem }: SimpleChanges) {
+  ngOnChanges({ arrows, items, orientation }: SimpleChanges) {
     if (orientation && orientation.currentValue != null) {
       const newOrientation: Orientation = orientation.currentValue;
       this.vertical = newOrientation === 'left' || newOrientation === 'right';
-    }
-    if (
-      selectedItem &&
-      selectedItem.currentValue != null &&
-      !selectedItem.firstChange &&
-      this.autoScroll
-    ) {
-      requestAnimationFrame(() => this.centerThumb(selectedItem.currentValue));
     }
     if (arrows && !arrows.firstChange) {
       if (arrows.currentValue) {
@@ -150,6 +142,9 @@ export class ThumbnailsComponent
         this.initArrowUpdates();
       } else if (this.arrows) {
         this.updateArrows();
+      }
+      if (!items.previousValue || !items.previousValue.length) {
+        setTimeout(() => this.centerThumb(this.selectedItem));
       }
     }
   }
@@ -224,6 +219,12 @@ export class ThumbnailsComponent
       thumbListScroll > itemOffset
     ) {
       this.sliding$.next(nextScrollDelta);
+    }
+  }
+
+  select(index: number) {
+    if (this.autoScroll) {
+      this.centerThumb(index);
     }
   }
 
