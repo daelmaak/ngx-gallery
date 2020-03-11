@@ -41,8 +41,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   imageFit: ImageFit = 'contain';
   loading: Loading = 'lazy';
   loop = true;
-  scrollBehavior: ScrollBehavior = 'smooth';
-  selectionScrollBehavior: ScrollBehavior = 'auto';
   thumbs = true;
   thumbsAutoScroll = true;
   thumbsOrientation: Orientation = this.mobile ? 'bottom' : 'left';
@@ -65,32 +63,25 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.images = of([
       {
-        src:
-          'https://kochut.at/image/cache/catalog/products/4023-4a-1020x1020.jpg',
-        thumbSrc: './assets/mountains1-thumb.jpg',
-        alt: 'Mountains 1'
+        src: './assets/kitten4.jpg',
+        alt: 'Kitten 4'
       },
       {
-        src:
-          'https://kochut.at/image/cache/catalog/products/4023-3a-1020x1020.jpg',
+        src: './assets/kitten3.jpg',
+        alt: 'Kitten 3'
+      },
+      {
+        src: './assets/mountains2.jpg',
         thumbSrc: './assets/mountains2-thumb.jpg',
         alt: 'Mountains 2'
       },
       {
-        src:
-          'https://kochut.at/image/cache/catalog/products/4023-5-1020x1020.jpg',
-        thumbSrc: './assets/mountains3-thumb.jpg',
-        alt: 'Mountains 3'
-      },
-      {
-        src:
-          'https://kochut.at/image/cache/catalog/products/4023-4a-1020x1020.jpg',
+        src: './assets/mountains4.jpg',
         thumbSrc: './assets/mountains4-thumb.jpg',
         alt: 'Mountains 4'
       },
       {
-        src:
-          'https://kochut.at/image/cache/catalog/products/4023-3a-1020x1020.jpgs',
+        src: './assets/fruit1.jpg',
         alt: 'Fruit 1'
       },
       {
