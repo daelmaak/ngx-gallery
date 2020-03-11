@@ -65,27 +65,32 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.images = of([
       {
-        src: './assets/mountains1.jpg',
+        src:
+          'https://kochut.at/image/cache/catalog/products/4023-4a-1020x1020.jpg',
         thumbSrc: './assets/mountains1-thumb.jpg',
         alt: 'Mountains 1'
       },
       {
-        src: './assets/mountains2.jpg',
+        src:
+          'https://kochut.at/image/cache/catalog/products/4023-3a-1020x1020.jpg',
         thumbSrc: './assets/mountains2-thumb.jpg',
         alt: 'Mountains 2'
       },
       {
-        src: './assets/mountains3.jpg',
+        src:
+          'https://kochut.at/image/cache/catalog/products/4023-5-1020x1020.jpg',
         thumbSrc: './assets/mountains3-thumb.jpg',
         alt: 'Mountains 3'
       },
       {
-        src: './assets/mountains4.jpg',
+        src:
+          'https://kochut.at/image/cache/catalog/products/4023-4a-1020x1020.jpg',
         thumbSrc: './assets/mountains4-thumb.jpg',
         alt: 'Mountains 4'
       },
       {
-        src: './assets/fruit1.jpg',
+        src:
+          'https://kochut.at/image/cache/catalog/products/4023-3a-1020x1020.jpgs',
         alt: 'Fruit 1'
       },
       {
