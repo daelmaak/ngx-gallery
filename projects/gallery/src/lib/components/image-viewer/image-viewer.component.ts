@@ -168,8 +168,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         );
         const startEvents$ = merge(mousedown$, touchstart$);
 
-        const mousemove$ = fromEvent<MouseEvent>(imageList, 'mousemove', opts);
-        const touchmove$ = fromEvent(imageList, 'touchmove', opts).pipe(
+        const mousemove$ = fromEvent<MouseEvent>(document, 'mousemove', opts);
+        const touchmove$ = fromEvent(document, 'touchmove', opts).pipe(
           filter<TouchEvent>(e => e.touches.length === 1),
           map(e => e.touches[0])
         );
@@ -343,6 +343,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private shiftImages(x: number) {
     const imageListEl = this.itemListRef.nativeElement;
-    imageListEl.style.transform = `translate3d(-${(this.listX = x)}px, 0, 0)`;
+    imageListEl.style.transform = `translate3d(${-(this.listX = x)}px, 0, 0)`;
   }
 }
