@@ -343,7 +343,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private shiftImages(x: number) {
     const imageListEl = this.itemListRef.nativeElement;
-
     imageListEl.style.transform = `translate3d(-${(this.listX = x)}px, 0, 0)`;
   }
 }

@@ -162,4 +162,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.selectedItem = index;
     this.selection.emit(this.items[index]);
   }
+
+  _selectInternal(index: number) {
+    this.selectedItem = index;
+    this.selection.emit(this.items[index]);
+  }
 }

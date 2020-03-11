@@ -12,11 +12,10 @@ ul {
   display: flex;
   width: 100%;
   height: 100%;
-  transform: translate3d(0, 0, 0);
-  touch-action: pan-y;
+  // touch-action: pan-y;
 
   &:not(.hidden) {
-    transition-timing-function: ease-out;
+    // transition-timing-function: ease-out;
     transition-property: transform;
     transition-duration: 400ms;
   }
