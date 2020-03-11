@@ -17,6 +17,7 @@
   <li
     #items
     *ngFor="let item of items; let i = index"
+    ondragstart="return false"
     (click)="imageClick.emit($event)"
   >
     <img
