@@ -138,7 +138,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       this.onResize();
 
       if (this.lazyLoading) {
-        setTimeout(() => this.loadLazily(this.selectedItem));
+        setTimeout(() => {
+          this.loadLazily(this.selectedItem);
+          this.cd.detectChanges();
+        });
       }
     }
   }
@@ -182,6 +185,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         let horizontal = false;
 
         if (UA.ios) {
+          // prevent vertical scroll from happening when swiping horizontally
           fromEvent(document, 'touchmove', opts)
             .pipe(takeUntil(this.destroy$))
             .subscribe(e => {
@@ -298,12 +302,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   onItemLoaded(item: GalleryItemInternal) {
-    // delayed to prevent fallback frames of not yet rendered images being shown
-    requestAnimationFrame(() => {
-      item._loaded = true;
-      item._loading = false;
-      this.cd.detectChanges();
-    });
+    item._loaded = true;
+    item._loading = false;
   }
 
   private center() {
