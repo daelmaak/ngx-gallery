@@ -144,7 +144,7 @@ export class ThumbnailsComponent
         this.updateArrows();
       }
       if (!items.previousValue || !items.previousValue.length) {
-        setTimeout(() => this.centerThumb(this.selectedItem));
+        setTimeout(() => this.centerThumbIfNeeded(this.selectedItem));
       }
     }
   }
@@ -165,7 +165,7 @@ export class ThumbnailsComponent
   }
 
   ngAfterViewInit() {
-    this.centerThumb(this.selectedItem);
+    this.centerThumbIfNeeded(this.selectedItem);
     this.smoothScrollAllowed = true;
   }
 
@@ -191,7 +191,7 @@ export class ThumbnailsComponent
     this.sliding$.next(delta * direction);
   }
 
-  centerThumb(index: number) {
+  centerThumbIfNeeded(index: number) {
     if (!this.items || this.items.length <= 1) {
       return;
     }
@@ -224,7 +224,7 @@ export class ThumbnailsComponent
 
   select(index: number) {
     if (this.autoScroll) {
-      this.centerThumb(index);
+      this.centerThumbIfNeeded(index);
     }
   }
 
