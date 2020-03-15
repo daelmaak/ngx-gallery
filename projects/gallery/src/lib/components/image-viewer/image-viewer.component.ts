@@ -5,35 +5,27 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  QueryList,
   SimpleChanges,
   TemplateRef,
   ViewChild,
-  QueryList,
-  ViewChildren,
-  NgZone
+  ViewChildren
 } from '@angular/core';
-import { fromEvent, Subject, merge, NEVER, pipe } from 'rxjs';
-import {
-  map,
-  switchMap,
-  takeUntil,
-  tap,
-  last,
-  filter,
-  catchError
-} from 'rxjs/operators';
+import { fromEvent, Subject } from 'rxjs';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 
 import {
   clientSide,
   ImageFit,
   Loading,
   Orientation,
-  VerticalOrientation,
-  UA
+  UA,
+  VerticalOrientation
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 
@@ -94,7 +86,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   noAnimation = false;
 
   private destroy$ = new Subject();
-  private lazyLoadObserver: IntersectionObserver;
 
   private itemWidth: number;
   private listX = 0;
@@ -164,27 +155,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       this.zone.runOutsideAngular(() => {
         const imageList = this.itemListRef.nativeElement;
 
-        const singleTouchPipe = pipe(
-          filter<TouchEvent>(e => e.touches.length === 1),
-          map(e => e.touches[0])
-        );
-
         const mousedown$ = fromEvent<MouseEvent>(imageList, 'mousedown', opts);
-        const touchstart$ = fromEvent(imageList, 'touchstart', opts).pipe(
-          singleTouchPipe
-        );
-        const startEvents$ = merge(mousedown$, touchstart$);
-
         const mousemove$ = fromEvent<MouseEvent>(document, 'mousemove', opts);
-        const touchmove$ = fromEvent(document, 'touchmove', opts).pipe(
-          singleTouchPipe
-        );
-        const moveEvents$ = merge(mousemove$, touchmove$);
-
         const mouseup$ = fromEvent<MouseEvent>(document, 'mouseup', opts);
-        const touchend$ = fromEvent<TouchEvent>(document, 'touchend', opts);
-        const endEvents$ = merge(mouseup$, touchend$);
-
         // moves image list along with a mousedown + mousemove
         mousedown$
           .pipe(
@@ -198,78 +171,70 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           )
           .subscribe(this.shiftImagesByDelta);
 
-        let horizontal;
-        if (UA.ios) {
-          // prevent vertical scroll from happening when swiping horizontally on iOS
-          fromEvent(document, 'touchmove', opts)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(e => {
-              if (horizontal) {
-                e.preventDefault();
-                e.stopPropagation();
-              }
-            });
-          touchend$
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(_ => (horizontal = null));
-        }
+        let drag = false;
+        let horizontal = null;
+        let touchstart: TouchEvent;
+        let lastTouchmove: TouchEvent;
 
-        // moves image list along with a touch point == touchstart + touchmove
-        touchstart$
-          .pipe(
-            switchMap(sE =>
-              touchmove$.pipe(
-                map(mE => {
-                  if (horizontal == null) {
-                    const deltaX = Math.abs(mE.clientX - sE.clientX);
-                    const deltaY = Math.abs(mE.clientY - sE.clientY);
+        const ontouchstart = (e: TouchEvent) => {
+          drag = true;
+          touchstart = e;
+          this.noAnimation = true;
+          this.cd.detectChanges();
+        };
 
-                    if (deltaX || deltaY) {
-                      horizontal = deltaX * 2 >= deltaY;
-                    }
-                  }
-                  return horizontal ? sE.clientX - mE.clientX : null;
-                }),
-                filter(e => e != null),
-                takeUntil(touchend$)
-              )
-            ),
-            takeUntil(this.destroy$)
-          )
-          .subscribe(this.shiftImagesByDelta);
+        const ontouchmove = (e: TouchEvent) => {
+          if (e.touches.length !== 1) {
+            return;
+          }
+          lastTouchmove = e;
+          const startTouch = touchstart.touches[0];
+          const moveTouch = e.touches[0];
 
-        // monitors distance and velocity and decides whether to navigate
-        startEvents$
-          .pipe(
-            tap(_ => {
-              this.noAnimation = true;
-              this.cd.detectChanges();
-            }),
-            switchMap(sE => {
-              const sTime = Date.now();
-              return moveEvents$.pipe(
-                takeUntil(endEvents$),
-                last(),
-                // if there are no move events = click happened, do nothing
-                catchError(_ => NEVER),
-                map(eE => ({
-                  time: Date.now() - sTime,
-                  distance: sE.clientX - eE.clientX
-                }))
-              );
-            }),
-            takeUntil(this.destroy$)
-          )
-          .subscribe(({ time, distance }) => {
-            this.noAnimation = false;
+          if (horizontal == null) {
+            const deltaX = Math.abs(moveTouch.clientX - startTouch.clientX);
+            const deltaY = Math.abs(moveTouch.clientY - startTouch.clientY);
 
-            if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
-              this.select(this.selectedItem + Math.sign(distance));
-            } else {
-              this.select(Math.round(this.listX / this.itemWidth));
+            if (deltaX || deltaY) {
+              horizontal = deltaX * 2 >= deltaY;
             }
-            this.cd.detectChanges();
-          });
+          }
+
+          if (horizontal) {
+            this.shiftImagesByDelta(startTouch.clientX - moveTouch.clientX);
+            if (UA.ios) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }
+        };
+
+        const ontouchend = _ => {
+          drag = false;
+          horizontal = null;
+          this.noAnimation = false;
+
+          const time = lastTouchmove.timeStamp - touchstart.timeStamp;
+          const distance =
+            touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
+
+          if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
+            this.select(this.selectedItem + Math.sign(distance));
+          } else {
+            this.select(Math.round(this.listX / this.itemWidth));
+          }
+          this.cd.detectChanges();
+        };
+
+        imageList.addEventListener('touchstart', ontouchstart, opts);
+        document.addEventListener('touchmove', ontouchmove, opts);
+        document.addEventListener('touchend', ontouchend);
+
+        this.destroy$.subscribe(() => {
+          imageList.removeEventListener('touchstart', ontouchstart);
+          document.removeEventListener('touchmove', ontouchmove);
+          document.removeEventListener('touchend', ontouchend);
+        });
       });
     }
   }
@@ -277,10 +242,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next(null);
     this.destroy$.complete();
-
-    if (this.lazyLoadObserver) {
-      this.lazyLoadObserver.disconnect();
-    }
   }
 
   prev() {
