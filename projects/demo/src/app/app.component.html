@@ -39,35 +39,7 @@
     </section>
 
     <section>
-      <label>Image loading:</label>
-      <mat-radio-group name="loading" [(ngModel)]="loading">
-        <mat-radio-button value="auto">auto</mat-radio-button>
-        <mat-radio-button value="eager">eager</mat-radio-button>
-        <mat-radio-button value="lazy">lazy</mat-radio-button>
-      </mat-radio-group>
-    </section>
-
-    <section>
       <mat-checkbox name="loop" [(ngModel)]="loop">Loop</mat-checkbox>
-    </section>
-
-    <section>
-      <label>Scroll behavior:</label>
-      <mat-radio-group name="scrollBehavior" [(ngModel)]="scrollBehavior">
-        <mat-radio-button value="smooth">smooth</mat-radio-button>
-        <mat-radio-button value="auto">auto</mat-radio-button>
-      </mat-radio-group>
-    </section>
-
-    <section>
-      <label>Selection Scroll behavior:</label>
-      <mat-radio-group
-        name="selectionScrollBehavior"
-        [(ngModel)]="selectionScrollBehavior"
-      >
-        <mat-radio-button value="smooth">smooth</mat-radio-button>
-        <mat-radio-button value="auto">auto</mat-radio-button>
-      </mat-radio-group>
     </section>
 
     <section>
@@ -173,9 +145,6 @@
     [imageFit]="imageFit"
     [loading]="loading"
     [loop]="loop"
-    [scrollBehavior]="scrollBehavior"
-    [selectionScrollBehavior]="selectionScrollBehavior"
-    [scrollSnap]="true"
     [thumbs]="thumbs"
     [thumbsAutoScroll]="thumbsAutoScroll"
     [thumbsOrientation]="thumbsOrientation"

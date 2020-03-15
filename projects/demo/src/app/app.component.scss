@@ -41,6 +41,15 @@ mat-form-field {
 
 ngx-gallery {
   width: 100%;
+  margin-bottom: 300px;
+
+  ::ng-deep {
+    ngx-image-viewer {
+      img {
+        margin: 0 auto;
+      }
+    }
+  }
 }
 
 .github-link {
@@ -61,14 +70,25 @@ ngx-gallery {
     ngx-gallery {
       width: 100vw;
       height: 100vh;
+      max-width: 900px;
+      max-height: 800px;
 
       @media (max-width: 767px) {
         width: auto;
       }
 
       img {
-        height: 80%;
         margin: 0 auto;
+      }
+
+      ngx-image-viewer {
+        .next {
+          right: 30px;
+        }
+
+        .prev {
+          left: 30px;
+        }
       }
     }
   }

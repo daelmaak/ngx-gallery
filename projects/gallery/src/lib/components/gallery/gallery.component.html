@@ -11,7 +11,7 @@
   [overscrollBehavior]="thumbsOverscrollBehavior"
   [thumbTemplate]="thumbTemplate"
   (thumbClick)="thumbClick.emit($event)"
-  (selection)="select($event)"
+  (selection)="_selectInternal($event); imageViewer.select($event)"
 ></ngx-thumbnails>
 
 <ngx-image-viewer
@@ -24,13 +24,11 @@
   [imageCounterOrientation]="imageCounterOrientation"
   [imageFit]="imageFit"
   [loading]="loading"
-  [imageTemplate]="imageTemplate"
+  [itemTemplate]="itemTemplate"
   [loop]="loop"
   [galleryMainAxis]="galleryMainAxis"
-  [scrollBehavior]="scrollBehavior"
-  [scrollSnap]="scrollSnap"
   [prevArrowTemplate]="prevArrowTemplate"
   [nextArrowTemplate]="nextArrowTemplate"
   (imageClick)="imageClick.emit($event)"
-  (selection)="select($event)"
+  (selection)="_selectInternal($event); thumbnails.select($event)"
 ></ngx-image-viewer>

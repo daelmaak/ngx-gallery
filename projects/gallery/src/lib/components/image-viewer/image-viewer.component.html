@@ -4,30 +4,35 @@
   </ng-container>
 </ng-container>
 
-<ul #imageList [class.hidden]="imagesHidden">
-  <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
+<ul
+  #itemList
+  [class.hidden]="imagesHidden"
+  [style.transitionDuration]="noAnimation ? '0ms' : ''"
+>
   <li *ngIf="!items || !items.length" class="initial-item">
     <div class="loading">
       <div class="animation"></div>
     </div>
   </li>
   <li
+    #items
     *ngFor="let item of items; let i = index"
+    ondragstart="return false"
     (click)="imageClick.emit($event)"
   >
     <img
-      *ngIf="!imageTemplate; else customTemplate"
-      [src]="loading === 'lazy' ? '' : item.src"
+      *ngIf="!itemTemplate; else customTemplate"
+      [src]="lazyLoading ? '' : item.src"
       [alt]="item.alt"
-      [attr.data-src]="loading === 'lazy' ? item.src : ''"
-      [class.before-load]="loading === 'lazy' && !item._loaded"
+      [attr.data-src]="lazyLoading ? item.src : ''"
+      [class.before-load]="lazyLoading && !item._loaded"
       [style.objectFit]="imageFit"
       (load)="onItemLoaded(item)"
     />
     <ng-template #customTemplate>
       <ng-container
         *ngTemplateOutlet="
-          imageTemplate;
+          itemTemplate;
           context: {
             index: i,
             selectedIndex: selectedItem,
@@ -41,11 +46,10 @@
     <div class="loading" *ngIf="!item._loaded">
       <div
         class="animation"
-        [class.active]="(item._loading && !item._loaded) || loading !== 'lazy'"
+        [class.active]="(item._loading && !item._loaded) || !lazyLoading"
       ></div>
     </div>
   </li>
-  <li class="fringe-item" [style.width.px]="fringeItemWidth"></li>
 </ul>
 
 <ng-container *ngIf="showNextArrow">

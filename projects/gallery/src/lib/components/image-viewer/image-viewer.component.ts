@@ -4,33 +4,27 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  HostBinding,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  QueryList,
   SimpleChanges,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  ViewChildren
 } from '@angular/core';
-import { animationFrameScheduler, fromEvent, interval, Subject } from 'rxjs';
-import {
-  debounceTime,
-  map,
-  startWith,
-  switchMapTo,
-  take,
-  takeUntil,
-  takeWhile
-} from 'rxjs/operators';
+import { fromEvent, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import {
   clientSide,
   ImageFit,
   Loading,
   Orientation,
-  SUPPORT,
+  UA,
   VerticalOrientation
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
@@ -70,7 +64,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   loading: Loading;
 
   @Input()
-  imageTemplate: TemplateRef<any>;
+  itemTemplate: TemplateRef<any>;
 
   @Input()
   loop: boolean;
@@ -78,30 +72,27 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   galleryMainAxis: Orientation;
 
-  @Input()
-  scrollBehavior: ScrollBehavior;
-
-  @HostBinding('class.scroll-snap')
-  @Input()
-  scrollSnap: boolean;
-
   @Output()
   imageClick = new EventEmitter<Event>();
 
   @Output()
   selection = new EventEmitter<number>();
 
-  @ViewChild('imageList', { static: true }) imageListRef: ElementRef<
-    HTMLElement
-  >;
+  @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
 
-  fringeItemWidth = 50;
+  @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
+
   imagesHidden = true;
+  noAnimation = false;
 
   private destroy$ = new Subject();
-  private lazyLoadObserver: IntersectionObserver;
 
   private itemWidth: number;
+  private listX = 0;
+
+  get lazyLoading() {
+    return this.loading === 'lazy';
+  }
 
   get showArrow() {
     return this.arrows && this.items && this.items.length > 1;
@@ -119,7 +110,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   constructor(
     private hostRef: ElementRef<HTMLElement>,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   ngOnChanges({ galleryMainAxis, items }: SimpleChanges) {
@@ -133,24 +125,13 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
     // late initialization; in case the gallery items come later
-    if (items && !items.firstChange) {
+    if (items && items.currentValue) {
       this.onResize();
-      this.initLazyLoad();
 
-      if (items.previousValue && items.currentValue) {
-        const prevItems = items.previousValue as GalleryItemInternal[];
-        const currItems = items.currentValue as GalleryItemInternal[];
-        this.items = currItems.map(c => {
-          const prevItem = prevItems.find(p => p.src === c.src);
-
-          if (prevItem) {
-            return {
-              ...c,
-              _loaded: prevItem._loaded,
-              _loading: prevItem._loading
-            };
-          }
-          return { ...c };
+      if (this.lazyLoading) {
+        setTimeout(() => {
+          this.loadLazily(this.selectedItem);
+          this.cd.detectChanges();
         });
       }
     }
@@ -161,25 +142,113 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.imageCounterOrientation == null &&
       (this.imageCounterOrientation = 'top');
     this.imageFit == null && (this.imageFit = 'contain');
-    this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
 
     if (clientSide) {
-      fromEvent(window, 'resize')
-        .pipe(startWith(null), takeUntil(this.destroy$))
+      const opts = {
+        passive: !UA.ios
+      };
+
+      fromEvent(window, 'resize', opts)
+        .pipe(takeUntil(this.destroy$))
         .subscribe(this.onResize);
 
-      this.initOnScrollItemSelection();
-      this.initLazyLoad();
+      this.zone.runOutsideAngular(() => {
+        const imageList = this.itemListRef.nativeElement;
+
+        let mousedown: MouseEvent;
+
+        const onmousedown = (e: MouseEvent) => {
+          mousedown = e;
+          this.noAnimation = true;
+          this.cd.detectChanges();
+
+          document.addEventListener('mousemove', onmousemove, opts);
+          document.addEventListener('mouseup', onmouseup, opts);
+        };
+
+        const onmousemove = (e: MouseEvent) => {
+          this.shiftImagesByDelta(mousedown.x - e.x);
+        };
+
+        const onmouseup = (e: MouseEvent) => {
+          this.noAnimation = false;
+
+          const time = e.timeStamp - mousedown.timeStamp;
+          const distance = mousedown.x - e.x;
+
+          this.selectBySwipeStats(time, distance);
+
+          document.removeEventListener('mousemove', onmousemove);
+          document.removeEventListener('mouseup', onmouseup);
+        };
+
+        let horizontal = null;
+        let touchstart: TouchEvent;
+        let lastTouchmove: TouchEvent;
+
+        const ontouchstart = (e: TouchEvent) => {
+          touchstart = e;
+          this.noAnimation = true;
+          this.cd.detectChanges();
+        };
+
+        const ontouchmove = (e: TouchEvent) => {
+          if (e.touches.length !== 1) {
+            return;
+          }
+          lastTouchmove = e;
+          const startTouch = touchstart.touches[0];
+          const moveTouch = e.touches[0];
+
+          if (horizontal == null) {
+            const deltaX = Math.abs(moveTouch.clientX - startTouch.clientX);
+            const deltaY = Math.abs(moveTouch.clientY - startTouch.clientY);
+
+            if (deltaX || deltaY) {
+              horizontal = deltaX * 2 >= deltaY;
+            }
+          }
+
+          if (horizontal) {
+            this.shiftImagesByDelta(startTouch.clientX - moveTouch.clientX);
+            if (UA.ios) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }
+        };
+
+        const ontouchend = _ => {
+          horizontal = null;
+          this.noAnimation = false;
+
+          const time = lastTouchmove.timeStamp - touchstart.timeStamp;
+          const distance =
+            touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
+
+          this.selectBySwipeStats(time, distance);
+        };
+
+        imageList.addEventListener('mousedown', onmousedown, opts);
+        imageList.addEventListener('touchstart', ontouchstart, opts);
+        document.addEventListener('touchmove', ontouchmove, opts);
+        document.addEventListener('touchend', ontouchend);
+
+        this.destroy$.subscribe(() => {
+          imageList.removeEventListener('mousedown', onmousedown);
+          document.removeEventListener('mousemove', onmousemove);
+          document.removeEventListener('mouseup', onmouseup);
+          imageList.removeEventListener('touchstart', ontouchstart);
+          document.removeEventListener('touchmove', ontouchmove);
+          document.removeEventListener('touchend', ontouchend);
+        });
+      });
     }
   }
 
   ngOnDestroy() {
     this.destroy$.next(null);
     this.destroy$.complete();
-
-    if (this.lazyLoadObserver) {
-      this.lazyLoadObserver.disconnect();
-    }
   }
 
   prev() {
@@ -190,8 +259,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.select(this.selectedItem + 1);
   }
 
-  select(index: number, scrollBehavior = this.scrollBehavior) {
+  select(index: number) {
     if (this.selectedItem === index) {
+      this.center();
       return;
     }
 
@@ -206,193 +276,68 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       index = 0;
     }
 
+    if (this.lazyLoading) {
+      this.loadLazily(index);
+    }
+
     this.selectedItem = index;
     this.selection.emit(index);
-    this.center(scrollBehavior);
+    this.center();
   }
 
   onItemLoaded(item: GalleryItemInternal) {
-    // delayed to prevent fallback frames of not yet rendered images being shown
-    requestAnimationFrame(() => {
-      item._loaded = true;
-      item._loading = false;
-      this.cd.detectChanges();
-    });
+    item._loaded = true;
+    item._loading = false;
   }
 
-  private center(scrollBehavior = this.scrollBehavior) {
-    const shift = this.selectedItem * this.itemWidth + this.fringeItemWidth;
+  private center() {
+    const shift = this.selectedItem * this.itemWidth;
 
-    this.shiftImages(shift, scrollBehavior);
+    this.shiftImages(shift);
   }
 
-  private getSelectedItemFromScrollPosition(): number {
-    const scrollLeft = this.imageListRef.nativeElement.scrollLeft;
-    let selectedPrecise = (scrollLeft - this.fringeItemWidth) / this.itemWidth;
+  private loadLazily(index: number) {
+    if (this.itemsRef && !this.itemTemplate) {
+      const itemEl = this.itemsRef.toArray()[index].nativeElement;
+      const img = itemEl.querySelector('img');
 
-    if (selectedPrecise < 0) {
-      return -1;
-    }
-
-    // tolerance for some devices which don't give precise scroll left
-    selectedPrecise = (scrollLeft - this.fringeItemWidth - 10) / this.itemWidth;
-    if (Math.ceil(selectedPrecise) >= this.items.length) {
-      return this.items.length;
-    }
-
-    return Math.round(selectedPrecise);
-  }
-
-  private initLazyLoad() {
-    if (
-      !SUPPORT.intersectionObserver ||
-      this.loading !== 'lazy' ||
-      !this.items ||
-      !this.items.length
-    ) {
-      return;
-    }
-
-    const listEl = this.hostRef.nativeElement;
-
-    if (!this.lazyLoadObserver) {
-      this.lazyLoadObserver = new IntersectionObserver(
-        this.onLazyLoadIntersection,
-        {
-          root: listEl,
-          threshold: 0.1
-        }
-      );
-    }
-    this.observeImagesForLazyLoad();
-  }
-
-  private observeImagesForLazyLoad() {
-    this.lazyLoadObserver.disconnect();
-
-    requestAnimationFrame(() => {
-      // image elements should be rendered now
-      this.imageListRef.nativeElement
-        .querySelectorAll('li img')
-        .forEach(el => this.lazyLoadObserver.observe(el));
-    });
-  }
-
-  private onLazyLoadIntersection = (entries: IntersectionObserverEntry[]) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && entry.intersectionRatio > 0) {
-        const lazyImage = entry.target as HTMLImageElement;
-
-        if (!lazyImage.getAttribute('src')) {
-          lazyImage.src = lazyImage.dataset.src;
-          this.items.find(i => i.src === lazyImage.dataset.src)._loading = true;
-          this.cd.markForCheck();
-        }
-        this.lazyLoadObserver.unobserve(lazyImage);
+      if (!img.getAttribute('src')) {
+        img.src = img.dataset.src;
+        img.dataset.src = '';
+        this.items[index]._loading = true;
       }
-    });
-  };
-
-  /**
-   * Determines selected item upon native scroll in the image list
-   * If the selected item is out of range, the image list will be looped
-   */
-  private initOnScrollItemSelection() {
-    const listEl = this.imageListRef.nativeElement;
-    const options = { passive: true };
-
-    fromEvent(listEl, 'touchstart', options)
-      .pipe(
-        switchMapTo(
-          fromEvent(document.body, 'touchend', options).pipe(take(1))
-        ),
-        switchMapTo(
-          fromEvent(listEl, 'scroll', options).pipe(
-            // if there are no more scroll events to come, simulate one
-            startWith(null),
-            takeUntil(fromEvent(document.body, 'touchstart', options)),
-            debounceTime(150)
-          )
-        ),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(_ => {
-        const selectedItem = this.getSelectedItemFromScrollPosition();
-
-        if (selectedItem < 0 || selectedItem >= this.items.length) {
-          this.select(selectedItem);
-        } else {
-          this.selectedItem = selectedItem;
-          this.selection.emit(selectedItem);
-        }
-      });
+    }
   }
 
   private onResize = () => {
     requestAnimationFrame(() => {
       if (!this.items || !this.items.length) {
-        this.shiftImages(this.fringeItemWidth, 'auto');
+        this.shiftImages(0);
       } else {
         this.itemWidth = this.hostRef.nativeElement.offsetWidth;
-        this.center('auto');
+        this.center();
       }
 
-      requestAnimationFrame(() => {
-        this.imagesHidden = false;
-        this.cd.detectChanges();
-      });
+      this.imagesHidden = false;
+      this.cd.detectChanges();
     });
   };
 
-  private shiftImages(x: number, scrollBehavior = this.scrollBehavior) {
-    const imageListEl = this.imageListRef.nativeElement;
-
-    if (this.scrollSnap) {
-      if (!SUPPORT.scrollBehavior && scrollBehavior === 'smooth') {
-        this.shiftImagesManually(x);
-      } else if (imageListEl.scrollTo) {
-        imageListEl.scroll({ left: x, behavior: scrollBehavior });
-      } else {
-        imageListEl.scrollLeft = x;
-      }
+  private selectBySwipeStats(time: number, distance: number) {
+    if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
+      this.select(this.selectedItem + Math.sign(distance));
     } else {
-      this.imageListRef.nativeElement.style.transform = `translate3d(-${x}px, 0, 0)`;
+      this.select(Math.round(this.listX / this.itemWidth));
     }
+    this.cd.detectChanges();
   }
 
-  /**
-   * Substitutes missing scroll-behavior: smooth capabilities
-   * @param x - scrollLeft
-   */
-  private shiftImagesManually(x: number) {
-    const imageListEl = this.imageListRef.nativeElement;
-    const startTime = Date.now();
-    const startScroll = imageListEl.scrollLeft;
-    const scrollDelta = Math.abs(startScroll - x);
-    const negative = startScroll > x;
-    let timeout =
-      300 + Math.floor((scrollDelta - this.itemWidth) / this.itemWidth) * 100;
-
-    timeout = Math.min(timeout, 1200);
-
-    interval(0, animationFrameScheduler)
-      .pipe(
-        map(_ => {
-          const timeEllapsedRatio = (Date.now() - startTime) / timeout;
-          const suggestedScroll =
-            startScroll +
-            (negative
-              ? -scrollDelta * timeEllapsedRatio
-              : scrollDelta * timeEllapsedRatio);
-
-          return negative
-            ? Math.max(x, Math.ceil(suggestedScroll))
-            : Math.min(x, Math.ceil(suggestedScroll));
-        }),
-        takeWhile(_ => timeout > Date.now() - startTime, true)
-      )
-      .subscribe(scroll => {
-        imageListEl.scrollLeft = scroll;
-      });
+  private shiftImages(x: number) {
+    const imageListEl = this.itemListRef.nativeElement;
+    imageListEl.style.transform = `translate3d(${-(this.listX = x)}px, 0, 0)`;
   }
+
+  private shiftImagesByDelta = (delta: number) => {
+    this.shiftImages(this.selectedItem * this.itemWidth + delta);
+  };
 }

@@ -13,6 +13,7 @@ import {
   ElementRef
 } from '@angular/core';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
+import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
 import {
   GalleryItem,
   Loading,
@@ -52,19 +53,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
   imageFit: ImageFit;
 
   @Input()
-  imageTemplate: TemplateRef<any>;
+  itemTemplate: TemplateRef<any>;
 
   @Input()
   loop: boolean;
-
-  @Input()
-  scrollBehavior: ScrollBehavior;
-
-  @Input()
-  selectionScrollBehavior: ScrollBehavior;
-
-  @Input()
-  scrollSnap: boolean;
 
   @Input()
   prevArrowTemplate: TemplateRef<any>;
@@ -111,6 +103,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @ViewChild(ImageViewerComponent, { static: false })
   imageViewer: ImageViewerComponent;
 
+  @ViewChild(ThumbnailsComponent, { static: false })
+  thumbnails: ThumbnailsComponent;
+
   @ViewChild(ImageViewerComponent, { static: false, read: ElementRef })
   imageViewerEl: ElementRef<HTMLElement>;
 
@@ -137,9 +132,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.arrows === undefined && (this.arrows = true);
     this.loop === undefined && (this.loop = true);
     this.loading == null && (this.loading = 'auto');
-    this.scrollSnap == null && (this.scrollSnap = true);
-    this.selectionScrollBehavior == null &&
-      (this.selectionScrollBehavior = 'auto');
     this.thumbs === undefined && (this.thumbs = true);
     this.thumbsArrows === undefined && (this.thumbsArrows = true);
     this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
@@ -161,8 +153,13 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.imageViewer.prev();
   }
 
-  select(index: number, scrollBehavior = this.selectionScrollBehavior) {
-    this.imageViewer.select(index, scrollBehavior);
+  select(index: number) {
+    this.imageViewer.select(index);
+    this.thumbnails.select(index);
+    this._selectInternal(index);
+  }
+
+  _selectInternal(index: number) {
     this.selectedItem = index;
     this.selection.emit(this.items[index]);
   }

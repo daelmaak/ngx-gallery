@@ -3,7 +3,8 @@ import {
   ChangeDetectorRef,
   Component,
   OnInit,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { defer, Observable, of } from 'rxjs';
 import { delay, switchMap } from 'rxjs/operators';
@@ -25,7 +26,8 @@ import {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, AfterViewInit {
   images: Observable<GalleryItem[]>;
@@ -33,14 +35,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   mobile = matchMedia('(max-width: 767px)').matches;
 
-  arrows = true;
+  arrows = !this.mobile;
   imageCounter = true;
   imageCounterOrientation: VerticalOrientation = 'top';
   imageFit: ImageFit = 'contain';
   loading: Loading = 'lazy';
   loop = true;
-  scrollBehavior: ScrollBehavior = 'smooth';
-  selectionScrollBehavior: ScrollBehavior = 'auto';
   thumbs = true;
   thumbsAutoScroll = true;
   thumbsOrientation: Orientation = this.mobile ? 'bottom' : 'left';
@@ -63,19 +63,17 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.images = of([
       {
-        src: './assets/mountains1.jpg',
-        thumbSrc: './assets/mountains1-thumb.jpg',
-        alt: 'Mountains 1'
+        src: './assets/kitten4.jpg',
+        alt: 'Kitten 4'
+      },
+      {
+        src: './assets/kitten3.jpg',
+        alt: 'Kitten 3'
       },
       {
         src: './assets/mountains2.jpg',
         thumbSrc: './assets/mountains2-thumb.jpg',
         alt: 'Mountains 2'
-      },
-      {
-        src: './assets/mountains3.jpg',
-        thumbSrc: './assets/mountains3-thumb.jpg',
-        alt: 'Mountains 3'
       },
       {
         src: './assets/mountains4.jpg',
@@ -122,8 +120,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         thumbsOrientation: 'bottom',
         panelClass: ['gallery-detail-first'],
         documentScroll: true,
-        loading: 'lazy',
-        scrollSnap: true
+        loading: 'lazy'
       })
       .load(await this.images.toPromise());
   }
