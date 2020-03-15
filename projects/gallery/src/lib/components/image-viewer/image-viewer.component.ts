@@ -17,7 +17,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
-import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import {
   clientSide,
@@ -155,29 +155,38 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       this.zone.runOutsideAngular(() => {
         const imageList = this.itemListRef.nativeElement;
 
-        const mousedown$ = fromEvent<MouseEvent>(imageList, 'mousedown', opts);
-        const mousemove$ = fromEvent<MouseEvent>(document, 'mousemove', opts);
-        const mouseup$ = fromEvent<MouseEvent>(document, 'mouseup', opts);
-        // moves image list along with a mousedown + mousemove
-        mousedown$
-          .pipe(
-            switchMap(sE =>
-              mousemove$.pipe(
-                map(mE => sE.clientX - mE.clientX),
-                takeUntil(mouseup$)
-              )
-            ),
-            takeUntil(this.destroy$)
-          )
-          .subscribe(this.shiftImagesByDelta);
+        let mousedown: MouseEvent;
 
-        let drag = false;
+        const onmousedown = (e: MouseEvent) => {
+          mousedown = e;
+          this.noAnimation = true;
+          this.cd.detectChanges();
+
+          document.addEventListener('mousemove', onmousemove, opts);
+          document.addEventListener('mouseup', onmouseup, opts);
+        };
+
+        const onmousemove = (e: MouseEvent) => {
+          this.shiftImagesByDelta(mousedown.x - e.x);
+        };
+
+        const onmouseup = (e: MouseEvent) => {
+          this.noAnimation = false;
+
+          const time = e.timeStamp - mousedown.timeStamp;
+          const distance = mousedown.x - e.x;
+
+          this.selectBySwipeStats(time, distance);
+
+          document.removeEventListener('mousemove', onmousemove);
+          document.removeEventListener('mouseup', onmouseup);
+        };
+
         let horizontal = null;
         let touchstart: TouchEvent;
         let lastTouchmove: TouchEvent;
 
         const ontouchstart = (e: TouchEvent) => {
-          drag = true;
           touchstart = e;
           this.noAnimation = true;
           this.cd.detectChanges();
@@ -210,7 +219,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const ontouchend = _ => {
-          drag = false;
           horizontal = null;
           this.noAnimation = false;
 
@@ -218,19 +226,18 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           const distance =
             touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
 
-          if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
-            this.select(this.selectedItem + Math.sign(distance));
-          } else {
-            this.select(Math.round(this.listX / this.itemWidth));
-          }
-          this.cd.detectChanges();
+          this.selectBySwipeStats(time, distance);
         };
 
+        imageList.addEventListener('mousedown', onmousedown, opts);
         imageList.addEventListener('touchstart', ontouchstart, opts);
         document.addEventListener('touchmove', ontouchmove, opts);
         document.addEventListener('touchend', ontouchend);
 
         this.destroy$.subscribe(() => {
+          imageList.removeEventListener('mousedown', onmousedown);
+          document.removeEventListener('mousemove', onmousemove);
+          document.removeEventListener('mouseup', onmouseup);
           imageList.removeEventListener('touchstart', ontouchstart);
           document.removeEventListener('touchmove', ontouchmove);
           document.removeEventListener('touchend', ontouchend);
@@ -315,6 +322,15 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       this.cd.detectChanges();
     });
   };
+
+  private selectBySwipeStats(time: number, distance: number) {
+    if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
+      this.select(this.selectedItem + Math.sign(distance));
+    } else {
+      this.select(Math.round(this.listX / this.itemWidth));
+    }
+    this.cd.detectChanges();
+  }
 
   private shiftImages(x: number) {
     const imageListEl = this.itemListRef.nativeElement;
