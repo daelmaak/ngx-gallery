@@ -16,7 +16,7 @@ import {
   ViewChildren,
   NgZone
 } from '@angular/core';
-import { fromEvent, Subject, merge, NEVER } from 'rxjs';
+import { fromEvent, Subject, merge, NEVER, pipe } from 'rxjs';
 import {
   map,
   switchMap,
@@ -164,17 +164,20 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       this.zone.runOutsideAngular(() => {
         const imageList = this.itemListRef.nativeElement;
 
-        const mousedown$ = fromEvent<MouseEvent>(imageList, 'mousedown', opts);
-        const touchstart$ = fromEvent(imageList, 'touchstart', opts).pipe(
+        const singleTouchPipe = pipe(
           filter<TouchEvent>(e => e.touches.length === 1),
           map(e => e.touches[0])
+        );
+
+        const mousedown$ = fromEvent<MouseEvent>(imageList, 'mousedown', opts);
+        const touchstart$ = fromEvent(imageList, 'touchstart', opts).pipe(
+          singleTouchPipe
         );
         const startEvents$ = merge(mousedown$, touchstart$);
 
         const mousemove$ = fromEvent<MouseEvent>(document, 'mousemove', opts);
         const touchmove$ = fromEvent(document, 'touchmove', opts).pipe(
-          filter<TouchEvent>(e => e.touches.length === 1),
-          map(e => e.touches[0])
+          singleTouchPipe
         );
         const moveEvents$ = merge(mousemove$, touchmove$);
 
@@ -182,10 +185,22 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         const touchend$ = fromEvent<TouchEvent>(document, 'touchend', opts);
         const endEvents$ = merge(mouseup$, touchend$);
 
-        let horizontal = false;
+        // moves image list along with a mousedown + mousemove
+        mousedown$
+          .pipe(
+            switchMap(sE =>
+              mousemove$.pipe(
+                map(mE => sE.clientX - mE.clientX),
+                takeUntil(mouseup$)
+              )
+            ),
+            takeUntil(this.destroy$)
+          )
+          .subscribe(this.shiftImagesByDelta);
 
+        let horizontal;
         if (UA.ios) {
-          // prevent vertical scroll from happening when swiping horizontally
+          // prevent vertical scroll from happening when swiping horizontally on iOS
           fromEvent(document, 'touchmove', opts)
             .pipe(takeUntil(this.destroy$))
             .subscribe(e => {
@@ -194,35 +209,36 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
                 e.stopPropagation();
               }
             });
+          touchend$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(_ => (horizontal = null));
         }
 
-        startEvents$
+        // moves image list along with a touch point == touchstart + touchmove
+        touchstart$
           .pipe(
-            switchMap(sE => {
-              return moveEvents$.pipe(
+            switchMap(sE =>
+              touchmove$.pipe(
                 map(mE => {
-                  let directionEventAppeared = false;
-                  if (!directionEventAppeared) {
+                  if (horizontal == null) {
                     const deltaX = Math.abs(mE.clientX - sE.clientX);
                     const deltaY = Math.abs(mE.clientY - sE.clientY);
 
                     if (deltaX || deltaY) {
-                      horizontal = deltaX * 2 > deltaY;
-                      directionEventAppeared = true;
+                      horizontal = deltaX * 2 >= deltaY;
                     }
                   }
                   return horizontal ? sE.clientX - mE.clientX : null;
                 }),
                 filter(e => e != null),
-                takeUntil(endEvents$)
-              );
-            }),
+                takeUntil(touchend$)
+              )
+            ),
             takeUntil(this.destroy$)
           )
-          .subscribe(delta => {
-            this.shiftImages(this.selectedItem * this.itemWidth + delta);
-          });
+          .subscribe(this.shiftImagesByDelta);
 
+        // monitors distance and velocity and decides whether to navigate
         startEvents$
           .pipe(
             tap(_ => {
@@ -334,10 +350,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         this.center();
       }
 
-      requestAnimationFrame(() => {
-        this.imagesHidden = false;
-        this.cd.detectChanges();
-      });
+      this.imagesHidden = false;
+      this.cd.detectChanges();
     });
   };
 
@@ -345,4 +359,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     const imageListEl = this.itemListRef.nativeElement;
     imageListEl.style.transform = `translate3d(${-(this.listX = x)}px, 0, 0)`;
   }
+
+  private shiftImagesByDelta = (delta: number) => {
+    this.shiftImages(this.selectedItem * this.itemWidth + delta);
+  };
 }
