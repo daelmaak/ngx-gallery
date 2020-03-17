@@ -20,7 +20,7 @@
   "scripts": {
     "build": "ng build --project=gallery-detail",
     "version:alpha": "npm version prerelease --preid=alpha",
-    "postversion": "npm run build && cd ../../ && npm run build:demo",
+    "upload": "npm run build && cd ../../dist/gallery-detail && npm publish",
     "test": "ng test --project=gallery-detail"
   },
   "peerDependencies": {
