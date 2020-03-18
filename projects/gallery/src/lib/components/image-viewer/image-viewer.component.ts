@@ -193,7 +193,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const ontouchmove = (e: TouchEvent) => {
-          if (e.touches.length !== 1) {
+          if (!touchstart || e.touches.length !== 1) {
             return;
           }
           lastTouchmove = e;
@@ -205,7 +205,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
             const deltaY = Math.abs(moveTouch.clientY - startTouch.clientY);
 
             if (deltaX || deltaY) {
-              horizontal = deltaX * 2 >= deltaY;
+              horizontal = deltaX >= deltaY;
             }
           }
 
@@ -219,12 +219,13 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const ontouchend = _ => {
-          horizontal = null;
-          this.noAnimation = false;
-
           const time = lastTouchmove.timeStamp - touchstart.timeStamp;
           const distance =
             touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
+
+          horizontal = null;
+          touchstart = null;
+          this.noAnimation = false;
 
           this.selectBySwipeStats(time, distance);
         };
