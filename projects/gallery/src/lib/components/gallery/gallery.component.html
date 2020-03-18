@@ -30,5 +30,5 @@
   [prevArrowTemplate]="prevArrowTemplate"
   [nextArrowTemplate]="nextArrowTemplate"
   (imageClick)="imageClick.emit($event)"
-  (selection)="_selectInternal($event); thumbnails.select($event)"
+  (selection)="_selectInternal($event); thumbnails?.select($event)"
 ></ngx-image-viewer>
