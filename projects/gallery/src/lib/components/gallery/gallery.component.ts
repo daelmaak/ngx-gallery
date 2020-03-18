@@ -10,7 +10,9 @@ import {
   ViewChild,
   TemplateRef,
   HostListener,
-  ElementRef
+  ElementRef,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
@@ -23,6 +25,7 @@ import {
   OrientationFlag,
   VerticalOrientation
 } from '../../core';
+import { GalleryItemInternal } from '../../core/gallery-item';
 
 @Component({
   selector: 'ngx-gallery',
@@ -30,7 +33,7 @@ import {
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GalleryComponent implements OnInit, OnDestroy {
+export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   items: GalleryItem[];
 
@@ -109,6 +112,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @ViewChild(ImageViewerComponent, { static: false, read: ElementRef })
   imageViewerEl: ElementRef<HTMLElement>;
 
+  _internalItems: GalleryItemInternal[];
+
   @HostBinding('class.column')
   get galleryCollumn() {
     return (
@@ -127,6 +132,13 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   constructor() {}
+
+  ngOnChanges({ items }: SimpleChanges) {
+    if (items && items.currentValue) {
+      const incomingItems = items.currentValue as GalleryItem[];
+      this._internalItems = incomingItems.map(item => ({ ...item }));
+    }
+  }
 
   ngOnInit() {
     this.arrows === undefined && (this.arrows = true);

@@ -1,6 +1,6 @@
 <ngx-thumbnails
   *ngIf="thumbs"
-  [items]="items"
+  [items]="_internalItems"
   [selectedItem]="selectedItem"
   [orientation]="thumbsOrientation"
   [arrows]="thumbsArrows"
@@ -17,7 +17,7 @@
 <ngx-image-viewer
   tabindex="0"
   ngxNoMoveClick
-  [items]="items"
+  [items]="_internalItems"
   [selectedItem]="selectedItem"
   [arrows]="arrows"
   [imageCounter]="imageCounter"
