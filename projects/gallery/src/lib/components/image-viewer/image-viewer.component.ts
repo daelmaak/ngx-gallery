@@ -49,7 +49,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   nextArrowTemplate: TemplateRef<any>;
 
   @Input()
-  selectedItem: number;
+  selectedIndex: number;
 
   @Input()
   imageCounter: boolean;
@@ -98,12 +98,13 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   get showPrevArrow() {
-    return this.showArrow && (this.selectedItem > 0 || this.loop);
+    return this.showArrow && (this.selectedIndex > 0 || this.loop);
   }
 
   get showNextArrow() {
     return (
-      this.showArrow && (this.selectedItem < this.items.length - 1 || this.loop)
+      this.showArrow &&
+      (this.selectedIndex < this.items.length - 1 || this.loop)
     );
   }
 
@@ -127,11 +128,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     if (items && items.currentValue) {
       this.onResize();
 
-      this.items[this.selectedItem]._visited = true;
+      this.items[this.selectedIndex]._visited = true;
 
       if (this.lazyLoading) {
         setTimeout(() => {
-          this.loadLazily(this.selectedItem);
+          this.loadLazily(this.selectedIndex);
           this.cd.detectChanges();
         });
       }
@@ -257,15 +258,15 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   prev() {
-    this.select(this.selectedItem - 1);
+    this.select(this.selectedIndex - 1);
   }
 
   next() {
-    this.select(this.selectedItem + 1);
+    this.select(this.selectedIndex + 1);
   }
 
   select(index: number) {
-    if (this.selectedItem === index) {
+    if (this.selectedIndex === index) {
       this.center();
       return;
     }
@@ -285,7 +286,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       this.loadLazily(index);
     }
 
-    this.selectedItem = index;
+    this.selectedIndex = index;
     this.items[index]._visited = true;
     this.selection.emit(index);
     this.center();
@@ -297,7 +298,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private center() {
-    const shift = this.selectedItem * this.itemWidth;
+    const shift = this.selectedIndex * this.itemWidth;
 
     this.shiftImages(shift);
   }
@@ -331,7 +332,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private selectBySwipeStats(time: number, distance: number) {
     if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
-      this.select(this.selectedItem + Math.sign(distance));
+      this.select(this.selectedIndex + Math.sign(distance));
     } else {
       this.select(Math.round(this.listX / this.itemWidth));
     }
@@ -344,6 +345,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private shiftImagesByDelta = (delta: number) => {
-    this.shiftImages(this.selectedItem * this.itemWidth + delta);
+    this.shiftImages(this.selectedIndex * this.itemWidth + delta);
   };
 }

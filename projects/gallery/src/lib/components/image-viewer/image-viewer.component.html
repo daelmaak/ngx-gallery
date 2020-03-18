@@ -35,7 +35,7 @@
           itemTemplate;
           context: {
             index: i,
-            selectedIndex: selectedItem,
+            selectedIndex: selectedIndex,
             item: item,
             visited: item._visited
           }
@@ -61,6 +61,6 @@
 <ngx-image-counter
   *ngIf="imageCounter"
   [itemQuantity]="items?.length"
-  [selectedItem]="selectedItem"
+  [selectedIndex]="selectedIndex"
   [orientation]="imageCounterOrientation"
 ></ngx-image-counter>

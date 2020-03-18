@@ -38,7 +38,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   items: GalleryItem[];
 
   @Input()
-  selectedItem: number;
+  selectedIndex: number;
 
   @Input()
   arrows: boolean;
@@ -144,7 +144,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
     this.arrows === undefined && (this.arrows = true);
     this.loop === undefined && (this.loop = true);
     this.loading == null && (this.loading = 'auto');
-    this.selectedItem == null && (this.selectedItem = 0);
+    this.selectedIndex == null && (this.selectedIndex = 0);
     this.thumbs === undefined && (this.thumbs = true);
     this.thumbsArrows === undefined && (this.thumbsArrows = true);
     this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
@@ -173,7 +173,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   _selectInternal(index: number) {
-    this.selectedItem = index;
+    this.selectedIndex = index;
     this.selection.emit(this.items[index]);
   }
 }

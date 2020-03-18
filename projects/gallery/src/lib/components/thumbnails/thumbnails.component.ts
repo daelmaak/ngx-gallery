@@ -50,7 +50,7 @@ export class ThumbnailsComponent
   items: GalleryItem[] = [];
 
   @Input()
-  selectedItem: number;
+  selectedIndex: number;
 
   @Input()
   @HostBinding('class')
@@ -144,7 +144,7 @@ export class ThumbnailsComponent
         this.updateArrows();
       }
       if (!items.previousValue || !items.previousValue.length) {
-        setTimeout(() => this.centerThumbIfNeeded(this.selectedItem));
+        setTimeout(() => this.centerThumbIfNeeded(this.selectedIndex));
       }
     }
   }
@@ -165,7 +165,7 @@ export class ThumbnailsComponent
   }
 
   ngAfterViewInit() {
-    this.centerThumbIfNeeded(this.selectedItem);
+    this.centerThumbIfNeeded(this.selectedIndex);
     this.smoothScrollAllowed = true;
   }
 

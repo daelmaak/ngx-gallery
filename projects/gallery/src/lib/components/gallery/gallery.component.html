@@ -1,7 +1,7 @@
 <ngx-thumbnails
   *ngIf="thumbs"
   [items]="_internalItems"
-  [selectedItem]="selectedItem"
+  [selectedIndex]="selectedIndex"
   [orientation]="thumbsOrientation"
   [arrows]="thumbsArrows"
   [arrowSlideByLength]="thumbsArrowSlideByLength"
@@ -18,7 +18,7 @@
   tabindex="0"
   ngxNoMoveClick
   [items]="_internalItems"
-  [selectedItem]="selectedItem"
+  [selectedIndex]="selectedIndex"
   [arrows]="arrows"
   [imageCounter]="imageCounter"
   [imageCounterOrientation]="imageCounterOrientation"
