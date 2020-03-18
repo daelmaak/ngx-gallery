@@ -196,7 +196,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           if (!touchstart || e.touches.length !== 1) {
             return;
           }
-          lastTouchmove = e;
           const startTouch = touchstart.touches[0];
           const moveTouch = e.touches[0];
 
@@ -205,11 +204,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
             const deltaY = Math.abs(moveTouch.clientY - startTouch.clientY);
 
             if (deltaX || deltaY) {
-              horizontal = deltaX >= deltaY;
+              horizontal = deltaX * 1.2 >= deltaY;
             }
           }
 
           if (horizontal) {
+            lastTouchmove = e;
             this.shiftImagesByDelta(startTouch.clientX - moveTouch.clientX);
             if (UA.ios) {
               e.preventDefault();
@@ -219,18 +219,18 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const ontouchend = _ => {
-          if (!lastTouchmove) {
-            return;
-          }
-          const time = lastTouchmove.timeStamp - touchstart.timeStamp;
-          const distance =
-            touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
-
-          horizontal = null;
-          touchstart = null;
           this.noAnimation = false;
 
-          this.selectBySwipeStats(time, distance);
+          if (lastTouchmove) {
+            const time = lastTouchmove.timeStamp - touchstart.timeStamp;
+            const distance =
+              touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
+
+            this.selectBySwipeStats(time, distance);
+          }
+          horizontal = null;
+          touchstart = null;
+          lastTouchmove = null;
         };
 
         imageList.addEventListener('mousedown', onmousedown, opts);
