@@ -219,6 +219,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const ontouchend = _ => {
+          if (!lastTouchmove) {
+            return;
+          }
           const time = lastTouchmove.timeStamp - touchstart.timeStamp;
           const distance =
             touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
