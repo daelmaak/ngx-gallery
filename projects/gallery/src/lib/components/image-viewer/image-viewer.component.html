@@ -37,13 +37,13 @@
             index: i,
             selectedIndex: selectedItem,
             item: item,
-            loading: item._loading
+            visited: item._visited
           }
         "
       ></ng-container>
     </ng-template>
 
-    <div class="loading" *ngIf="!item._loaded">
+    <div class="loading" *ngIf="!item._loaded && !itemTemplate">
       <div
         class="animation"
         [class.active]="(item._loading && !item._loaded) || !lazyLoading"

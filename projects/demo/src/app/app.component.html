@@ -158,38 +158,28 @@
 </main>
 
 <ng-template
-  #itemTemplate2
+  #itemTemplate
   let-index="index"
   let-selectedIndex="selectedIndex"
   let-item="item"
+  let-visited="visited"
 >
   <img
-    class="image-2"
-    [src]="item.src"
-    draggable="false"
-    ondragstart="return false"
+    #img
+    class="custom-image"
+    [src]="visited ? item.src : ''"
+    (load)="onImageLoad()"
   />
+  <div class="loading" *ngIf="visited && img.naturalHeight <= 0">
+    Loading ...
+  </div>
 </ng-template>
 
 <ng-template
-  #thumbTemplate2
+  #thumbTemplate
   let-index="index"
   let-selectedIndex="selectedIndex"
   let-item="item"
 >
-  <img
-    class="thumb-2"
-    [src]="item.thumbSrc || item.src"
-    draggable="false"
-    ondragstart="return false"
-  />
-</ng-template>
-
-<ng-template #detailImageTemplate2 let-item="item">
-  <img
-    class="image-2"
-    [src]="item.src"
-    draggable="false"
-    ondragstart="return false"
-  />
+  <img class="custom-thumb" [src]="item.thumbSrc || item.src" />
 </ng-template>

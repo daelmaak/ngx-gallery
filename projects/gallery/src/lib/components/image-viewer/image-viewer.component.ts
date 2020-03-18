@@ -79,7 +79,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   selection = new EventEmitter<number>();
 
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
-
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
   imagesHidden = true;
@@ -127,6 +126,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     // late initialization; in case the gallery items come later
     if (items && items.currentValue) {
       this.onResize();
+
+      this.items[this.selectedItem]._visited = true;
 
       if (this.lazyLoading) {
         setTimeout(() => {
@@ -285,6 +286,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     this.selectedItem = index;
+    this.items[index]._visited = true;
     this.selection.emit(index);
     this.center();
   }

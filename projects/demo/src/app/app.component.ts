@@ -125,6 +125,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       .load(await this.images.toPromise());
   }
 
+  onImageLoad() {}
+
   reloadGallery() {
     this.displayGallery = false;
     this.cd.detectChanges();
