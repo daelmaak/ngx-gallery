@@ -56,6 +56,11 @@ img {
   }
 }
 
+iframe {
+  width: 100%;
+  height: 100%;
+}
+
 .loading {
   display: flex;
   justify-content: center;
@@ -116,6 +121,7 @@ img {
     }
   }
 }
+
 ngx-chevron-icon {
   $icon-dimension: 32px;
 

@@ -7,6 +7,7 @@ import { ImageCounterComponent } from './components/image-counter/image-counter.
 import { ImageViewerComponent } from './components/image-viewer/image-viewer.component';
 import { ThumbnailsComponent } from './components/thumbnails/thumbnails.component';
 import { NoMoveClickDirective } from './directives/no-move-click.directive';
+import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { NoMoveClickDirective } from './directives/no-move-click.directive';
     ImageViewerComponent,
     ChevronIconComponent,
     NoMoveClickDirective,
-    ImageCounterComponent
+    ImageCounterComponent,
+    SafePipe
   ],
   imports: [CommonModule],
   exports: [GalleryComponent]

@@ -127,15 +127,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     // late initialization; in case the gallery items come later
     if (items && items.currentValue) {
       this.onResize();
-
-      this.items[this.selectedIndex]._visited = true;
-
-      if (this.lazyLoading) {
-        setTimeout(() => {
-          this.loadLazily(this.selectedIndex);
-          this.cd.detectChanges();
-        });
-      }
+      this.markAsVisitedIfNeeded(this.selectedIndex);
     }
   }
 
@@ -257,6 +249,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  isYoutube(item: GalleryItemInternal) {
+    return !!item.src.match(/youtube.*\/embed\//);
+  }
+
   prev() {
     this.select(this.selectedIndex - 1);
   }
@@ -282,19 +278,19 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       index = 0;
     }
 
-    if (this.lazyLoading) {
-      this.loadLazily(index);
-    }
+    this.markAsVisitedIfNeeded(index);
 
     this.selectedIndex = index;
-    this.items[index]._visited = true;
     this.selection.emit(index);
     this.center();
   }
 
-  onItemLoaded(item: GalleryItemInternal) {
-    item._loaded = true;
-    item._loading = false;
+  onItemLoaded(item: GalleryItemInternal, loadEvent: Event) {
+    const target = loadEvent.target as HTMLElement;
+
+    if (target.getAttribute('src')) {
+      item._loaded = true;
+    }
   }
 
   private center() {
@@ -303,16 +299,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.shiftImages(shift);
   }
 
-  private loadLazily(index: number) {
-    if (this.itemsRef && !this.itemTemplate) {
-      const itemEl = this.itemsRef.toArray()[index].nativeElement;
-      const img = itemEl.querySelector('img');
-
-      if (!img.getAttribute('src')) {
-        img.src = img.dataset.src;
-        img.dataset.src = '';
-        this.items[index]._loading = true;
-      }
+  private markAsVisitedIfNeeded(index: number) {
+    const item = this.items[index];
+    if (!item._visited) {
+      item._visited = true;
+      this.cd.markForCheck();
     }
   }
 

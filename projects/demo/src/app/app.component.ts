@@ -71,6 +71,11 @@ export class AppComponent implements OnInit, AfterViewInit {
         alt: 'Kitten 3'
       },
       {
+        src: 'https://www.youtube.com/embed/s54LfNUU1Cg',
+        thumbSrc: 'https://img.youtube.com/vi/s54LfNUU1Cg/1.jpg',
+        alt: 'LP Somewhere I belong'
+      },
+      {
         src: './assets/mountains2.jpg',
         thumbSrc: './assets/mountains2-thumb.jpg',
         alt: 'Mountains 2'

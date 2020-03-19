@@ -20,15 +20,26 @@
     ondragstart="return false"
     (click)="imageClick.emit($event)"
   >
-    <img
-      *ngIf="!itemTemplate; else customTemplate"
-      [src]="lazyLoading ? '' : item.src"
-      [alt]="item.alt"
-      [attr.data-src]="lazyLoading ? item.src : ''"
-      [class.before-load]="lazyLoading && !item._loaded"
-      [style.objectFit]="imageFit"
-      (load)="onItemLoaded(item)"
-    />
+    <ng-container *ngIf="!itemTemplate; else customTemplate">
+      <img
+        *ngIf="!isYoutube(item); else youtube"
+        [src]="lazyLoading && !item._visited ? '' : item.src"
+        [alt]="item.alt"
+        [class.before-load]="lazyLoading && !item._loaded"
+        [style.objectFit]="imageFit"
+        (load)="onItemLoaded(item, $event)"
+      />
+      <ng-template #youtube>
+        <iframe
+          [src]="(lazyLoading && !item._visited ? '' : item.src) | safe"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          (load)="onItemLoaded(item, $event)"
+        ></iframe>
+      </ng-template>
+    </ng-container>
+
     <ng-template #customTemplate>
       <ng-container
         *ngTemplateOutlet="
@@ -46,7 +57,7 @@
     <div class="loading" *ngIf="!item._loaded && !itemTemplate">
       <div
         class="animation"
-        [class.active]="(item._loading && !item._loaded) || !lazyLoading"
+        [class.active]="(item._visited && !item._loaded) || !lazyLoading"
       ></div>
     </div>
   </li>
