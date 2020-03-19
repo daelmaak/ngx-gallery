@@ -63,6 +63,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.images = of([
       {
+        src: 'https://www.youtube.com/embed/E3URhJx0NSw',
+        thumbSrc: 'https://img.youtube.com/vi/E3URhJx0NSw/1.jpg',
+        alt: ''
+      },
+      {
         src: './assets/kitten4.jpg',
         alt: 'Kitten 4'
       },

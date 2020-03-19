@@ -250,7 +250,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   getSrc(item: GalleryItemInternal) {
-    return this.lazyLoading && item._visited ? '' : item.src;
+    return this.lazyLoading && !item._visited ? '' : item.src;
   }
 
   isYoutube(item: GalleryItemInternal) {
