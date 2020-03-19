@@ -249,6 +249,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  getSrc(item: GalleryItemInternal) {
+    return this.lazyLoading && item._visited ? '' : item.src;
+  }
+
   isYoutube(item: GalleryItemInternal) {
     return !!item.src.match(/youtube.*\/embed\//);
   }

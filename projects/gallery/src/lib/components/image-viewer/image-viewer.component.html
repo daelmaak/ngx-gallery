@@ -11,7 +11,7 @@
 >
   <li *ngIf="!items || !items.length" class="initial-item">
     <div class="loading">
-      <div class="animation"></div>
+      <div class="spinner"></div>
     </div>
   </li>
   <li
@@ -23,7 +23,7 @@
     <ng-container *ngIf="!itemTemplate; else customTemplate">
       <img
         *ngIf="!isYoutube(item); else youtube"
-        [src]="lazyLoading && !item._visited ? '' : item.src"
+        [src]="getSrc(item)"
         [alt]="item.alt"
         [class.before-load]="lazyLoading && !item._loaded"
         [style.objectFit]="imageFit"
@@ -31,7 +31,7 @@
       />
       <ng-template #youtube>
         <iframe
-          [src]="(lazyLoading && !item._visited ? '' : item.src) | safe"
+          [src]="getSrc(item) | safe"
           frameborder="0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
@@ -55,10 +55,7 @@
     </ng-template>
 
     <div class="loading" *ngIf="!item._loaded && !itemTemplate">
-      <div
-        class="animation"
-        [class.active]="(item._visited && !item._loaded) || !lazyLoading"
-      ></div>
+      <div class="spinner" [class.active]="item._visited || !lazyLoading"></div>
     </div>
   </li>
 </ul>
