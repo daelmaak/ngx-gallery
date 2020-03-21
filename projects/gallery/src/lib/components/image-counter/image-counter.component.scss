@@ -10,6 +10,7 @@ $borderRadius: 4px;
   opacity: 0.8;
   font-size: 15px;
   font-family: Arial;
+  user-select: none;
 
   &.top {
     top: 0;
