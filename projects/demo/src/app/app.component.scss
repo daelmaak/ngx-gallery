@@ -1,12 +1,3 @@
-:host {
-  display: block;
-  min-height: 1000px;
-}
-
-header {
-  width: 100%;
-}
-
 main {
   max-width: 800px;
   margin: 0 auto;
@@ -17,111 +8,9 @@ main {
   }
 }
 
-form {
-  margin-bottom: 20px;
-}
-
-section {
-  margin-bottom: 15px;
-}
-
-mat-checkbox {
-  display: block;
-}
-
-mat-radio-button {
-  margin-left: 20px;
-}
-
-mat-form-field {
-  label {
-    white-space: nowrap;
-  }
-}
-
-ngx-gallery {
+footer {
   width: 100%;
-  margin-bottom: 300px;
-
-  ::ng-deep {
-    ngx-image-viewer {
-      img {
-        margin: 0 auto;
-      }
-    }
-  }
-}
-
-.github-link {
-  $dimension: 32px;
-
-  width: $dimension;
-  height: $dimension;
-  margin-left: auto;
-
-  img {
-    width: $dimension;
-    height: $dimension;
-  }
-}
-
-::ng-deep {
-  .gallery-detail-first {
-    ngx-gallery {
-      width: 100vw;
-      height: 100vh;
-      max-width: 900px;
-      max-height: 800px;
-
-      @media (max-width: 767px) {
-        width: auto;
-      }
-
-      img {
-        margin: 0 auto;
-      }
-
-      ngx-image-viewer {
-        .next {
-          right: 30px;
-        }
-
-        .prev {
-          left: 30px;
-        }
-      }
-    }
-  }
-}
-
-section {
-  button {
-    margin-left: 20px;
-  }
-}
-
-:host::ng-deep .image-loading-latency {
-  .mat-form-field-infix {
-    width: auto;
-  }
-}
-
-.custom-image {
-  object-fit: contain;
-  width: 100%;
-  height: 100%;
-}
-
-.custom-image + .loading {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: black;
-  color: white;
-  z-index: 1;
+  height: 64px;
+  text-align: center;
+  color: lighten(#000000, 40%);
 }

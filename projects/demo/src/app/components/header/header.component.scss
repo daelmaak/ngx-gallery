@@ -1,0 +1,69 @@
+header {
+  width: 100%;
+}
+
+mat-toolbar {
+  background-color: #641fb7;
+  color: white;
+}
+
+a {
+  &,
+  &:visited,
+  &:active,
+  &:focus {
+    color: white;
+  }
+}
+
+.app-title {
+  text-decoration: none;
+  outline: 0;
+  border: none;
+}
+
+.links {
+  margin-left: auto;
+
+  .link {
+    display: inline-block;
+    margin-right: 15px;
+
+    &:nth-last-of-type(1) {
+      margin-right: 0;
+    }
+
+    &,
+    & img,
+    & svg {
+      $dimension: 36px;
+      width: $dimension;
+      height: $dimension;
+    }
+  }
+
+  .npm-link {
+    img {
+      transform: scale(1.1) translateY(3px);
+    }
+  }
+}
+
+.menu {
+  margin: 2px auto 0;
+  height: 100%;
+  list-style-type: none;
+  font-size: 18px;
+  font-weight: 400;
+
+  li {
+    height: 100%;
+    line-height: 64px;
+    padding: 0 10px;
+    cursor: pointer;
+
+    &:hover {
+      font-weight: 500;
+    }
+  }
+}
