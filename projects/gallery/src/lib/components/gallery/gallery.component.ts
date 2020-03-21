@@ -26,6 +26,7 @@ import {
   VerticalOrientation
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
+import { ItemTemplateContext } from '../../core/template-contexts';
 
 @Component({
   selector: 'ngx-gallery',
@@ -56,16 +57,19 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   imageFit: ImageFit;
 
   @Input()
-  itemTemplate: TemplateRef<any>;
+  itemTemplate: TemplateRef<ItemTemplateContext>;
+
+  @Input()
+  loadingTemplate: TemplateRef<void>;
 
   @Input()
   loop: boolean;
 
   @Input()
-  prevArrowTemplate: TemplateRef<any>;
+  prevArrowTemplate: TemplateRef<void>;
 
   @Input()
-  nextArrowTemplate: TemplateRef<any>;
+  nextArrowTemplate: TemplateRef<void>;
 
   @Input()
   thumbs: boolean;

@@ -146,6 +146,12 @@
   (imageClick)="openFirst(gallery.selectedIndex)"
 ></ngx-gallery>
 
+<ng-template #loadingTemplate>
+  <div class="custom-loading">
+    Custom Loading ...
+  </div>
+</ng-template>
+
 <ng-template
   #itemTemplate
   let-index="index"

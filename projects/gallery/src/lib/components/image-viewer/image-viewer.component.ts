@@ -28,6 +28,7 @@ import {
   VerticalOrientation
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
+import { ItemTemplateContext } from '../../core/template-contexts';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -43,10 +44,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
-  prevArrowTemplate: TemplateRef<any>;
+  prevArrowTemplate: TemplateRef<void>;
 
   @Input()
-  nextArrowTemplate: TemplateRef<any>;
+  nextArrowTemplate: TemplateRef<void>;
 
   @Input()
   selectedIndex: number;
@@ -64,7 +65,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   loading: Loading;
 
   @Input()
-  itemTemplate: TemplateRef<any>;
+  itemTemplate: TemplateRef<ItemTemplateContext>;
+
+  @Input()
+  loadingTemplate: TemplateRef<void>;
 
   @Input()
   loop: boolean;

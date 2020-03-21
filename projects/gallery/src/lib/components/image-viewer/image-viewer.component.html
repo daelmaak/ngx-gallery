@@ -25,7 +25,7 @@
         *ngIf="!isYoutube(item); else youtube"
         [src]="getSrc(item)"
         [alt]="item.alt"
-        [class.before-load]="lazyLoading && !item._loaded"
+        [class.loading]="item._visited && !item._loaded"
         [style.objectFit]="imageFit"
         (load)="onItemLoaded(item, $event)"
       />
@@ -54,9 +54,11 @@
       ></ng-container>
     </ng-template>
 
-    <div class="loading" *ngIf="!item._loaded && !itemTemplate">
-      <div class="spinner" [class.active]="item._visited || !lazyLoading"></div>
-    </div>
+    <ng-container *ngIf="item._visited && !item._loaded && !itemTemplate">
+      <div class="loading" *ngIf="!loadingTemplate; else loadingTemplate">
+        <div class="spinner"></div>
+      </div>
+    </ng-container>
   </li>
 </ul>
 
