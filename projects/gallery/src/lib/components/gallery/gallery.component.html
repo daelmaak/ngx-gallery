@@ -30,6 +30,6 @@
   [galleryMainAxis]="galleryMainAxis"
   [prevArrowTemplate]="prevArrowTemplate"
   [nextArrowTemplate]="nextArrowTemplate"
-  (imageClick)="imageClick.emit($event)"
+  (imageClick)="onImageClick($event)"
   (selection)="_selectInternal($event); thumbnails?.select($event)"
 ></ngx-image-viewer>

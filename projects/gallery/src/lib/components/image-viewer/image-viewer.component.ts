@@ -29,6 +29,7 @@ import {
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 import { ItemTemplateContext } from '../../core/template-contexts';
+import { ImageClickEvent } from './image-viewer.model';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -77,7 +78,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   galleryMainAxis: Orientation;
 
   @Output()
-  imageClick = new EventEmitter<Event>();
+  imageClick = new EventEmitter<ImageClickEvent>();
 
   @Output()
   selection = new EventEmitter<number>();
@@ -131,7 +132,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     // late initialization; in case the gallery items come later
     if (items && items.currentValue) {
       this.onResize();
-      this.markAsVisitedIfNeeded(this.selectedIndex);
+      setTimeout(() => this.markAsVisitedIfNeeded(this.selectedIndex));
     }
   }
 
@@ -286,6 +287,15 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       index = 0;
     }
 
+    // stop video when navigating away from it
+    if (this.items[this.selectedIndex].video) {
+      const videoEl: HTMLMediaElement = this.itemsRef
+        .toArray()
+        [this.selectedIndex].nativeElement.querySelector('video');
+
+      videoEl.pause();
+    }
+
     this.markAsVisitedIfNeeded(index);
 
     this.selectedIndex = index;
@@ -293,9 +303,18 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.center();
   }
 
+  onImageClick(item: GalleryItemInternal, event: Event) {
+    this.imageClick.emit({
+      event,
+      item,
+      index: this.items.indexOf(item)
+    });
+  }
+
   onItemLoaded(item: GalleryItemInternal, loadEvent: Event) {
     const target = loadEvent.target as HTMLElement;
 
+    // elements with empty src also get loaded event, therefore the check
     if (target.getAttribute('src')) {
       item._loaded = true;
     }

@@ -19,7 +19,8 @@ import {
   Loading,
   Orientation,
   OverscrollBehavior,
-  VerticalOrientation
+  VerticalOrientation,
+  ImageClickEvent
 } from 'projects/gallery/src/public-api';
 
 @Component({
@@ -62,11 +63,6 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.images = of([
       {
-        src: 'https://www.youtube.com/embed/E3URhJx0NSw',
-        thumbSrc: 'https://img.youtube.com/vi/E3URhJx0NSw/1.jpg',
-        alt: ''
-      },
-      {
         src: './assets/kitten4.jpg',
         alt: 'Kitten 4'
       },
@@ -75,15 +71,21 @@ export class HomeComponent implements OnInit {
         alt: 'Kitten 3'
       },
       {
-        src: 'https://www.youtube.com/embed/s54LfNUU1Cg',
-        thumbSrc: 'https://img.youtube.com/vi/s54LfNUU1Cg/1.jpg',
-        alt: 'LP Somewhere I belong'
+        src:
+          'https://interactive-examples.mdn.mozilla.net/media/examples/flower.mp4',
+        thumbSrc: './assets/flower.jpg',
+        video: true
       },
       {
         src: './assets/mountains2.jpg',
         thumbSrc: './assets/mountains2-thumb.jpg',
         alt: 'Mountains 2'
       },
+      // {
+      //   src: 'https://www.youtube.com/embed/s54LfNUU1Cg',
+      //   thumbSrc: 'https://img.youtube.com/vi/s54LfNUU1Cg/1.jpg',
+      //   alt: 'LP Somewhere I belong'
+      // },
       {
         src: './assets/mountains4.jpg',
         thumbSrc: './assets/mountains4-thumb.jpg',
@@ -119,15 +121,15 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  async openFirst(index: number) {
-    this.galleryDetail
-      .open(index, {
-        thumbsOrientation: 'bottom',
-        panelClass: ['gallery-detail-first'],
-        documentScroll: true,
-        loading: 'lazy'
-      })
-      .load(await this.images.toPromise());
+  async openFirst(event: ImageClickEvent) {
+    // this.galleryDetail
+    //   .open(event.index, {
+    //     thumbsOrientation: 'bottom',
+    //     panelClass: ['gallery-detail'],
+    //     documentScroll: true,
+    //     loading: 'lazy'
+    //   })
+    //   .load(await this.images.toPromise());
   }
 
   onImageLoad() {}

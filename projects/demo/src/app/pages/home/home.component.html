@@ -125,8 +125,6 @@
 </form>
 
 <ngx-gallery
-  #gallery
-  class="first"
   *ngIf="displayGallery"
   [items]="images | async"
   [arrows]="arrows"
@@ -143,7 +141,7 @@
   [thumbsScrollBehavior]="thumbsScrollBehavior"
   [thumbsOverscrollBehavior]="thumbsOverscrollBehavior"
   [thumbsImageFit]="thumbsImageFit"
-  (imageClick)="openFirst(gallery.selectedIndex)"
+  (imageClick)="openFirst($event)"
 ></ngx-gallery>
 
 <ng-template #loadingTemplate>

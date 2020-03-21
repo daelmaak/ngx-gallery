@@ -18,26 +18,33 @@
     #items
     *ngFor="let item of items; let i = index"
     ondragstart="return false"
-    (click)="imageClick.emit($event)"
+    (click)="onImageClick(item, $event)"
   >
     <ng-container *ngIf="!itemTemplate; else customTemplate">
       <img
-        *ngIf="!isYoutube(item); else youtube"
+        *ngIf="!isYoutube(item) && !item.video"
         [src]="getSrc(item)"
         [alt]="item.alt"
         [class.loading]="item._visited && !item._loaded"
         [style.objectFit]="imageFit"
         (load)="onItemLoaded(item, $event)"
       />
-      <ng-template #youtube>
-        <iframe
-          [src]="getSrc(item) | safe"
-          frameborder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          (load)="onItemLoaded(item, $event)"
-        ></iframe>
-      </ng-template>
+      <video
+        *ngIf="!isYoutube(item) && item.video"
+        [src]="getSrc(item)"
+        [class.loading]="item._visited && !item._loaded"
+        controls
+        playsinline
+        (loadeddata)="onItemLoaded(item, $event)"
+      ></video>
+      <iframe
+        *ngIf="isYoutube(item)"
+        [src]="getSrc(item) | safe"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        (load)="onItemLoaded(item, $event)"
+      ></iframe>
     </ng-container>
 
     <ng-template #customTemplate>

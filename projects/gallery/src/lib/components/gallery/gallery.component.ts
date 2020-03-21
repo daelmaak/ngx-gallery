@@ -27,6 +27,7 @@ import {
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 import { ItemTemplateContext } from '../../core/template-contexts';
+import { ImageClickEvent } from '../image-viewer/image-viewer.model';
 
 @Component({
   selector: 'ngx-gallery',
@@ -99,7 +100,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   thumbTemplate: TemplateRef<any>;
 
   @Output()
-  imageClick = new EventEmitter<Event>();
+  imageClick = new EventEmitter<ImageClickEvent>();
 
   @Output()
   thumbClick = new EventEmitter<Event>();
@@ -168,6 +169,12 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   @HostListener('keydown.arrowleft')
   prev() {
     this.imageViewer.prev();
+  }
+
+  onImageClick(event: ImageClickEvent) {
+    // give back original item, not the internal
+    event.item = this.items[event.index];
+    this.imageClick.emit(event);
   }
 
   select(index: number) {

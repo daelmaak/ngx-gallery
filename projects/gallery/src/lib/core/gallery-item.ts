@@ -2,6 +2,7 @@ export interface GalleryItem {
   src: string;
   thumbSrc?: string;
   alt?: string;
+  video?: boolean;
   data?: any;
 }
 
