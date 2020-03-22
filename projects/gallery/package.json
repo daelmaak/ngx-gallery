@@ -1,13 +1,13 @@
 {
   "name": "@ngx-imagery/gallery",
-  "version": "0.1.0-alpha.18",
+  "version": "0.1.0-alpha.19",
   "license": "Apache-2.0",
   "author": {
     "name": "Daniel Macak",
     "email": "daniel.macak@email.cz",
     "url": "https://github.com/daelmaak"
   },
-  "homepage": "https://github.com/daelmaak/ngx-imagery",
+  "homepage": "https://daelmaak.github.io/ngx-imagery/",
   "repository": {
     "type": "git",
     "url": "https://github.com/daelmaak/ngx-imagery.git"

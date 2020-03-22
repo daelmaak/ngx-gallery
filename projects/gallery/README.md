@@ -1,8 +1,10 @@
-# Project Gallery (Still in alpha!)
+# Angular 8+ Image Gallery (Still in alpha!)
 
-Gallery component for beautiful display of your media assets.
+Performant, responsive, easy to use gallery
 
 [**DEMO**](https://daelmaak.github.io/ngx-imagery/)
+
+[**Stackblitz**](https://stackblitz.com/edit/ngx-imagery)
 
 ## Installation
 
@@ -45,3 +47,36 @@ In your component template
 ## Docs
 
 - [Gallery API](https://github.com/daelmaak/ngx-imagery/wiki/Gallery-API)
+
+```
+
+## Development
+
+### Build
+
+In the root of the project, run
+
+```
+
+npm ci
+npm run build
+
+```
+
+### Serve
+
+```
+
+npm start
+
+```
+
+### Test
+
+```
+
+npm test
+
+```
+
+```
