@@ -293,7 +293,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         .toArray()
         [this.selectedIndex].nativeElement.querySelector('video');
 
-      videoEl.pause();
+      if (videoEl) {
+        videoEl.pause();
+      }
     }
 
     this.markAsVisitedIfNeeded(index);
