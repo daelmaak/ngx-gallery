@@ -21,7 +21,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import {
   clientSide,
-  ImageFit,
+  ObjectFit,
   Loading,
   Orientation,
   UA,
@@ -60,7 +60,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   imageCounterOrientation: VerticalOrientation;
 
   @Input()
-  imageFit: ImageFit;
+  objectFit: ObjectFit;
 
   @Input()
   loading: Loading;
@@ -140,7 +140,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.imageCounter === undefined && (this.imageCounter = true);
     this.imageCounterOrientation == null &&
       (this.imageCounterOrientation = 'top');
-    this.imageFit == null && (this.imageFit = 'contain');
+    this.objectFit == null && (this.objectFit = 'contain');
 
     if (clientSide) {
       const opts = {

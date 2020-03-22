@@ -24,7 +24,7 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
       [items]="(galleryDetailRef?.state | async)?.items"
       [arrows]="config.arrows"
       [imageCounter]="config.imageCounter"
-      [imageFit]="config.imageFit"
+      [objectFit]="config.objectFit"
       [itemTemplate]="config.itemTemplate"
       [loading]="config.loading"
       [loop]="config.loop"

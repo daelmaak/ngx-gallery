@@ -34,7 +34,7 @@ import {
 
 import { clientSide, SUPPORT } from '../../core';
 import { GalleryItem } from '../../core/gallery-item';
-import { ImageFit } from '../../core/image-fit';
+import { ObjectFit } from '../../core/object-fit';
 import { Orientation } from '../../core/orientation';
 import { OverscrollBehavior } from '../../core/overscroll-behavior';
 
@@ -66,7 +66,7 @@ export class ThumbnailsComponent
   autoScroll: boolean;
 
   @Input()
-  imageFit: ImageFit;
+  objectFit: ObjectFit;
 
   @Input()
   set scrollBehavior(val: ScrollBehavior) {
@@ -150,7 +150,7 @@ export class ThumbnailsComponent
   }
 
   ngOnInit() {
-    this.imageFit == null && (this.imageFit = 'cover');
+    this.objectFit == null && (this.objectFit = 'cover');
     this.autoScroll === undefined && (this.autoScroll = true);
     this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
     this.overscrollBehavior == null && (this.overscrollBehavior = 'auto');

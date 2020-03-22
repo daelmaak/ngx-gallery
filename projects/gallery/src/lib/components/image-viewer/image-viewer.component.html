@@ -22,7 +22,7 @@
         [src]="getSrc(item)"
         [alt]="item.alt"
         [class.loading]="item._visited && !item._loaded"
-        [style.objectFit]="imageFit"
+        [style.objectFit]="objectFit"
         (load)="onItemLoaded(item, $event)"
       />
       <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
@@ -30,6 +30,7 @@
         *ngIf="!isYoutube(item) && item.video"
         [src]="getSrc(item)"
         [class.loading]="item._visited && !item._loaded"
+        [style.objectFit]="objectFit"
         controls
         playsinline
         (loadedmetadata)="onItemLoaded(item, $event)"

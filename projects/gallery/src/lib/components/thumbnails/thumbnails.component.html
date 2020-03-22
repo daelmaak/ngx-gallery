@@ -18,7 +18,7 @@
       *ngIf="!thumbTemplate; else customTemplate"
       [src]="item.thumbSrc || item.src"
       [alt]="item.alt"
-      [style.objectFit]="imageFit"
+      [style.objectFit]="objectFit"
     />
     <ng-template #customTemplate>
       <ng-container

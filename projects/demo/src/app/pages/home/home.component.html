@@ -22,7 +22,7 @@
 
   <section>
     <label>Image fit:</label>
-    <mat-radio-group name="imageFit" [(ngModel)]="imageFit">
+    <mat-radio-group name="objectFit" [(ngModel)]="objectFit">
       <mat-radio-button value="contain">contain</mat-radio-button>
       <mat-radio-button value="cover">cover</mat-radio-button>
     </mat-radio-group>
@@ -90,7 +90,7 @@
 
   <section>
     <label>Thumbnail image fit:</label>
-    <mat-radio-group name="thumbsImageFit" [(ngModel)]="thumbsImageFit">
+    <mat-radio-group name="thumbsObjectFit" [(ngModel)]="thumbsObjectFit">
       <mat-radio-button value="contain">contain</mat-radio-button>
       <mat-radio-button value="cover">cover</mat-radio-button>
     </mat-radio-group>
@@ -130,7 +130,7 @@
   [arrows]="arrows"
   [imageCounter]="imageCounter"
   [imageCounterOrientation]="imageCounterOrientation"
-  [imageFit]="imageFit"
+  [objectFit]="objectFit"
   [loading]="loading"
   [loop]="loop"
   [thumbs]="thumbs"
@@ -140,7 +140,7 @@
   [thumbsArrowSlideByLength]="thumbsArrowSlideByLength"
   [thumbsScrollBehavior]="thumbsScrollBehavior"
   [thumbsOverscrollBehavior]="thumbsOverscrollBehavior"
-  [thumbsImageFit]="thumbsImageFit"
+  [thumbsObjectFit]="thumbsObjectFit"
   (imageClick)="openFirst($event)"
 ></ngx-gallery>
 

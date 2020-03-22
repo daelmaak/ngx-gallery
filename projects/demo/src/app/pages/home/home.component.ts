@@ -15,7 +15,7 @@ import {
 import {
   GalleryComponent,
   GalleryItem,
-  ImageFit,
+  ObjectFit,
   Loading,
   Orientation,
   OverscrollBehavior,
@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
   arrows = !this.mobile;
   imageCounter = true;
   imageCounterOrientation: VerticalOrientation = 'top';
-  imageFit: ImageFit = 'contain';
+  objectFit: ObjectFit = 'contain';
   loading: Loading = 'lazy';
   loop = true;
   thumbs = true;
@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
   thumbsArrowSlideByLength = 0;
   thumbsScrollBehavior: ScrollBehavior = 'smooth';
   thumbsOverscrollBehavior: OverscrollBehavior = 'auto';
-  thumbsImageFit: ImageFit = 'cover';
+  thumbsObjectFit: ObjectFit = 'cover';
 
   displayGallery = true;
   imageLoadingLatency = 0;

@@ -19,7 +19,7 @@ import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
 import {
   GalleryItem,
   Loading,
-  ImageFit,
+  ObjectFit,
   Orientation,
   OverscrollBehavior,
   OrientationFlag,
@@ -55,7 +55,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   imageCounterOrientation: VerticalOrientation;
 
   @Input()
-  imageFit: ImageFit;
+  objectFit: ObjectFit;
 
   @Input()
   itemTemplate: TemplateRef<ItemTemplateContext>;
@@ -94,7 +94,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   thumbsOverscrollBehavior: OverscrollBehavior;
 
   @Input()
-  thumbsImageFit: ImageFit;
+  thumbsObjectFit: ObjectFit;
 
   @Input()
   thumbTemplate: TemplateRef<any>;

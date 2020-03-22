@@ -1,6 +1,6 @@
 import { TemplateRef } from '@angular/core';
 import {
-  ImageFit,
+  ObjectFit,
   Loading,
   Orientation,
   OverscrollBehavior
@@ -15,7 +15,7 @@ export interface GalleryDetailConfig {
   // gallery config
   arrows?: boolean;
   imageCounter?: boolean;
-  imageFit?: ImageFit;
+  objectFit?: ObjectFit;
   itemTemplate?: TemplateRef<any>;
   loading?: Loading;
   loop?: boolean;
