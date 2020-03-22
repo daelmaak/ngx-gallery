@@ -9,11 +9,7 @@
   [class.hidden]="imagesHidden"
   [style.transitionDuration]="noAnimation ? '0ms' : ''"
 >
-  <li *ngIf="!items || !items.length" class="initial-item">
-    <div class="loading">
-      <div class="spinner"></div>
-    </div>
-  </li>
+  <li *ngIf="!items?.length" class="initial-item"></li>
   <li
     #items
     *ngFor="let item of items; let i = index"
@@ -63,9 +59,7 @@
     </ng-template>
 
     <ng-container *ngIf="item._visited && !item._loaded && !itemTemplate">
-      <div class="loading" *ngIf="!loadingTemplate; else loadingTemplate">
-        <div class="spinner"></div>
-      </div>
+      <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
     </ng-container>
   </li>
 </ul>
@@ -77,7 +71,7 @@
 </ng-container>
 
 <ngx-image-counter
-  *ngIf="imageCounter"
+  *ngIf="imageCounter && items?.length"
   [itemQuantity]="items?.length"
   [selectedIndex]="selectedIndex"
   [orientation]="imageCounterOrientation"

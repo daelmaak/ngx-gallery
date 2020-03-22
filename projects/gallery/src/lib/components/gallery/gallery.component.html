@@ -25,7 +25,7 @@
   [imageFit]="imageFit"
   [loading]="loading"
   [itemTemplate]="itemTemplate"
-  [loadingTemplate]="loadingTemplate"
+  [loadingTemplate]="loadingTemplate || defaultLoadingTemplate"
   [loop]="loop"
   [galleryMainAxis]="galleryMainAxis"
   [prevArrowTemplate]="prevArrowTemplate"
@@ -33,3 +33,15 @@
   (imageClick)="onImageClick($event)"
   (selection)="_selectInternal($event); thumbnails?.select($event)"
 ></ngx-image-viewer>
+
+<ng-container *ngIf="!_internalItems?.length">
+  <ng-container
+    *ngTemplateOutlet="loadingTemplate || defaultLoadingTemplate"
+  ></ng-container>
+</ng-container>
+
+<ng-template #defaultLoadingTemplate>
+  <div class="loading">
+    <div class="spinner"></div>
+  </div>
+</ng-template>
