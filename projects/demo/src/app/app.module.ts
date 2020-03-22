@@ -8,7 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatRadioModule } from '@angular/material/radio';
 
@@ -23,7 +22,6 @@ const materialModules = [
   MatCheckboxModule,
   MatFormFieldModule,
   MatInputModule,
-  MatMenuModule,
   MatRadioModule,
   MatToolbarModule
 ];
