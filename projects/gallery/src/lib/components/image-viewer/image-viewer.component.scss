@@ -49,6 +49,7 @@ iframe {
   height: 100%;
   background-color: transparent;
   transition: opacity 0.3s ease-out;
+  outline: 0;
 
   &[src=''] {
     opacity: 0;
