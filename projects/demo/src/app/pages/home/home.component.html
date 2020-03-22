@@ -157,15 +157,28 @@
   let-item="item"
   let-visited="visited"
 >
-  <img
-    #img
-    class="custom-image"
-    [src]="visited ? item.src : ''"
-    (load)="onImageLoad()"
-  />
-  <div class="loading" *ngIf="visited && img.naturalHeight <= 0">
-    Loading ...
-  </div>
+  <ng-container *ngIf="item.video; then videoTemplate; else imgTemplate">
+  </ng-container>
+  <ng-template #imgTemplate>
+    <img
+      #img
+      class="custom-media"
+      [src]="visited ? item.src : ''"
+      (load)="onImageLoad()"
+    />
+    <div class="custom-loading" *ngIf="visited && img.naturalHeight <= 0">
+      Custom item loading ...
+    </div>
+  </ng-template>
+  <ng-template #videoTemplate>
+    <video
+      #video
+      class="custom-media"
+      [src]="visited ? item.src : ''"
+      controls
+      (loadedmetadata)="onImageLoad()"
+    ></video>
+  </ng-template>
 </ng-template>
 
 <ng-template
