@@ -98,6 +98,9 @@ THE SOFTWARE.
 @angular/platform-browser
 MIT
 
+@angular/router
+MIT
+
 @ngx-imagery/gallery
 Apache-2.0
 Apache License
