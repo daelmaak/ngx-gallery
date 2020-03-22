@@ -9,46 +9,59 @@
   [class.hidden]="imagesHidden"
   [style.transitionDuration]="noAnimation ? '0ms' : ''"
 >
-  <li *ngIf="!items || !items.length" class="initial-item">
-    <div class="loading">
-      <div class="animation"></div>
-    </div>
-  </li>
+  <li *ngIf="!items?.length" class="initial-item"></li>
   <li
     #items
     *ngFor="let item of items; let i = index"
     ondragstart="return false"
-    (click)="imageClick.emit($event)"
+    (click)="onImageClick(item, $event)"
   >
-    <img
-      *ngIf="!itemTemplate; else customTemplate"
-      [src]="lazyLoading ? '' : item.src"
-      [alt]="item.alt"
-      [attr.data-src]="lazyLoading ? item.src : ''"
-      [class.before-load]="lazyLoading && !item._loaded"
-      [style.objectFit]="imageFit"
-      (load)="onItemLoaded(item)"
-    />
+    <ng-container *ngIf="!itemTemplate; else customTemplate">
+      <img
+        *ngIf="!isYoutube(item) && !item.video"
+        [src]="getSrc(item)"
+        [alt]="item.alt"
+        [class.loading]="item._visited && !item._loaded"
+        [style.objectFit]="objectFit"
+        (load)="onItemLoaded(item, $event)"
+      />
+      <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
+      <video
+        *ngIf="!isYoutube(item) && item.video"
+        [src]="getSrc(item)"
+        [class.loading]="item._visited && !item._loaded"
+        [style.objectFit]="objectFit"
+        controls
+        playsinline
+        (loadedmetadata)="onItemLoaded(item, $event)"
+      ></video>
+      <iframe
+        *ngIf="isYoutube(item)"
+        [src]="getSrc(item) | safe"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        (load)="onItemLoaded(item, $event)"
+      ></iframe>
+
+      <ng-container *ngIf="item._visited && !item._loaded">
+        <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+      </ng-container>
+    </ng-container>
+
     <ng-template #customTemplate>
       <ng-container
         *ngTemplateOutlet="
           itemTemplate;
           context: {
             index: i,
-            selectedIndex: selectedItem,
+            selectedIndex: selectedIndex,
             item: item,
-            loading: item._loading
+            visited: item._visited
           }
         "
       ></ng-container>
     </ng-template>
-
-    <div class="loading" *ngIf="!item._loaded">
-      <div
-        class="animation"
-        [class.active]="(item._loading && !item._loaded) || !lazyLoading"
-      ></div>
-    </div>
   </li>
 </ul>
 
@@ -59,8 +72,8 @@
 </ng-container>
 
 <ngx-image-counter
-  *ngIf="imageCounter"
+  *ngIf="imageCounter && items?.length"
   [itemQuantity]="items?.length"
-  [selectedItem]="selectedItem"
+  [selectedIndex]="selectedIndex"
   [orientation]="imageCounterOrientation"
 ></ngx-image-counter>

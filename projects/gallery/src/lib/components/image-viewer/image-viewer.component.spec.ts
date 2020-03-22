@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ImageViewerComponent } from './image-viewer.component';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
 import { ImageCounterComponent } from '../image-counter/image-counter.component';
+import { SafePipe } from '../../pipes/safe.pipe';
 
 describe('ImageViewerComponent', () => {
   let component: ImageViewerComponent;
@@ -13,7 +14,8 @@ describe('ImageViewerComponent', () => {
       declarations: [
         ImageViewerComponent,
         ChevronIconComponent,
-        ImageCounterComponent
+        ImageCounterComponent,
+        SafePipe
       ]
     }).compileComponents();
   }));

@@ -20,11 +20,11 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
     <ngx-close-icon (click)="close()"></ngx-close-icon>
     <ngx-gallery
       tabindex="0"
-      [selectedItem]="selectedItem || 0"
+      [selectedIndex]="selectedIndex || 0"
       [items]="(galleryDetailRef?.state | async)?.items"
       [arrows]="config.arrows"
       [imageCounter]="config.imageCounter"
-      [imageFit]="config.imageFit"
+      [objectFit]="config.objectFit"
       [itemTemplate]="config.itemTemplate"
       [loading]="config.loading"
       [loop]="config.loop"
@@ -42,7 +42,7 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
 })
 export class GalleryDetailComponent implements OnInit {
   @Input()
-  selectedItem: number;
+  selectedIndex: number;
 
   @Input()
   galleryDetailRef: GalleryDetailRef;

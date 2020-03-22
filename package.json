@@ -15,7 +15,10 @@
     "start:demo": "ng serve --host 0.0.0.0 demo",
     "build": "ng build && ng build --project=gallery-detail",
     "build:demo": "ng build --project=demo --prod --base-href /ngx-imagery/",
-    "test": "ng test",
+    "test": "ng test --watch=false && ng test --project=gallery-detail --watch=false && ng test --project=demo --watch=false",
+    "test:gallery": "ng test",
+    "test:detail": "ng test --project=gallery-detail",
+    "test:demo": "ng test --project=demo",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },

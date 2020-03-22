@@ -21,13 +21,15 @@ import { takeUntil } from 'rxjs/operators';
 
 import {
   clientSide,
-  ImageFit,
+  ObjectFit,
   Loading,
   Orientation,
   UA,
   VerticalOrientation
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
+import { ItemTemplateContext } from '../../core/template-contexts';
+import { ImageClickEvent } from './image-viewer.model';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -43,13 +45,13 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
-  prevArrowTemplate: TemplateRef<any>;
+  prevArrowTemplate: TemplateRef<void>;
 
   @Input()
-  nextArrowTemplate: TemplateRef<any>;
+  nextArrowTemplate: TemplateRef<void>;
 
   @Input()
-  selectedItem: number;
+  selectedIndex: number;
 
   @Input()
   imageCounter: boolean;
@@ -58,13 +60,16 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   imageCounterOrientation: VerticalOrientation;
 
   @Input()
-  imageFit: ImageFit;
+  objectFit: ObjectFit;
 
   @Input()
   loading: Loading;
 
   @Input()
-  itemTemplate: TemplateRef<any>;
+  itemTemplate: TemplateRef<ItemTemplateContext>;
+
+  @Input()
+  loadingTemplate: TemplateRef<void>;
 
   @Input()
   loop: boolean;
@@ -73,13 +78,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   galleryMainAxis: Orientation;
 
   @Output()
-  imageClick = new EventEmitter<Event>();
+  imageClick = new EventEmitter<ImageClickEvent>();
 
   @Output()
   selection = new EventEmitter<number>();
 
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
-
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
   imagesHidden = true;
@@ -99,12 +103,13 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   get showPrevArrow() {
-    return this.showArrow && (this.selectedItem > 0 || this.loop);
+    return this.showArrow && (this.selectedIndex > 0 || this.loop);
   }
 
   get showNextArrow() {
     return (
-      this.showArrow && (this.selectedItem < this.items.length - 1 || this.loop)
+      this.showArrow &&
+      (this.selectedIndex < this.items.length - 1 || this.loop)
     );
   }
 
@@ -127,13 +132,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     // late initialization; in case the gallery items come later
     if (items && items.currentValue) {
       this.onResize();
-
-      if (this.lazyLoading) {
-        setTimeout(() => {
-          this.loadLazily(this.selectedItem);
-          this.cd.detectChanges();
-        });
-      }
+      setTimeout(() => this.markAsVisitedIfNeeded(this.selectedIndex));
     }
   }
 
@@ -141,7 +140,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.imageCounter === undefined && (this.imageCounter = true);
     this.imageCounterOrientation == null &&
       (this.imageCounterOrientation = 'top');
-    this.imageFit == null && (this.imageFit = 'contain');
+    this.objectFit == null && (this.objectFit = 'contain');
 
     if (clientSide) {
       const opts = {
@@ -255,16 +254,24 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  getSrc(item: GalleryItemInternal) {
+    return this.lazyLoading && !item._visited ? '' : item.src;
+  }
+
+  isYoutube(item: GalleryItemInternal) {
+    return !!item.src.match(/youtube.*\/embed\//);
+  }
+
   prev() {
-    this.select(this.selectedItem - 1);
+    this.select(this.selectedIndex - 1);
   }
 
   next() {
-    this.select(this.selectedItem + 1);
+    this.select(this.selectedIndex + 1);
   }
 
   select(index: number) {
-    if (this.selectedItem === index) {
+    if (this.selectedIndex === index) {
       this.center();
       return;
     }
@@ -280,36 +287,52 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       index = 0;
     }
 
-    if (this.lazyLoading) {
-      this.loadLazily(index);
+    // stop video when navigating away from it
+    if (this.items[this.selectedIndex].video) {
+      const videoEl: HTMLMediaElement = this.itemsRef
+        .toArray()
+        [this.selectedIndex].nativeElement.querySelector('video');
+
+      if (videoEl) {
+        videoEl.pause();
+      }
     }
 
-    this.selectedItem = index;
+    this.markAsVisitedIfNeeded(index);
+
+    this.selectedIndex = index;
     this.selection.emit(index);
     this.center();
   }
 
-  onItemLoaded(item: GalleryItemInternal) {
-    item._loaded = true;
-    item._loading = false;
+  onImageClick(item: GalleryItemInternal, event: Event) {
+    this.imageClick.emit({
+      event,
+      item,
+      index: this.items.indexOf(item)
+    });
+  }
+
+  onItemLoaded(item: GalleryItemInternal, loadEvent: Event) {
+    const target = loadEvent.target as HTMLElement;
+
+    // elements with empty src also get loaded event, therefore the check
+    if (target.getAttribute('src')) {
+      item._loaded = true;
+    }
   }
 
   private center() {
-    const shift = this.selectedItem * this.itemWidth;
+    const shift = this.selectedIndex * this.itemWidth;
 
     this.shiftImages(shift);
   }
 
-  private loadLazily(index: number) {
-    if (this.itemsRef && !this.itemTemplate) {
-      const itemEl = this.itemsRef.toArray()[index].nativeElement;
-      const img = itemEl.querySelector('img');
-
-      if (!img.getAttribute('src')) {
-        img.src = img.dataset.src;
-        img.dataset.src = '';
-        this.items[index]._loading = true;
-      }
+  private markAsVisitedIfNeeded(index: number) {
+    const item = this.items[index];
+    if (!item._visited) {
+      item._visited = true;
+      this.cd.markForCheck();
     }
   }
 
@@ -329,7 +352,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private selectBySwipeStats(time: number, distance: number) {
     if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
-      this.select(this.selectedItem + Math.sign(distance));
+      this.select(this.selectedIndex + Math.sign(distance));
     } else {
       this.select(Math.round(this.listX / this.itemWidth));
     }
@@ -342,6 +365,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private shiftImagesByDelta = (delta: number) => {
-    this.shiftImages(this.selectedItem * this.itemWidth + delta);
+    this.shiftImages(this.selectedIndex * this.itemWidth + delta);
   };
 }

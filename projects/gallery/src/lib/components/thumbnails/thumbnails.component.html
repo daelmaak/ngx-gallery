@@ -11,20 +11,20 @@
   <li *ngIf="!items || !items.length"></li>
   <li
     *ngFor="let item of items; let i = index"
-    [class.selected]="i === selectedItem"
+    [class.selected]="i === selectedIndex"
     (click)="selection.emit(i); thumbClick.emit($event)"
   >
     <img
       *ngIf="!thumbTemplate; else customTemplate"
       [src]="item.thumbSrc || item.src"
       [alt]="item.alt"
-      [style.objectFit]="imageFit"
+      [style.objectFit]="objectFit"
     />
     <ng-template #customTemplate>
       <ng-container
         *ngTemplateOutlet="
           thumbTemplate;
-          context: { index: i, selectedIndex: selectedItem, item: item }
+          context: { index: i, selectedIndex: selectedIndex, item: item }
         "
       ></ng-container>
     </ng-template>

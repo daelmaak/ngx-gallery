@@ -1,12 +1,12 @@
 <ngx-thumbnails
   *ngIf="thumbs"
-  [items]="items"
-  [selectedItem]="selectedItem"
+  [items]="_internalItems"
+  [selectedIndex]="selectedIndex"
   [orientation]="thumbsOrientation"
   [arrows]="thumbsArrows"
   [arrowSlideByLength]="thumbsArrowSlideByLength"
   [autoScroll]="thumbsAutoScroll"
-  [imageFit]="thumbsImageFit"
+  [objectFit]="thumbsObjectFit"
   [scrollBehavior]="thumbsScrollBehavior"
   [overscrollBehavior]="thumbsOverscrollBehavior"
   [thumbTemplate]="thumbTemplate"
@@ -17,18 +17,31 @@
 <ngx-image-viewer
   tabindex="0"
   ngxNoMoveClick
-  [items]="items"
-  [selectedItem]="selectedItem"
+  [items]="_internalItems"
+  [selectedIndex]="selectedIndex"
   [arrows]="arrows"
   [imageCounter]="imageCounter"
   [imageCounterOrientation]="imageCounterOrientation"
-  [imageFit]="imageFit"
+  [objectFit]="objectFit"
   [loading]="loading"
   [itemTemplate]="itemTemplate"
+  [loadingTemplate]="loadingTemplate || defaultLoadingTemplate"
   [loop]="loop"
   [galleryMainAxis]="galleryMainAxis"
   [prevArrowTemplate]="prevArrowTemplate"
   [nextArrowTemplate]="nextArrowTemplate"
-  (imageClick)="imageClick.emit($event)"
+  (imageClick)="onImageClick($event)"
   (selection)="_selectInternal($event); thumbnails?.select($event)"
 ></ngx-image-viewer>
+
+<ng-container *ngIf="!_internalItems?.length">
+  <ng-container
+    *ngTemplateOutlet="loadingTemplate || defaultLoadingTemplate"
+  ></ng-container>
+</ng-container>
+
+<ng-template #defaultLoadingTemplate>
+  <div class="loading">
+    <div class="spinner"></div>
+  </div>
+</ng-template>

@@ -1,0 +1,108 @@
+:host {
+  display: block;
+  min-height: 1000px;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+section {
+  margin-bottom: 15px;
+}
+
+mat-checkbox {
+  display: block;
+}
+
+mat-radio-button {
+  margin-left: 20px;
+}
+
+mat-form-field {
+  label {
+    white-space: nowrap;
+  }
+}
+
+ngx-gallery {
+  width: 100%;
+  margin-bottom: 300px;
+
+  ::ng-deep {
+    ngx-image-viewer {
+      img {
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .gallery-detail {
+    ngx-gallery {
+      width: 100vw;
+      height: 100vh;
+      max-width: 900px;
+      max-height: 800px;
+
+      @media (max-width: 767px) {
+        width: auto;
+      }
+
+      img {
+        margin: 0 auto;
+      }
+
+      ngx-image-viewer {
+        .next {
+          right: 30px;
+        }
+
+        .prev {
+          left: 30px;
+        }
+      }
+    }
+  }
+}
+
+section {
+  button {
+    margin-left: 20px;
+  }
+}
+
+:host::ng-deep .image-loading-latency {
+  .mat-form-field-infix {
+    width: auto;
+  }
+}
+
+.custom-media {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  outline: 0;
+
+  &[src=''] {
+    // do not show media if not started to load yet
+    opacity: 0;
+  }
+}
+
+.custom-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: white;
+  opacity: 0.8;
+}

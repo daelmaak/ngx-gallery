@@ -10,19 +10,24 @@ import {
   ViewChild,
   TemplateRef,
   HostListener,
-  ElementRef
+  ElementRef,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
 import {
   GalleryItem,
   Loading,
-  ImageFit,
+  ObjectFit,
   Orientation,
   OverscrollBehavior,
   OrientationFlag,
   VerticalOrientation
 } from '../../core';
+import { GalleryItemInternal } from '../../core/gallery-item';
+import { ItemTemplateContext } from '../../core/template-contexts';
+import { ImageClickEvent } from '../image-viewer/image-viewer.model';
 
 @Component({
   selector: 'ngx-gallery',
@@ -30,12 +35,12 @@ import {
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GalleryComponent implements OnInit, OnDestroy {
+export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   items: GalleryItem[];
 
   @Input()
-  selectedItem = 0;
+  selectedIndex: number;
 
   @Input()
   arrows: boolean;
@@ -50,19 +55,22 @@ export class GalleryComponent implements OnInit, OnDestroy {
   imageCounterOrientation: VerticalOrientation;
 
   @Input()
-  imageFit: ImageFit;
+  objectFit: ObjectFit;
 
   @Input()
-  itemTemplate: TemplateRef<any>;
+  itemTemplate: TemplateRef<ItemTemplateContext>;
+
+  @Input()
+  loadingTemplate: TemplateRef<void>;
 
   @Input()
   loop: boolean;
 
   @Input()
-  prevArrowTemplate: TemplateRef<any>;
+  prevArrowTemplate: TemplateRef<void>;
 
   @Input()
-  nextArrowTemplate: TemplateRef<any>;
+  nextArrowTemplate: TemplateRef<void>;
 
   @Input()
   thumbs: boolean;
@@ -86,13 +94,13 @@ export class GalleryComponent implements OnInit, OnDestroy {
   thumbsOverscrollBehavior: OverscrollBehavior;
 
   @Input()
-  thumbsImageFit: ImageFit;
+  thumbsObjectFit: ObjectFit;
 
   @Input()
   thumbTemplate: TemplateRef<any>;
 
   @Output()
-  imageClick = new EventEmitter<Event>();
+  imageClick = new EventEmitter<ImageClickEvent>();
 
   @Output()
   thumbClick = new EventEmitter<Event>();
@@ -108,6 +116,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @ViewChild(ImageViewerComponent, { static: false, read: ElementRef })
   imageViewerEl: ElementRef<HTMLElement>;
+
+  _internalItems: GalleryItemInternal[];
 
   @HostBinding('class.column')
   get galleryCollumn() {
@@ -128,10 +138,18 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   constructor() {}
 
+  ngOnChanges({ items }: SimpleChanges) {
+    if (items && items.currentValue) {
+      const incomingItems = items.currentValue as GalleryItem[];
+      this._internalItems = incomingItems.map(item => ({ ...item }));
+    }
+  }
+
   ngOnInit() {
     this.arrows === undefined && (this.arrows = true);
     this.loop === undefined && (this.loop = true);
     this.loading == null && (this.loading = 'auto');
+    this.selectedIndex == null && (this.selectedIndex = 0);
     this.thumbs === undefined && (this.thumbs = true);
     this.thumbsArrows === undefined && (this.thumbsArrows = true);
     this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
@@ -153,6 +171,12 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.imageViewer.prev();
   }
 
+  onImageClick(event: ImageClickEvent) {
+    // give back original item, not the internal
+    event.item = this.items[event.index];
+    this.imageClick.emit(event);
+  }
+
   select(index: number) {
     this.imageViewer.select(index);
     this.thumbnails.select(index);
@@ -160,7 +184,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   _selectInternal(index: number) {
-    this.selectedItem = index;
+    this.selectedIndex = index;
     this.selection.emit(this.items[index]);
   }
 }

@@ -34,7 +34,7 @@ import {
 
 import { clientSide, SUPPORT } from '../../core';
 import { GalleryItem } from '../../core/gallery-item';
-import { ImageFit } from '../../core/image-fit';
+import { ObjectFit } from '../../core/object-fit';
 import { Orientation } from '../../core/orientation';
 import { OverscrollBehavior } from '../../core/overscroll-behavior';
 
@@ -50,7 +50,7 @@ export class ThumbnailsComponent
   items: GalleryItem[] = [];
 
   @Input()
-  selectedItem: number;
+  selectedIndex: number;
 
   @Input()
   @HostBinding('class')
@@ -66,7 +66,7 @@ export class ThumbnailsComponent
   autoScroll: boolean;
 
   @Input()
-  imageFit: ImageFit;
+  objectFit: ObjectFit;
 
   @Input()
   set scrollBehavior(val: ScrollBehavior) {
@@ -144,13 +144,13 @@ export class ThumbnailsComponent
         this.updateArrows();
       }
       if (!items.previousValue || !items.previousValue.length) {
-        setTimeout(() => this.centerThumbIfNeeded(this.selectedItem));
+        setTimeout(() => this.centerThumbIfNeeded(this.selectedIndex));
       }
     }
   }
 
   ngOnInit() {
-    this.imageFit == null && (this.imageFit = 'cover');
+    this.objectFit == null && (this.objectFit = 'cover');
     this.autoScroll === undefined && (this.autoScroll = true);
     this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
     this.overscrollBehavior == null && (this.overscrollBehavior = 'auto');
@@ -165,7 +165,7 @@ export class ThumbnailsComponent
   }
 
   ngAfterViewInit() {
-    this.centerThumbIfNeeded(this.selectedItem);
+    this.centerThumbIfNeeded(this.selectedIndex);
     this.smoothScrollAllowed = true;
   }
 
