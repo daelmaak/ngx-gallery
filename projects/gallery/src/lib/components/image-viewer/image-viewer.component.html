@@ -29,13 +29,14 @@
         [style.objectFit]="imageFit"
         (load)="onItemLoaded(item, $event)"
       />
+      <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
       <video
         *ngIf="!isYoutube(item) && item.video"
         [src]="getSrc(item)"
         [class.loading]="item._visited && !item._loaded"
         controls
         playsinline
-        (loadeddata)="onItemLoaded(item, $event)"
+        (loadedmetadata)="onItemLoaded(item, $event)"
       ></video>
       <iframe
         *ngIf="isYoutube(item)"
