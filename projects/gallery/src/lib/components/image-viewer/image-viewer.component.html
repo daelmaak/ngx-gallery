@@ -43,6 +43,10 @@
         allowfullscreen
         (load)="onItemLoaded(item, $event)"
       ></iframe>
+
+      <ng-container *ngIf="item._visited && !item._loaded">
+        <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+      </ng-container>
     </ng-container>
 
     <ng-template #customTemplate>
@@ -58,10 +62,6 @@
         "
       ></ng-container>
     </ng-template>
-
-    <ng-container *ngIf="item._visited && !item._loaded && !itemTemplate">
-      <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
-    </ng-container>
   </li>
 </ul>
 
