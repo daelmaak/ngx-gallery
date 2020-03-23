@@ -2,9 +2,11 @@
 
 Performant, responsive, easy to use gallery
 
-[**DEMO**](https://daelmaak.github.io/ngx-imagery/)
+[**Demo**](https://daelmaak.github.io/ngx-imagery/)
 
 [**Stackblitz**](https://stackblitz.com/edit/ngx-imagery)
+
+[**Docs**](https://github.com/daelmaak/ngx-imagery/wiki/Gallery-API)
 
 ## Installation
 
@@ -44,12 +46,6 @@ In your component template
 <ngx-gallery [items]="images"></ngx-gallery>
 ```
 
-## Docs
-
-- [Gallery API](https://github.com/daelmaak/ngx-imagery/wiki/Gallery-API)
-
-```
-
 ## Development
 
 ### Build
@@ -57,26 +53,18 @@ In your component template
 In the root of the project, run
 
 ```
-
 npm ci
 npm run build
-
 ```
 
 ### Serve
 
 ```
-
 npm start
-
 ```
 
 ### Test
 
 ```
-
 npm test
-
-```
-
 ```
