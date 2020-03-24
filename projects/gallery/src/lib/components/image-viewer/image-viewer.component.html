@@ -13,6 +13,7 @@
   <li
     #items
     *ngFor="let item of items; let i = index"
+    [class.selected]="i === selectedIndex"
     ondragstart="return false"
     (click)="onImageClick(item, $event)"
   >
