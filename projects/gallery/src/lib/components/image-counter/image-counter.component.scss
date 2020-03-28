@@ -4,23 +4,20 @@ $borderRadius: 4px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  background: #555353;
+  background: #222;
   padding: 2px 5px;
-  color: white;
+  color: #e3e3e3;
   opacity: 0.8;
   font-size: 15px;
   font-family: Arial;
   user-select: none;
+  box-shadow: 0 0 2px black;
 
   &.top {
     top: 0;
-    border-bottom-left-radius: $borderRadius;
-    border-bottom-right-radius: $borderRadius;
   }
 
   &.bottom {
     bottom: 0;
-    border-top-left-radius: $borderRadius;
-    border-top-right-radius: $borderRadius;
   }
 }

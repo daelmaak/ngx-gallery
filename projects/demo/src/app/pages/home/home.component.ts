@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit {
   mobile = matchMedia('(max-width: 767px)').matches;
 
   arrows = !this.mobile;
+  descriptions = false;
   imageCounter = true;
   imageCounterOrientation: VerticalOrientation = 'top';
   objectFit: ObjectFit = 'contain';
@@ -64,11 +65,14 @@ export class HomeComponent implements OnInit {
     this.images = of([
       {
         src: './assets/kitten4.jpg',
-        alt: 'Kitten 4'
+        alt: 'Kitten 4',
+        description:
+          '<i>Lovely</i> kitten that <strong>will</strong> make your day way more enjoyable'
       },
       {
         src: './assets/kitten3.jpg',
-        alt: 'Kitten 3'
+        alt: 'Kitten 3',
+        description: 'Beautiful kitten'
       },
       {
         src:

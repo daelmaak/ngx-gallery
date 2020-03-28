@@ -15,6 +15,11 @@ export interface GalleryItem {
   alt?: string;
 
   /**
+   * Description that is to be shown in on the currently displayed gallery item
+   */
+  description?: string;
+
+  /**
    * Makes item's media be rendered as HTML video.
    * This property doesn't mark youtube videos. Those don't need this flag as they are recongnized automatically
    */

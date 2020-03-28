@@ -65,6 +65,31 @@ img {
   pointer-events: none;
 }
 
+.description-container {
+  position: absolute;
+  bottom: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  &.above-counter {
+    bottom: 35px;
+  }
+}
+
+.description {
+  display: inline-block;
+  background: #222;
+  opacity: 0.8;
+  color: #e3e3e3;
+  padding: 6px 15px;
+  letter-spacing: 0.04em;
+  max-width: 80%;
+  transition: opacity 0.3s;
+  box-shadow: 0 0 2px black;
+  text-align: center;
+}
+
 ngx-chevron-icon {
   $icon-dimension: 32px;
 
