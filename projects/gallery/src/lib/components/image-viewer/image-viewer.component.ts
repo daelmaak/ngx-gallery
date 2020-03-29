@@ -328,6 +328,14 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
+  onItemErrored(item: GalleryItemInternal, errEvent: Event) {
+    const target = errEvent.target as HTMLElement;
+
+    if (target.getAttribute('src')) {
+      item._failed = true;
+    }
+  }
+
   private center() {
     const shift = this.selectedIndex * this.itemWidth;
 

@@ -89,6 +89,38 @@ img {
   text-align: center;
 }
 
+.error {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  background: #222;
+  color: #e3e3e3;
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #dc3d3d;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 38px;
+    font-weight: 600;
+    color: #dc3d3d;
+  }
+
+  .text {
+    margin-top: 20px;
+    letter-spacing: 0.04em;
+  }
+}
+
 ngx-chevron-icon {
   $icon-dimension: 32px;
 

@@ -25,6 +25,7 @@
         [class.loading]="item._visited && !item._loaded"
         [style.objectFit]="objectFit"
         (load)="onItemLoaded(item, $event)"
+        (error)="onItemErrored(item, $event)"
       />
       <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
       <video
@@ -35,6 +36,7 @@
         controls
         playsinline
         (loadedmetadata)="onItemLoaded(item, $event)"
+        (error)="onItemErrored(item, $event)"
       ></video>
       <iframe
         *ngIf="isYoutube(item)"
@@ -48,6 +50,10 @@
       <ng-container *ngIf="item._visited && !item._loaded">
         <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
       </ng-container>
+      <div *ngIf="item._failed" class="error">
+        <div class="icon">!</div>
+        <p class="text">{{ errorText || 'Loading of this media failed' }}</p>
+      </div>
     </ng-container>
 
     <ng-template #customTemplate>
