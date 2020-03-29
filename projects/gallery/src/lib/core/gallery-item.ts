@@ -15,7 +15,7 @@ export interface GalleryItem {
   alt?: string;
 
   /**
-   * Description that is to be shown in on the currently displayed gallery item
+   * Description that is to be shown on the currently displayed gallery item
    */
   description?: string;
 
