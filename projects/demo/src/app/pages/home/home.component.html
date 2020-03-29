@@ -4,6 +4,12 @@
   </section>
 
   <section>
+    <mat-checkbox name="descriptions" [(ngModel)]="descriptions">
+      Descriptions
+    </mat-checkbox>
+  </section>
+
+  <section>
     <mat-checkbox name="imageCounter" [(ngModel)]="imageCounter"
       >Image counter</mat-checkbox
     >
@@ -128,6 +134,7 @@
   *ngIf="displayGallery"
   [items]="images | async"
   [arrows]="arrows"
+  [descriptions]="descriptions"
   [imageCounter]="imageCounter"
   [imageCounterOrientation]="imageCounterOrientation"
   [objectFit]="objectFit"
@@ -142,6 +149,7 @@
   [thumbsOverscrollBehavior]="thumbsOverscrollBehavior"
   [thumbsObjectFit]="thumbsObjectFit"
   (imageClick)="openFirst($event)"
+  (descriptionClick)="descriptions = false"
 ></ngx-gallery>
 
 <ng-template #loadingTemplate>

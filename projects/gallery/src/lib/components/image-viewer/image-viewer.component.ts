@@ -54,16 +54,22 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   selectedIndex: number;
 
   @Input()
+  descriptions: boolean;
+
+  @Input()
   imageCounter: boolean;
 
   @Input()
   imageCounterOrientation: VerticalOrientation;
 
   @Input()
-  objectFit: ObjectFit;
+  loading: Loading;
 
   @Input()
-  loading: Loading;
+  loop: boolean;
+
+  @Input()
+  objectFit: ObjectFit;
 
   @Input()
   itemTemplate: TemplateRef<ItemTemplateContext>;
@@ -72,13 +78,13 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   loadingTemplate: TemplateRef<void>;
 
   @Input()
-  loop: boolean;
-
-  @Input()
   galleryMainAxis: Orientation;
 
   @Output()
   imageClick = new EventEmitter<ImageClickEvent>();
+
+  @Output()
+  descriptionClick = new EventEmitter<Event>();
 
   @Output()
   selection = new EventEmitter<number>();

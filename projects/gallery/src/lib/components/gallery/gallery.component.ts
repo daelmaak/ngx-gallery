@@ -23,10 +23,10 @@ import {
   Orientation,
   OverscrollBehavior,
   OrientationFlag,
-  VerticalOrientation
+  VerticalOrientation,
+  ItemTemplateContext
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
-import { ItemTemplateContext } from '../../core/template-contexts';
 import { ImageClickEvent } from '../image-viewer/image-viewer.model';
 
 @Component({
@@ -46,13 +46,19 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
-  loading: Loading;
+  descriptions: boolean;
 
   @Input()
   imageCounter: boolean;
 
   @Input()
   imageCounterOrientation: VerticalOrientation;
+
+  @Input()
+  loading: Loading;
+
+  @Input()
+  loop: boolean;
 
   @Input()
   objectFit: ObjectFit;
@@ -62,9 +68,6 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   loadingTemplate: TemplateRef<void>;
-
-  @Input()
-  loop: boolean;
 
   @Input()
   prevArrowTemplate: TemplateRef<void>;
@@ -104,6 +107,9 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
 
   @Output()
   thumbClick = new EventEmitter<Event>();
+
+  @Output()
+  descriptionClick = new EventEmitter<Event>();
 
   @Output()
   selection = new EventEmitter<GalleryItem>();
@@ -147,6 +153,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnInit() {
     this.arrows === undefined && (this.arrows = true);
+    this.descriptions == null && (this.descriptions = true);
     this.loop === undefined && (this.loop = true);
     this.loading == null && (this.loading = 'auto');
     this.selectedIndex == null && (this.selectedIndex = 0);
