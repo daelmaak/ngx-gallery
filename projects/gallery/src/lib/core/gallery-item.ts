@@ -46,4 +46,9 @@ export interface GalleryItemInternal extends GalleryItem {
    * `true` when media couldn't be loaded
    */
   _failed?: boolean;
+
+  /**
+   * `true` when thumbnail couldn't be loaded
+   */
+  _thumbFailed?: boolean;
 }

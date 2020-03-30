@@ -33,7 +33,7 @@ import {
 } from 'rxjs/operators';
 
 import { clientSide, SUPPORT } from '../../core';
-import { GalleryItem } from '../../core/gallery-item';
+import { GalleryItem, GalleryItemInternal } from '../../core/gallery-item';
 import { ObjectFit } from '../../core/object-fit';
 import { Orientation } from '../../core/orientation';
 import { OverscrollBehavior } from '../../core/overscroll-behavior';
@@ -226,6 +226,10 @@ export class ThumbnailsComponent
     if (this.autoScroll) {
       this.centerThumbIfNeeded(index);
     }
+  }
+
+  onItemErrored(item: GalleryItemInternal, event: Event) {
+    item._thumbFailed = true;
   }
 
   private initArrowUpdates() {

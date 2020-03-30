@@ -50,6 +50,7 @@
       <ng-container *ngIf="item._visited && !item._loaded">
         <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
       </ng-container>
+
       <div *ngIf="item._failed" class="error">
         <div class="icon">!</div>
         <p class="text">{{ errorText || 'Loading of this media failed' }}</p>
