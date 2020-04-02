@@ -140,7 +140,6 @@
   [objectFit]="objectFit"
   [loading]="loading"
   [loop]="loop"
-  [errorTemplate]="errorTemplate"
   [thumbs]="thumbs"
   [thumbsAutoScroll]="thumbsAutoScroll"
   [thumbsOrientation]="thumbsOrientation"
@@ -202,5 +201,11 @@
 <ng-template #errorTemplate>
   <div class="custom-error">
     Custom loading error
+  </div>
+</ng-template>
+
+<ng-template #thumbErrorTemplate>
+  <div class="custom-thumb-error">
+    Custom thumb loading error
   </div>
 </ng-template>

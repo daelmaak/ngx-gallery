@@ -83,6 +83,9 @@ export class ThumbnailsComponent
   @Input()
   thumbTemplate: TemplateRef<any>;
 
+  @Input()
+  thumbErrorTemplate: TemplateRef<any>;
+
   @Output()
   thumbClick = new EventEmitter<Event>();
 

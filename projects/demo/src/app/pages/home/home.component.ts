@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.images = of([
       {
-        src: './assets/kitten45.jpg',
+        src: './assets/kitten4.jpg',
         alt: 'Kitten 4',
         description:
           '<i>Lovely</i> kitten that <strong>will</strong> make your day way more enjoyable'
@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit {
       },
       {
         src:
-          'https://interactive-examples.mdn.mozilla.net/media/examples/flower.mp45',
+          'https://interactive-examples.mdn.mozilla.net/media/examples/flower.mp4',
         thumbSrc: './assets/flower.jpg',
         video: true
       },
@@ -85,11 +85,11 @@ export class HomeComponent implements OnInit {
         thumbSrc: './assets/mountains2-thumb.jpg',
         alt: 'Mountains 2'
       },
-      {
-        src: 'https://www.youtube.com/embed/s54LfNUU1Cg',
-        thumbSrc: 'https://img.youtube.com/vi/s54LfNUU1Cg/1.jpg',
-        alt: 'LP Somewhere I belong'
-      },
+      // {
+      //   src: 'https://www.youtube.com/embed/s54LfNUU1Cg',
+      //   thumbSrc: 'https://img.youtube.com/vi/s54LfNUU1Cg/1.jpg',
+      //   alt: 'LP Somewhere I belong'
+      // },
       {
         src: './assets/mountains4.jpg',
         thumbSrc: './assets/mountains4-thumb.jpg',

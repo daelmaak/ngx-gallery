@@ -22,9 +22,11 @@
         (error)="onItemErrored(item, $event)"
       />
 
-      <div *ngIf="item._thumbFailed" class="error">
-        <div class="icon">!</div>
-      </div>
+      <ng-container *ngIf="item._thumbFailed">
+        <div *ngIf="!thumbErrorTemplate; else thumbErrorTemplate" class="error">
+          <div class="icon">!</div>
+        </div>
+      </ng-container>
     </ng-container>
 
     <ng-template #customTemplate>

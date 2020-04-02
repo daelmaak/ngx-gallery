@@ -108,6 +108,9 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   thumbTemplate: TemplateRef<any>;
 
+  @Input()
+  thumbErrorTemplate: TemplateRef<any>;
+
   @Output()
   imageClick = new EventEmitter<ImageClickEvent>();
 
