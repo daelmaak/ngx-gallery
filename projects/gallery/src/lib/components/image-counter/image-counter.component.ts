@@ -10,7 +10,10 @@ import { VerticalOrientation } from '../../core';
 @Component({
   selector: 'ngx-image-counter',
   template: `
-    <span>{{ selectedIndex + 1 }}/{{ itemQuantity || 0 }}</span>
+    <span>
+      {{ selectedIndex + 1 }}<span class="delimiter">/</span
+      >{{ itemQuantity || 0 }}
+    </span>
   `,
   styleUrls: ['./image-counter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

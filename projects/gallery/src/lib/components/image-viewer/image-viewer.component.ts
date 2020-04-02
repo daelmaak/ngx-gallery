@@ -45,16 +45,13 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   arrows: boolean;
 
   @Input()
-  prevArrowTemplate: TemplateRef<void>;
-
-  @Input()
-  nextArrowTemplate: TemplateRef<void>;
-
-  @Input()
   selectedIndex: number;
 
   @Input()
   descriptions: boolean;
+
+  @Input()
+  errorText: string;
 
   @Input()
   imageCounter: boolean;
@@ -76,6 +73,15 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   loadingTemplate: TemplateRef<void>;
+
+  @Input()
+  errorTemplate: TemplateRef<void>;
+
+  @Input()
+  prevArrowTemplate: TemplateRef<void>;
+
+  @Input()
+  nextArrowTemplate: TemplateRef<void>;
 
   @Input()
   galleryMainAxis: Orientation;
@@ -325,6 +331,14 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     // elements with empty src also get loaded event, therefore the check
     if (target.getAttribute('src')) {
       item._loaded = true;
+    }
+  }
+
+  onItemErrored(item: GalleryItemInternal, errEvent: Event) {
+    const target = errEvent.target as HTMLElement;
+
+    if (target.getAttribute('src')) {
+      item._failed = true;
     }
   }
 

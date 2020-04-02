@@ -14,13 +14,22 @@
     [class.selected]="i === selectedIndex"
     (click)="selection.emit(i); thumbClick.emit($event)"
   >
-    <img
-      *ngIf="!thumbTemplate; else customTemplate"
-      [src]="item.thumbSrc || item.src"
-      [alt]="item.alt"
-      [style.objectFit]="objectFit"
-    />
-    <ng-template #customTemplate>
+    <ng-container *ngIf="!thumbTemplate; else customThumbTemplate">
+      <img
+        [src]="item.thumbSrc || item.src"
+        [alt]="item.alt"
+        [style.objectFit]="objectFit"
+        (error)="onItemErrored(item, $event)"
+      />
+
+      <ng-container *ngIf="item._thumbFailed">
+        <div *ngIf="!thumbErrorTemplate; else thumbErrorTemplate" class="error">
+          <div class="icon">!</div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #customThumbTemplate>
       <ng-container
         *ngTemplateOutlet="
           thumbTemplate;

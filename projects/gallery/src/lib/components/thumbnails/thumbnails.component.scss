@@ -107,6 +107,32 @@ img {
   background-position: center;
 }
 
+.error {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  background: #222;
+
+  .icon {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #716f6f;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #716f6f;
+  }
+}
+
 .prev-thumbs,
 .next-thumbs {
   position: absolute;

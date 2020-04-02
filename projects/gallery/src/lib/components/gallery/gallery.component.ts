@@ -49,6 +49,9 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   descriptions: boolean;
 
   @Input()
+  errorText: string;
+
+  @Input()
   imageCounter: boolean;
 
   @Input()
@@ -68,6 +71,9 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   loadingTemplate: TemplateRef<void>;
+
+  @Input()
+  errorTemplate: TemplateRef<void>;
 
   @Input()
   prevArrowTemplate: TemplateRef<void>;
@@ -101,6 +107,9 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   thumbTemplate: TemplateRef<any>;
+
+  @Input()
+  thumbErrorTemplate: TemplateRef<any>;
 
   @Output()
   imageClick = new EventEmitter<ImageClickEvent>();

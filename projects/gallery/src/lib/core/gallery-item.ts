@@ -41,4 +41,14 @@ export interface GalleryItemInternal extends GalleryItem {
    * Marks item as visited at least once
    */
   _visited?: boolean;
+
+  /**
+   * `true` when media couldn't be loaded
+   */
+  _failed?: boolean;
+
+  /**
+   * `true` when thumbnail couldn't be loaded
+   */
+  _thumbFailed?: boolean;
 }
