@@ -14,7 +14,7 @@
     [class.selected]="i === selectedIndex"
     (click)="selection.emit(i); thumbClick.emit($event)"
   >
-    <ng-container *ngIf="!thumbTemplate; else customTemplate">
+    <ng-container *ngIf="!thumbTemplate; else customThumbTemplate">
       <img
         [src]="item.thumbSrc || item.src"
         [alt]="item.alt"
@@ -29,7 +29,7 @@
       </ng-container>
     </ng-container>
 
-    <ng-template #customTemplate>
+    <ng-template #customThumbTemplate>
       <ng-container
         *ngTemplateOutlet="
           thumbTemplate;
