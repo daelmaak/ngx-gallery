@@ -141,7 +141,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
     );
   }
 
-  get galleryMainAxis(): OrientationFlag {
+  get thumbsOrientationFlag(): OrientationFlag {
     if (
       this.thumbsOrientation === 'top' ||
       this.thumbsOrientation === 'bottom'

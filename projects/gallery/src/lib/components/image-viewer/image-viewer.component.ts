@@ -23,9 +23,9 @@ import {
   clientSide,
   ObjectFit,
   Loading,
-  Orientation,
   UA,
-  VerticalOrientation
+  VerticalOrientation,
+  OrientationFlag
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 import { ItemTemplateContext } from '../../core/template-contexts';
@@ -84,7 +84,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   nextArrowTemplate: TemplateRef<void>;
 
   @Input()
-  galleryMainAxis: Orientation;
+  thumbsOrientation: OrientationFlag;
 
   @Output()
   imageClick = new EventEmitter<ImageClickEvent>();
@@ -131,10 +131,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     private zone: NgZone
   ) {}
 
-  ngOnChanges({ galleryMainAxis, items }: SimpleChanges) {
-    if (galleryMainAxis && !galleryMainAxis.firstChange) {
+  ngOnChanges({ thumbsOrientation, items }: SimpleChanges) {
+    if (thumbsOrientation && !thumbsOrientation.firstChange) {
       // if image-viewer - thumbnails layout (main axis) changed from vertical to horizontal or vice versa
-      if (!(galleryMainAxis.currentValue & galleryMainAxis.previousValue)) {
+      if (!(thumbsOrientation.currentValue & thumbsOrientation.previousValue)) {
         requestAnimationFrame(() => {
           this.itemWidth = this.hostRef.nativeElement.offsetWidth;
           this.center();
