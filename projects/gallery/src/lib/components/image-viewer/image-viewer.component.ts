@@ -14,7 +14,7 @@ import {
   SimpleChanges,
   TemplateRef,
   ViewChild,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -25,7 +25,7 @@ import {
   Loading,
   UA,
   VerticalOrientation,
-  OrientationFlag
+  OrientationFlag,
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 import { ItemTemplateContext } from '../../core/template-contexts';
@@ -35,7 +35,7 @@ import { ImageClickEvent } from './image-viewer.model';
   selector: 'ngx-image-viewer',
   templateUrl: './image-viewer.component.html',
   styleUrls: ['./image-viewer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
@@ -136,7 +136,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       // if image-viewer - thumbnails layout (main axis) changed from vertical to horizontal or vice versa
       if (!(thumbsOrientation.currentValue & thumbsOrientation.previousValue)) {
         requestAnimationFrame(() => {
-          this.itemWidth = this.hostRef.nativeElement.offsetWidth;
+          this.itemWidth = this.getItemWidth();
           this.center();
         });
       }
@@ -156,7 +156,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     if (clientSide) {
       const opts = {
-        passive: !UA.ios
+        passive: !UA.ios,
       };
 
       fromEvent(window, 'resize', opts)
@@ -229,7 +229,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           }
         };
 
-        const ontouchend = _ => {
+        const ontouchend = () => {
           this.noAnimation = false;
 
           if (lastTouchmove) {
@@ -321,7 +321,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.imageClick.emit({
       event,
       item,
-      index: this.items.indexOf(item)
+      index: this.items.indexOf(item),
     });
   }
 
@@ -348,6 +348,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.shiftImages(shift);
   }
 
+  private getItemWidth() {
+    return this.hostRef.nativeElement.querySelector('li').offsetWidth;
+  }
+
   private markAsVisitedIfNeeded(index: number) {
     const item = this.items[index];
     if (!item._visited) {
@@ -361,7 +365,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       if (!this.items || !this.items.length) {
         this.shiftImages(0);
       } else {
-        this.itemWidth = this.hostRef.nativeElement.offsetWidth;
+        this.itemWidth = this.getItemWidth();
         this.center();
       }
 
