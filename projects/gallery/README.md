@@ -48,13 +48,12 @@ In your component template
 
 ## Development
 
-### Build
+### Install dependencies
 
 In the root of the project, run
 
 ```
 npm ci
-npm run build
 ```
 
 ### Serve

@@ -13,7 +13,6 @@ import { MatRadioModule } from '@angular/material/radio';
 
 import { AppComponent } from './app.component';
 import { GalleryModule } from 'projects/gallery/src/public-api';
-import { GalleryDetailModule } from 'projects/gallery-detail/src/public-api';
 import { HomeComponent } from './pages/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
 
@@ -23,14 +22,14 @@ const materialModules = [
   MatFormFieldModule,
   MatInputModule,
   MatRadioModule,
-  MatToolbarModule
+  MatToolbarModule,
 ];
 
 const routes: Route[] = [
   {
     path: '',
-    component: HomeComponent
-  }
+    component: HomeComponent,
+  },
 ];
 
 @NgModule({
@@ -42,10 +41,9 @@ const routes: Route[] = [
     CommonModule,
     FormsModule,
     GalleryModule,
-    GalleryDetailModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
