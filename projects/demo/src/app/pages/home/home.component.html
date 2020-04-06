@@ -84,17 +84,6 @@
   </section>
 
   <section>
-    <label>Thumbnails overscroll behavior:</label>
-    <mat-radio-group
-      name="thumbsOverscrollBehavior"
-      [(ngModel)]="thumbsOverscrollBehavior"
-    >
-      <mat-radio-button value="contain">contain</mat-radio-button>
-      <mat-radio-button value="auto">auto</mat-radio-button>
-    </mat-radio-group>
-  </section>
-
-  <section>
     <label>Thumbnail image fit:</label>
     <mat-radio-group name="thumbsObjectFit" [(ngModel)]="thumbsObjectFit">
       <mat-radio-button value="contain">contain</mat-radio-button>
@@ -146,7 +135,6 @@
   [thumbsArrows]="thumbsArrows"
   [thumbsArrowSlideByLength]="thumbsArrowSlideByLength"
   [thumbsScrollBehavior]="thumbsScrollBehavior"
-  [thumbsOverscrollBehavior]="thumbsOverscrollBehavior"
   [thumbsObjectFit]="thumbsObjectFit"
   (imageClick)="openFirst($event)"
   (descriptionClick)="descriptions = false"

@@ -34,7 +34,6 @@ import { GalleryDetailRef } from '../../gallery-detail-ref';
       [thumbsOrientation]="config.thumbsOrientation"
       [thumbsArrows]="config.thumbsArrows"
       [thumbsArrowSlideByLength]="config.thumbsArrowSlideByLength"
-      [thumbsOverscrollBehavior]="config.thumbsOverscrollBehavior"
     ></ngx-gallery>
   `,
   styleUrls: ['./gallery-detail.component.scss'],

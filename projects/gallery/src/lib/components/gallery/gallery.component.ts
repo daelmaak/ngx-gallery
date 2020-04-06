@@ -21,7 +21,6 @@ import {
   Loading,
   ObjectFit,
   Orientation,
-  OverscrollBehavior,
   OrientationFlag,
   VerticalOrientation,
   ItemTemplateContext
@@ -98,9 +97,6 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   thumbsScrollBehavior: ScrollBehavior;
-
-  @Input()
-  thumbsOverscrollBehavior: OverscrollBehavior;
 
   @Input()
   thumbsObjectFit: ObjectFit;

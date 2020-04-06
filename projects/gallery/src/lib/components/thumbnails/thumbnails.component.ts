@@ -36,7 +36,6 @@ import { clientSide, SUPPORT } from '../../core';
 import { GalleryItem, GalleryItemInternal } from '../../core/gallery-item';
 import { ObjectFit } from '../../core/object-fit';
 import { Orientation } from '../../core/orientation';
-import { OverscrollBehavior } from '../../core/overscroll-behavior';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -76,9 +75,6 @@ export class ThumbnailsComponent
   get scrollBehavior() {
     return this.smoothScrollAllowed ? this._scrollBehavior : 'auto';
   }
-
-  @Input()
-  overscrollBehavior: OverscrollBehavior;
 
   @Input()
   thumbTemplate: TemplateRef<any>;
@@ -156,14 +152,9 @@ export class ThumbnailsComponent
     this.objectFit == null && (this.objectFit = 'cover');
     this.autoScroll === undefined && (this.autoScroll = true);
     this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
-    this.overscrollBehavior == null && (this.overscrollBehavior = 'auto');
 
     if (this.arrows && clientSide) {
       this.initImperativeScroll();
-    }
-
-    if (this.overscrollBehavior === 'contain' && !SUPPORT.overscrollBehavior) {
-      this.initManualOverscrollContain();
     }
   }
 
@@ -246,26 +237,6 @@ export class ThumbnailsComponent
     }
 
     this.updateArrows();
-  }
-
-  private initManualOverscrollContain() {
-    fromEvent<WheelEvent>(this.thumbListRef.nativeElement, 'wheel')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(e => {
-        const {
-          offsetHeight,
-          scrollTop,
-          scrollHeight
-        } = this.thumbListRef.nativeElement;
-
-        if (
-          (e.deltaY < 0 && scrollTop === 0) ||
-          (e.deltaY > 0 && offsetHeight + scrollTop >= scrollHeight)
-        ) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      });
   }
 
   private initImperativeScroll() {
