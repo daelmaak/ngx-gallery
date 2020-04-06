@@ -32,10 +32,8 @@ import {
   takeWhile
 } from 'rxjs/operators';
 
-import { clientSide, SUPPORT } from '../../core';
+import { isBrowser, SUPPORT, Orientation, ObjectFit } from '../../core';
 import { GalleryItem, GalleryItemInternal } from '../../core/gallery-item';
-import { ObjectFit } from '../../core/object-fit';
-import { Orientation } from '../../core/orientation';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -153,7 +151,7 @@ export class ThumbnailsComponent
     this.autoScroll === undefined && (this.autoScroll = true);
     this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
 
-    if (this.arrows && clientSide) {
+    if (this.arrows && isBrowser) {
       this.initImperativeScroll();
     }
   }
@@ -222,12 +220,12 @@ export class ThumbnailsComponent
     }
   }
 
-  onItemErrored(item: GalleryItemInternal, event: Event) {
+  onItemErrored(item: GalleryItemInternal) {
     item._thumbFailed = true;
   }
 
   private initArrowUpdates() {
-    if (clientSide) {
+    if (isBrowser) {
       this.arrowUpdatesSub = merge(
         fromEvent(this.thumbListRef.nativeElement, 'scroll', { passive: true }),
         fromEvent(window, 'resize')

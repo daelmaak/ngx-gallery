@@ -115,7 +115,7 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  async openFirst(event: ImageClickEvent) {
+  async onImageClick(event: ImageClickEvent) {
     // this.galleryDetail
     //   .open(event.index, {
     //     thumbsOrientation: 'bottom',

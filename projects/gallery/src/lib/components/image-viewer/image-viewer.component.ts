@@ -14,28 +14,28 @@ import {
   SimpleChanges,
   TemplateRef,
   ViewChild,
-  ViewChildren,
+  ViewChildren
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import {
-  clientSide,
+  isBrowser,
   ObjectFit,
   Loading,
   UA,
   VerticalOrientation,
   OrientationFlag,
+  ItemTemplateContext
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
-import { ItemTemplateContext } from '../../core/template-contexts';
 import { ImageClickEvent } from './image-viewer.model';
 
 @Component({
   selector: 'ngx-image-viewer',
   templateUrl: './image-viewer.component.html',
   styleUrls: ['./image-viewer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
@@ -154,9 +154,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       (this.imageCounterOrientation = 'top');
     this.objectFit == null && (this.objectFit = 'contain');
 
-    if (clientSide) {
+    if (isBrowser) {
       const opts = {
-        passive: !UA.ios,
+        passive: !UA.ios
       };
 
       fromEvent(window, 'resize', opts)
@@ -321,7 +321,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.imageClick.emit({
       event,
       item,
-      index: this.items.indexOf(item),
+      index: this.items.indexOf(item)
     });
   }
 

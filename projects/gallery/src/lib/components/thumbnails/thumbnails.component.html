@@ -15,7 +15,7 @@
         [src]="item.thumbSrc || item.src"
         [alt]="item.alt"
         [style.objectFit]="objectFit"
-        (error)="onItemErrored(item, $event)"
+        (error)="onItemErrored(item)"
       />
 
       <ng-container *ngIf="item._thumbFailed">

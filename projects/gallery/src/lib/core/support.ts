@@ -1,11 +1,11 @@
-export const clientSide = typeof window !== 'undefined';
+export const isBrowser = typeof window !== 'undefined';
 
 export const SUPPORT = {
-  scrollBehavior: clientSide && 'scrollBehavior' in document.body.style,
-  nativeMediaLoading: clientSide && 'loading' in Image.prototype,
-  intersectionObserver: clientSide && 'IntersectionObserver' in window
+  scrollBehavior: isBrowser && 'scrollBehavior' in document.body.style,
+  nativeMediaLoading: isBrowser && 'loading' in Image.prototype,
+  intersectionObserver: isBrowser && 'IntersectionObserver' in window
 };
 
 export const UA = {
-  ios: clientSide && !!window.navigator.userAgent.match(/iP(ad|hone|od)/)
+  ios: isBrowser && !!window.navigator.userAgent.match(/iP(ad|hone|od)/)
 };
