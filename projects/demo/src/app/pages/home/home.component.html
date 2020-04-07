@@ -151,7 +151,7 @@
   let-index="index"
   let-selectedIndex="selectedIndex"
   let-item="item"
-  let-visited="visited"
+  let-seen="seen"
 >
   <ng-container *ngIf="item.video; then videoTemplate; else imgTemplate">
   </ng-container>
@@ -159,10 +159,10 @@
     <img
       #img
       class="custom-media"
-      [src]="visited ? item.src : ''"
+      [src]="seen ? item.src : ''"
       (load)="onImageLoad()"
     />
-    <div class="custom-loading" *ngIf="visited && img.naturalHeight <= 0">
+    <div class="custom-loading" *ngIf="seen && img.naturalHeight <= 0">
       Custom item loading ...
     </div>
   </ng-template>
@@ -170,7 +170,7 @@
     <video
       #video
       class="custom-media"
-      [src]="visited ? item.src : ''"
+      [src]="seen ? item.src : ''"
       controls
       (loadedmetadata)="onImageLoad()"
     ></video>

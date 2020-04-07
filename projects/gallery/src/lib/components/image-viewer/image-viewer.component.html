@@ -22,7 +22,7 @@
         *ngIf="!isYoutube(item) && !item.video"
         [src]="getSrc(item)"
         [alt]="item.alt"
-        [class.loading]="item._visited && !item._loaded"
+        [class.loading]="item._seen && !item._loaded"
         [style.objectFit]="objectFit"
         (load)="onItemLoaded(item, $event)"
         (error)="onItemErrored(item, $event)"
@@ -31,7 +31,7 @@
       <video
         *ngIf="!isYoutube(item) && item.video"
         [src]="getSrc(item)"
-        [class.loading]="item._visited && !item._loaded"
+        [class.loading]="item._seen && !item._loaded"
         [style.objectFit]="objectFit"
         controls
         playsinline
@@ -47,7 +47,7 @@
         (load)="onItemLoaded(item, $event)"
       ></iframe>
 
-      <ng-container *ngIf="item._visited && !item._loaded && !item._failed">
+      <ng-container *ngIf="item._seen && !item._loaded && !item._failed">
         <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
       </ng-container>
 
@@ -67,7 +67,7 @@
             index: i,
             selectedIndex: selectedIndex,
             item: item,
-            visited: item._visited
+            seen: item._seen
           }
         "
       ></ng-container>

@@ -276,7 +276,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   getSrc(item: GalleryItemInternal) {
-    return this.lazyLoading && !item._visited ? '' : item.src;
+    return this.lazyLoading && !item._seen ? '' : item.src;
   }
 
   isYoutube(item: GalleryItemInternal) {
@@ -380,7 +380,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           .toArray()
           .findIndex(i => i.nativeElement === target);
 
-        this.items[index]._visited = true;
+        this.items[index]._seen = true;
         this.cd.detectChanges();
         this.seenItemsObserver.unobserve(target);
       });
