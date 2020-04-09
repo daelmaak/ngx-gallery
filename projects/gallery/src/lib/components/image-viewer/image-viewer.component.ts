@@ -135,7 +135,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnChanges({ thumbsOrientation, items }: SimpleChanges) {
     if (thumbsOrientation && !thumbsOrientation.firstChange) {
-      // if image-viewer - thumbnails layout (main axis) changed from vertical to horizontal or vice versa
       if (!(thumbsOrientation.currentValue & thumbsOrientation.previousValue)) {
         requestAnimationFrame(() => {
           this.itemWidth = this.getItemWidth();
@@ -143,7 +142,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         });
       }
     }
-    // late initialization; in case the gallery items come later
     if (items && items.currentValue) {
       this.onResize();
       this.observeSeenItems();
@@ -363,6 +361,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     if (isBrowser && SUPPORT.intersectionObserver) {
       this.seenItemsObserver.disconnect();
 
+      // wait for any rendering changes necessary
       setTimeout(() => {
         this.itemsRef.forEach(ref =>
           this.seenItemsObserver.observe(ref.nativeElement)
