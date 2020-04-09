@@ -26,7 +26,8 @@ import {
   UA,
   VerticalOrientation,
   OrientationFlag,
-  ItemTemplateContext
+  ItemTemplateContext,
+  SUPPORT
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 import { ImageClickEvent } from './image-viewer.model';
@@ -101,6 +102,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   imagesHidden = true;
   noAnimation = false;
 
+  private seenItemsObserver: IntersectionObserver;
   private destroy$ = new Subject();
 
   private itemWidth: number;
@@ -133,7 +135,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnChanges({ thumbsOrientation, items }: SimpleChanges) {
     if (thumbsOrientation && !thumbsOrientation.firstChange) {
-      // if image-viewer - thumbnails layout (main axis) changed from vertical to horizontal or vice versa
       if (!(thumbsOrientation.currentValue & thumbsOrientation.previousValue)) {
         requestAnimationFrame(() => {
           this.itemWidth = this.getItemWidth();
@@ -141,10 +142,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         });
       }
     }
-    // late initialization; in case the gallery items come later
     if (items && items.currentValue) {
       this.onResize();
-      setTimeout(() => this.markAsVisitedIfNeeded(this.selectedIndex));
+      this.observeSeenItems();
     }
   }
 
@@ -259,15 +259,22 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         });
       });
     }
+
+    if (isBrowser && SUPPORT.intersectionObserver) {
+      this.seenItemsObserver = new IntersectionObserver(this.onItemsSeen, {
+        threshold: 0.1
+      });
+    }
   }
 
   ngOnDestroy() {
     this.destroy$.next(null);
     this.destroy$.complete();
+    this.seenItemsObserver.disconnect();
   }
 
   getSrc(item: GalleryItemInternal) {
-    return this.lazyLoading && !item._visited ? '' : item.src;
+    return this.lazyLoading && !item._seen ? '' : item.src;
   }
 
   isYoutube(item: GalleryItemInternal) {
@@ -310,8 +317,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
 
-    this.markAsVisitedIfNeeded(index);
-
     this.selectedIndex = index;
     this.selection.emit(index);
     this.center();
@@ -352,13 +357,32 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     return this.hostRef.nativeElement.querySelector('li').offsetWidth;
   }
 
-  private markAsVisitedIfNeeded(index: number) {
-    const item = this.items[index];
-    if (!item._visited) {
-      item._visited = true;
-      this.cd.markForCheck();
+  private observeSeenItems() {
+    if (isBrowser && SUPPORT.intersectionObserver) {
+      this.seenItemsObserver.disconnect();
+
+      // wait for any rendering changes necessary
+      setTimeout(() => {
+        this.itemsRef.forEach(ref =>
+          this.seenItemsObserver.observe(ref.nativeElement)
+        );
+      });
     }
   }
+
+  private onItemsSeen: IntersectionObserverCallback = entries =>
+    entries
+      .filter(e => e.isIntersecting && e.intersectionRatio > 0)
+      .forEach(e => {
+        const target = e.target as HTMLElement;
+        const index = this.itemsRef
+          .toArray()
+          .findIndex(i => i.nativeElement === target);
+
+        this.items[index]._seen = true;
+        this.cd.detectChanges();
+        this.seenItemsObserver.unobserve(target);
+      });
 
   private onResize = () => {
     requestAnimationFrame(() => {

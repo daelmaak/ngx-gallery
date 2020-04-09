@@ -4,5 +4,5 @@ export interface ItemTemplateContext {
   index: number;
   selectedIndex: number;
   item: GalleryItem;
-  visited: boolean;
+  seen: boolean;
 }
