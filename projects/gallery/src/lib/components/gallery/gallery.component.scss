@@ -9,6 +9,10 @@
   &.column {
     flex-direction: column;
   }
+
+  &::ng-deep {
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  }
 }
 
 :host::ng-deep {
