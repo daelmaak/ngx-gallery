@@ -103,6 +103,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   noAnimation = false;
 
   private seenItemsObserver: IntersectionObserver;
+  private swiping = false;
   private destroy$ = new Subject();
 
   private itemWidth: number;
@@ -170,6 +171,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
         const onmousedown = (e: MouseEvent) => {
           mousedown = e;
+          this.swiping = true;
           this.noAnimation = true;
           this.cd.detectChanges();
 
@@ -182,6 +184,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const onmouseup = (e: MouseEvent) => {
+          this.swiping = false;
           this.noAnimation = false;
 
           const time = e.timeStamp - mousedown.timeStamp;
@@ -199,6 +202,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
         const ontouchstart = (e: TouchEvent) => {
           touchstart = e;
+          this.swiping = true;
           this.noAnimation = true;
           this.cd.detectChanges();
         };
@@ -230,6 +234,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const ontouchend = () => {
+          this.swiping = false;
           this.noAnimation = false;
 
           if (lastTouchmove) {
@@ -273,8 +278,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.seenItemsObserver.disconnect();
   }
 
-  getSrc(item: GalleryItemInternal) {
-    return this.lazyLoading && !item._seen ? '' : item.src;
+  getSrc(item: GalleryItemInternal, index: number) {
+    return !this.lazyLoading || item._seen || this.selectedIndex === index
+      ? item.src
+      : '';
   }
 
   isYoutube(item: GalleryItemInternal) {
@@ -379,9 +386,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           .toArray()
           .findIndex(i => i.nativeElement === target);
 
-        this.items[index]._seen = true;
-        this.cd.detectChanges();
-        this.seenItemsObserver.unobserve(target);
+        if (this.swiping || this.selectedIndex === index) {
+          this.items[index]._seen = true;
+          this.cd.detectChanges();
+          this.seenItemsObserver.unobserve(target);
+        }
       });
 
   private onResize = () => {

@@ -20,7 +20,7 @@
     <ng-container *ngIf="!itemTemplate; else customTemplate">
       <img
         *ngIf="!isYoutube(item) && !item.video"
-        [src]="getSrc(item)"
+        [src]="getSrc(item, i)"
         [alt]="item.alt"
         [class.loading]="item._seen && !item._loaded"
         [style.objectFit]="objectFit"
@@ -30,7 +30,7 @@
       <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
       <video
         *ngIf="!isYoutube(item) && item.video"
-        [src]="getSrc(item)"
+        [src]="getSrc(item, i)"
         [class.loading]="item._seen && !item._loaded"
         [style.objectFit]="objectFit"
         controls
@@ -40,7 +40,7 @@
       ></video>
       <iframe
         *ngIf="isYoutube(item)"
-        [src]="getSrc(item) | safe"
+        [src]="getSrc(item, i) | safe"
         frameborder="0"
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
