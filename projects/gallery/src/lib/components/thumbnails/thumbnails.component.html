@@ -1,6 +1,12 @@
-<button *ngIf="showStartArrow" class="prev-thumbs" (click)="arrowSlide(-1)">
-  <ngx-chevron-icon></ngx-chevron-icon>
-</button>
+<ng-container *ngIf="showStartArrow">
+  <button
+    *ngIf="!prevArrowTemplate; else prevArrowTemplate"
+    class="prev-thumbs"
+    (click)="slide(-1)"
+  >
+    <ngx-chevron-icon></ngx-chevron-icon>
+  </button>
+</ng-container>
 
 <ul #thumbs [style.scrollBehavior]="scrollBehavior">
   <!-- placeholder before items come -->
@@ -36,6 +42,12 @@
   </li>
 </ul>
 
-<button *ngIf="showEndArrow" class="next-thumbs" (click)="arrowSlide(1)">
-  <ngx-chevron-icon></ngx-chevron-icon>
-</button>
+<ng-container *ngIf="showEndArrow">
+  <button
+    *ngIf="!nextArrowTemplate; else nextArrowTemplate"
+    class="next-thumbs"
+    (click)="slide(1)"
+  >
+    <ngx-chevron-icon></ngx-chevron-icon>
+  </button>
+</ng-container>

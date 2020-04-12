@@ -108,3 +108,24 @@ section {
   color: white;
   opacity: 0.8;
 }
+
+.custom-prev-thumbs,
+.custom-next-thumbs {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 36px;
+  background-color: transparent;
+  border: none;
+  display: block;
+  outline: 0;
+  cursor: pointer;
+}
+
+.custom-prev-thumbs {
+  left: -40px;
+}
+
+.custom-next-thumbs {
+  right: -40px;
+}

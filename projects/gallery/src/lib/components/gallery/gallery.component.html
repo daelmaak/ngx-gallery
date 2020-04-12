@@ -10,6 +10,8 @@
   [scrollBehavior]="thumbsScrollBehavior"
   [thumbTemplate]="thumbTemplate"
   [thumbErrorTemplate]="thumbErrorTemplate"
+  [prevArrowTemplate]="prevThumbsArrowTemplate"
+  [nextArrowTemplate]="nextThumbsArrowTemplate"
   (thumbClick)="thumbClick.emit($event)"
   (selection)="_selectInternal($event); imageViewer.select($event)"
 ></ngx-thumbnails>

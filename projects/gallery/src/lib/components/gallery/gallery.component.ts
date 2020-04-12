@@ -107,6 +107,12 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   thumbErrorTemplate: TemplateRef<any>;
 
+  @Input()
+  prevThumbsArrowTemplate: TemplateRef<void>;
+
+  @Input()
+  nextThumbsArrowTemplate: TemplateRef<void>;
+
   @Output()
   imageClick = new EventEmitter<ImageClickEvent>();
 
@@ -193,6 +199,10 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
     this.imageViewer.select(index);
     this.thumbnails.select(index);
     this._selectInternal(index);
+  }
+
+  slideThumbs(direction: -1 | 1) {
+    this.thumbnails.slide(direction);
   }
 
   _selectInternal(index: number) {

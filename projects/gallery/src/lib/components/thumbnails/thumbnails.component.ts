@@ -33,7 +33,7 @@ import {
 } from 'rxjs/operators';
 
 import { isBrowser, SUPPORT, Orientation, ObjectFit } from '../../core';
-import { GalleryItem, GalleryItemInternal } from '../../core/gallery-item';
+import { GalleryItemInternal } from '../../core/gallery-item';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -44,7 +44,7 @@ import { GalleryItem, GalleryItemInternal } from '../../core/gallery-item';
 export class ThumbnailsComponent
   implements OnChanges, OnInit, AfterViewInit, OnDestroy {
   @Input()
-  items: GalleryItem[] = [];
+  items: GalleryItemInternal[] = [];
 
   @Input()
   selectedIndex: number;
@@ -80,11 +80,17 @@ export class ThumbnailsComponent
   @Input()
   thumbErrorTemplate: TemplateRef<any>;
 
+  @Input()
+  prevArrowTemplate: TemplateRef<void>;
+
+  @Input()
+  nextArrowTemplate: TemplateRef<void>;
+
   @Output()
   thumbClick = new EventEmitter<Event>();
 
   @Output()
-  selection = new EventEmitter<GalleryItem>();
+  selection = new EventEmitter<GalleryItemInternal>();
 
   @ViewChild('thumbs', { static: true })
   thumbListRef: ElementRef<HTMLElement>;
@@ -166,7 +172,7 @@ export class ThumbnailsComponent
     this.destroy$.complete();
   }
 
-  arrowSlide(direction: number) {
+  slide(direction: number) {
     let delta: number;
 
     if (this.arrowSlideByLength) {
@@ -193,7 +199,6 @@ export class ThumbnailsComponent
 
     const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = nextItemEl;
 
-    // TODO maybe find better name than offset
     const itemOffset = this.vertical ? offsetTop : offsetLeft;
     const itemMainAxis = this.vertical ? offsetHeight : offsetWidth;
 

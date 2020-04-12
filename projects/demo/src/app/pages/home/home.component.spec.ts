@@ -4,11 +4,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatIconModule } from '@angular/material/icon';
 
 import { GalleryDetailService } from 'projects/gallery-detail/src/public-api';
 import { GalleryModule } from 'projects/gallery/src/public-api';
 import { HomeComponent } from './home.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -20,6 +21,7 @@ describe('HomeComponent', () => {
         FormsModule,
         NoopAnimationsModule,
         MatCheckboxModule,
+        MatIconModule,
         MatInputModule,
         MatFormFieldModule,
         MatRadioModule,
