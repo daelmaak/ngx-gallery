@@ -156,8 +156,8 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   constructor() {}
 
   ngOnChanges({ items }: SimpleChanges) {
-    if (items && items.currentValue) {
-      const incomingItems = items.currentValue as GalleryItem[];
+    if (items) {
+      const incomingItems = (items.currentValue || []) as GalleryItem[];
       this._internalItems = incomingItems.map(item => ({ ...item }));
     }
   }

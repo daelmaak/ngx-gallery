@@ -264,18 +264,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         });
       });
     }
-
-    if (isBrowser && SUPPORT.intersectionObserver) {
-      this.seenItemsObserver = new IntersectionObserver(this.onItemsSeen, {
-        threshold: 0.1
-      });
-    }
   }
 
   ngOnDestroy() {
     this.destroy$.next(null);
     this.destroy$.complete();
-    this.seenItemsObserver.disconnect();
+    this.seenItemsObserver && this.seenItemsObserver.disconnect();
   }
 
   getSrc(item: GalleryItemInternal, index: number) {
@@ -366,7 +360,13 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private observeSeenItems() {
     if (isBrowser && SUPPORT.intersectionObserver) {
-      this.seenItemsObserver.disconnect();
+      if (!this.seenItemsObserver) {
+        this.seenItemsObserver = new IntersectionObserver(this.onItemsSeen, {
+          threshold: 0.1
+        });
+      } else {
+        this.seenItemsObserver.disconnect();
+      }
 
       // wait for any rendering changes necessary
       setTimeout(() => {

@@ -1,1 +1,1 @@
-export type Loading = 'auto' | 'lazy' | 'eager';
+export type Loading = 'auto' | 'lazy';

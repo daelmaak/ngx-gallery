@@ -94,7 +94,7 @@
   [class.above-counter]="imageCounterOrientation === 'bottom'"
 >
   <div
-    *ngIf="items[selectedIndex].description as description"
+    *ngIf="items[selectedIndex]?.description as description"
     class="description"
     [innerHTML]="description"
     (click)="descriptionClick.emit($event)"
