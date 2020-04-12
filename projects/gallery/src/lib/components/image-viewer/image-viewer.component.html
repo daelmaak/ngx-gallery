@@ -1,13 +1,16 @@
 <ng-container *ngIf="showPrevArrow">
-  <ng-container *ngIf="!prevArrowTemplate; else prevArrowTemplate">
-    <ngx-chevron-icon class="prev" (click)="prev()"></ngx-chevron-icon>
-  </ng-container>
+  <ngx-chevron-icon
+    *ngIf="!prevArrowTemplate; else prevArrowTemplate"
+    class="prev"
+    (click)="prev()"
+  ></ngx-chevron-icon>
 </ng-container>
 
 <ul
   #itemList
   [class.hidden]="imagesHidden"
   [style.transitionDuration]="noAnimation ? '0ms' : ''"
+  [attr.aria-label]="aria?.viewerLabel"
 >
   <li *ngIf="!items?.length" class="initial-item"></li>
   <li
@@ -15,6 +18,9 @@
     *ngFor="let item of items; let i = index"
     [class.selected]="i === selectedIndex"
     ondragstart="return false"
+    tabindex="0"
+    [attr.aria-label]="item.alt"
+    [attr.aria-describedby]="'imgr-desc-' + i"
     (click)="onImageClick(item, $event)"
   >
     <ng-container *ngIf="!itemTemplate; else customTemplate">
@@ -59,6 +65,12 @@
       </ng-container>
     </ng-container>
 
+    <span
+      [id]="'imgr-desc-' + i"
+      class="aria-description"
+      [innerHTML]="item.description"
+    ></span>
+
     <ng-template #customTemplate>
       <ng-container
         *ngTemplateOutlet="
@@ -76,9 +88,11 @@
 </ul>
 
 <ng-container *ngIf="showNextArrow">
-  <ng-container *ngIf="!nextArrowTemplate; else nextArrowTemplate">
-    <ngx-chevron-icon class="next" (click)="next()"></ngx-chevron-icon>
-  </ng-container>
+  <ngx-chevron-icon
+    *ngIf="!nextArrowTemplate; else nextArrowTemplate"
+    class="next"
+    (click)="next()"
+  ></ngx-chevron-icon>
 </ng-container>
 
 <ngx-image-counter
@@ -92,6 +106,7 @@
   *ngIf="descriptions"
   class="description-container"
   [class.above-counter]="imageCounterOrientation === 'bottom'"
+  aria-hidden="true"
 >
   <div
     *ngIf="items[selectedIndex]?.description as description"

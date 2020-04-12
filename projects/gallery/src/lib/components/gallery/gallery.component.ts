@@ -27,6 +27,7 @@ import {
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 import { ImageClickEvent } from '../image-viewer/image-viewer.model';
+import { Aria, defaultAria } from '../../core/aria';
 
 @Component({
   selector: 'ngx-gallery',
@@ -113,6 +114,9 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   nextThumbsArrowTemplate: TemplateRef<void>;
 
+  @Input()
+  aria: Aria;
+
   @Output()
   imageClick = new EventEmitter<ImageClickEvent>();
 
@@ -136,11 +140,19 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
 
   _internalItems: GalleryItemInternal[];
 
+  @HostBinding('tabindex')
+  _tabindex = 0;
+
   @HostBinding('class.column')
   get galleryCollumn() {
     return (
       this.thumbsOrientation === 'top' || this.thumbsOrientation === 'bottom'
     );
+  }
+
+  @HostBinding('attr.aria-label')
+  get ariaLabel() {
+    return this.aria && this.aria.galleryLabel;
   }
 
   get thumbsOrientationFlag(): OrientationFlag {
@@ -163,6 +175,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.aria == null && (this.aria = defaultAria);
     this.arrows === undefined && (this.arrows = true);
     this.descriptions == null && (this.descriptions = true);
     this.loop === undefined && (this.loop = true);

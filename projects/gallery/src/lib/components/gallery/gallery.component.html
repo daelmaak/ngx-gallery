@@ -12,6 +12,7 @@
   [thumbErrorTemplate]="thumbErrorTemplate"
   [prevArrowTemplate]="prevThumbsArrowTemplate"
   [nextArrowTemplate]="nextThumbsArrowTemplate"
+  [aria]="aria"
   (thumbClick)="thumbClick.emit($event)"
   (selection)="_selectInternal($event); imageViewer.select($event)"
 ></ngx-thumbnails>
@@ -35,6 +36,7 @@
   [thumbsOrientation]="thumbsOrientationFlag"
   [prevArrowTemplate]="prevArrowTemplate"
   [nextArrowTemplate]="nextArrowTemplate"
+  [aria]="aria"
   (imageClick)="onImageClick($event)"
   (descriptionClick)="descriptionClick.emit($event)"
   (selection)="_selectInternal($event); thumbnails?.select($event)"

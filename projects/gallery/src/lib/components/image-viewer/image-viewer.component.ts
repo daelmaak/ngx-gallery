@@ -31,6 +31,7 @@ import {
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 import { ImageClickEvent } from './image-viewer.model';
+import { Aria } from '../../core/aria';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -86,6 +87,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   thumbsOrientation: OrientationFlag;
+
+  @Input()
+  aria: Aria;
 
   @Output()
   imageClick = new EventEmitter<ImageClickEvent>();
@@ -386,7 +390,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           .toArray()
           .findIndex(i => i.nativeElement === target);
 
-        if (this.swiping || this.selectedIndex === index) {
+        // for a11y, when user tabs through gallery items
+        const tabbed = e.intersectionRatio > 0.95;
+
+        if (this.swiping || this.selectedIndex === index || tabbed) {
           this.items[index]._seen = true;
           this.cd.detectChanges();
           this.seenItemsObserver.unobserve(target);

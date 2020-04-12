@@ -72,12 +72,14 @@ export class HomeComponent implements OnInit {
         src:
           'https://interactive-examples.mdn.mozilla.net/media/examples/flower.mp4',
         thumbSrc: './assets/flower.jpg',
-        video: true
+        video: true,
+        description: 'Blooming rose'
       },
       {
         src: './assets/mountains2.jpg',
         thumbSrc: './assets/mountains2-thumb.jpg',
-        alt: 'Mountains 2'
+        alt: 'Mountains 2',
+        description: 'Mountain ridge'
       },
       // {
       //   src: 'https://www.youtube.com/embed/s54LfNUU1Cg',
@@ -87,30 +89,36 @@ export class HomeComponent implements OnInit {
       {
         src: './assets/mountains4.jpg',
         thumbSrc: './assets/mountains4-thumb.jpg',
-        alt: 'Mountains 4'
+        alt: 'Mountains 4',
+        description: 'Mountain shoulder'
       },
       {
         src: './assets/fruit1.jpg',
-        alt: 'Fruit 1'
+        alt: 'Fruit 1',
+        description: 'Passion fruit'
       },
       {
         src: './assets/fruit2.jpg',
         thumbSrc: './assets/fruit2-thumb.jpg',
-        alt: 'Fruit 2'
+        alt: 'Fruit 2',
+        description: 'Really juicy fruit'
       },
       {
         src: './assets/fruit3.jpg',
-        alt: 'Fruit 3'
+        alt: 'Fruit 3',
+        description: 'Most exotic fruit I have ever seen'
       },
       {
         src: './assets/vogel1.jpg',
         thumbSrc: './assets/vogel1-thumb.jpg',
-        alt: 'Bird 1'
+        alt: 'Bird 1',
+        description: 'Bird, taking off'
       },
       {
         src: './assets/landscape1.jpg',
         thumbSrc: './assets/landscape1-thumb.jpg',
-        alt: 'Landscape 1'
+        alt: 'Landscape 1',
+        description: 'Pale painting of a landscape'
       }
     ]).pipe(
       switchMap(items =>

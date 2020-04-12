@@ -2,13 +2,19 @@
   <button
     *ngIf="!prevArrowTemplate; else prevArrowTemplate"
     class="prev-thumbs"
+    aria-hidden="true"
     (click)="slide(-1)"
   >
     <ngx-chevron-icon></ngx-chevron-icon>
   </button>
 </ng-container>
 
-<ul #thumbs [style.scrollBehavior]="scrollBehavior">
+<ul
+  #thumbs
+  [style.scrollBehavior]="scrollBehavior"
+  tabindex="0"
+  [attr.aria-label]="aria?.thumbnailsLabel"
+>
   <!-- placeholder before items come -->
   <li *ngIf="!items || !items.length"></li>
   <li
@@ -46,6 +52,7 @@
   <button
     *ngIf="!nextArrowTemplate; else nextArrowTemplate"
     class="next-thumbs"
+    aria-hidden="true"
     (click)="slide(1)"
   >
     <ngx-chevron-icon></ngx-chevron-icon>

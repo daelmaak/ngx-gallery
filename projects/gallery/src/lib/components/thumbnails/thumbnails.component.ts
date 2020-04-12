@@ -34,6 +34,7 @@ import {
 
 import { isBrowser, SUPPORT, Orientation, ObjectFit } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
+import { Aria } from '../../core/aria';
 
 @Component({
   selector: 'ngx-thumbnails',
@@ -85,6 +86,9 @@ export class ThumbnailsComponent
 
   @Input()
   nextArrowTemplate: TemplateRef<void>;
+
+  @Input()
+  aria: Aria;
 
   @Output()
   thumbClick = new EventEmitter<Event>();

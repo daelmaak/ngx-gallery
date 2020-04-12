@@ -81,6 +81,7 @@ $arrow-btn-dimension: 30px;
 }
 
 ul {
+  outline: 0;
   // hide scrollbar
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
