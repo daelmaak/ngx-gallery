@@ -27,29 +27,33 @@ import {
 export class HomeComponent implements OnInit {
   images: Observable<GalleryItem[]>;
 
-  mobile = matchMedia('(max-width: 767px)').matches;
-
-  arrows = !this.mobile;
-  descriptions = false;
-  imageCounter = true;
-  imageCounterOrientation: VerticalOrientation = 'top';
-  objectFit: ObjectFit = 'contain';
-  loading: Loading = 'lazy';
-  loop = true;
-  thumbs = true;
-  thumbsAutoScroll = true;
-  thumbsOrientation: Orientation = this.mobile ? 'bottom' : 'left';
-  thumbsArrows = true;
-  thumbsArrowSlideByLength = 0;
-  thumbsScrollBehavior: ScrollBehavior = 'smooth';
-  thumbsObjectFit: ObjectFit = 'cover';
-
   displayGallery = true;
   imageLoadingLatency = 0;
 
+  mobile = matchMedia('(max-width: 767px)').matches;
+
+  galleryConfig = {
+    arrows: !this.mobile,
+    descriptions: false,
+    imageCounter: true,
+    imageCounterOrientation: 'top',
+    objectFit: 'contain',
+    loading: 'lazy',
+    loop: true,
+    thumbs: true,
+    thumbsAutoScroll: true,
+    thumbsOrientation: this.mobile ? 'bottom' : 'left',
+    thumbsArrows: true,
+    thumbsArrowSlideByLength: 0,
+    thumbsScrollBehavior: 'smooth',
+    thumbsObjectFit: 'cover'
+  };
+
   @ViewChild(GalleryComponent, { static: false }) gallery: GalleryComponent;
 
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(private cd: ChangeDetectorRef) {
+    this.galleryConfig = this.getGalleryConfig() || this.galleryConfig;
+  }
 
   ngOnInit() {
     this.images = of([
@@ -113,6 +117,8 @@ export class HomeComponent implements OnInit {
         defer(() => of(items).pipe(delay(this.imageLoadingLatency)))
       )
     );
+
+    window.addEventListener('beforeunload', this.storeGalleryConfig);
   }
 
   async onImageClick(event: ImageClickEvent) {
@@ -134,4 +140,12 @@ export class HomeComponent implements OnInit {
     this.displayGallery = true;
     this.cd.detectChanges();
   }
+
+  private getGalleryConfig() {
+    return JSON.parse(sessionStorage.getItem('galleryConfig'));
+  }
+
+  private storeGalleryConfig = () => {
+    sessionStorage.setItem('galleryConfig', JSON.stringify(this.galleryConfig));
+  };
 }

@@ -1,16 +1,18 @@
 <form>
   <section>
-    <mat-checkbox name="arrows" [(ngModel)]="arrows">Arrows</mat-checkbox>
+    <mat-checkbox name="arrows" [(ngModel)]="galleryConfig.arrows"
+      >Arrows</mat-checkbox
+    >
   </section>
 
   <section>
-    <mat-checkbox name="descriptions" [(ngModel)]="descriptions">
+    <mat-checkbox name="descriptions" [(ngModel)]="galleryConfig.descriptions">
       Descriptions
     </mat-checkbox>
   </section>
 
   <section>
-    <mat-checkbox name="imageCounter" [(ngModel)]="imageCounter"
+    <mat-checkbox name="imageCounter" [(ngModel)]="galleryConfig.imageCounter"
       >Image counter</mat-checkbox
     >
   </section>
@@ -19,7 +21,7 @@
     <label>Image counter orientation:</label>
     <mat-radio-group
       name="imageCounterOrientation"
-      [(ngModel)]="imageCounterOrientation"
+      [(ngModel)]="galleryConfig.imageCounterOrientation"
     >
       <mat-radio-button value="top">top</mat-radio-button>
       <mat-radio-button value="bottom">bottom</mat-radio-button>
@@ -28,29 +30,38 @@
 
   <section>
     <label>Image fit:</label>
-    <mat-radio-group name="objectFit" [(ngModel)]="objectFit">
+    <mat-radio-group name="objectFit" [(ngModel)]="galleryConfig.objectFit">
       <mat-radio-button value="contain">contain</mat-radio-button>
       <mat-radio-button value="cover">cover</mat-radio-button>
     </mat-radio-group>
   </section>
 
   <section>
-    <mat-checkbox name="loop" [(ngModel)]="loop">Loop</mat-checkbox>
+    <mat-checkbox name="loop" [(ngModel)]="galleryConfig.loop"
+      >Loop</mat-checkbox
+    >
   </section>
 
   <section>
-    <mat-checkbox name="thumbs" [(ngModel)]="thumbs">Thumbnails</mat-checkbox>
+    <mat-checkbox name="thumbs" [(ngModel)]="galleryConfig.thumbs"
+      >Thumbnails</mat-checkbox
+    >
   </section>
 
   <section>
-    <mat-checkbox name="thumbsAutoScroll" [(ngModel)]="thumbsAutoScroll"
+    <mat-checkbox
+      name="thumbsAutoScroll"
+      [(ngModel)]="galleryConfig.thumbsAutoScroll"
       >Thumbs autoscroll</mat-checkbox
     >
   </section>
 
   <section>
     <label>Thumbnails orientation:</label>
-    <mat-radio-group name="thumbsOrientation" [(ngModel)]="thumbsOrientation">
+    <mat-radio-group
+      name="thumbsOrientation"
+      [(ngModel)]="galleryConfig.thumbsOrientation"
+    >
       <mat-radio-button value="top">top</mat-radio-button>
       <mat-radio-button value="bottom">bottom</mat-radio-button>
       <mat-radio-button value="left">left</mat-radio-button>
@@ -59,7 +70,7 @@
   </section>
 
   <section>
-    <mat-checkbox name="thumbsArrows" [(ngModel)]="thumbsArrows"
+    <mat-checkbox name="thumbsArrows" [(ngModel)]="galleryConfig.thumbsArrows"
       >Thumbnail arrows</mat-checkbox
     >
     <mat-form-field>
@@ -67,7 +78,7 @@
       <input
         name="thumbsArrowsSlideByLength"
         matInput
-        [(ngModel)]="thumbsArrowSlideByLength"
+        [(ngModel)]="galleryConfig.thumbsArrowSlideByLength"
       />
     </mat-form-field>
   </section>
@@ -76,7 +87,7 @@
     <label>Thumbnails scroll behavior:</label>
     <mat-radio-group
       name="thumbsScrollBehavior"
-      [(ngModel)]="thumbsScrollBehavior"
+      [(ngModel)]="galleryConfig.thumbsScrollBehavior"
     >
       <mat-radio-button value="smooth">smooth</mat-radio-button>
       <mat-radio-button value="auto">auto</mat-radio-button>
@@ -85,7 +96,10 @@
 
   <section>
     <label>Thumbnail image fit:</label>
-    <mat-radio-group name="thumbsObjectFit" [(ngModel)]="thumbsObjectFit">
+    <mat-radio-group
+      name="thumbsObjectFit"
+      [(ngModel)]="galleryConfig.thumbsObjectFit"
+    >
       <mat-radio-button value="contain">contain</mat-radio-button>
       <mat-radio-button value="cover">cover</mat-radio-button>
     </mat-radio-group>
@@ -93,7 +107,7 @@
 
   <section>
     <label>Image loading strategy:</label>
-    <mat-radio-group name="loading" [(ngModel)]="loading">
+    <mat-radio-group name="loading" [(ngModel)]="galleryConfig.loading">
       <mat-radio-button value="auto">auto</mat-radio-button>
       <mat-radio-button value="lazy">lazy</mat-radio-button>
     </mat-radio-group>
@@ -122,22 +136,22 @@
 <ngx-gallery
   *ngIf="displayGallery"
   [items]="images | async"
-  [arrows]="arrows"
-  [descriptions]="descriptions"
-  [imageCounter]="imageCounter"
-  [imageCounterOrientation]="imageCounterOrientation"
-  [objectFit]="objectFit"
-  [loading]="loading"
-  [loop]="loop"
-  [thumbs]="thumbs"
-  [thumbsAutoScroll]="thumbsAutoScroll"
-  [thumbsOrientation]="thumbsOrientation"
-  [thumbsArrows]="thumbsArrows"
-  [thumbsArrowSlideByLength]="thumbsArrowSlideByLength"
-  [thumbsScrollBehavior]="thumbsScrollBehavior"
-  [thumbsObjectFit]="thumbsObjectFit"
+  [arrows]="galleryConfig.arrows"
+  [descriptions]="galleryConfig.descriptions"
+  [imageCounter]="galleryConfig.imageCounter"
+  [imageCounterOrientation]="galleryConfig.imageCounterOrientation"
+  [objectFit]="galleryConfig.objectFit"
+  [loading]="galleryConfig.loading"
+  [loop]="galleryConfig.loop"
+  [thumbs]="galleryConfig.thumbs"
+  [thumbsAutoScroll]="galleryConfig.thumbsAutoScroll"
+  [thumbsOrientation]="galleryConfig.thumbsOrientation"
+  [thumbsArrows]="galleryConfig.thumbsArrows"
+  [thumbsArrowSlideByLength]="galleryConfig.thumbsArrowSlideByLength"
+  [thumbsScrollBehavior]="galleryConfig.thumbsScrollBehavior"
+  [thumbsObjectFit]="galleryConfig.thumbsObjectFit"
   (imageClick)="onImageClick($event)"
-  (descriptionClick)="descriptions = false"
+  (descriptionClick)="galleryConfig.descriptions = false"
 ></ngx-gallery>
 
 <ng-template #loadingTemplate>
