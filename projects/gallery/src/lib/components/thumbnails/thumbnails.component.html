@@ -20,6 +20,7 @@
   <li
     *ngFor="let item of items; let i = index"
     [class.selected]="i === selectedIndex"
+    aria-hidden="true"
     (click)="selection.emit(i); thumbClick.emit($event)"
   >
     <ng-container *ngIf="!thumbTemplate; else customThumbTemplate">

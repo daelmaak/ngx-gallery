@@ -106,21 +106,30 @@ describe('ImageViewerComponent Unit', () => {
 
     it('should be truthy if default loading on', () => {
       viewer.loading = 'auto';
-      expect(viewer.getSrc(viewer.items[1], 1)).toBeTruthy();
+      expect(viewer.getSrc(viewer.items[1])).toBeTruthy();
     });
 
     it('should be empty if lazy loading on and item has not been seen nor selected yet', () => {
-      expect(viewer.getSrc(viewer.items[1], 1)).toBeFalsy();
+      expect(viewer.getSrc(viewer.items[1])).toBeFalsy();
+    });
+
+    it(`should be truthy if item:
+          +- 1 item distance from selected item
+          lazy loaded
+          not yet seen
+          viewer was already interacted with`, () => {
+      viewer.onInteraction();
+      expect(viewer.getSrc(viewer.items[1])).toBeTruthy();
     });
 
     it('should be truthy if lazy loading on and item has been seen', () => {
       viewer.items[1]._seen = true;
-      expect(viewer.getSrc(viewer.items[1], 1)).toBeTruthy();
+      expect(viewer.getSrc(viewer.items[1])).toBeTruthy();
     });
 
     it('should be truthy if lazy loading on and item has been selected', () => {
       viewer.selectedIndex = 1;
-      expect(viewer.getSrc(viewer.items[1], 1)).toBeTruthy();
+      expect(viewer.getSrc(viewer.items[1])).toBeTruthy();
     });
   });
 });

@@ -14,7 +14,8 @@ import {
   SimpleChanges,
   TemplateRef,
   ViewChild,
-  ViewChildren
+  ViewChildren,
+  HostListener
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -27,11 +28,10 @@ import {
   VerticalOrientation,
   OrientationFlag,
   ItemTemplateContext,
-  SUPPORT
+  Aria
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 import { ImageClickEvent } from './image-viewer.model';
-import { Aria } from '../../core/aria';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -106,10 +106,9 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   imagesHidden = true;
   noAnimation = false;
 
-  private seenItemsObserver: IntersectionObserver;
-  private swiping = false;
   private destroy$ = new Subject();
-
+  // this flag is supposed to prevent unnecessary loading of other than selected images
+  private interacted = false;
   private itemWidth: number;
   private listX = 0;
 
@@ -149,7 +148,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
     if (items && items.currentValue) {
       this.onResize();
-      this.observeSeenItems();
+
+      const selectedItem = items.currentValue[this.selectedIndex];
+      if (selectedItem) {
+        selectedItem._seen = true;
+      }
     }
   }
 
@@ -175,7 +178,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
         const onmousedown = (e: MouseEvent) => {
           mousedown = e;
-          this.swiping = true;
           this.noAnimation = true;
           this.cd.detectChanges();
 
@@ -188,7 +190,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const onmouseup = (e: MouseEvent) => {
-          this.swiping = false;
           this.noAnimation = false;
 
           const time = e.timeStamp - mousedown.timeStamp;
@@ -206,7 +207,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
         const ontouchstart = (e: TouchEvent) => {
           touchstart = e;
-          this.swiping = true;
           this.noAnimation = true;
           this.cd.detectChanges();
         };
@@ -238,7 +238,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const ontouchend = () => {
-          this.swiping = false;
           this.noAnimation = false;
 
           if (lastTouchmove) {
@@ -273,13 +272,14 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next(null);
     this.destroy$.complete();
-    this.seenItemsObserver && this.seenItemsObserver.disconnect();
   }
 
-  getSrc(item: GalleryItemInternal, index: number) {
-    return !this.lazyLoading || item._seen || this.selectedIndex === index
-      ? item.src
-      : '';
+  getSrc(item: GalleryItemInternal) {
+    const index = this.items.indexOf(item);
+    const inProximity = this.interacted
+      ? Math.abs(this.selectedIndex - index) <= 1
+      : this.selectedIndex === index;
+    return !this.lazyLoading || item._seen || inProximity ? item.src : '';
   }
 
   isYoutube(item: GalleryItemInternal) {
@@ -322,10 +322,15 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
 
+    this.items[index]._seen = true;
     this.selectedIndex = index;
     this.selection.emit(index);
     this.center();
   }
+
+  @HostListener('mousedown')
+  @HostListener('touchstart')
+  onInteraction = () => (this.interacted = true);
 
   onImageClick(item: GalleryItemInternal, event: Event) {
     this.imageClick.emit({
@@ -333,6 +338,15 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       item,
       index: this.items.indexOf(item)
     });
+  }
+
+  onTab(nextItemIndex: number) {
+    // allow focus to escape viewer
+    if (nextItemIndex >= 0 && nextItemIndex < this.items.length) {
+      this.select(nextItemIndex);
+      // focusing an item literally scrolls the item list, so I have to scroll it back
+      requestAnimationFrame(() => (this.hostRef.nativeElement.scrollLeft = 0));
+    }
   }
 
   onItemLoaded(item: GalleryItemInternal, loadEvent: Event) {
@@ -361,44 +375,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   private getItemWidth() {
     return this.hostRef.nativeElement.querySelector('li').offsetWidth;
   }
-
-  private observeSeenItems() {
-    if (isBrowser && SUPPORT.intersectionObserver) {
-      if (!this.seenItemsObserver) {
-        this.seenItemsObserver = new IntersectionObserver(this.onItemsSeen, {
-          threshold: 0.1
-        });
-      } else {
-        this.seenItemsObserver.disconnect();
-      }
-
-      // wait for any rendering changes necessary
-      setTimeout(() => {
-        this.itemsRef.forEach(ref =>
-          this.seenItemsObserver.observe(ref.nativeElement)
-        );
-      });
-    }
-  }
-
-  private onItemsSeen: IntersectionObserverCallback = entries =>
-    entries
-      .filter(e => e.isIntersecting && e.intersectionRatio > 0)
-      .forEach(e => {
-        const target = e.target as HTMLElement;
-        const index = this.itemsRef
-          .toArray()
-          .findIndex(i => i.nativeElement === target);
-
-        // for a11y, when user tabs through gallery items
-        const tabbed = e.intersectionRatio > 0.95;
-
-        if (this.swiping || this.selectedIndex === index || tabbed) {
-          this.items[index]._seen = true;
-          this.cd.detectChanges();
-          this.seenItemsObserver.unobserve(target);
-        }
-      });
 
   private onResize = () => {
     requestAnimationFrame(() => {

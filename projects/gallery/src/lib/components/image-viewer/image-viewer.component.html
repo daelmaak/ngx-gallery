@@ -22,11 +22,13 @@
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'imgr-desc-' + i"
     (click)="onImageClick(item, $event)"
+    (keydown.Tab)="onTab(i + 1)"
+    (keydown.shift.Tab)="onTab(i - 1)"
   >
     <ng-container *ngIf="!itemTemplate; else customTemplate">
       <img
         *ngIf="!isYoutube(item) && !item.video"
-        [src]="getSrc(item, i)"
+        [src]="getSrc(item)"
         [alt]="item.alt"
         [class.loading]="item._seen && !item._loaded"
         [style.objectFit]="objectFit"
@@ -36,7 +38,7 @@
       <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
       <video
         *ngIf="!isYoutube(item) && item.video"
-        [src]="getSrc(item, i)"
+        [src]="getSrc(item)"
         [class.loading]="item._seen && !item._loaded"
         [style.objectFit]="objectFit"
         controls
@@ -46,7 +48,7 @@
       ></video>
       <iframe
         *ngIf="isYoutube(item)"
-        [src]="getSrc(item, i) | safe"
+        [src]="getSrc(item) | safe"
         frameborder="0"
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
@@ -69,6 +71,7 @@
       [id]="'imgr-desc-' + i"
       class="aria-description"
       [innerHTML]="item.description"
+      aria-hidden="true"
     ></span>
 
     <ng-template #customTemplate>

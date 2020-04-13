@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
     descriptions: false,
     imageCounter: true,
     imageCounterOrientation: 'top',
-    objectFit: 'contain',
+    objectFit: 'cover',
     loading: 'lazy',
     loop: true,
     thumbs: true,
@@ -58,28 +58,21 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.images = of([
       {
-        src: './assets/kitten4.jpg',
-        alt: 'Kitten 4',
-        description:
-          '<i>Lovely</i> kitten that <strong>will</strong> make your day way more enjoyable'
-      },
-      {
         src: './assets/kitten3.jpg',
         alt: 'Kitten 3',
         description: 'Beautiful kitten'
-      },
-      {
-        src:
-          'https://interactive-examples.mdn.mozilla.net/media/examples/flower.mp4',
-        thumbSrc: './assets/flower.jpg',
-        video: true,
-        description: 'Blooming rose'
       },
       {
         src: './assets/mountains2.jpg',
         thumbSrc: './assets/mountains2-thumb.jpg',
         alt: 'Mountains 2',
         description: 'Mountain ridge'
+      },
+      {
+        src: './assets/kitten4.jpg',
+        alt: 'Kitten 4',
+        description:
+          '<i>Lovely</i> kitten that <strong>will</strong> make your day way more enjoyable'
       },
       // {
       //   src: 'https://www.youtube.com/embed/s54LfNUU1Cg',
@@ -107,6 +100,13 @@ export class HomeComponent implements OnInit {
         src: './assets/fruit3.jpg',
         alt: 'Fruit 3',
         description: 'Most exotic fruit I have ever seen'
+      },
+      {
+        src:
+          'https://interactive-examples.mdn.mozilla.net/media/examples/flower.mp4',
+        thumbSrc: './assets/flower.jpg',
+        video: true,
+        description: 'Blooming rose'
       },
       {
         src: './assets/vogel1.jpg',
