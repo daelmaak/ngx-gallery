@@ -74,11 +74,6 @@ export class HomeComponent implements OnInit {
         description:
           '<i>Lovely</i> kitten that <strong>will</strong> make your day way more enjoyable'
       },
-      // {
-      //   src: 'https://www.youtube.com/embed/s54LfNUU1Cg',
-      //   thumbSrc: 'https://img.youtube.com/vi/s54LfNUU1Cg/1.jpg',
-      //   alt: 'LP Somewhere I belong'
-      // },
       {
         src: './assets/mountains4.jpg',
         thumbSrc: './assets/mountains4-thumb.jpg',
@@ -120,6 +115,11 @@ export class HomeComponent implements OnInit {
         alt: 'Landscape 1',
         description: 'Pale painting of a landscape'
       }
+      // {
+      //   src: 'https://www.youtube.com/embed/s54LfNUU1Cg',
+      //   thumbSrc: 'https://img.youtube.com/vi/s54LfNUU1Cg/1.jpg',
+      //   alt: 'LP Somewhere I belong'
+      // }
     ]).pipe(
       switchMap(items =>
         defer(() => of(items).pipe(delay(this.imageLoadingLatency)))

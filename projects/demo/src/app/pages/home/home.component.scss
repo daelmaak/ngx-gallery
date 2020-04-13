@@ -27,7 +27,8 @@ mat-form-field {
 
 ngx-gallery {
   width: 100%;
-  margin-bottom: 300px;
+  // max-width: calc(1020px / 3);
+  margin: 0 auto 300px;
 
   ::ng-deep {
     ngx-image-viewer {

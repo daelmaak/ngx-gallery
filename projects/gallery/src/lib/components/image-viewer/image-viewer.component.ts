@@ -104,7 +104,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
   imagesHidden = true;
-  noAnimation = false;
+
+  set noAnimation(value: boolean) {
+    this.itemListRef.nativeElement.style.transitionDuration = value
+      ? '0ms'
+      : '';
+  }
 
   private destroy$ = new Subject();
   // this flag is supposed to prevent unnecessary loading of other than selected images
@@ -173,13 +178,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
       this.zone.runOutsideAngular(() => {
         const imageList = this.itemListRef.nativeElement;
-
         let mousedown: MouseEvent;
 
         const onmousedown = (e: MouseEvent) => {
           mousedown = e;
           this.noAnimation = true;
-          this.cd.detectChanges();
 
           document.addEventListener('mousemove', onmousemove, opts);
           document.addEventListener('mouseup', onmouseup, opts);
@@ -208,7 +211,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         const ontouchstart = (e: TouchEvent) => {
           touchstart = e;
           this.noAnimation = true;
-          this.cd.detectChanges();
         };
 
         const ontouchmove = (e: TouchEvent) => {
@@ -276,10 +278,14 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   getSrc(item: GalleryItemInternal) {
     const index = this.items.indexOf(item);
-    const inProximity = this.interacted
+    const inProximity = this.isInScrollportProximity(index);
+    return !this.lazyLoading || item._seen || inProximity ? item.src : '';
+  }
+
+  isInScrollportProximity(index: number) {
+    return this.interacted
       ? Math.abs(this.selectedIndex - index) <= 1
       : this.selectedIndex === index;
-    return !this.lazyLoading || item._seen || inProximity ? item.src : '';
   }
 
   isYoutube(item: GalleryItemInternal) {
