@@ -64,9 +64,6 @@ export class ThumbnailsComponent
   autoScroll: boolean;
 
   @Input()
-  objectFit: ObjectFit;
-
-  @Input()
   set scrollBehavior(val: ScrollBehavior) {
     this._scrollBehavior = val || 'smooth';
   }
@@ -157,7 +154,6 @@ export class ThumbnailsComponent
   }
 
   ngOnInit() {
-    this.objectFit == null && (this.objectFit = 'cover');
     this.autoScroll === undefined && (this.autoScroll = true);
     this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
 

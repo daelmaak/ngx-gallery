@@ -45,8 +45,7 @@ export class HomeComponent implements OnInit {
     thumbsOrientation: this.mobile ? 'bottom' : 'left',
     thumbsArrows: true,
     thumbsArrowSlideByLength: 0,
-    thumbsScrollBehavior: 'smooth',
-    thumbsObjectFit: 'cover'
+    thumbsScrollBehavior: 'smooth'
   };
 
   @ViewChild(GalleryComponent, { static: false }) gallery: GalleryComponent;

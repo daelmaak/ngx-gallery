@@ -95,17 +95,6 @@
   </section>
 
   <section>
-    <label>Thumbnail image fit:</label>
-    <mat-radio-group
-      name="thumbsObjectFit"
-      [(ngModel)]="galleryConfig.thumbsObjectFit"
-    >
-      <mat-radio-button value="contain">contain</mat-radio-button>
-      <mat-radio-button value="cover">cover</mat-radio-button>
-    </mat-radio-group>
-  </section>
-
-  <section>
     <label>Image loading strategy:</label>
     <mat-radio-group name="loading" [(ngModel)]="galleryConfig.loading">
       <mat-radio-button value="auto">auto</mat-radio-button>
@@ -149,7 +138,6 @@
   [thumbsArrows]="galleryConfig.thumbsArrows"
   [thumbsArrowSlideByLength]="galleryConfig.thumbsArrowSlideByLength"
   [thumbsScrollBehavior]="galleryConfig.thumbsScrollBehavior"
-  [thumbsObjectFit]="galleryConfig.thumbsObjectFit"
   (imageClick)="onImageClick($event)"
   (descriptionClick)="galleryConfig.descriptions = false"
 ></ngx-gallery>

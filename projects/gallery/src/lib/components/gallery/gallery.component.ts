@@ -100,9 +100,6 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   thumbsScrollBehavior: ScrollBehavior;
 
   @Input()
-  thumbsObjectFit: ObjectFit;
-
-  @Input()
   thumbTemplate: TemplateRef<any>;
 
   @Input()
