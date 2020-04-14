@@ -52,6 +52,9 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   errorText: string;
 
   @Input()
+  gestures: boolean;
+
+  @Input()
   imageCounter: boolean;
 
   @Input()
@@ -175,6 +178,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
     this.aria == null && (this.aria = defaultAria);
     this.arrows === undefined && (this.arrows = true);
     this.descriptions == null && (this.descriptions = true);
+    this.gestures == null && (this.gestures = true);
     this.loop === undefined && (this.loop = true);
     this.loading == null && (this.loading = 'auto');
     this.selectedIndex == null && (this.selectedIndex = 0);

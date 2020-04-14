@@ -12,6 +12,15 @@
   </section>
 
   <section>
+    <mat-checkbox name="gestures" [(ngModel)]="galleryConfig.gestures">
+      Gestures
+      <button mat-raised-button (click)="reloadGallery()">
+        Apply gestures
+      </button>
+    </mat-checkbox>
+  </section>
+
+  <section>
     <mat-checkbox name="imageCounter" [(ngModel)]="galleryConfig.imageCounter"
       >Image counter</mat-checkbox
     >
@@ -101,7 +110,7 @@
       <mat-radio-button value="lazy">lazy</mat-radio-button>
     </mat-radio-group>
     <button mat-raised-button (click)="reloadGallery()">
-      Confirm loading strategy
+      Apply loading strategy
     </button>
   </section>
 
@@ -127,6 +136,7 @@
   [items]="images | async"
   [arrows]="galleryConfig.arrows"
   [descriptions]="galleryConfig.descriptions"
+  [gestures]="galleryConfig.gestures"
   [imageCounter]="galleryConfig.imageCounter"
   [imageCounterOrientation]="galleryConfig.imageCounterOrientation"
   [objectFit]="galleryConfig.objectFit"

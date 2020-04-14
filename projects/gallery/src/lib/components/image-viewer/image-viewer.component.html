@@ -16,11 +16,11 @@
     #items
     *ngFor="let item of items; let i = index"
     [class.selected]="i === selectedIndex"
-    ondragstart="return false"
     tabindex="0"
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'imgr-desc-' + i"
     (click)="onImageClick(item, $event)"
+    (dragstart)="onDragstart($event)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
   >
