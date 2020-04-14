@@ -104,6 +104,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
   imagesHidden = true;
+  UA = UA;
 
   set noAnimation(value: boolean) {
     this.itemListRef.nativeElement.style.transitionDuration = value
