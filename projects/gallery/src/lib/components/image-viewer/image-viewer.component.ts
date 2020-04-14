@@ -283,9 +283,11 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   isInScrollportProximity(index: number) {
-    return this.interacted
-      ? Math.abs(this.selectedIndex - index) <= 1
-      : this.selectedIndex === index;
+    const distance = Math.abs(this.selectedIndex - index);
+    if (distance === this.items.length - 1 && this.loop) {
+      return true;
+    }
+    return this.interacted ? distance <= 1 : this.selectedIndex === index;
   }
 
   isYoutube(item: GalleryItemInternal) {

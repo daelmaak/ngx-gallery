@@ -63,12 +63,6 @@ export class HomeComponent implements OnInit {
         description: 'Beautiful kitten'
       },
       {
-        src: './assets/mountains2.jpg',
-        thumbSrc: './assets/mountains2-thumb.jpg',
-        alt: 'Mountains 2',
-        description: 'Mountain ridge'
-      },
-      {
         src: './assets/kitten4.jpg',
         alt: 'Kitten 4',
         description:
@@ -126,7 +120,7 @@ export class HomeComponent implements OnInit {
       )
     );
 
-    window.addEventListener('beforeunload', this.storeGalleryConfig);
+    window.addEventListener('pagehide', this.storeGalleryConfig);
   }
 
   async onImageClick(event: ImageClickEvent) {
