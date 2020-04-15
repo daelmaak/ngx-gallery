@@ -56,7 +56,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   errorText: string;
 
   @Input()
-  gestures: boolean;
+  mouseGestures: boolean;
+
+  @Input()
+  touchGestures: boolean;
 
   @Input()
   imageCounter: boolean;
@@ -181,7 +184,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         .subscribe(this.onResize);
     }
 
-    if (isBrowser && this.gestures) {
+    if (isBrowser && this.mouseGestures) {
       this.zone.runOutsideAngular(() => {
         const imageList = this.itemListRef.nativeElement;
         let mousedown: MouseEvent;
@@ -210,6 +213,16 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           document.removeEventListener('mouseup', onmouseup);
         };
 
+        imageList.addEventListener('mousedown', onmousedown, listenerOpts);
+        this.destroy$.subscribe(() => {
+          imageList.removeEventListener('mousedown', onmousedown);
+        });
+      });
+    }
+
+    if (isBrowser && this.touchGestures) {
+      this.zone.runOutsideAngular(() => {
+        const imageList = this.itemListRef.nativeElement;
         let horizontal = null;
         let touchstart: TouchEvent;
         let lastTouchmove: TouchEvent;
@@ -260,15 +273,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           lastTouchmove = null;
         };
 
-        imageList.addEventListener('mousedown', onmousedown, listenerOpts);
         imageList.addEventListener('touchstart', ontouchstart, listenerOpts);
         document.addEventListener('touchmove', ontouchmove, listenerOpts);
         document.addEventListener('touchend', ontouchend);
-
         this.destroy$.subscribe(() => {
-          imageList.removeEventListener('mousedown', onmousedown);
-          document.removeEventListener('mousemove', onmousemove);
-          document.removeEventListener('mouseup', onmouseup);
           imageList.removeEventListener('touchstart', ontouchstart);
           document.removeEventListener('touchmove', ontouchmove);
           document.removeEventListener('touchend', ontouchend);
@@ -343,7 +351,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   onDragstart(e: Event) {
-    if (this.gestures) {
+    if (this.mouseGestures) {
       e.preventDefault();
     }
   }

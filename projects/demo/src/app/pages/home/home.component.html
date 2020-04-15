@@ -12,8 +12,23 @@
   </section>
 
   <section>
-    <mat-checkbox name="gestures" [(ngModel)]="galleryConfig.gestures">
-      Gestures
+    <mat-checkbox
+      name="mouseGestures"
+      [(ngModel)]="galleryConfig.mouseGestures"
+    >
+      Mouse Gestures
+      <button mat-raised-button (click)="reloadGallery()">
+        Apply gestures
+      </button>
+    </mat-checkbox>
+  </section>
+
+  <section>
+    <mat-checkbox
+      name="touchGestures"
+      [(ngModel)]="galleryConfig.touchGestures"
+    >
+      Touch Gestures
       <button mat-raised-button (click)="reloadGallery()">
         Apply gestures
       </button>
@@ -136,7 +151,8 @@
   [items]="images | async"
   [arrows]="galleryConfig.arrows"
   [descriptions]="galleryConfig.descriptions"
-  [gestures]="galleryConfig.gestures"
+  [mouseGestures]="galleryConfig.mouseGestures"
+  [touchGestures]="galleryConfig.touchGestures"
   [imageCounter]="galleryConfig.imageCounter"
   [imageCounterOrientation]="galleryConfig.imageCounterOrientation"
   [objectFit]="galleryConfig.objectFit"

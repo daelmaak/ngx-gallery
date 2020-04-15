@@ -52,7 +52,10 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   errorText: string;
 
   @Input()
-  gestures: boolean;
+  mouseGestures: boolean;
+
+  @Input()
+  touchGestures: boolean;
 
   @Input()
   imageCounter: boolean;
@@ -178,7 +181,8 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
     this.aria == null && (this.aria = defaultAria);
     this.arrows === undefined && (this.arrows = true);
     this.descriptions == null && (this.descriptions = true);
-    this.gestures == null && (this.gestures = true);
+    this.mouseGestures == null && (this.mouseGestures = true);
+    this.touchGestures == null && (this.touchGestures = true);
     this.loop === undefined && (this.loop = true);
     this.loading == null && (this.loading = 'auto');
     this.selectedIndex == null && (this.selectedIndex = 0);
@@ -215,7 +219,7 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
     this._selectInternal(index);
   }
 
-  slideThumbs(direction: -1 | 1) {
+  slideThumbs(direction: number) {
     this.thumbnails.slide(direction);
   }
 

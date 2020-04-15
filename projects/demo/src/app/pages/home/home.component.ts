@@ -35,7 +35,8 @@ export class HomeComponent implements OnInit {
   galleryConfig = {
     arrows: !this.mobile,
     descriptions: false,
-    gestures: true,
+    mouseGestures: true,
+    touchGestures: true,
     imageCounter: true,
     imageCounterOrientation: 'top',
     objectFit: 'cover',
