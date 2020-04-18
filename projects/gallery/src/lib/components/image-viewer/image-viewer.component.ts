@@ -158,7 +158,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         });
       }
     }
-    if (items && items.currentValue) {
+    if (items && items.currentValue && items.currentValue.length) {
       this.onResize();
 
       const selectedItem = items.currentValue[this.selectedIndex];
@@ -405,16 +405,16 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private onResize = () => {
-    requestAnimationFrame(() => {
-      if (!this.items || !this.items.length) {
-        this.shiftImages(0);
-      } else {
-        this.itemWidth = this.getItemWidth();
-        this.center();
-      }
+    this.noAnimation = true;
+    if (!this.items || !this.items.length) {
+      this.shiftImages(0);
+    } else {
+      this.itemWidth = this.getItemWidth();
+      this.center();
+    }
 
-      this.imagesHidden = false;
-      this.cd.detectChanges();
+    setTimeout(() => {
+      this.noAnimation = false;
     });
   };
 

@@ -6,11 +6,7 @@
   ></ngx-chevron-icon>
 </ng-container>
 
-<ul
-  #itemList
-  [class.hidden]="imagesHidden"
-  [attr.aria-label]="aria?.viewerLabel"
->
+<ul #itemList [attr.aria-label]="aria?.viewerLabel">
   <li *ngIf="!items?.length" class="initial-item"></li>
   <li
     #items
