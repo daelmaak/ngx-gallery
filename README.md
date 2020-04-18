@@ -2,6 +2,8 @@
 
 Performant, responsive, easy to use gallery
 
+[![CircleCI](https://circleci.com/gh/daelmaak/ngx-imagery.svg?style=svg)](https://circleci.com/gh/daelmaak/ngx-imagery)
+
 [**DEMO**](https://daelmaak.github.io/ngx-imagery/)
 
 [**Stackblitz**](https://stackblitz.com/edit/ngx-imagery)
