@@ -109,20 +109,19 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
-  imagesHidden = true;
   UA = UA;
-
-  set noAnimation(value: boolean) {
-    this.itemListRef.nativeElement.style.transitionDuration = value
-      ? '0ms'
-      : '';
-  }
 
   private destroy$ = new Subject();
   // this flag is supposed to prevent unnecessary loading of other than selected images
   private interacted = false;
   private itemWidth: number;
   private listX = 0;
+
+  set noAnimation(value: boolean) {
+    this.itemListRef.nativeElement.style.transitionDuration = value
+      ? '0ms'
+      : '';
+  }
 
   get lazyLoading() {
     return this.loading === 'lazy';
