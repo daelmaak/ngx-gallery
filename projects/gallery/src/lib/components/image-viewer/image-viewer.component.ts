@@ -109,8 +109,6 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
-  UA = UA;
-
   private destroy$ = new Subject();
   // this flag is supposed to prevent unnecessary loading of other than selected images
   private interacted = false;

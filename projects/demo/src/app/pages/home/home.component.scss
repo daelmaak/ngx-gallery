@@ -30,6 +30,10 @@ ngx-gallery {
   // max-width: calc(1020px / 3);
   margin: 0 auto 300px;
 
+  @media (max-width: 480px) {
+    max-width: calc(100vw - 60px);
+  }
+
   ::ng-deep {
     ngx-image-viewer {
       img {
