@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   NgZone,
   OnChanges,
@@ -14,24 +15,23 @@ import {
   SimpleChanges,
   TemplateRef,
   ViewChild,
-  ViewChildren,
-  HostListener
+  ViewChildren
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import {
+  Aria,
+  GalleryItemEvent,
   isBrowser,
-  ObjectFit,
-  Loading,
-  UA,
-  VerticalOrientation,
-  OrientationFlag,
   ItemTemplateContext,
-  Aria
+  Loading,
+  ObjectFit,
+  OrientationFlag,
+  UA,
+  VerticalOrientation
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
-import { ImageClickEvent } from './image-viewer.model';
 
 @Component({
   selector: 'ngx-image-viewer',
@@ -98,7 +98,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   aria: Aria;
 
   @Output()
-  imageClick = new EventEmitter<ImageClickEvent>();
+  imageClick = new EventEmitter<GalleryItemEvent>();
 
   @Output()
   descriptionClick = new EventEmitter<Event>();
@@ -156,7 +156,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
     if (items && items.currentValue && items.currentValue.length) {
-      this.onResize();
+      setTimeout(() => this.onResize());
 
       const selectedItem = items.currentValue[this.selectedIndex];
       if (selectedItem) {
