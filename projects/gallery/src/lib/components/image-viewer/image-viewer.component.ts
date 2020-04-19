@@ -380,6 +380,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     // elements with empty src also get loaded event, therefore the check
     if (target.getAttribute('src')) {
       item._loaded = true;
+      this.cd.detectChanges();
     }
   }
 
@@ -388,6 +389,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     if (target.getAttribute('src')) {
       item._failed = true;
+      this.cd.detectChanges();
     }
   }
 
