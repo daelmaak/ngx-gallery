@@ -14,6 +14,7 @@ $arrow-btn-dimension: 30px;
       width: 100%;
       display: flex;
       overflow-x: scroll;
+      overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
     }
 
@@ -48,6 +49,7 @@ $arrow-btn-dimension: 30px;
     ul {
       height: 100%;
       overflow-y: scroll;
+      overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
     }
 
