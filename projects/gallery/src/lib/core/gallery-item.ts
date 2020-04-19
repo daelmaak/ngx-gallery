@@ -52,3 +52,19 @@ export interface GalleryItemInternal extends GalleryItem {
    */
   _thumbFailed?: boolean;
 }
+
+export interface GalleryItemEventInternal {
+  /**
+   * Index of the item
+   */
+  index: number;
+
+  /**
+   * DOM event
+   */
+  event: Event;
+}
+
+export interface GalleryItemEvent extends GalleryItemEventInternal {
+  item: GalleryItem;
+}

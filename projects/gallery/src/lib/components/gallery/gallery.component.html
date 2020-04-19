@@ -12,8 +12,8 @@
   [prevArrowTemplate]="prevThumbsArrowTemplate"
   [nextArrowTemplate]="nextThumbsArrowTemplate"
   [aria]="aria"
-  (thumbClick)="thumbClick.emit($event)"
-  (selection)="_selectInternal($event); imageViewer.select($event)"
+  (thumbClick)="onThumbClick($event)"
+  (thumbHover)="_emitEvent($event, thumbHover)"
 ></ngx-thumbnails>
 
 <ngx-image-viewer
@@ -38,7 +38,7 @@
   [prevArrowTemplate]="prevArrowTemplate"
   [nextArrowTemplate]="nextArrowTemplate"
   [aria]="aria"
-  (imageClick)="onImageClick($event)"
+  (imageClick)="_emitEvent($event, imageClick)"
   (descriptionClick)="descriptionClick.emit($event)"
   (selection)="_selectInternal($event); thumbnails?.select($event)"
 ></ngx-image-viewer>

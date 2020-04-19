@@ -33,7 +33,10 @@ import {
 } from 'rxjs/operators';
 
 import { isBrowser, SUPPORT, Orientation, ObjectFit } from '../../core';
-import { GalleryItemInternal } from '../../core/gallery-item';
+import {
+  GalleryItemInternal,
+  GalleryItemEventInternal
+} from '../../core/gallery-item';
 import { Aria } from '../../core/aria';
 
 @Component({
@@ -49,6 +52,9 @@ export class ThumbnailsComponent
 
   @Input()
   selectedIndex: number;
+
+  @Input()
+  aria: Aria;
 
   @Input()
   @HostBinding('class')
@@ -84,14 +90,11 @@ export class ThumbnailsComponent
   @Input()
   nextArrowTemplate: TemplateRef<void>;
 
-  @Input()
-  aria: Aria;
+  @Output()
+  thumbClick = new EventEmitter<GalleryItemEventInternal>();
 
   @Output()
-  thumbClick = new EventEmitter<Event>();
-
-  @Output()
-  selection = new EventEmitter<GalleryItemInternal>();
+  thumbHover = new EventEmitter<GalleryItemEventInternal>();
 
   @ViewChild('thumbs', { static: true })
   thumbListRef: ElementRef<HTMLElement>;
@@ -227,6 +230,17 @@ export class ThumbnailsComponent
 
   onItemErrored(item: GalleryItemInternal) {
     item._thumbFailed = true;
+  }
+
+  emitEvent(
+    index: number,
+    event: Event,
+    emitter: EventEmitter<GalleryItemEventInternal>
+  ) {
+    emitter.emit({
+      index,
+      event
+    });
   }
 
   private initArrowUpdates() {

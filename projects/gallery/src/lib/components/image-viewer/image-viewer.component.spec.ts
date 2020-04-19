@@ -83,6 +83,24 @@ describe('ImageViewerComponent UI', () => {
 
       expect(de.queryAll(By.css('li:not(.initial-item)')).length).toBe(2);
     }));
+
+    it('should preselect item based on gived index', fakeAsync(() => {
+      component.selectedIndex = 1;
+      component.items = [{ src: 'src1' }, { src: 'src2' }];
+      const changes = {
+        items: new SimpleChange(null, component.items, true)
+      };
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+
+      tick();
+
+      expect(de.query(By.css('li.selected'))).toBeTruthy();
+      expect(de.queryAll(By.css('li'))[1].classes.selected).toBeTruthy();
+      expect(de.query(By.css('ul')).nativeElement.style.transform).toMatch(
+        /translate3d\(-\d+px, 0px, 0px\)/
+      );
+    }));
   });
 });
 

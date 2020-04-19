@@ -1,33 +1,38 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   EventEmitter,
   HostBinding,
+  HostListener,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  ViewChild,
+  SimpleChanges,
   TemplateRef,
-  HostListener,
-  ElementRef,
-  OnChanges,
-  SimpleChanges
+  ViewChild
 } from '@angular/core';
-import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
-import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
+
 import {
+  Aria,
   GalleryItem,
+  GalleryItemEvent,
+  ItemTemplateContext,
   Loading,
   ObjectFit,
   Orientation,
   OrientationFlag,
-  VerticalOrientation,
-  ItemTemplateContext
+  VerticalOrientation
 } from '../../core';
-import { GalleryItemInternal } from '../../core/gallery-item';
-import { ImageClickEvent } from '../image-viewer/image-viewer.model';
-import { Aria, defaultAria } from '../../core/aria';
+import { defaultAria } from '../../core/aria';
+import {
+  GalleryItemEventInternal,
+  GalleryItemInternal
+} from '../../core/gallery-item';
+import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
+import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
 
 @Component({
   selector: 'ngx-gallery',
@@ -41,6 +46,9 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   selectedIndex: number;
+
+  @Input()
+  aria: Aria;
 
   @Input()
   arrows: boolean;
@@ -117,14 +125,14 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   nextThumbsArrowTemplate: TemplateRef<void>;
 
-  @Input()
-  aria: Aria;
+  @Output()
+  imageClick = new EventEmitter<GalleryItemEvent>();
 
   @Output()
-  imageClick = new EventEmitter<ImageClickEvent>();
+  thumbClick = new EventEmitter<GalleryItemEvent>();
 
   @Output()
-  thumbClick = new EventEmitter<Event>();
+  thumbHover = new EventEmitter<GalleryItemEvent>();
 
   @Output()
   descriptionClick = new EventEmitter<Event>();
@@ -207,10 +215,10 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
     this.imageViewer.prev();
   }
 
-  onImageClick(event: ImageClickEvent) {
-    // give back original item, not the internal
-    event.item = this.items[event.index];
-    this.imageClick.emit(event);
+  onThumbClick(event: GalleryItemEvent) {
+    this.imageViewer.select(event.index);
+    this._emitEvent(event, this.thumbClick);
+    this._selectInternal(event.index);
   }
 
   select(index: number) {
@@ -221,6 +229,16 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
 
   slideThumbs(direction: number) {
     this.thumbnails.slide(direction);
+  }
+
+  _emitEvent(
+    event: GalleryItemEventInternal,
+    emitter: EventEmitter<GalleryItemEvent>
+  ) {
+    const publicEvent = event as GalleryItemEvent;
+
+    publicEvent.item = this.items[event.index];
+    emitter.emit(publicEvent);
   }
 
   _selectInternal(index: number) {

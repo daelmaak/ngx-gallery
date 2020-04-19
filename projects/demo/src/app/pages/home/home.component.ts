@@ -11,11 +11,7 @@ import { delay, switchMap } from 'rxjs/operators';
 import {
   GalleryComponent,
   GalleryItem,
-  ObjectFit,
-  Loading,
-  Orientation,
-  VerticalOrientation,
-  ImageClickEvent
+  GalleryItemEvent
 } from 'projects/gallery/src/public-api';
 
 @Component({
@@ -124,7 +120,7 @@ export class HomeComponent implements OnInit {
     window.addEventListener('pagehide', this.storeGalleryConfig);
   }
 
-  async onImageClick(event: ImageClickEvent) {
+  async onImageClick(event: GalleryItemEvent) {
     // this.galleryDetail
     //   .open(event.index, {
     //     thumbsOrientation: 'bottom',

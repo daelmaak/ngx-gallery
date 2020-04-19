@@ -104,7 +104,7 @@
 ></ngx-image-counter>
 
 <div
-  *ngIf="descriptions"
+  *ngIf="descriptions && items"
   class="description-container"
   [class.above-counter]="imageCounterOrientation === 'bottom'"
   aria-hidden="true"
