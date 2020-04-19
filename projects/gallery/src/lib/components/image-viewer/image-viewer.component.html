@@ -21,35 +21,37 @@
     (keydown.shift.Tab)="onTab(i - 1)"
   >
     <ng-container *ngIf="!itemTemplate; else customTemplate">
-      <img
-        *ngIf="!isYoutube(item) && !item.video"
-        [src]="getSrc(item)"
-        [alt]="item.alt"
-        [class.loading]="item._seen && !item._loaded"
-        [style.objectFit]="objectFit"
-        (load)="onItemLoaded(item, $event)"
-        (error)="onItemErrored(item, $event)"
-      />
-      <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
-      <video
-        *ngIf="!isYoutube(item) && item.video"
-        [src]="getSrc(item)"
-        [poster]="item.thumbSrc"
-        [class.loading]="item._seen && !item._loaded"
-        [style.objectFit]="objectFit"
-        controls
-        playsinline
-        (loadedmetadata)="onItemLoaded(item, $event)"
-        (error)="onItemErrored(item, $event)"
-      ></video>
-      <iframe
-        *ngIf="isYoutube(item)"
-        [src]="getSrc(item) | safe"
-        frameborder="0"
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        (load)="onItemLoaded(item, $event)"
-      ></iframe>
+      <ng-container *ngIf="getSrc(item); let src">
+        <img
+          *ngIf="!isYoutube(item) && !item.video"
+          [src]="src"
+          [alt]="item.alt"
+          [class.loading]="item._seen && !item._loaded"
+          [style.objectFit]="objectFit"
+          (load)="onItemLoaded(item, $event)"
+          (error)="onItemErrored(item, $event)"
+        />
+        <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
+        <video
+          *ngIf="!isYoutube(item) && item.video"
+          [src]="src"
+          [poster]="item.thumbSrc"
+          [class.loading]="item._seen && !item._loaded"
+          [style.objectFit]="objectFit"
+          controls
+          playsinline
+          (loadedmetadata)="onItemLoaded(item, $event)"
+          (error)="onItemErrored(item, $event)"
+        ></video>
+        <iframe
+          *ngIf="isYoutube(item)"
+          [src]="src | safe"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          (load)="onItemLoaded(item, $event)"
+        ></iframe>
+      </ng-container>
 
       <ng-container *ngIf="item._seen && !item._loaded && !item._failed">
         <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>

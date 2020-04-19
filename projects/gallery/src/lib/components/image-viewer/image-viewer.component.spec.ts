@@ -140,6 +140,17 @@ describe('ImageViewerComponent Unit', () => {
       expect(viewer.getSrc(viewer.items[1])).toBeTruthy();
     });
 
+    it(`should be falsy if item:
+          +- 1 item distance from selected item
+          lazy loaded
+          not yet seen
+          viewer wasn't interacted with yet
+          viewer has looping on`, () => {
+      viewer.loop = true;
+      viewer.items.push({ src: 'src3' });
+      expect(viewer.getSrc(viewer.items[2])).toBeFalsy();
+    });
+
     it('should be truthy if lazy loading on and item has been seen', () => {
       viewer.items[1]._seen = true;
       expect(viewer.getSrc(viewer.items[1])).toBeTruthy();

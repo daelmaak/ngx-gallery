@@ -195,7 +195,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const onmousemove = (e: MouseEvent) => {
-          this.shiftImagesByDelta(mousedown.x - e.x);
+          this.shiftByDelta(mousedown.x - e.x);
         };
 
         const onmouseup = (e: MouseEvent) => {
@@ -247,7 +247,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
           if (horizontal) {
             lastTouchmove = e;
-            this.shiftImagesByDelta(startTouch.clientX - moveTouch.clientX);
+            this.shiftByDelta(startTouch.clientX - moveTouch.clientX);
             if (UA.ios) {
               e.preventDefault();
               e.stopPropagation();
@@ -295,10 +295,10 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   isInScrollportProximity(index: number) {
     const distance = Math.abs(this.selectedIndex - index);
-    if (distance === this.items.length - 1 && this.loop) {
-      return true;
+    if (this.interacted) {
+      return (distance === this.items.length - 1 && this.loop) || distance <= 1;
     }
-    return this.interacted ? distance <= 1 : this.selectedIndex === index;
+    return this.selectedIndex === index;
   }
 
   isYoutube(item: GalleryItemInternal) {
@@ -392,9 +392,7 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private center() {
-    const shift = this.selectedIndex * this.itemWidth;
-
-    this.shiftImages(shift);
+    this.shift(this.selectedIndex * this.itemWidth);
   }
 
   private getItemWidth() {
@@ -402,16 +400,20 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private onResize = () => {
-    this.noAnimation = true;
-    if (!this.items || !this.items.length) {
-      this.shiftImages(0);
-    } else {
-      this.itemWidth = this.getItemWidth();
-      this.center();
-    }
-
+    // the setTimeout is here due to getItemWidth call
+    // it prevents situations where layout calculations are invalidated before the call
+    // this prevents unnecessary layout recalculation
     setTimeout(() => {
-      this.noAnimation = false;
+      this.noAnimation = true;
+      if (!this.items || !this.items.length) {
+        this.shift(0);
+      } else {
+        this.itemWidth = this.getItemWidth();
+        this.center();
+      }
+
+      // the setTimeout makes sure that the animation is allowed AFTER the list was shifted
+      setTimeout(() => (this.noAnimation = false));
     });
   };
 
@@ -424,12 +426,12 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.cd.detectChanges();
   }
 
-  private shiftImages(x: number) {
+  private shift(x: number) {
     const imageListEl = this.itemListRef.nativeElement;
     imageListEl.style.transform = `translate3d(${-(this.listX = x)}px, 0, 0)`;
   }
 
-  private shiftImagesByDelta = (delta: number) => {
-    this.shiftImages(this.selectedIndex * this.itemWidth + delta);
+  private shiftByDelta = (delta: number) => {
+    this.shift(this.selectedIndex * this.itemWidth + delta);
   };
 }

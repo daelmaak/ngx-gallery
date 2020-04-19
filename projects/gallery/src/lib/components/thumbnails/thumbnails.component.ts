@@ -32,7 +32,7 @@ import {
   takeWhile
 } from 'rxjs/operators';
 
-import { isBrowser, SUPPORT, Orientation, ObjectFit } from '../../core';
+import { isBrowser, SUPPORT, Orientation } from '../../core';
 import {
   GalleryItemInternal,
   GalleryItemEventInternal
@@ -144,13 +144,21 @@ export class ThumbnailsComponent
         this.arrowUpdatesSub.unsubscribe();
       }
     }
+
     if (items && items.currentValue) {
+      const currItems = (items.currentValue || []) as GalleryItemInternal[];
+      const prevItems = (items.previousValue || []) as GalleryItemInternal[];
+
+      if (currItems.length === prevItems.length) {
+        return;
+      }
+
       if (!this.arrowUpdatesSub && this.arrows) {
         this.initArrowUpdates();
       } else if (this.arrows) {
         this.updateArrows();
       }
-      if (!items.previousValue || !items.previousValue.length) {
+      if (!prevItems.length) {
         setTimeout(() => this.centerThumbIfNeeded(this.selectedIndex));
       }
     }
