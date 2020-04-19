@@ -1,4 +1,4 @@
-# Angular 8+ Image Gallery (Still in alpha!)
+# Angular 8+ Image Gallery (Currently in beta)
 
 Performant, responsive, easy to use gallery
 

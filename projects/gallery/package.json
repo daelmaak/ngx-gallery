@@ -1,6 +1,6 @@
 {
   "name": "@ngx-imagery/gallery",
-  "version": "0.1.0-alpha.19",
+  "version": "0.1.0-beta.0",
   "license": "Apache-2.0",
   "author": {
     "name": "Daniel Macak",
@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "ng build --project=gallery",
-    "version:alpha": "npm version prerelease --preid=alpha",
+    "version:beta": "npm version prerelease --preid=beta",
     "upload": "npm run build && cd ../../dist/gallery && npm publish",
     "test": "ng test --project=gallery"
   },
