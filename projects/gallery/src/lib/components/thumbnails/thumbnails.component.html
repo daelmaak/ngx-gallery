@@ -15,7 +15,6 @@
   tabindex="0"
   [attr.aria-label]="aria?.thumbnailsLabel"
 >
-  <!-- placeholder before items come -->
   <li *ngIf="!items || !items.length"></li>
   <li
     *ngFor="let item of items; let i = index"

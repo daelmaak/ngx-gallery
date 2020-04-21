@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'ngx-chevron-icon',
@@ -6,8 +6,4 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./chevron-icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChevronIconComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
-}
+export class ChevronIconComponent {}
