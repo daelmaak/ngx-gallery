@@ -9,7 +9,6 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   Output,
   SimpleChanges,
   TemplateRef,
@@ -46,7 +45,7 @@ import { Aria } from '../../core/aria';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ThumbnailsComponent
-  implements OnChanges, OnInit, AfterViewInit, OnDestroy {
+  implements OnChanges, AfterViewInit, OnDestroy {
   @Input()
   items: GalleryItemInternal[] = [];
 
@@ -164,16 +163,10 @@ export class ThumbnailsComponent
     }
   }
 
-  ngOnInit() {
-    this.autoScroll === undefined && (this.autoScroll = true);
-    this.scrollBehavior == null && (this.scrollBehavior = 'smooth');
-
+  ngAfterViewInit() {
     if (this.arrows && isBrowser) {
       this.initImperativeScroll();
     }
-  }
-
-  ngAfterViewInit() {
     this.centerThumbIfNeeded(this.selectedIndex);
     this.smoothScrollAllowed = true;
   }

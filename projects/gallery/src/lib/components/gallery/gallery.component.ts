@@ -8,7 +8,6 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   Output,
   SimpleChanges,
   TemplateRef,
@@ -40,45 +39,45 @@ import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
+export class GalleryComponent implements OnChanges, OnDestroy {
   @Input()
   items: GalleryItem[];
 
   @Input()
-  selectedIndex: number;
+  selectedIndex = 0;
 
   @Input()
-  aria: Aria;
+  aria: Aria = defaultAria;
 
   @Input()
-  arrows: boolean;
+  arrows = true;
 
   @Input()
-  descriptions: boolean;
+  descriptions = false;
 
   @Input()
   errorText: string;
 
   @Input()
-  mouseGestures: boolean;
+  mouseGestures = true;
 
   @Input()
-  touchGestures: boolean;
+  touchGestures = true;
 
   @Input()
-  imageCounter: boolean;
+  imageCounter = true;
 
   @Input()
-  imageCounterOrientation: VerticalOrientation;
+  imageCounterOrientation: VerticalOrientation = 'top';
 
   @Input()
-  loading: Loading;
+  loading: Loading = 'auto';
 
   @Input()
-  loop: boolean;
+  loop = true;
 
   @Input()
-  objectFit: ObjectFit;
+  objectFit: ObjectFit = 'contain';
 
   @Input()
   itemTemplate: TemplateRef<ItemTemplateContext>;
@@ -96,22 +95,22 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   nextArrowTemplate: TemplateRef<void>;
 
   @Input()
-  thumbs: boolean;
+  thumbs = true;
 
   @Input()
-  thumbsAutoScroll: boolean;
+  thumbsAutoScroll = true;
 
   @Input()
-  thumbsOrientation: Orientation;
+  thumbsOrientation: Orientation = 'bottom';
 
   @Input()
-  thumbsArrows: boolean;
+  thumbsArrows = true;
 
   @Input()
   thumbsArrowSlideByLength: number;
 
   @Input()
-  thumbsScrollBehavior: ScrollBehavior;
+  thumbsScrollBehavior: ScrollBehavior = 'smooth';
 
   @Input()
   thumbTemplate: TemplateRef<any>;
@@ -183,20 +182,6 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
       const incomingItems = (items.currentValue || []) as GalleryItem[];
       this._internalItems = incomingItems.map(item => ({ ...item }));
     }
-  }
-
-  ngOnInit() {
-    this.aria == null && (this.aria = defaultAria);
-    this.arrows === undefined && (this.arrows = true);
-    this.descriptions == null && (this.descriptions = true);
-    this.mouseGestures == null && (this.mouseGestures = true);
-    this.touchGestures == null && (this.touchGestures = true);
-    this.loop === undefined && (this.loop = true);
-    this.loading == null && (this.loading = 'auto');
-    this.selectedIndex == null && (this.selectedIndex = 0);
-    this.thumbs === undefined && (this.thumbs = true);
-    this.thumbsArrows === undefined && (this.thumbsArrows = true);
-    this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
   }
 
   ngOnDestroy() {}

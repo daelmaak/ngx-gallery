@@ -166,11 +166,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.imageCounter === undefined && (this.imageCounter = true);
-    this.imageCounterOrientation == null &&
-      (this.imageCounterOrientation = 'top');
-    this.objectFit == null && (this.objectFit = 'contain');
-
     const listenerOpts = {
       passive: !UA.ios
     };
