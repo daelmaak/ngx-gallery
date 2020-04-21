@@ -6,7 +6,6 @@ import { ChevronIconComponent } from './components/icons/chevron/chevron-icon.co
 import { ImageCounterComponent } from './components/image-counter/image-counter.component';
 import { ImageViewerComponent } from './components/image-viewer/image-viewer.component';
 import { ThumbnailsComponent } from './components/thumbnails/thumbnails.component';
-import { NoMoveClickDirective } from './directives/no-move-click.directive';
 import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
@@ -15,7 +14,6 @@ import { SafePipe } from './pipes/safe.pipe';
     ThumbnailsComponent,
     ImageViewerComponent,
     ChevronIconComponent,
-    NoMoveClickDirective,
     ImageCounterComponent,
     SafePipe
   ],

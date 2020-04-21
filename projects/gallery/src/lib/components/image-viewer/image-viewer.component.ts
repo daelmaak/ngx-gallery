@@ -185,6 +185,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
       this.zone.runOutsideAngular(() => {
         const imageList = this.itemListRef.nativeElement;
         let mousedown: MouseEvent;
+        let maxDeltaX = 0;
+        let maxDeltaY = 0;
 
         const onmousedown = (e: MouseEvent) => {
           mousedown = e;
@@ -195,6 +197,8 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const onmousemove = (e: MouseEvent) => {
+          maxDeltaX = Math.max(Math.abs(mousedown.x - e.x));
+          maxDeltaY = Math.max(Math.abs(mousedown.y - e.y));
           this.shiftByDelta(mousedown.x - e.x);
         };
 
@@ -210,9 +214,18 @@ export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
           document.removeEventListener('mouseup', onmouseup);
         };
 
+        const onclick = (e: MouseEvent) => {
+          if (maxDeltaX > 10 || maxDeltaY > 10) {
+            e.stopPropagation();
+          }
+          maxDeltaY = maxDeltaX = 0;
+        };
+
         imageList.addEventListener('mousedown', onmousedown, listenerOpts);
+        imageList.addEventListener('click', onclick, { capture: true });
         this.destroy$.subscribe(() => {
           imageList.removeEventListener('mousedown', onmousedown);
+          imageList.removeEventListener('click', onclick);
         });
       });
     }
