@@ -31,7 +31,7 @@ import {
   GalleryItemEventInternal,
   GalleryItemInternal
 } from '../../core/gallery-item';
-import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
+import { ViewerComponent } from '../viewer/viewer.component';
 import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
 
 @Component({
@@ -140,13 +140,13 @@ export class GalleryComponent implements OnChanges, OnInit, OnDestroy {
   @Output()
   selection = new EventEmitter<GalleryItem>();
 
-  @ViewChild(ImageViewerComponent, { static: false })
-  imageViewer: ImageViewerComponent;
+  @ViewChild(ViewerComponent, { static: false })
+  imageViewer: ViewerComponent;
 
   @ViewChild(ThumbnailsComponent, { static: false })
   thumbnails: ThumbnailsComponent;
 
-  @ViewChild(ImageViewerComponent, { static: false, read: ElementRef })
+  @ViewChild(ViewerComponent, { static: false, read: ElementRef })
   imageViewerEl: ElementRef<HTMLElement>;
 
   _internalItems: GalleryItemInternal[];

@@ -3,10 +3,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockComponent, MockPipe } from 'ng-mocks';
 
 import { GalleryComponent } from './gallery.component';
-import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
+import { ViewerComponent } from '../viewer/viewer.component';
 import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
-import { ImageCounterComponent } from '../image-counter/image-counter.component';
+import { CounterComponent } from '../counter/counter.component';
 import { SafePipe } from '../../pipes/safe.pipe';
 import { DebugElement, SimpleChange } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -20,10 +20,10 @@ describe('GalleryComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         GalleryComponent,
-        ImageViewerComponent,
+        ViewerComponent,
         ThumbnailsComponent,
         MockComponent(ChevronIconComponent),
-        MockComponent(ImageCounterComponent),
+        MockComponent(CounterComponent),
         MockPipe(SafePipe)
       ]
     }).compileComponents();
@@ -52,7 +52,7 @@ describe('GalleryComponent', () => {
 
     it('should emit event when viewer image clicked', () => {
       const imageClickSpy = spyOn(component.imageClick, 'emit');
-      const secondItem = de.queryAll(By.css('ngx-image-viewer ul li'))[1];
+      const secondItem = de.queryAll(By.css('ngx-viewer ul li'))[1];
 
       const mockedClick = { name: 'mocked-event' };
       secondItem.triggerEventHandler('click', mockedClick);

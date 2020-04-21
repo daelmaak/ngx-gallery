@@ -16,7 +16,7 @@
   (thumbHover)="_emitEvent($event, thumbHover)"
 ></ngx-thumbnails>
 
-<ngx-image-viewer
+<ngx-viewer
   tabindex="0"
   [items]="_internalItems"
   [selectedIndex]="selectedIndex"
@@ -40,7 +40,7 @@
   (imageClick)="_emitEvent($event, imageClick)"
   (descriptionClick)="descriptionClick.emit($event)"
   (selection)="_selectInternal($event); thumbnails?.select($event)"
-></ngx-image-viewer>
+></ngx-viewer>
 
 <ng-container *ngIf="!_internalItems?.length">
   <ng-container

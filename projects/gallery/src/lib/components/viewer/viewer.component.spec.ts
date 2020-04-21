@@ -7,9 +7,9 @@ import {
   flush
 } from '@angular/core/testing';
 
-import { ImageViewerComponent } from './image-viewer.component';
+import { ViewerComponent } from './viewer.component';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
-import { ImageCounterComponent } from '../image-counter/image-counter.component';
+import { CounterComponent } from '../counter/counter.component';
 import { SafePipe } from '../../pipes/safe.pipe';
 import {
   SimpleChange,
@@ -18,28 +18,28 @@ import {
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-describe('ImageViewerComponent UI', () => {
-  let component: ImageViewerComponent;
-  let fixture: ComponentFixture<ImageViewerComponent>;
+describe('ViewerComponent UI', () => {
+  let component: ViewerComponent;
+  let fixture: ComponentFixture<ViewerComponent>;
   let de: DebugElement;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        ImageViewerComponent,
+        ViewerComponent,
         ChevronIconComponent,
-        ImageCounterComponent,
+        CounterComponent,
         SafePipe
       ]
     })
-      .overrideComponent(ImageViewerComponent, {
+      .overrideComponent(ViewerComponent, {
         set: { changeDetection: ChangeDetectionStrategy.Default }
       })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ImageViewerComponent);
+    fixture = TestBed.createComponent(ViewerComponent);
     component = fixture.componentInstance;
     de = fixture.debugElement;
   });
@@ -104,12 +104,12 @@ describe('ImageViewerComponent UI', () => {
   });
 });
 
-describe('ImageViewerComponent Unit', () => {
+describe('ViewerComponent Unit', () => {
   describe('src attribute', () => {
-    let viewer: ImageViewerComponent;
+    let viewer: ViewerComponent;
 
     beforeEach(() => {
-      viewer = new ImageViewerComponent(null, null, null);
+      viewer = new ViewerComponent(null, null, null);
       viewer.items = [
         {
           src: 'src1'

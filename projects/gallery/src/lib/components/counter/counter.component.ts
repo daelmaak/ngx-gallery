@@ -8,17 +8,17 @@ import {
 import { VerticalOrientation } from '../../core';
 
 @Component({
-  selector: 'ngx-image-counter',
+  selector: 'ngx-counter',
   template: `
     <span aria-hidden="true">
       {{ selectedIndex + 1 }}<span class="delimiter">/</span
       >{{ itemQuantity || 0 }}
     </span>
   `,
-  styleUrls: ['./image-counter.component.scss'],
+  styleUrls: ['./counter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageCounterComponent {
+export class CounterComponent {
   @Input()
   itemQuantity: number;
 

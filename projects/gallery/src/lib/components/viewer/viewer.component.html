@@ -98,12 +98,12 @@
   ></ngx-chevron-icon>
 </ng-container>
 
-<ngx-image-counter
+<ngx-counter
   *ngIf="imageCounter && items?.length"
   [itemQuantity]="items?.length"
   [selectedIndex]="selectedIndex"
   [orientation]="imageCounterOrientation"
-></ngx-image-counter>
+></ngx-counter>
 
 <div
   *ngIf="descriptions && items"

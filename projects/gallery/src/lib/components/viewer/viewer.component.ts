@@ -34,12 +34,12 @@ import {
 import { GalleryItemInternal } from '../../core/gallery-item';
 
 @Component({
-  selector: 'ngx-image-viewer',
-  templateUrl: './image-viewer.component.html',
-  styleUrls: ['./image-viewer.component.scss'],
+  selector: 'ngx-viewer',
+  templateUrl: './viewer.component.html',
+  styleUrls: ['./viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageViewerComponent implements OnChanges, OnInit, OnDestroy {
+export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   items: GalleryItemInternal[];
 

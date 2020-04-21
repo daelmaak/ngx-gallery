@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { ChevronIconComponent } from './components/icons/chevron/chevron-icon.component';
-import { ImageCounterComponent } from './components/image-counter/image-counter.component';
-import { ImageViewerComponent } from './components/image-viewer/image-viewer.component';
+import { CounterComponent } from './components/counter/counter.component';
+import { ViewerComponent } from './components/viewer/viewer.component';
 import { ThumbnailsComponent } from './components/thumbnails/thumbnails.component';
 import { SafePipe } from './pipes/safe.pipe';
 
@@ -12,9 +12,9 @@ import { SafePipe } from './pipes/safe.pipe';
   declarations: [
     GalleryComponent,
     ThumbnailsComponent,
-    ImageViewerComponent,
+    ViewerComponent,
     ChevronIconComponent,
-    ImageCounterComponent,
+    CounterComponent,
     SafePipe
   ],
   imports: [CommonModule],
