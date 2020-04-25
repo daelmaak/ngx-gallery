@@ -17,6 +17,7 @@
 >
   <li *ngIf="!items || !items.length"></li>
   <li
+    #thumb
     *ngFor="let item of items; let i = index"
     [class.selected]="i === selectedIndex"
     aria-hidden="true"

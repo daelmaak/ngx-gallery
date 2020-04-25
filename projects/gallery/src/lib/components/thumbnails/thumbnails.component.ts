@@ -12,24 +12,12 @@ import {
   Output,
   SimpleChanges,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  QueryList,
+  ViewChildren
 } from '@angular/core';
-import {
-  animationFrameScheduler,
-  fromEvent,
-  merge,
-  of,
-  Subject,
-  Subscription
-} from 'rxjs';
-import {
-  debounceTime,
-  map,
-  repeat,
-  switchMap,
-  takeUntil,
-  takeWhile
-} from 'rxjs/operators';
+import { animationFrameScheduler, of, Subject } from 'rxjs';
+import { map, repeat, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
 
 import { isBrowser, SUPPORT, Orientation } from '../../core';
 import {
@@ -97,14 +85,17 @@ export class ThumbnailsComponent
 
   @ViewChild('thumbs', { static: true })
   thumbListRef: ElementRef<HTMLElement>;
+  @ViewChildren('thumb')
+  thumbsRef: QueryList<ElementRef<HTMLElement>>;
+
   showStartArrow = false;
   showEndArrow = false;
   vertical: boolean;
 
   private destroy$ = new Subject();
   private sliding$ = new Subject<number>();
-  private arrowUpdatesSub: Subscription;
 
+  private arrowObserver: IntersectionObserver;
   private _scrollBehavior: ScrollBehavior;
   private smoothScrollAllowed = false;
 
@@ -134,13 +125,13 @@ export class ThumbnailsComponent
       const newOrientation: Orientation = orientation.currentValue;
       this.vertical = newOrientation === 'left' || newOrientation === 'right';
     }
-    if (arrows && !arrows.firstChange) {
-      if (arrows.currentValue) {
-        this.initArrowUpdates();
-      } else {
+    if (arrows) {
+      if (arrows.currentValue && this.items && this.items.length) {
+        this.observeArrows();
+      } else if (!arrows.currentValue) {
         this.showStartArrow = false;
         this.showEndArrow = false;
-        this.arrowUpdatesSub.unsubscribe();
+        this.unobserveArrows();
       }
     }
 
@@ -152,10 +143,8 @@ export class ThumbnailsComponent
         return;
       }
 
-      if (!this.arrowUpdatesSub && this.arrows) {
-        this.initArrowUpdates();
-      } else if (this.arrows) {
-        this.updateArrows();
+      if (this.arrows && currItems.length) {
+        this.observeArrows();
       }
       if (!prevItems.length) {
         setTimeout(() => this.centerThumbIfNeeded(this.selectedIndex));
@@ -244,19 +233,6 @@ export class ThumbnailsComponent
     });
   }
 
-  private initArrowUpdates() {
-    if (isBrowser) {
-      this.arrowUpdatesSub = merge(
-        fromEvent(this.thumbListRef.nativeElement, 'scroll', { passive: true }),
-        fromEvent(window, 'resize')
-      )
-        .pipe(debounceTime(50), takeUntil(this.destroy$))
-        .subscribe(this.updateArrows);
-    }
-
-    this.updateArrows();
-  }
-
   private initImperativeScroll() {
     this.sliding$
       .pipe(
@@ -264,14 +240,11 @@ export class ThumbnailsComponent
           if (SUPPORT.scrollBehavior || this.scrollBehavior === 'auto') {
             return of(totalScrollDelta);
           }
-
-          const negative = totalScrollDelta < 0;
-          totalScrollDelta = Math.abs(totalScrollDelta);
-
+          const totalDistance = Math.abs(totalScrollDelta);
           const startTime = Date.now();
           const baseArrowSlideTime = 200;
           let totalTime =
-            (Math.log10(totalScrollDelta) - 1.1) * baseArrowSlideTime;
+            (Math.log10(totalDistance) - 1.1) * baseArrowSlideTime;
 
           if (totalTime < 0) {
             totalTime = baseArrowSlideTime;
@@ -288,17 +261,17 @@ export class ThumbnailsComponent
             repeat(),
             map(_ => {
               const suggestedScroll = Math.ceil(
-                ((Date.now() - startTime) / totalTime) * totalScrollDelta
+                ((Date.now() - startTime) / totalTime) * totalDistance
               );
               const frameScroll = Math.min(
                 suggestedScroll - currentScroll,
-                totalScrollDelta - currentScroll
+                totalDistance - currentScroll
               );
               currentScroll = suggestedScroll;
 
-              return negative ? -frameScroll : frameScroll;
+              return Math.sign(totalScrollDelta) * frameScroll;
             }),
-            takeWhile(_ => currentScroll < totalScrollDelta, true)
+            takeWhile(_ => currentScroll < totalDistance, true)
           );
         }),
         takeUntil(this.destroy$)
@@ -308,15 +281,38 @@ export class ThumbnailsComponent
       });
   }
 
-  private updateArrows = () => {
-    setTimeout(() => {
-      this.showStartArrow = this.thumbListRef.nativeElement[this.scrollKey] > 0;
+  private onArrowsObserved: IntersectionObserverCallback = entries => {
+    const entryEl1 = entries[0].target as HTMLElement;
+    const firstThumbEntry =
+      entryEl1 === this.thumbsRef.first.nativeElement ? entries[0] : entries[1];
+    const lastThumbEntry =
+      entryEl1 === this.thumbsRef.last.nativeElement ? entries[0] : entries[1];
 
-      this.showEndArrow =
-        this.thumbListRef.nativeElement[this.scrollKey] <
-        this.thumbListMainAxis - this.thumbContainerMainAxis;
+    this.showStartArrow = lastThumbEntry && lastThumbEntry.isIntersecting;
+    this.showEndArrow = firstThumbEntry && firstThumbEntry.isIntersecting;
 
-      this.cd.detectChanges();
-    });
+    if (!this.showStartArrow && !this.showEndArrow) {
+      this.showStartArrow = this.showEndArrow = true;
+    }
+    this.cd.detectChanges();
   };
+
+  private observeArrows() {
+    if (!this.arrowObserver) {
+      this.arrowObserver = new IntersectionObserver(this.onArrowsObserved, {
+        root: this.elRef.nativeElement,
+        threshold: 0.9
+      });
+    } else {
+      this.arrowObserver.disconnect();
+    }
+    setTimeout(() => {
+      this.arrowObserver.observe(this.thumbsRef.first.nativeElement);
+      this.arrowObserver.observe(this.thumbsRef.last.nativeElement);
+    });
+  }
+
+  private unobserveArrows() {
+    this.arrowObserver.disconnect();
+  }
 }
