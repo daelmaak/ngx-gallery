@@ -109,6 +109,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
+  UA = UA;
+
   private destroy$ = new Subject();
   // this flag is supposed to prevent unnecessary loading of other than selected images
   private itemWidth: number;
@@ -166,7 +168,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnInit() {
     const listenerOpts = {
-      passive: !UA.ios
+      passive: true
     };
 
     if (isBrowser) {
@@ -278,8 +280,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         imageList.addEventListener('touchstart', ontouchstart, listenerOpts);
-        document.addEventListener('touchmove', ontouchmove, listenerOpts);
-        document.addEventListener('touchend', ontouchend);
+        document.addEventListener('touchmove', ontouchmove, {
+          passive: !UA.ios
+        });
+        document.addEventListener('touchend', ontouchend, listenerOpts);
         this.destroy$.subscribe(() => {
           imageList.removeEventListener('touchstart', ontouchstart);
           document.removeEventListener('touchmove', ontouchmove);
