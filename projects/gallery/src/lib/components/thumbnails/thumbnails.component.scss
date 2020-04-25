@@ -87,6 +87,9 @@ ul {
   // hide scrollbar
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
+  // Promotes thumb list to a separate layer, which allows for compositing when scrolling, which prevents repaints.
+  // It also reduces the amount of memory held by its parent layer dramatically.
+  transform: translate3d(0, 0, 0);
 
   &::-webkit-scrollbar {
     /* WebKit */
