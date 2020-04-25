@@ -15,7 +15,6 @@ $arrow-btn-dimension: 30px;
       display: flex;
       overflow-x: scroll;
       overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
     }
 
     li {
@@ -50,7 +49,6 @@ $arrow-btn-dimension: 30px;
       height: 100%;
       overflow-y: scroll;
       overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
     }
 
     .prev-thumbs,
@@ -87,6 +85,9 @@ ul {
   // hide scrollbar
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
+
+  -webkit-overflow-scrolling: touch;
+
   // Promotes thumb list to a separate layer, which allows for compositing when scrolling, which prevents repaints.
   // It also reduces the amount of memory held by its parent layer dramatically.
   transform: translate3d(0, 0, 0);

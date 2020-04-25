@@ -111,7 +111,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private destroy$ = new Subject();
   // this flag is supposed to prevent unnecessary loading of other than selected images
-  private interacted = false;
   private itemWidth: number;
   private listX = 0;
 
@@ -303,10 +302,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   isInScrollportProximity(index: number) {
     const distance = Math.abs(this.selectedIndex - index);
-    if (this.interacted) {
-      return (distance === this.items.length - 1 && this.loop) || distance <= 1;
-    }
-    return this.selectedIndex === index;
+    return (distance === this.items.length - 1 && this.loop) || distance <= 1;
   }
 
   isYoutube(item: GalleryItemInternal) {
@@ -360,10 +356,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       e.preventDefault();
     }
   }
-
-  @HostListener('mousedown')
-  @HostListener('touchstart')
-  onInteraction = () => (this.interacted = true);
 
   onImageClick(item: GalleryItemInternal, event: Event) {
     this.imageClick.emit({
