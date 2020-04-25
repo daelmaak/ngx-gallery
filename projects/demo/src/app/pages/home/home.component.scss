@@ -35,7 +35,7 @@ ngx-gallery {
   }
 
   ::ng-deep {
-    ngx-image-viewer {
+    ngx-viewer {
       img {
         margin: 0 auto;
       }
@@ -59,7 +59,7 @@ ngx-gallery {
         margin: 0 auto;
       }
 
-      ngx-image-viewer {
+      ngx-viewer {
         .next {
           right: 30px;
         }

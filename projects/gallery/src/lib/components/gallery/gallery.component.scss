@@ -26,12 +26,8 @@
   }
 }
 
-ngx-image-viewer {
-  z-index: 1;
-}
-
 :host,
-ngx-image-viewer::ng-deep {
+ngx-viewer::ng-deep {
   .loading {
     display: flex;
     justify-content: center;
