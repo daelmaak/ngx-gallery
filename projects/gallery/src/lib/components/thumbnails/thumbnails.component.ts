@@ -103,16 +103,10 @@ export class ThumbnailsComponent
     return this.vertical ? 'scrollTop' : 'scrollLeft';
   }
 
-  private get thumbContainerMainAxis(): number {
+  private get hostOffsetAxis(): number {
     return this.vertical
       ? this.elRef.nativeElement.offsetHeight
       : this.elRef.nativeElement.offsetWidth;
-  }
-
-  private get thumbListMainAxis(): number {
-    return this.vertical
-      ? this.thumbListRef.nativeElement.scrollHeight
-      : this.thumbListRef.nativeElement.scrollWidth;
   }
 
   constructor(
@@ -174,9 +168,17 @@ export class ThumbnailsComponent
       // Note: Slide by the full height/width of the gallery
       // or by the overflow of the thumbnails - to prevent unnecessary requestAnimationFrame calls while trying to scroll
       // outside of the min/max scroll of the thumbnails
+      const thumbList = this.thumbListRef.nativeElement as HTMLElement;
+      const thumbListScrollAxis = this.vertical
+        ? thumbList.scrollHeight
+        : thumbList.scrollWidth;
+      const thumbListOffsetAxis = this.vertical
+        ? thumbList.offsetHeight
+        : thumbList.offsetWidth;
+
       delta = Math.min(
-        this.thumbContainerMainAxis,
-        this.thumbListMainAxis - this.thumbContainerMainAxis
+        thumbListOffsetAxis,
+        thumbListScrollAxis - thumbListOffsetAxis
       );
     }
     this.sliding$.next(delta * direction);
@@ -187,25 +189,20 @@ export class ThumbnailsComponent
       return;
     }
 
-    const itemEls = this.thumbListRef.nativeElement.querySelectorAll('li');
-    const nextItemEl = itemEls.item(index);
-
+    const nextItemEl = this.thumbsRef.toArray()[index].nativeElement;
     const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = nextItemEl;
 
     const itemOffset = this.vertical ? offsetTop : offsetLeft;
-    const itemMainAxis = this.vertical ? offsetHeight : offsetWidth;
+    const itemOffsetAxis = this.vertical ? offsetHeight : offsetWidth;
 
-    const thumbListScrollPortAxis = this.thumbContainerMainAxis;
+    const hostScrollAxis = this.hostOffsetAxis;
     const thumbListScroll = this.thumbListRef.nativeElement[this.scrollKey];
 
     const nextScrollDelta =
-      itemOffset +
-      itemMainAxis / 2 -
-      thumbListScrollPortAxis / 2 -
-      thumbListScroll;
+      itemOffset + itemOffsetAxis / 2 - hostScrollAxis / 2 - thumbListScroll;
 
     if (
-      thumbListScroll + thumbListScrollPortAxis < itemOffset + itemMainAxis ||
+      thumbListScroll + hostScrollAxis < itemOffset + itemOffsetAxis ||
       thumbListScroll > itemOffset
     ) {
       this.sliding$.next(nextScrollDelta);
@@ -300,7 +297,7 @@ export class ThumbnailsComponent
   private observeArrows() {
     if (!this.arrowObserver) {
       this.arrowObserver = new IntersectionObserver(this.onArrowsObserved, {
-        root: this.elRef.nativeElement,
+        root: this.thumbListRef.nativeElement,
         threshold: 0.9
       });
     } else {
