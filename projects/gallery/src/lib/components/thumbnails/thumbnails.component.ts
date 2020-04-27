@@ -305,6 +305,6 @@ export class ThumbnailsComponent
   }
 
   private unobserveArrows() {
-    this.arrowObserver.disconnect();
+    this.arrowObserver && this.arrowObserver.disconnect();
   }
 }
