@@ -31,79 +31,41 @@ import {
   VerticalOrientation
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
+import { transition, animate, trigger } from '@angular/animations';
 
 @Component({
   selector: 'ngx-viewer',
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('removeMedia', [transition(':leave', animate('0ms 100ms'))])
+  ]
 })
 export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
-  @Input()
-  items: GalleryItemInternal[];
+  @Input() items: GalleryItemInternal[];
+  @Input() arrows: boolean;
+  @Input() selectedIndex: number;
+  @Input() descriptions: boolean;
+  @Input() errorText: string;
+  @Input() mouseGestures: boolean;
+  @Input() touchGestures: boolean;
+  @Input() imageCounter: boolean;
+  @Input() imageCounterOrientation: VerticalOrientation;
+  @Input() loading: Loading;
+  @Input() loop: boolean;
+  @Input() objectFit: ObjectFit;
+  @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
+  @Input() loadingTemplate: TemplateRef<void>;
+  @Input() errorTemplate: TemplateRef<void>;
+  @Input() prevArrowTemplate: TemplateRef<void>;
+  @Input() nextArrowTemplate: TemplateRef<void>;
+  @Input() thumbsOrientation: OrientationFlag;
+  @Input() aria: Aria;
 
-  @Input()
-  arrows: boolean;
-
-  @Input()
-  selectedIndex: number;
-
-  @Input()
-  descriptions: boolean;
-
-  @Input()
-  errorText: string;
-
-  @Input()
-  mouseGestures: boolean;
-
-  @Input()
-  touchGestures: boolean;
-
-  @Input()
-  imageCounter: boolean;
-
-  @Input()
-  imageCounterOrientation: VerticalOrientation;
-
-  @Input()
-  loading: Loading;
-
-  @Input()
-  loop: boolean;
-
-  @Input()
-  objectFit: ObjectFit;
-
-  @Input()
-  itemTemplate: TemplateRef<ItemTemplateContext>;
-
-  @Input()
-  loadingTemplate: TemplateRef<void>;
-
-  @Input()
-  errorTemplate: TemplateRef<void>;
-
-  @Input()
-  prevArrowTemplate: TemplateRef<void>;
-
-  @Input()
-  nextArrowTemplate: TemplateRef<void>;
-
-  @Input()
-  thumbsOrientation: OrientationFlag;
-
-  @Input()
-  aria: Aria;
-
-  @Output()
-  imageClick = new EventEmitter<GalleryItemEvent>();
-
-  @Output()
-  descriptionClick = new EventEmitter<Event>();
-
-  @Output()
-  selection = new EventEmitter<number>();
+  @Output() imageClick = new EventEmitter<GalleryItemEvent>();
+  @Output() descriptionClick = new EventEmitter<Event>();
+  @Output() selection = new EventEmitter<number>();
 
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;

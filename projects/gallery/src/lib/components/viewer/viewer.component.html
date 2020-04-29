@@ -24,6 +24,7 @@
       <ng-container *ngIf="!UA.ios || isInScrollportProximity(i)">
         <ng-container *ngIf="getSrc(item); let src">
           <img
+            @removeMedia
             *ngIf="!isYoutube(item) && !item.video"
             [src]="src"
             [alt]="item.alt"
@@ -34,6 +35,7 @@
           />
           <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
           <video
+            @removeMedia
             *ngIf="!isYoutube(item) && item.video"
             [src]="src"
             [poster]="item.thumbSrc"
@@ -45,6 +47,7 @@
             (error)="onItemErrored(item, $event)"
           ></video>
           <iframe
+            @removeMedia
             *ngIf="isYoutube(item)"
             [src]="src | safe"
             frameborder="0"
