@@ -17,6 +17,7 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ViewerComponent UI', () => {
   let component: ViewerComponent;
@@ -25,6 +26,7 @@ describe('ViewerComponent UI', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [NoopAnimationsModule],
       declarations: [
         ViewerComponent,
         ChevronIconComponent,

@@ -10,6 +10,7 @@ import { CounterComponent } from '../counter/counter.component';
 import { SafePipe } from '../../pipes/safe.pipe';
 import { DebugElement, SimpleChange } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('GalleryComponent', () => {
   let component: GalleryComponent;
@@ -18,6 +19,7 @@ describe('GalleryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [NoopAnimationsModule],
       declarations: [
         GalleryComponent,
         ViewerComponent,
