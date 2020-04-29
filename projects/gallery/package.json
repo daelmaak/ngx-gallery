@@ -1,16 +1,16 @@
 {
-  "name": "ngx-imagery",
-  "version": "0.1.0-beta.3",
+  "name": "ngx-doe-gallery",
+  "version": "0.1.0-beta.0",
   "license": "Apache-2.0",
   "author": {
     "name": "Daniel Macak",
     "email": "daniel.macak@email.cz",
     "url": "https://github.com/daelmaak"
   },
-  "homepage": "https://daelmaak.github.io/ngx-imagery/",
+  "homepage": "https://daelmaak.github.io/ngx-doe-gallery/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/daelmaak/ngx-imagery.git"
+    "url": "https://github.com/daelmaak/ngx-doe-gallery.git"
   },
   "keywords": [
     "gallery",

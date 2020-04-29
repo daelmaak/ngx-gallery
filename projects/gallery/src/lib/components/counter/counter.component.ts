@@ -8,7 +8,7 @@ import {
 import { VerticalOrientation } from '../../core';
 
 @Component({
-  selector: 'ngx-counter',
+  selector: 'doe-counter',
   template: `
     <span aria-hidden="true">
       {{ selectedIndex + 1 }}<span class="delimiter">/</span

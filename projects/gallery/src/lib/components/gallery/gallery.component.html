@@ -1,4 +1,4 @@
-<ngx-thumbnails
+<doe-thumbnails
   *ngIf="thumbs"
   [items]="_internalItems"
   [selectedIndex]="selectedIndex"
@@ -14,9 +14,9 @@
   [aria]="aria"
   (thumbClick)="onThumbClick($event)"
   (thumbHover)="_emitEvent($event, thumbHover)"
-></ngx-thumbnails>
+></doe-thumbnails>
 
-<ngx-viewer
+<doe-viewer
   tabindex="0"
   [items]="_internalItems"
   [selectedIndex]="selectedIndex"
@@ -40,7 +40,7 @@
   (imageClick)="_emitEvent($event, imageClick)"
   (descriptionClick)="descriptionClick.emit($event)"
   (selection)="_selectInternal($event); thumbnails?.select($event)"
-></ngx-viewer>
+></doe-viewer>
 
 <ng-container *ngIf="!_internalItems?.length">
   <ng-container

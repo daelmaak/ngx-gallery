@@ -1,5 +1,5 @@
 {
-  "name": "ngx-imagery-demo",
+  "name": "ngx-doe-gallery-demo",
   "version": "0.1.0",
   "license": "Apache-2.0",
   "author": {
@@ -14,10 +14,11 @@
     "start": "ng serve --host 0.0.0.0 demo",
     "serve": "http-server docs/",
     "build": "ng build",
-    "build:demo": "ng build --project=demo --prod --base-href /ngx-imagery/",
+    "build:demo": "ng build --project=demo --prod --base-href /ngx-doe-gallery/",
     "test": "ng test --project=gallery",
     "test:demo": "ng test --project=demo",
     "lint": "ng lint",
+    "version:alpha": "cd projects/gallery && npm version prerelease --preid=alpha",
     "version:beta": "cd projects/gallery && npm version prerelease --preid=beta",
     "upload": "npm run build && cd dist/gallery && npm publish",
     "e2e": "ng e2e"

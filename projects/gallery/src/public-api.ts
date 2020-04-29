@@ -1,5 +1,5 @@
 /*
- * Public API Surface of ngx-imagery
+ * Public API Surface of doe-gallery
  */
 
 export * from './lib/components/gallery/gallery.component';

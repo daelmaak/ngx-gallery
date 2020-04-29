@@ -146,7 +146,7 @@
   </section>
 </form>
 
-<ngx-gallery
+<doe-gallery
   *ngIf="displayGallery"
   [items]="images | async"
   [arrows]="galleryConfig.arrows"
@@ -166,7 +166,7 @@
   [thumbsScrollBehavior]="galleryConfig.thumbsScrollBehavior"
   (imageClick)="onImageClick($event)"
   (descriptionClick)="galleryConfig.descriptions = false"
-></ngx-gallery>
+></doe-gallery>
 
 <ng-template #loadingTemplate>
   <div class="custom-loading">

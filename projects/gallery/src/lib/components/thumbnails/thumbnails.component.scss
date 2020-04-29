@@ -31,7 +31,7 @@ $arrow-btn-dimension: 30px;
     .prev-thumbs {
       left: 0;
 
-      ngx-chevron-icon {
+      doe-chevron-icon {
         transform: rotate(180deg);
       }
     }
@@ -60,7 +60,7 @@ $arrow-btn-dimension: 30px;
     .prev-thumbs {
       top: 0;
 
-      ngx-chevron-icon {
+      doe-chevron-icon {
         transform: rotate(-90deg);
       }
     }
@@ -68,7 +68,7 @@ $arrow-btn-dimension: 30px;
     .next-thumbs {
       bottom: 0;
 
-      ngx-chevron-icon {
+      doe-chevron-icon {
         transform: rotate(90deg);
       }
     }

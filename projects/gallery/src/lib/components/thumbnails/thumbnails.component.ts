@@ -26,7 +26,7 @@ import {
 } from '../../core/gallery-item';
 
 @Component({
-  selector: 'ngx-thumbnails',
+  selector: 'doe-thumbnails',
   templateUrl: './thumbnails.component.html',
   styleUrls: ['./thumbnails.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

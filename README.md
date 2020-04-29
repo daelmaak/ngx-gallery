@@ -1,14 +1,16 @@
-# Imagery
+# Doe Gallery (former Imagery)
 
 Performant, responsive, easy to use Angular 8+ gallery
 
-[![CircleCI](https://circleci.com/gh/daelmaak/ngx-imagery.svg?style=shield)](https://circleci.com/gh/daelmaak/ngx-imagery)
+[![CircleCI](https://circleci.com/gh/daelmaak/ngx-doe-gallery.svg?style=shield)](https://circleci.com/gh/daelmaak/ngx-doe-gallery)
 
-[**Demo**](https://daelmaak.github.io/ngx-imagery/) |
-[**Stackblitz**](https://stackblitz.com/edit/ngx-imagery) |
-[**Docs**](https://github.com/daelmaak/ngx-imagery/wiki/Gallery-API)
+[**Demo**](https://daelmaak.github.io/ngx-doe-gallery/) |
+[**Stackblitz**](https://stackblitz.com/edit/ngx-doe-gallery) |
+[**Docs**](https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API)
 
-## Why ngx-imagery
+## Why ngx-doe-gallery
+
+Because it gives you the doe eyes! Seriously though, use it if you need:
 
 - Great performance and feel both on mobile and desktop
 - Very small - gallery itself has just 8kB gzipped!
@@ -16,14 +18,14 @@ Performant, responsive, easy to use Angular 8+ gallery
 
 ## Installation
 
-`npm i -S ngx-imagery@latest`
+`npm i -S ngx-doe-gallery@latest`
 
 ## Usage
 
 In your ng module
 
 ```
-import { GalleryModule } from 'ngx-imagery';
+import { GalleryModule } from 'ngx-doe-gallery';
 
 @NgModule({
   imports: [ GalleryModule ]
@@ -34,7 +36,7 @@ import { GalleryModule } from 'ngx-imagery';
 In your component class
 
 ```
-import { GalleryItem } from 'ngx-imagery';
+import { GalleryItem } from 'ngx-doe-gallery';
 
 @Component({...})
 export class AppComponent {
@@ -49,7 +51,7 @@ export class AppComponent {
 In your component template
 
 ```
-<ngx-gallery [items]="images"></ngx-gallery>
+<doe-gallery [items]="images"></doe-gallery>
 ```
 
 ## Development

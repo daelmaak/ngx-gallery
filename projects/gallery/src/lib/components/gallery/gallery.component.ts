@@ -34,7 +34,7 @@ import { ViewerComponent } from '../viewer/viewer.component';
 import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
 
 @Component({
-  selector: 'ngx-gallery',
+  selector: 'doe-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

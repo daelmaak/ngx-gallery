@@ -34,7 +34,7 @@ import { GalleryItemInternal } from '../../core/gallery-item';
 import { transition, animate, trigger } from '@angular/animations';
 
 @Component({
-  selector: 'ngx-viewer',
+  selector: 'doe-viewer',
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

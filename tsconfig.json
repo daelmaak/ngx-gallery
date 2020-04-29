@@ -14,8 +14,8 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"],
     "paths": {
-      "ngx-imagery": ["dist/gallery"],
-      "ngx-imagery/*": ["dist/gallery/*"]
+      "ngx-doe-gallery": ["dist/gallery"],
+      "ngx-doe-gallery/*": ["dist/gallery/*"]
     }
   },
   "angularCompilerOptions": {

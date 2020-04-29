@@ -54,7 +54,7 @@ describe('GalleryComponent', () => {
 
     it('should emit event when viewer image clicked', () => {
       const imageClickSpy = spyOn(component.imageClick, 'emit');
-      const secondItem = de.queryAll(By.css('ngx-viewer ul li'))[1];
+      const secondItem = de.queryAll(By.css('doe-viewer ul li'))[1];
 
       const mockedClick = { name: 'mocked-event' };
       secondItem.triggerEventHandler('click', mockedClick);
@@ -69,7 +69,7 @@ describe('GalleryComponent', () => {
 
     it('should emit event when thumbnail clicked', () => {
       const thumbClickSpy = spyOn(component.thumbClick, 'emit');
-      const secondThumb = de.queryAll(By.css('ngx-thumbnails ul li'))[1];
+      const secondThumb = de.queryAll(By.css('doe-thumbnails ul li'))[1];
 
       const mockedClick = { name: 'mocked-event' };
       secondThumb.triggerEventHandler('click', mockedClick);
@@ -84,7 +84,7 @@ describe('GalleryComponent', () => {
 
     it('should emit event when thumbnail hovered', () => {
       const thumbHoverSpy = spyOn(component.thumbHover, 'emit');
-      const secondThumb = de.queryAll(By.css('ngx-thumbnails ul li'))[1];
+      const secondThumb = de.queryAll(By.css('doe-thumbnails ul li'))[1];
 
       const mockedMouseenter = { name: 'mocked-event' };
       secondThumb.triggerEventHandler('mouseenter', mockedMouseenter);
