@@ -1,26 +1,75 @@
-# Angular 8+ Image Gallery (Currently in beta)
+# Imagery
 
-Performant, responsive, easy to use gallery
+Performant, responsive, easy to use Angular 8+ gallery
 
-[![CircleCI](https://circleci.com/gh/daelmaak/ngx-imagery.svg?style=svg)](https://circleci.com/gh/daelmaak/ngx-imagery)
+[![CircleCI](https://circleci.com/gh/daelmaak/ngx-imagery.svg?style=shield)](https://circleci.com/gh/daelmaak/ngx-imagery)
 
-[**DEMO**](https://daelmaak.github.io/ngx-imagery/)
-
-[**Stackblitz**](https://stackblitz.com/edit/ngx-imagery)
-
-[**Repository**](https://github.com/daelmaak/ngx-imagery/tree/master/projects/gallery)
-
-[**Docs**](https://github.com/daelmaak/ngx-imagery/wiki)
+[**Demo**](https://daelmaak.github.io/ngx-imagery/) |
+[**Stackblitz**](https://stackblitz.com/edit/ngx-imagery) |
+[**Docs**](https://github.com/daelmaak/ngx-imagery/wiki/Gallery-API)
 
 ## Why ngx-imagery
 
 - Great performance and feel both on mobile and desktop
-- Very small - gallery itself has just 5kB gzipped!
+- Very small - gallery itself has just 8kB gzipped!
 - Easy to use and customize
 
-## List of notable features
+## Installation
 
-- Great swipe experience on mobile, both Android and iOS
-- Out of the box support of youtube and generic videos
-- Lazy loading of all assets mentioned above
-- Customizable item, thumbnail, loading screen and navigation arrows
+`npm i -S ngx-imagery@latest`
+
+## Usage
+
+In your ng module
+
+```
+import { GalleryModule } from 'ngx-imagery';
+
+@NgModule({
+  imports: [ GalleryModule ]
+})
+...
+```
+
+In your component class
+
+```
+import { GalleryItem } from 'ngx-imagery';
+
+@Component({...})
+export class AppComponent {
+  images: GalleryItem[] = [
+      {
+        src: '/assets/kitten1.jpg'
+      }
+  ]
+}
+```
+
+In your component template
+
+```
+<ngx-gallery [items]="images"></ngx-gallery>
+```
+
+## Development
+
+### Install dependencies
+
+In the root of the project, run
+
+```
+npm ci
+```
+
+### Serve
+
+```
+npm start
+```
+
+### Test
+
+```
+npm test
+```
