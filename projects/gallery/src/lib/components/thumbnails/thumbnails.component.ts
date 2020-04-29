@@ -281,10 +281,10 @@ export class ThumbnailsComponent
       entryEl1 === this.thumbsRef.last.nativeElement ? entries[0] : entries[1];
 
     if (firstThumbEntry) {
-      this.showStartArrow = !(firstThumbEntry.intersectionRatio >= 0.9);
+      this.showStartArrow = firstThumbEntry.intersectionRatio < 1;
     }
     if (lastThumbEntry) {
-      this.showEndArrow = !(lastThumbEntry.intersectionRatio >= 0.9);
+      this.showEndArrow = lastThumbEntry.intersectionRatio < 1;
     }
 
     this.cd.detectChanges();
@@ -294,7 +294,7 @@ export class ThumbnailsComponent
     if (!this.arrowObserver) {
       this.arrowObserver = new IntersectionObserver(this.onArrowsObserved, {
         root: this.thumbListRef.nativeElement,
-        threshold: 0.9
+        threshold: 1.0
       });
     } else {
       this.arrowObserver.disconnect();
