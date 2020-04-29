@@ -7,7 +7,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 
-import { GalleryDetailService } from 'projects/gallery-detail/src/public-api';
 import { GalleryModule } from 'projects/gallery/src/public-api';
 import { HomeComponent } from './home.component';
 
@@ -28,13 +27,7 @@ describe('HomeComponent', () => {
         MatRadioModule,
         GalleryModule
       ],
-      declarations: [HomeComponent],
-      providers: [
-        {
-          provide: GalleryDetailService,
-          useValue: jasmine.createSpyObj('GalleryDetailService', ['open'])
-        }
-      ]
+      declarations: [HomeComponent]
     }).compileComponents();
   }));
 

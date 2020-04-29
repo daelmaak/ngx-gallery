@@ -10,14 +10,14 @@ Performant, responsive, easy to use gallery
 
 ## Installation
 
-`npm i -S @ngx-imagery/gallery@latest`
+`npm i -S ngx-imagery@latest`
 
 ## Usage
 
 In your ng module
 
 ```
-import { GalleryModule } from '@ngx-imagery/gallery';
+import { GalleryModule } from 'ngx-imagery';
 
 @NgModule({
   imports: [ GalleryModule ]
@@ -28,7 +28,7 @@ import { GalleryModule } from '@ngx-imagery/gallery';
 In your component class
 
 ```
-import { GalleryItem } from '@ngx-imagery/gallery';
+import { GalleryItem } from 'ngx-imagery';
 
 @Component({...})
 export class AppComponent {

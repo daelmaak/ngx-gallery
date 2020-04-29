@@ -1,5 +1,5 @@
 {
-  "name": "@ngx-imagery/gallery",
+  "name": "ngx-imagery",
   "version": "0.1.0-beta.1",
   "license": "Apache-2.0",
   "author": {
@@ -22,10 +22,9 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "build": "ng build --project=gallery",
-    "version:beta": "npm version prerelease --preid=beta",
-    "upload": "npm run build && cd ../../dist/gallery && npm publish",
-    "test": "ng test --project=gallery"
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint"
   },
   "peerDependencies": {
     "@angular/common": ">=8.0.0",

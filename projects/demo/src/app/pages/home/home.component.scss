@@ -43,35 +43,6 @@ ngx-gallery {
   }
 }
 
-::ng-deep {
-  .gallery-detail {
-    ngx-gallery {
-      width: 100vw;
-      height: 100vh;
-      max-width: 900px;
-      max-height: 800px;
-
-      @media (max-width: 767px) {
-        width: auto;
-      }
-
-      img {
-        margin: 0 auto;
-      }
-
-      ngx-viewer {
-        .next {
-          right: 30px;
-        }
-
-        .prev {
-          left: 30px;
-        }
-      }
-    }
-  }
-}
-
 section {
   button {
     margin-left: 20px;

@@ -87,13 +87,13 @@ export class HomeComponent implements OnInit {
         alt: 'Fruit 3',
         description: 'Most exotic fruit I have ever seen'
       },
-      {
-        src:
-          'https://interactive-examples.mdn.mozilla.net/media/examples/flower.mp4',
-        thumbSrc: './assets/flower.jpg',
-        video: true,
-        description: 'Blooming rose'
-      },
+      // {
+      //   src:
+      //     'https://interactive-examples.mdn.mozilla.net/media/examples/flower.mp4',
+      //   thumbSrc: './assets/flower.jpg',
+      //   video: true,
+      //   description: 'Blooming rose'
+      // },
       {
         src: './assets/vogel1.jpg',
         thumbSrc: './assets/vogel1-thumb.jpg',
@@ -120,16 +120,7 @@ export class HomeComponent implements OnInit {
     window.addEventListener('pagehide', this.storeGalleryConfig);
   }
 
-  async onImageClick(event: GalleryItemEvent) {
-    // this.galleryDetail
-    //   .open(event.index, {
-    //     thumbsOrientation: 'bottom',
-    //     panelClass: ['gallery-detail'],
-    //     documentScroll: true,
-    //     loading: 'lazy'
-    //   })
-    //   .load(await this.images.toPromise());
-  }
+  async onImageClick(event: GalleryItemEvent) {}
 
   onImageLoad() {}
 
