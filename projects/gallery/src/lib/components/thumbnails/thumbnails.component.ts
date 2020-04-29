@@ -281,10 +281,10 @@ export class ThumbnailsComponent
       entryEl1 === this.thumbsRef.last.nativeElement ? entries[0] : entries[1];
 
     if (firstThumbEntry) {
-      this.showStartArrow = !firstThumbEntry.isIntersecting;
+      this.showStartArrow = !(firstThumbEntry.intersectionRatio >= 0.9);
     }
     if (lastThumbEntry) {
-      this.showEndArrow = !lastThumbEntry.isIntersecting;
+      this.showEndArrow = !(lastThumbEntry.intersectionRatio >= 0.9);
     }
 
     this.cd.detectChanges();
