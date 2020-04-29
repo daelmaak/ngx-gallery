@@ -17,6 +17,7 @@
     "build:demo": "ng build --project=demo --prod --base-href /ngx-doe-gallery/",
     "test": "ng test --project=gallery",
     "test:demo": "ng test --project=demo",
+    "test:ci": "npm test -- --watch=false",
     "lint": "ng lint",
     "version:alpha": "cd projects/gallery && npm version prerelease --preid=alpha",
     "version:beta": "cd projects/gallery && npm version prerelease --preid=beta",

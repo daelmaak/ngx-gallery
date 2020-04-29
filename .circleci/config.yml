@@ -23,7 +23,7 @@ jobs:
           command: npm run build
       - run:
           name: test
-          command: npm test
+          command: npm run test:ci
 workflows:
   build:
     jobs:
