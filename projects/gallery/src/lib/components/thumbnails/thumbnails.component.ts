@@ -280,12 +280,13 @@ export class ThumbnailsComponent
     const lastThumbEntry =
       entryEl1 === this.thumbsRef.last.nativeElement ? entries[0] : entries[1];
 
-    this.showStartArrow = lastThumbEntry && lastThumbEntry.isIntersecting;
-    this.showEndArrow = firstThumbEntry && firstThumbEntry.isIntersecting;
-
-    if (!this.showStartArrow && !this.showEndArrow) {
-      this.showStartArrow = this.showEndArrow = true;
+    if (firstThumbEntry) {
+      this.showStartArrow = firstThumbEntry.intersectionRatio < 1;
     }
+    if (lastThumbEntry) {
+      this.showEndArrow = lastThumbEntry.intersectionRatio < 1;
+    }
+
     this.cd.detectChanges();
   };
 
@@ -293,7 +294,7 @@ export class ThumbnailsComponent
     if (!this.arrowObserver) {
       this.arrowObserver = new IntersectionObserver(this.onArrowsObserved, {
         root: this.thumbListRef.nativeElement,
-        threshold: 0.9
+        threshold: 1.0
       });
     } else {
       this.arrowObserver.disconnect();
