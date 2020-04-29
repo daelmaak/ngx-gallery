@@ -280,12 +280,13 @@ export class ThumbnailsComponent
     const lastThumbEntry =
       entryEl1 === this.thumbsRef.last.nativeElement ? entries[0] : entries[1];
 
-    this.showStartArrow = lastThumbEntry && lastThumbEntry.isIntersecting;
-    this.showEndArrow = firstThumbEntry && firstThumbEntry.isIntersecting;
-
-    if (!this.showStartArrow && !this.showEndArrow) {
-      this.showStartArrow = this.showEndArrow = true;
+    if (firstThumbEntry) {
+      this.showStartArrow = !firstThumbEntry.isIntersecting;
     }
+    if (lastThumbEntry) {
+      this.showEndArrow = !lastThumbEntry.isIntersecting;
+    }
+
     this.cd.detectChanges();
   };
 
