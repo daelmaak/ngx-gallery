@@ -15,7 +15,7 @@
     "serve": "http-server docs/",
     "build": "ng build",
     "build:demo": "ng build --project=demo --prod --base-href /ngx-imagery/",
-    "test": "ng test",
+    "test": "ng test --project=gallery",
     "test:demo": "ng test --project=demo",
     "lint": "ng lint",
     "version:beta": "cd projects/gallery && npm version prerelease --preid=beta",
