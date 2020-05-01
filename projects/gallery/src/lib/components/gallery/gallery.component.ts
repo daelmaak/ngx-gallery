@@ -89,10 +89,7 @@ export class GalleryComponent implements OnChanges, OnDestroy {
   errorTemplate: TemplateRef<void>;
 
   @Input()
-  prevArrowTemplate: TemplateRef<void>;
-
-  @Input()
-  nextArrowTemplate: TemplateRef<void>;
+  arrowTemplate: TemplateRef<void>;
 
   @Input()
   thumbs = true;
@@ -116,13 +113,10 @@ export class GalleryComponent implements OnChanges, OnDestroy {
   thumbTemplate: TemplateRef<any>;
 
   @Input()
+  thumbsArrowTemplate: TemplateRef<void>;
+
+  @Input()
   thumbErrorTemplate: TemplateRef<any>;
-
-  @Input()
-  prevThumbsArrowTemplate: TemplateRef<void>;
-
-  @Input()
-  nextThumbsArrowTemplate: TemplateRef<void>;
 
   @Output()
   imageClick = new EventEmitter<GalleryItemEvent>();

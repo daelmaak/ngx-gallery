@@ -21,23 +21,22 @@ $arrow-btn-dimension: 30px;
       flex: none;
     }
 
-    .prev-thumbs,
-    .next-thumbs {
-      width: $arrow-btn-dimension;
-      height: 100%;
+    .thumb-nav {
       top: 0;
-    }
+      height: 100%;
 
-    .prev-thumbs {
-      left: 0;
-
-      doe-chevron-icon {
-        transform: rotate(180deg);
+      > div {
+        width: $arrow-btn-dimension;
+        height: 100%;
       }
-    }
 
-    .next-thumbs {
-      right: 0;
+      &.prev {
+        left: 0;
+      }
+
+      &.next {
+        right: 0;
+      }
     }
   }
 
@@ -51,25 +50,24 @@ $arrow-btn-dimension: 30px;
       overflow-x: hidden;
     }
 
-    .prev-thumbs,
-    .next-thumbs {
+    .thumb-nav {
       width: 100%;
-      height: $arrow-btn-dimension;
-    }
 
-    .prev-thumbs {
-      top: 0;
-
-      doe-chevron-icon {
-        transform: rotate(-90deg);
+      > div {
+        width: 100%;
+        height: $arrow-btn-dimension;
       }
-    }
-
-    .next-thumbs {
-      bottom: 0;
 
       doe-chevron-icon {
         transform: rotate(90deg);
+      }
+
+      &.prev {
+        top: 0;
+      }
+
+      &.next {
+        bottom: 0;
       }
     }
   }
@@ -132,23 +130,27 @@ img {
   }
 }
 
-.prev-thumbs,
-.next-thumbs {
+.thumb-nav {
   position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 0;
-  overflow: hidden;
-  outline: 0;
   cursor: pointer;
   z-index: 10;
-  opacity: 0.7;
 
-  @include supports-hover {
-    &:hover {
-      opacity: 1;
+  &.prev {
+    transform: rotate(180deg);
+  }
+
+  > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0;
+    opacity: 0.7;
+
+    @include supports-hover {
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 }

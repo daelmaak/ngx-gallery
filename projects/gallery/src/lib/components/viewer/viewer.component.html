@@ -1,10 +1,8 @@
-<ng-container *ngIf="showPrevArrow">
+<div *ngIf="showPrevArrow" class="prev" (click)="prev()">
   <doe-chevron-icon
-    *ngIf="!prevArrowTemplate; else prevArrowTemplate"
-    class="prev"
-    (click)="prev()"
+    *ngIf="!arrowTemplate; else arrowTemplate"
   ></doe-chevron-icon>
-</ng-container>
+</div>
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
   <li *ngIf="!items?.length" class="initial-item"></li>
@@ -95,13 +93,11 @@
   </li>
 </ul>
 
-<ng-container *ngIf="showNextArrow">
+<div *ngIf="showNextArrow" class="next" (click)="next()">
   <doe-chevron-icon
-    *ngIf="!nextArrowTemplate; else nextArrowTemplate"
-    class="next"
-    (click)="next()"
+    *ngIf="!arrowTemplate; else arrowTemplate"
   ></doe-chevron-icon>
-</ng-container>
+</div>
 
 <doe-counter
   *ngIf="imageCounter && items?.length"

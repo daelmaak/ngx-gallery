@@ -117,13 +117,13 @@ img {
   }
 }
 
-doe-chevron-icon {
+.prev,
+.next {
   $icon-dimension: 32px;
 
   display: flex;
   position: absolute;
   box-sizing: border-box;
-  // center horizontally
   top: 50%;
   transform: translateY(-50%);
   z-index: 100;
@@ -137,17 +137,17 @@ doe-chevron-icon {
     }
   }
 
-  &.prev {
-    left: 0;
-    transform: rotate(180deg) translateY(50%);
-  }
-
-  &.next {
-    right: 0;
-  }
-
   &::ng-deep svg {
     height: $icon-dimension;
     width: $icon-dimension;
   }
+}
+
+.prev {
+  left: 0;
+  transform: rotate(180deg) translateY(50%);
+}
+
+.next {
+  right: 0;
 }

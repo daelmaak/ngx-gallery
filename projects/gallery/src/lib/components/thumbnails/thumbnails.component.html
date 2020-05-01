@@ -1,13 +1,8 @@
-<ng-container *ngIf="showStartArrow">
-  <button
-    *ngIf="!prevArrowTemplate; else prevArrowTemplate"
-    class="prev-thumbs"
-    aria-hidden="true"
-    (click)="slide(-1)"
-  >
+<div *ngIf="showStartArrow" class="thumb-nav prev" (click)="slide(-1)">
+  <div *ngIf="!arrowTemplate; else arrowTemplate">
     <doe-chevron-icon></doe-chevron-icon>
-  </button>
-</ng-container>
+  </div>
+</div>
 
 <ul
   #thumbs
@@ -32,7 +27,7 @@
       />
 
       <ng-container *ngIf="item._thumbFailed">
-        <div *ngIf="!thumbErrorTemplate; else thumbErrorTemplate" class="error">
+        <div *ngIf="!errorTemplate; else errorTemplate" class="error">
           <div class="icon">⚠</div>
         </div>
       </ng-container>
@@ -49,13 +44,8 @@
   </li>
 </ul>
 
-<ng-container *ngIf="showEndArrow">
-  <button
-    *ngIf="!nextArrowTemplate; else nextArrowTemplate"
-    class="next-thumbs"
-    aria-hidden="true"
-    (click)="slide(1)"
-  >
+<div *ngIf="showEndArrow" class="thumb-nav next" (click)="slide(1)">
+  <div *ngIf="!arrowTemplate; else arrowTemplate">
     <doe-chevron-icon></doe-chevron-icon>
-  </button>
-</ng-container>
+  </div>
+</div>

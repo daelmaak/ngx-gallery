@@ -68,13 +68,10 @@ export class ThumbnailsComponent
   thumbTemplate: TemplateRef<any>;
 
   @Input()
-  thumbErrorTemplate: TemplateRef<any>;
+  arrowTemplate: TemplateRef<void>;
 
   @Input()
-  prevArrowTemplate: TemplateRef<void>;
-
-  @Input()
-  nextArrowTemplate: TemplateRef<void>;
+  errorTemplate: TemplateRef<any>;
 
   @Output()
   thumbClick = new EventEmitter<GalleryItemEventInternal>();

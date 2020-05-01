@@ -58,8 +58,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
   @Input() loadingTemplate: TemplateRef<void>;
   @Input() errorTemplate: TemplateRef<void>;
-  @Input() prevArrowTemplate: TemplateRef<void>;
-  @Input() nextArrowTemplate: TemplateRef<void>;
+  @Input() arrowTemplate: TemplateRef<void>;
   @Input() thumbsOrientation: OrientationFlag;
   @Input() aria: Aria;
 
