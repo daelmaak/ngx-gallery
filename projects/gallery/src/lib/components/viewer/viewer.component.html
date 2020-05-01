@@ -62,8 +62,8 @@
         <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
       </ng-container>
 
-      <ng-container *ngIf="!errorTemplate; else errorTemplate">
-        <div *ngIf="item._failed" class="error">
+      <ng-container *ngIf="item._failed">
+        <div *ngIf="!errorTemplate; else errorTemplate" class="error">
           <div class="icon">!</div>
           <p class="text">
             {{ errorText || 'Loading of this media failed' }}

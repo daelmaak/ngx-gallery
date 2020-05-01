@@ -1,25 +1,29 @@
 import {
+  ChangeDetectionStrategy,
+  Component,
+  DebugElement,
+  SimpleChange,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
+import {
   async,
   ComponentFixture,
-  TestBed,
   fakeAsync,
-  tick,
-  flush
+  flush,
+  TestBed,
+  tick
 } from '@angular/core/testing';
-
-import { ViewerComponent } from './viewer.component';
-import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
-import { CounterComponent } from '../counter/counter.component';
-import { SafePipe } from '../../pipes/safe.pipe';
-import {
-  SimpleChange,
-  DebugElement,
-  ChangeDetectionStrategy
-} from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('ViewerComponent UI', () => {
+import { GalleryItemInternal } from '../../core/gallery-item';
+import { SafePipe } from '../../pipes/safe.pipe';
+import { CounterComponent } from '../counter/counter.component';
+import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
+import { ViewerComponent } from './viewer.component';
+
+describe('ViewerComponent', () => {
   let component: ViewerComponent;
   let fixture: ComponentFixture<ViewerComponent>;
   let de: DebugElement;
@@ -31,7 +35,8 @@ describe('ViewerComponent UI', () => {
         ViewerComponent,
         ChevronIconComponent,
         CounterComponent,
-        SafePipe
+        SafePipe,
+        TestViewerContainerComponent
       ]
     })
       .overrideComponent(ViewerComponent, {
@@ -104,61 +109,50 @@ describe('ViewerComponent UI', () => {
       );
     }));
   });
-});
 
-describe('ViewerComponent Unit', () => {
-  describe('src attribute', () => {
-    let viewer: ViewerComponent;
+  describe('error handling', () => {
+    let testViewerContainer: TestViewerContainerComponent;
+    let testViewerFixture: ComponentFixture<TestViewerContainerComponent>;
 
     beforeEach(() => {
-      viewer = new ViewerComponent(null, null, null);
-      viewer.items = [
-        {
-          src: 'src1'
-        },
-        {
-          src: 'src2'
-        },
-        {
-          src: 'src3'
-        },
-        {
-          src: 'src4'
-        }
-      ];
-      viewer.loading = 'lazy';
-      viewer.selectedIndex = 0;
+      testViewerFixture = TestBed.createComponent(TestViewerContainerComponent);
+      testViewerContainer = testViewerFixture.componentInstance;
     });
 
-    it('should be truthy if default loading on', () => {
-      viewer.loading = 'auto';
-      expect(viewer.getSrc(viewer.items[2])).toBeTruthy();
-    });
+    it('should not display custom error on items where the loading was successful', () => {
+      testViewerFixture.detectChanges();
 
-    it('should be falsy if lazy loading on and item has not been seen nor selected yet', () => {
-      expect(viewer.getSrc(viewer.items[2])).toBeFalsy();
-    });
+      const items = [
+        { src: 'src1', _failed: true },
+        { src: 'src2' }
+      ] as GalleryItemInternal[];
+      component.items = items;
+      component.errorTemplate = testViewerContainer.errorTemplate;
 
-    it('should be truthy if lazy loading on and item has been seen', () => {
-      viewer.items[2]._seen = true;
-      expect(viewer.getSrc(viewer.items[2])).toBeTruthy();
-    });
+      const changes = {
+        items: new SimpleChange(null, items, true)
+      };
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
 
-    it('should be truthy if lazy loading on and item has been selected', () => {
-      viewer.selectedIndex = 2;
-      expect(viewer.getSrc(viewer.items[2])).toBeTruthy();
-    });
+      const itemEls = de.queryAll(By.css('li'));
+      const customErrors = de.queryAll(By.css('li .custom-error'));
 
-    it('should load items around selected item even though lazy loading is on', () => {
-      viewer.selectedIndex = 1;
-      expect(viewer.getSrc(viewer.items[0])).toBeTruthy();
-      expect(viewer.getSrc(viewer.items[2])).toBeTruthy();
-    });
-
-    it('should load items around selected item even though lazy loading is on, with overlap to the end of list if looping is on', () => {
-      viewer.loop = true;
-      expect(viewer.getSrc(viewer.items[1])).toBeTruthy();
-      expect(viewer.getSrc(viewer.items[3])).toBeTruthy();
+      expect(customErrors.length).toBe(1);
+      expect(itemEls[0].query(By.css('.custom-error'))).toBeTruthy();
+      expect(itemEls[1].query(By.css('.custom-error'))).toBeFalsy();
     });
   });
 });
+
+@Component({
+  selector: 'doe-test-viewer-wrapper',
+  template: `
+    <ng-template #errorTemplate>
+      <div class="custom-error">Error !</div>
+    </ng-template>
+  `
+})
+export class TestViewerContainerComponent {
+  @ViewChild('errorTemplate', { static: true }) errorTemplate: TemplateRef<any>;
+}
