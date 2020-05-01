@@ -77,7 +77,7 @@ export class GalleryComponent implements OnChanges, OnDestroy {
   loop = true;
 
   @Input()
-  objectFit: ObjectFit = 'contain';
+  objectFit: ObjectFit = 'cover';
 
   @Input()
   itemTemplate: TemplateRef<ItemTemplateContext>;
