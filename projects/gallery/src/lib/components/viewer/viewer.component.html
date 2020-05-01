@@ -64,7 +64,7 @@
 
       <ng-container *ngIf="item._failed">
         <div *ngIf="!errorTemplate; else errorTemplate" class="error">
-          <div class="icon">!</div>
+          <div class="icon">⚠</div>
           <p class="text">
             {{ errorText || 'Loading of this media failed' }}
           </p>
