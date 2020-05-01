@@ -68,7 +68,7 @@ export class GalleryComponent implements OnChanges, OnDestroy {
   imageCounter = true;
 
   @Input()
-  imageCounterOrientation: VerticalOrientation = 'top';
+  imageCounterOrientation: VerticalOrientation = 'bottom';
 
   @Input()
   loading: Loading = 'auto';
