@@ -19,13 +19,14 @@ $arrow-btn-dimension: 30px;
 
     li {
       flex: none;
+      margin-right: 0;
 
       &:first-child {
-        margin-left: 0;
+        margin-left: auto;
       }
 
       &:last-child {
-        margin-right: 0;
+        margin-right: auto;
       }
     }
 

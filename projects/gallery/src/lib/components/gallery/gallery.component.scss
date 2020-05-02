@@ -4,6 +4,8 @@
   width: 500px;
   outline: 0;
   position: relative;
+  background-color: whitesmoke;
+  border-radius: 5px;
 
   &.column {
     flex-direction: column;

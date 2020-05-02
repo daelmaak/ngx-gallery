@@ -1,3 +1,4 @@
+import { animate, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -31,20 +32,17 @@ import {
   VerticalOrientation
 } from '../../core';
 import {
+  GalleryImage,
   GalleryItemInternal,
-  GalleryVideo,
-  GalleryImage
+  GalleryVideo
 } from '../../core/gallery-item';
-import { transition, animate, trigger } from '@angular/animations';
 
 @Component({
   selector: 'doe-viewer',
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('removeMedia', [transition(':leave', animate('0ms 100ms'))])
-  ]
+  animations: [trigger('remove', [transition(':leave', animate('0ms 100ms'))])]
 })
 export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() items: GalleryItemInternal[];
