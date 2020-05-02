@@ -30,7 +30,11 @@ import {
   UA,
   VerticalOrientation
 } from '../../core';
-import { GalleryItemInternal } from '../../core/gallery-item';
+import {
+  GalleryItemInternal,
+  GalleryVideo,
+  GalleryImage
+} from '../../core/gallery-item';
 import { transition, animate, trigger } from '@angular/animations';
 
 @Component({
@@ -273,6 +277,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     return !!item.src.match(/youtube.*\/embed\//);
   }
 
+  isVideo(index: number) {
+    return this.items[index] instanceof GalleryVideo;
+  }
+
   prev() {
     this.select(this.selectedIndex - 1);
   }
@@ -299,7 +307,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     // stop video when navigating away from it
-    if (this.items[this.selectedIndex].video) {
+    if (this.isVideo(this.selectedIndex)) {
       const videoEl: HTMLMediaElement = this.itemsRef
         .toArray()
         [this.selectedIndex].nativeElement.querySelector('video');
@@ -315,17 +323,21 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.center();
   }
 
+  toImage(item: GalleryItemInternal): GalleryImage {
+    return item instanceof GalleryImage && item;
+  }
+
   onDragstart(e: Event) {
     if (this.mouseGestures) {
       e.preventDefault();
     }
   }
 
-  onImageClick(item: GalleryItemInternal, event: Event) {
+  onImageClick(index: number, item: GalleryItemInternal, event: Event) {
     this.imageClick.emit({
       event,
       item,
-      index: this.items.indexOf(item)
+      index
     });
   }
 

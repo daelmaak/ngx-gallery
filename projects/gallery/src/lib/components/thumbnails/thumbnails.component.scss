@@ -19,6 +19,14 @@ $arrow-btn-dimension: 30px;
 
     li {
       flex: none;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
     }
 
     .thumb-nav {
@@ -48,6 +56,16 @@ $arrow-btn-dimension: 30px;
       height: 100%;
       overflow-y: scroll;
       overflow-x: hidden;
+    }
+
+    li {
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     .thumb-nav {

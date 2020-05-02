@@ -11,7 +11,8 @@ import { delay, switchMap } from 'rxjs/operators';
 import {
   GalleryComponent,
   GalleryItem,
-  GalleryItemEvent
+  GalleryItemEvent,
+  GalleryImage
 } from 'projects/gallery/src/public-api';
 
 @Component({
@@ -40,7 +41,7 @@ export class HomeComponent implements OnInit {
     loop: true,
     thumbs: true,
     thumbsAutoScroll: true,
-    thumbsOrientation: this.mobile ? 'bottom' : 'left',
+    thumbsOrientation: 'bottom',
     thumbsArrows: true,
     thumbsArrowSlideByLength: 0,
     thumbsScrollBehavior: 'smooth'
@@ -54,63 +55,18 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.images = of([
-      {
-        src: './assets/kitten3.jpg',
-        alt: 'Kitten 3',
-        description: 'Beautiful kitten'
-      },
-      {
-        src: './assets/kitten4.jpg',
-        alt: 'Kitten 4',
-        description:
-          '<i>Lovely</i> kitten that <strong>will</strong> make your day way more enjoyable'
-      },
-      {
-        src: './assets/mountains4.jpg',
-        thumbSrc: './assets/mountains4-thumb.jpg',
-        alt: 'Mountains 4',
-        description: 'Mountain shoulder'
-      },
-      {
-        src: './assets/fruit1.jpg',
-        alt: 'Fruit 1',
-        description: 'Passion fruit'
-      },
-      {
-        src: './assets/fruit2.jpg',
-        thumbSrc: './assets/fruit2-thumb.jpg',
-        alt: 'Fruit 2',
-        description: 'Really juicy fruit'
-      },
-      {
-        src: './assets/fruit3.jpg',
-        alt: 'Fruit 3',
-        description: 'Most exotic fruit I have ever seen'
-      },
-      // {
-      //   src:
-      //     'https://interactive-examples.mdn.mozilla.net/media/examples/flower.mp4',
-      //   thumbSrc: './assets/flower.jpg',
-      //   video: true,
-      //   description: 'Blooming rose'
-      // },
-      {
-        src: './assets/vogel1.jpg',
-        thumbSrc: './assets/vogel1-thumb.jpg',
-        alt: 'Bird 1',
-        description: 'Bird, taking off'
-      },
-      {
-        src: './assets/landscape1.jpg',
-        thumbSrc: './assets/landscape1-thumb.jpg',
-        alt: 'Landscape 1',
-        description: 'Pale painting of a landscape'
-      }
-      // {
-      //   src: 'https://www.youtube.com/embed/s54LfNUU1Cg',
-      //   thumbSrc: 'https://img.youtube.com/vi/s54LfNUU1Cg/1.jpg',
-      //   alt: 'LP Somewhere I belong'
-      // }
+      new GalleryImage(
+        './assets/forest-1-lg.jpg',
+        './assets/forest-1-sm.jpg',
+        'Forest',
+        'Mysterious forest',
+        [
+          {
+            media: '(max-width: 960px)',
+            srcset: './assets/forest-1-md.jpg, ./assets/forest-1-lg.jpg 4x'
+          }
+        ]
+      )
     ]).pipe(
       switchMap(items =>
         defer(() => of(items).pipe(delay(this.imageLoadingLatency)))

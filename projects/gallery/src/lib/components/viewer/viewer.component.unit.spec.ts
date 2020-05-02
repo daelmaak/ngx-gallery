@@ -1,4 +1,5 @@
 import { ViewerComponent } from './viewer.component';
+import { GalleryImage } from '../../core';
 
 describe('ViewerComponent Unit', () => {
   describe('src attribute', () => {
@@ -7,18 +8,10 @@ describe('ViewerComponent Unit', () => {
     beforeEach(() => {
       viewer = new ViewerComponent(null, null, null);
       viewer.items = [
-        {
-          src: 'src1'
-        },
-        {
-          src: 'src2'
-        },
-        {
-          src: 'src3'
-        },
-        {
-          src: 'src4'
-        }
+        new GalleryImage('src1'),
+        new GalleryImage('src2'),
+        new GalleryImage('src3'),
+        new GalleryImage('src4')
       ];
       viewer.loading = 'lazy';
       viewer.selectedIndex = 0;

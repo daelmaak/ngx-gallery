@@ -6,10 +6,7 @@ import {
   HostBinding,
   HostListener,
   Input,
-  OnChanges,
-  OnDestroy,
   Output,
-  SimpleChanges,
   TemplateRef,
   ViewChild
 } from '@angular/core';
@@ -26,12 +23,8 @@ import {
   VerticalOrientation
 } from '../../core';
 import { defaultAria } from '../../core/aria';
-import {
-  GalleryItemEventInternal,
-  GalleryItemInternal
-} from '../../core/gallery-item';
-import { ViewerComponent } from '../viewer/viewer.component';
 import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
+import { ViewerComponent } from '../viewer/viewer.component';
 
 @Component({
   selector: 'doe-gallery',
@@ -39,7 +32,7 @@ import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GalleryComponent implements OnChanges, OnDestroy {
+export class GalleryComponent {
   @Input()
   items: GalleryItem[];
 
@@ -142,8 +135,6 @@ export class GalleryComponent implements OnChanges, OnDestroy {
   @ViewChild(ViewerComponent, { static: false, read: ElementRef })
   imageViewerEl: ElementRef<HTMLElement>;
 
-  _internalItems: GalleryItemInternal[];
-
   @HostBinding('tabindex')
   _tabindex = 0;
 
@@ -169,17 +160,6 @@ export class GalleryComponent implements OnChanges, OnDestroy {
     return OrientationFlag.VERTICAL;
   }
 
-  constructor() {}
-
-  ngOnChanges({ items }: SimpleChanges) {
-    if (items) {
-      const incomingItems = (items.currentValue || []) as GalleryItem[];
-      this._internalItems = incomingItems.map(item => ({ ...item }));
-    }
-  }
-
-  ngOnDestroy() {}
-
   focus() {
     this.imageViewerEl.nativeElement.focus();
   }
@@ -196,7 +176,7 @@ export class GalleryComponent implements OnChanges, OnDestroy {
 
   onThumbClick(event: GalleryItemEvent) {
     this.imageViewer.select(event.index);
-    this._emitEvent(event, this.thumbClick);
+    this.thumbClick.emit(event);
     this._selectInternal(event.index);
   }
 
@@ -208,16 +188,6 @@ export class GalleryComponent implements OnChanges, OnDestroy {
 
   slideThumbs(direction: number) {
     this.thumbnails.slide(direction);
-  }
-
-  _emitEvent(
-    event: GalleryItemEventInternal,
-    emitter: EventEmitter<GalleryItemEvent>
-  ) {
-    const publicEvent = event as GalleryItemEvent;
-
-    publicEvent.item = this.items[event.index];
-    emitter.emit(publicEvent);
   }
 
   _selectInternal(index: number) {

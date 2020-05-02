@@ -1,34 +1,79 @@
-export interface GalleryItem {
+export abstract class GalleryItem {
+  constructor(
+    /**
+     * Media url
+     */
+    public src: string,
+
+    /**
+     * Url of media thumbnail
+     */
+    public thumbSrc: string,
+
+    /**
+     * Alt text for not yet loaded image
+     */
+    public alt: string,
+
+    /**
+     * Description that is to be shown on the currently displayed gallery item
+     */
+    public description: string,
+
+    /**
+     * Custom data where you can put whatever you want
+     */
+    public data: any
+  ) {}
+}
+
+/**
+ * The whole interface mirrors <source> attributes from the WHATWG spec.
+ */
+export interface PictureSource {
   /**
-   * Media url
+   * src URL
    */
-  src: string;
+  srcset: string;
 
   /**
-   * Url of media thumbnail
+   * CSS media selector
    */
-  thumbSrc?: string;
+  media?: string;
 
   /**
-   * Alt text for not yet loaded image
+   * Give hint to browser which src from srcset to pick
    */
-  alt?: string;
+  sizes?: string;
 
   /**
-   * Description that is to be shown on the currently displayed gallery item
+   * MIME media type
    */
-  description?: string;
+  type?: string;
+}
 
-  /**
-   * Makes item's media be rendered as HTML video.
-   * This property doesn't mark youtube videos. Those don't need this flag as they are recongnized automatically
-   */
-  video?: boolean;
+export class GalleryImage extends GalleryItem {
+  constructor(
+    src,
+    thumbSrc?,
+    alt?,
+    description?,
 
-  /**
-   * Custom data where you can put whatever you want
-   */
-  data?: any;
+    /**
+     * Sources for <picture>
+     */
+    public pictureSources?: PictureSource[],
+
+    data?
+  ) {
+    super(src, thumbSrc, alt, description, data);
+  }
+}
+
+export class GalleryVideo extends GalleryItem {
+  constructor(src, thumbSrc?, alt?, data?, description?) {
+    super(src, thumbSrc, alt, description, data);
+  }
 }
 
 export interface GalleryItemInternal extends GalleryItem {
@@ -53,18 +98,16 @@ export interface GalleryItemInternal extends GalleryItem {
   _thumbFailed?: boolean;
 }
 
-export interface GalleryItemEventInternal {
+export interface GalleryItemEvent {
   /**
    * Index of the item
    */
   index: number;
 
+  item: GalleryItem;
+
   /**
    * DOM event
    */
   event: Event;
-}
-
-export interface GalleryItemEvent extends GalleryItemEventInternal {
-  item: GalleryItem;
 }

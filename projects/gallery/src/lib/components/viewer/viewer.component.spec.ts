@@ -17,7 +17,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { GalleryItemInternal } from '../../core/gallery-item';
+import { GalleryItemInternal, GalleryImage } from '../../core/gallery-item';
 import { SafePipe } from '../../pipes/safe.pipe';
 import { CounterComponent } from '../counter/counter.component';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
@@ -79,7 +79,7 @@ describe('ViewerComponent', () => {
 
       tick(1000);
 
-      component.items = [{ src: 'src1' }, { src: 'src2' }];
+      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
       changes = {
         items: new SimpleChange([], component.items, false)
       };
@@ -93,7 +93,7 @@ describe('ViewerComponent', () => {
 
     it('should preselect item based on gived index', fakeAsync(() => {
       component.selectedIndex = 1;
-      component.items = [{ src: 'src1' }, { src: 'src2' }];
+      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
       const changes = {
         items: new SimpleChange(null, component.items, true)
       };

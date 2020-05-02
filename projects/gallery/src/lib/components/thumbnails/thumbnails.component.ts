@@ -21,8 +21,9 @@ import { Subject } from 'rxjs';
 import { isBrowser, Orientation, SUPPORT } from '../../core';
 import { Aria } from '../../core/aria';
 import {
-  GalleryItemEventInternal,
-  GalleryItemInternal
+  GalleryItemInternal,
+  GalleryItemEvent,
+  GalleryItem
 } from '../../core/gallery-item';
 
 @Component({
@@ -74,10 +75,10 @@ export class ThumbnailsComponent
   errorTemplate: TemplateRef<any>;
 
   @Output()
-  thumbClick = new EventEmitter<GalleryItemEventInternal>();
+  thumbClick = new EventEmitter<GalleryItemEvent>();
 
   @Output()
-  thumbHover = new EventEmitter<GalleryItemEventInternal>();
+  thumbHover = new EventEmitter<GalleryItemEvent>();
 
   @ViewChild('thumbs', { static: true })
   thumbListRef: ElementRef<HTMLElement>;
@@ -215,11 +216,13 @@ export class ThumbnailsComponent
 
   emitEvent(
     index: number,
+    item: GalleryItem,
     event: Event,
-    emitter: EventEmitter<GalleryItemEventInternal>
+    emitter: EventEmitter<GalleryItemEvent>
   ) {
     emitter.emit({
       index,
+      item,
       event
     });
   }

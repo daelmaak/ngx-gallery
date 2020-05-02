@@ -16,8 +16,8 @@
     *ngFor="let item of items; let i = index"
     [class.selected]="i === selectedIndex"
     aria-hidden="true"
-    (click)="emitEvent(i, $event, thumbClick)"
-    (mouseenter)="emitEvent(i, $event, thumbHover)"
+    (click)="emitEvent(i, item, $event, thumbClick)"
+    (mouseenter)="emitEvent(i, item, $event, thumbHover)"
   >
     <ng-container *ngIf="!thumbTemplate; else customThumbTemplate">
       <img
