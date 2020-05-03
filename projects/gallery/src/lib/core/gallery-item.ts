@@ -71,7 +71,7 @@ export class GalleryImage extends GalleryItem {
 }
 
 export class GalleryVideo extends GalleryItem {
-  constructor(src, thumbSrc?, alt?, data?, description?) {
+  constructor(src, thumbSrc?, alt?, description?, data?) {
     super(src, thumbSrc, alt, description, data);
   }
 }
