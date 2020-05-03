@@ -123,37 +123,38 @@ img {
   }
 }
 
-.prev,
-.next {
-  $icon-dimension: 32px;
-
+.arrow {
   display: flex;
   position: absolute;
-  box-sizing: border-box;
   top: 50%;
   transform: translateY(-50%);
   z-index: 100;
-  padding: 15px 6px;
   cursor: pointer;
-  opacity: 0.6;
 
-  @include supports-hover {
-    &:hover {
-      opacity: 1;
+  &.prev {
+    left: 0;
+    transform: rotate(180deg) translateY(50%);
+  }
+
+  &.next {
+    right: 0;
+  }
+
+  doe-chevron-icon {
+    $icon-dimension: 32px;
+
+    margin: 15px 6px;
+    opacity: 0.7;
+
+    @include supports-hover {
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &::ng-deep svg {
+      height: $icon-dimension;
+      width: $icon-dimension;
     }
   }
-
-  &::ng-deep svg {
-    height: $icon-dimension;
-    width: $icon-dimension;
-  }
-}
-
-.prev {
-  left: 0;
-  transform: rotate(180deg) translateY(50%);
-}
-
-.next {
-  right: 0;
 }
