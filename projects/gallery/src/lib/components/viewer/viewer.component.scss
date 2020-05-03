@@ -7,6 +7,7 @@
   height: 100%;
   overflow: hidden;
   outline: none;
+  background-color: #f5f5f5;
   // NOTE on z-index: It prevents creation of secondary layer for scrollable content (found out in Chromium dev tools in Layers) in context of the viewer DOM element.
   // This secondary layer holds a large portion of memory
   // Positive z-index prevent creation of this layer. It also causes a separate layer to be created, because it has "composited" descendants - ul element,
@@ -49,6 +50,11 @@ li {
   }
 }
 
+picture {
+  width: 100%;
+  height: 100%;
+}
+
 img,
 video,
 iframe {
@@ -85,12 +91,12 @@ img {
 
 .description {
   display: inline-block;
-  background: #222;
+  background: black;
   opacity: 0.8;
   color: white;
   padding: 6px 15px;
-  letter-spacing: 0.02em;
   max-width: 80%;
+  font-size: 0.95em;
   text-align: center;
 }
 
@@ -104,8 +110,8 @@ img {
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
-  background: #222;
-  color: #e3e3e3;
+  background-color: #f5f5f5;
+  color: #424242;
 
   .icon {
     font-size: 40px;
@@ -113,41 +119,42 @@ img {
 
   .text {
     margin-top: 20px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.01em;
   }
 }
 
-.prev,
-.next {
-  $icon-dimension: 32px;
-
+.arrow {
   display: flex;
   position: absolute;
-  box-sizing: border-box;
   top: 50%;
   transform: translateY(-50%);
   z-index: 100;
-  padding: 15px 6px;
   cursor: pointer;
-  opacity: 0.6;
 
-  @include supports-hover {
-    &:hover {
-      opacity: 1;
+  &.prev {
+    left: 0;
+    transform: rotate(180deg) translateY(50%);
+  }
+
+  &.next {
+    right: 0;
+  }
+
+  doe-chevron-icon {
+    $icon-dimension: 32px;
+
+    margin: 15px 6px;
+    opacity: 0.7;
+
+    @include supports-hover {
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &::ng-deep svg {
+      height: $icon-dimension;
+      width: $icon-dimension;
     }
   }
-
-  &::ng-deep svg {
-    height: $icon-dimension;
-    width: $icon-dimension;
-  }
-}
-
-.prev {
-  left: 0;
-  transform: rotate(180deg) translateY(50%);
-}
-
-.next {
-  right: 0;
 }

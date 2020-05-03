@@ -11,6 +11,7 @@ import { SafePipe } from '../../pipes/safe.pipe';
 import { DebugElement, SimpleChange } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { GalleryImage } from '../../core';
 
 describe('GalleryComponent', () => {
   let component: GalleryComponent;
@@ -44,11 +45,7 @@ describe('GalleryComponent', () => {
 
   describe('emitters', () => {
     beforeEach(() => {
-      component.items = [{ src: 'src1' }, { src: 'src2' }];
-      const changes = {
-        items: new SimpleChange(undefined, component.items, true)
-      };
-      component.ngOnChanges(changes);
+      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
       fixture.detectChanges();
     });
 

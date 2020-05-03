@@ -1,7 +1,5 @@
 main {
-  max-width: 800px;
   margin: 0 auto;
-  padding: 20px 10px 15px;
 
   @media (max-width: 767px) {
     max-width: 100%;
@@ -11,6 +9,10 @@ main {
 footer {
   width: 100%;
   height: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9em;
   text-align: center;
-  color: lighten(#000000, 40%);
+  color: #b3b3b3;
 }

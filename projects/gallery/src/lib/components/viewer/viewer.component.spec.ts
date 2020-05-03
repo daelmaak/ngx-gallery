@@ -17,7 +17,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { GalleryItemInternal } from '../../core/gallery-item';
+import { GalleryItemInternal, GalleryImage } from '../../core/gallery-item';
 import { SafePipe } from '../../pipes/safe.pipe';
 import { CounterComponent } from '../counter/counter.component';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
@@ -79,7 +79,7 @@ describe('ViewerComponent', () => {
 
       tick(1000);
 
-      component.items = [{ src: 'src1' }, { src: 'src2' }];
+      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
       changes = {
         items: new SimpleChange([], component.items, false)
       };
@@ -93,7 +93,7 @@ describe('ViewerComponent', () => {
 
     it('should preselect item based on gived index', fakeAsync(() => {
       component.selectedIndex = 1;
-      component.items = [{ src: 'src1' }, { src: 'src2' }];
+      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
       const changes = {
         items: new SimpleChange(null, component.items, true)
       };
@@ -141,6 +141,26 @@ describe('ViewerComponent', () => {
       expect(customErrors.length).toBe(1);
       expect(itemEls[0].query(By.css('.custom-error'))).toBeTruthy();
       expect(itemEls[1].query(By.css('.custom-error'))).toBeFalsy();
+    });
+  });
+
+  describe('descriptions', () => {
+    beforeEach(() => {
+      component.descriptions = true;
+    });
+
+    it(`shouldn't give description class above-counter when counter position set, but counter is disabled`, () => {
+      component.imageCounterOrientation = 'bottom';
+      component.imageCounter = false;
+      component.items = [new GalleryImage('src1', null, null, 'description1')];
+      const changes = {
+        items: new SimpleChange(null, component.items, true)
+      };
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+
+      const descContainer = de.query(By.css('.description-container'));
+      expect(descContainer.classes['above-counter']).toBeFalsy();
     });
   });
 });

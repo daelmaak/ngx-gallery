@@ -1,3 +1,4 @@
+import { animate, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -30,17 +31,14 @@ import {
   UA,
   VerticalOrientation
 } from '../../core';
-import { GalleryItemInternal } from '../../core/gallery-item';
-import { transition, animate, trigger } from '@angular/animations';
+import { GalleryItemInternal, GalleryVideo } from '../../core/gallery-item';
 
 @Component({
   selector: 'doe-viewer',
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('removeMedia', [transition(':leave', animate('0ms 100ms'))])
-  ]
+  animations: [trigger('remove', [transition(':leave', animate('0ms 100ms'))])]
 })
 export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() items: GalleryItemInternal[];
@@ -273,6 +271,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     return !!item.src.match(/youtube.*\/embed\//);
   }
 
+  isVideo(index: number) {
+    return this.items[index] instanceof GalleryVideo;
+  }
+
   prev() {
     this.select(this.selectedIndex - 1);
   }
@@ -299,7 +301,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     // stop video when navigating away from it
-    if (this.items[this.selectedIndex].video) {
+    if (this.isVideo(this.selectedIndex)) {
       const videoEl: HTMLMediaElement = this.itemsRef
         .toArray()
         [this.selectedIndex].nativeElement.querySelector('video');
@@ -321,11 +323,11 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
-  onImageClick(item: GalleryItemInternal, event: Event) {
+  onImageClick(index: number, item: GalleryItemInternal, event: Event) {
     this.imageClick.emit({
       event,
       item,
-      index: this.items.indexOf(item)
+      index
     });
   }
 

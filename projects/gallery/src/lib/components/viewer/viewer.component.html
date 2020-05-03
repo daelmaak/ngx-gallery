@@ -1,4 +1,4 @@
-<div *ngIf="showPrevArrow" class="prev" (click)="prev()">
+<div *ngIf="showPrevArrow" class="prev arrow" (click)="prev()">
   <doe-chevron-icon
     *ngIf="!arrowTemplate; else arrowTemplate"
   ></doe-chevron-icon>
@@ -13,7 +13,7 @@
     tabindex="0"
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'imgr-desc-' + i"
-    (click)="onImageClick(item, $event)"
+    (click)="onImageClick(i, item, $event)"
     (dragstart)="onDragstart($event)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
@@ -21,20 +21,27 @@
     <ng-container *ngIf="!itemTemplate; else customTemplate">
       <ng-container *ngIf="!UA.ios || isInScrollportProximity(i)">
         <ng-container *ngIf="getSrc(item); let src">
-          <img
-            @removeMedia
-            *ngIf="!isYoutube(item) && !item.video"
-            [src]="src"
-            [alt]="item.alt"
-            [class.loading]="item._seen && !item._loaded"
-            [style.objectFit]="objectFit"
-            (load)="onItemLoaded(item, $event)"
-            (error)="onItemErrored(item, $event)"
-          />
+          <picture *ngIf="!isVideo(i)" @remove>
+            <source
+              *ngFor="let source of item.pictureSources"
+              [srcset]="source.srcset"
+              [attr.media]="source.media"
+              [attr.sizes]="source.sizes"
+              [attr.type]="source.type"
+            />
+            <img
+              [src]="src"
+              [alt]="item.alt"
+              [class.loading]="item._seen && !item._loaded"
+              [style.objectFit]="objectFit"
+              (load)="onItemLoaded(item, $event)"
+              (error)="onItemErrored(item, $event)"
+            />
+          </picture>
           <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
           <video
-            @removeMedia
-            *ngIf="!isYoutube(item) && item.video"
+            @remove
+            *ngIf="!isYoutube(item) && isVideo(i)"
             [src]="src"
             [poster]="item.thumbSrc"
             [class.loading]="item._seen && !item._loaded"
@@ -44,8 +51,9 @@
             (loadedmetadata)="onItemLoaded(item, $event)"
             (error)="onItemErrored(item, $event)"
           ></video>
+
           <iframe
-            @removeMedia
+            @remove
             *ngIf="isYoutube(item)"
             [src]="src | safe"
             frameborder="0"
@@ -93,7 +101,7 @@
   </li>
 </ul>
 
-<div *ngIf="showNextArrow" class="next" (click)="next()">
+<div *ngIf="showNextArrow" class="next arrow" (click)="next()">
   <doe-chevron-icon
     *ngIf="!arrowTemplate; else arrowTemplate"
   ></doe-chevron-icon>
@@ -109,7 +117,7 @@
 <div
   *ngIf="descriptions && items"
   class="description-container"
-  [class.above-counter]="imageCounterOrientation === 'bottom'"
+  [class.above-counter]="imageCounter && imageCounterOrientation === 'bottom'"
   aria-hidden="true"
 >
   <div

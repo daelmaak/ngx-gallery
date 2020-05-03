@@ -1,172 +1,181 @@
 <form>
-  <section>
-    <mat-checkbox name="arrows" [(ngModel)]="galleryConfig.arrows"
-      >Arrows</mat-checkbox
-    >
-  </section>
+  <div>
+    <section>
+      <mat-checkbox name="arrows" [(ngModel)]="galleryConfig.arrows"
+        >Arrows</mat-checkbox
+      >
+    </section>
 
-  <section>
-    <mat-checkbox name="descriptions" [(ngModel)]="galleryConfig.descriptions">
-      Descriptions
-    </mat-checkbox>
-  </section>
+    <section>
+      <mat-checkbox
+        name="descriptions"
+        [(ngModel)]="galleryConfig.descriptions"
+      >
+        Descriptions
+      </mat-checkbox>
+    </section>
 
-  <section>
-    <mat-checkbox
-      name="mouseGestures"
-      [(ngModel)]="galleryConfig.mouseGestures"
-    >
-      Mouse Gestures
+    <section>
+      <mat-checkbox
+        name="mouseGestures"
+        [(ngModel)]="galleryConfig.mouseGestures"
+      >
+        Mouse Gestures
+        <button mat-raised-button (click)="reloadGallery()">
+          Apply gestures
+        </button>
+      </mat-checkbox>
+    </section>
+
+    <section>
+      <mat-checkbox
+        name="touchGestures"
+        [(ngModel)]="galleryConfig.touchGestures"
+      >
+        Touch Gestures
+        <button mat-raised-button (click)="reloadGallery()">
+          Apply gestures
+        </button>
+      </mat-checkbox>
+    </section>
+
+    <section>
+      <mat-checkbox name="imageCounter" [(ngModel)]="galleryConfig.imageCounter"
+        >Image counter</mat-checkbox
+      >
+    </section>
+
+    <section>
+      <label>Image counter orientation:</label>
+      <mat-radio-group
+        name="imageCounterOrientation"
+        [(ngModel)]="galleryConfig.imageCounterOrientation"
+      >
+        <mat-radio-button value="top">top</mat-radio-button>
+        <mat-radio-button value="bottom">bottom</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
+      <label>Image fit:</label>
+      <mat-radio-group name="objectFit" [(ngModel)]="galleryConfig.objectFit">
+        <mat-radio-button value="contain">contain</mat-radio-button>
+        <mat-radio-button value="cover">cover</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
+      <mat-checkbox name="loop" [(ngModel)]="galleryConfig.loop"
+        >Loop</mat-checkbox
+      >
+    </section>
+
+    <section>
+      <label>Image loading strategy:</label>
+      <mat-radio-group name="loading" [(ngModel)]="galleryConfig.loading">
+        <mat-radio-button value="auto">auto</mat-radio-button>
+        <mat-radio-button value="lazy">lazy</mat-radio-button>
+      </mat-radio-group>
       <button mat-raised-button (click)="reloadGallery()">
-        Apply gestures
+        Apply loading strategy
       </button>
-    </mat-checkbox>
-  </section>
+    </section>
+  </div>
 
-  <section>
-    <mat-checkbox
-      name="touchGestures"
-      [(ngModel)]="galleryConfig.touchGestures"
-    >
-      Touch Gestures
+  <div>
+    <section>
+      <mat-checkbox name="thumbs" [(ngModel)]="galleryConfig.thumbs"
+        >Thumbnails</mat-checkbox
+      >
+    </section>
+
+    <section>
+      <mat-checkbox
+        name="thumbsAutoScroll"
+        [(ngModel)]="galleryConfig.thumbsAutoScroll"
+        >Thumbs autoscroll</mat-checkbox
+      >
+    </section>
+
+    <section>
+      <label>Thumbnails orientation:</label>
+      <mat-radio-group
+        name="thumbsOrientation"
+        [(ngModel)]="galleryConfig.thumbsOrientation"
+      >
+        <mat-radio-button value="top">top</mat-radio-button>
+        <mat-radio-button value="bottom">bottom</mat-radio-button>
+        <mat-radio-button value="left">left</mat-radio-button>
+        <mat-radio-button value="right">right</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
+      <mat-checkbox name="thumbsArrows" [(ngModel)]="galleryConfig.thumbsArrows"
+        >Thumbnail arrows</mat-checkbox
+      >
+      <mat-form-field>
+        <label>Slide thumbnails by length</label>
+        <input
+          name="thumbsArrowsSlideByLength"
+          matInput
+          [(ngModel)]="galleryConfig.thumbsArrowSlideByLength"
+        />
+      </mat-form-field>
+    </section>
+
+    <section>
+      <label>Thumbnails scroll behavior:</label>
+      <mat-radio-group
+        name="thumbsScrollBehavior"
+        [(ngModel)]="galleryConfig.thumbsScrollBehavior"
+      >
+        <mat-radio-button value="smooth">smooth</mat-radio-button>
+        <mat-radio-button value="auto">auto</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <hr />
+
+    <section class="image-loading-latency">
+      <mat-form-field>
+        <label>Items (not images!) loading latency</label>
+        <input
+          name="imageLoadingLatency"
+          matInput
+          [(ngModel)]="imageLoadingLatency"
+        />
+      </mat-form-field>
       <button mat-raised-button (click)="reloadGallery()">
-        Apply gestures
+        Confirm latency
       </button>
-    </mat-checkbox>
-  </section>
-
-  <section>
-    <mat-checkbox name="imageCounter" [(ngModel)]="galleryConfig.imageCounter"
-      >Image counter</mat-checkbox
-    >
-  </section>
-
-  <section>
-    <label>Image counter orientation:</label>
-    <mat-radio-group
-      name="imageCounterOrientation"
-      [(ngModel)]="galleryConfig.imageCounterOrientation"
-    >
-      <mat-radio-button value="top">top</mat-radio-button>
-      <mat-radio-button value="bottom">bottom</mat-radio-button>
-    </mat-radio-group>
-  </section>
-
-  <section>
-    <label>Image fit:</label>
-    <mat-radio-group name="objectFit" [(ngModel)]="galleryConfig.objectFit">
-      <mat-radio-button value="contain">contain</mat-radio-button>
-      <mat-radio-button value="cover">cover</mat-radio-button>
-    </mat-radio-group>
-  </section>
-
-  <section>
-    <mat-checkbox name="loop" [(ngModel)]="galleryConfig.loop"
-      >Loop</mat-checkbox
-    >
-  </section>
-
-  <section>
-    <mat-checkbox name="thumbs" [(ngModel)]="galleryConfig.thumbs"
-      >Thumbnails</mat-checkbox
-    >
-  </section>
-
-  <section>
-    <mat-checkbox
-      name="thumbsAutoScroll"
-      [(ngModel)]="galleryConfig.thumbsAutoScroll"
-      >Thumbs autoscroll</mat-checkbox
-    >
-  </section>
-
-  <section>
-    <label>Thumbnails orientation:</label>
-    <mat-radio-group
-      name="thumbsOrientation"
-      [(ngModel)]="galleryConfig.thumbsOrientation"
-    >
-      <mat-radio-button value="top">top</mat-radio-button>
-      <mat-radio-button value="bottom">bottom</mat-radio-button>
-      <mat-radio-button value="left">left</mat-radio-button>
-      <mat-radio-button value="right">right</mat-radio-button>
-    </mat-radio-group>
-  </section>
-
-  <section>
-    <mat-checkbox name="thumbsArrows" [(ngModel)]="galleryConfig.thumbsArrows"
-      >Thumbnail arrows</mat-checkbox
-    >
-    <mat-form-field>
-      <label>Slide thumbnails by length</label>
-      <input
-        name="thumbsArrowsSlideByLength"
-        matInput
-        [(ngModel)]="galleryConfig.thumbsArrowSlideByLength"
-      />
-    </mat-form-field>
-  </section>
-
-  <section>
-    <label>Thumbnails scroll behavior:</label>
-    <mat-radio-group
-      name="thumbsScrollBehavior"
-      [(ngModel)]="galleryConfig.thumbsScrollBehavior"
-    >
-      <mat-radio-button value="smooth">smooth</mat-radio-button>
-      <mat-radio-button value="auto">auto</mat-radio-button>
-    </mat-radio-group>
-  </section>
-
-  <section>
-    <label>Image loading strategy:</label>
-    <mat-radio-group name="loading" [(ngModel)]="galleryConfig.loading">
-      <mat-radio-button value="auto">auto</mat-radio-button>
-      <mat-radio-button value="lazy">lazy</mat-radio-button>
-    </mat-radio-group>
-    <button mat-raised-button (click)="reloadGallery()">
-      Apply loading strategy
-    </button>
-  </section>
-
-  <hr />
-
-  <section class="image-loading-latency">
-    <mat-form-field>
-      <label>Items (not images!) loading latency</label>
-      <input
-        name="imageLoadingLatency"
-        matInput
-        [(ngModel)]="imageLoadingLatency"
-      />
-    </mat-form-field>
-    <button mat-raised-button (click)="reloadGallery()">
-      Confirm latency
-    </button>
-  </section>
+    </section>
+  </div>
 </form>
 
-<doe-gallery
-  *ngIf="displayGallery"
-  [items]="images | async"
-  [arrows]="galleryConfig.arrows"
-  [descriptions]="galleryConfig.descriptions"
-  [mouseGestures]="galleryConfig.mouseGestures"
-  [touchGestures]="galleryConfig.touchGestures"
-  [imageCounter]="galleryConfig.imageCounter"
-  [imageCounterOrientation]="galleryConfig.imageCounterOrientation"
-  [objectFit]="galleryConfig.objectFit"
-  [loading]="galleryConfig.loading"
-  [loop]="galleryConfig.loop"
-  [thumbs]="galleryConfig.thumbs"
-  [thumbsAutoScroll]="galleryConfig.thumbsAutoScroll"
-  [thumbsOrientation]="galleryConfig.thumbsOrientation"
-  [thumbsArrows]="galleryConfig.thumbsArrows"
-  [thumbsArrowSlideByLength]="galleryConfig.thumbsArrowSlideByLength"
-  [thumbsScrollBehavior]="galleryConfig.thumbsScrollBehavior"
-  (imageClick)="onImageClick($event)"
-  (descriptionClick)="galleryConfig.descriptions = false"
-></doe-gallery>
+<div class="gallery-container">
+  <doe-gallery
+    *ngIf="displayGallery"
+    [items]="images | async"
+    [arrows]="galleryConfig.arrows"
+    [descriptions]="galleryConfig.descriptions"
+    [mouseGestures]="galleryConfig.mouseGestures"
+    [touchGestures]="galleryConfig.touchGestures"
+    [imageCounter]="galleryConfig.imageCounter"
+    [imageCounterOrientation]="galleryConfig.imageCounterOrientation"
+    [objectFit]="galleryConfig.objectFit"
+    [loading]="galleryConfig.loading"
+    [loop]="galleryConfig.loop"
+    [thumbs]="galleryConfig.thumbs"
+    [thumbsAutoScroll]="galleryConfig.thumbsAutoScroll"
+    [thumbsOrientation]="galleryConfig.thumbsOrientation"
+    [thumbsArrows]="galleryConfig.thumbsArrows"
+    [thumbsArrowSlideByLength]="galleryConfig.thumbsArrowSlideByLength"
+    [thumbsScrollBehavior]="galleryConfig.thumbsScrollBehavior"
+    (imageClick)="onImageClick($event)"
+    (descriptionClick)="galleryConfig.descriptions = false"
+  ></doe-gallery>
+</div>
 
 <ng-template #loadingTemplate>
   <div class="custom-loading">
