@@ -3,7 +3,7 @@ import {
   Component,
   OnInit,
   ViewChild,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { defer, Observable, of } from 'rxjs';
 import { delay, switchMap } from 'rxjs/operators';
@@ -12,14 +12,14 @@ import {
   GalleryComponent,
   GalleryItem,
   GalleryItemEvent,
-  GalleryImage
+  GalleryImage,
 } from 'projects/gallery/src/public-api';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
   images: Observable<GalleryItem[]>;
@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
   mobile = matchMedia('(max-width: 767px)').matches;
 
   galleryConfig = {
+    selectedIndex: 0,
     arrows: !this.mobile,
     descriptions: false,
     mouseGestures: true,
@@ -44,7 +45,7 @@ export class HomeComponent implements OnInit {
     thumbsOrientation: 'bottom',
     thumbsArrows: true,
     thumbsArrowSlideByLength: 0,
-    thumbsScrollBehavior: 'smooth'
+    thumbsScrollBehavior: 'smooth',
   };
 
   @ViewChild(GalleryComponent, { static: false }) gallery: GalleryComponent;
@@ -63,8 +64,8 @@ export class HomeComponent implements OnInit {
         [
           {
             media: '(max-width: 1024px)',
-            srcset: './assets/forest-1-md.jpg, ./assets/forest-1-lg.jpg 4x'
-          }
+            srcset: './assets/forest-1-md.jpg, ./assets/forest-1-lg.jpg 4x',
+          },
         ]
       ),
       new GalleryImage(
@@ -75,8 +76,8 @@ export class HomeComponent implements OnInit {
         [
           {
             media: '(max-width: 1024px)',
-            srcset: './assets/sky-1-md.jpg, ./assets/sky-1-lg.jpg 4x'
-          }
+            srcset: './assets/sky-1-md.jpg, ./assets/sky-1-lg.jpg 4x',
+          },
         ]
       ),
       new GalleryImage(
@@ -87,8 +88,8 @@ export class HomeComponent implements OnInit {
         [
           {
             media: '(max-width: 1024px)',
-            srcset: './assets/cheers-1-md.jpg, ./assets/cheers-1-lg.jpg 4x'
-          }
+            srcset: './assets/cheers-1-md.jpg, ./assets/cheers-1-lg.jpg 4x',
+          },
         ]
       ),
       new GalleryImage(
@@ -99,8 +100,8 @@ export class HomeComponent implements OnInit {
         [
           {
             media: '(max-width: 1024px)',
-            srcset: './assets/laptop-1-md.jpg, ./assets/laptop-1-lg.jpg 4x'
-          }
+            srcset: './assets/laptop-1-md.jpg, ./assets/laptop-1-lg.jpg 4x',
+          },
         ]
       ),
       new GalleryImage(
@@ -112,8 +113,8 @@ export class HomeComponent implements OnInit {
           {
             media: '(max-width: 1024px)',
             srcset:
-              './assets/snowflake-1-md.jpg, ./assets/snowflake-1-lg.jpg 4x'
-          }
+              './assets/snowflake-1-md.jpg, ./assets/snowflake-1-lg.jpg 4x',
+          },
         ]
       ),
       new GalleryImage(
@@ -124,10 +125,10 @@ export class HomeComponent implements OnInit {
         [
           {
             media: '(max-width: 1024px)',
-            srcset: './assets/mesh-1-md.jpg, ./assets/mesh-1-lg.jpg 4x'
-          }
+            srcset: './assets/mesh-1-md.jpg, ./assets/mesh-1-lg.jpg 4x',
+          },
         ]
-      )
+      ),
     ]).pipe(
       switchMap(items =>
         defer(() => of(items).pipe(delay(this.imageLoadingLatency)))
