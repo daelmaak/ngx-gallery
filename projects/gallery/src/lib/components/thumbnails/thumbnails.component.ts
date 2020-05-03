@@ -20,11 +20,7 @@ import { Subject } from 'rxjs';
 
 import { isBrowser, Orientation, SUPPORT } from '../../core';
 import { Aria } from '../../core/aria';
-import {
-  GalleryItemInternal,
-  GalleryItemEvent,
-  GalleryItem
-} from '../../core/gallery-item';
+import { GalleryItemInternal, GalleryItemEvent } from '../../core/gallery-item';
 
 @Component({
   selector: 'doe-thumbnails',
@@ -216,7 +212,7 @@ export class ThumbnailsComponent
 
   emitEvent(
     index: number,
-    item: GalleryItem,
+    item: GalleryItemInternal,
     event: Event,
     emitter: EventEmitter<GalleryItemEvent>
   ) {
