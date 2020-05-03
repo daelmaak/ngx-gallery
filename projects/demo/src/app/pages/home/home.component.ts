@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
         'Mysterious forest',
         [
           {
-            media: '(max-width: 960px)',
+            media: '(max-width: 1024px)',
             srcset: './assets/forest-1-md.jpg, ./assets/forest-1-lg.jpg 4x'
           }
         ]
@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit {
         'Mysterious sky',
         [
           {
-            media: '(max-width: 960px)',
+            media: '(max-width: 1024px)',
             srcset: './assets/sky-1-md.jpg, ./assets/sky-1-lg.jpg 4x'
           }
         ]
@@ -86,7 +86,7 @@ export class HomeComponent implements OnInit {
         'Two guys drinking during sunset',
         [
           {
-            media: '(max-width: 960px)',
+            media: '(max-width: 1024px)',
             srcset: './assets/cheers-1-md.jpg, ./assets/cheers-1-lg.jpg 4x'
           }
         ]
@@ -98,7 +98,7 @@ export class HomeComponent implements OnInit {
         'Ideal workplace for computer work',
         [
           {
-            media: '(max-width: 960px)',
+            media: '(max-width: 1024px)',
             srcset: './assets/laptop-1-md.jpg, ./assets/laptop-1-lg.jpg 4x'
           }
         ]
@@ -110,7 +110,7 @@ export class HomeComponent implements OnInit {
         'Snowflake detail',
         [
           {
-            media: '(max-width: 960px)',
+            media: '(max-width: 1024px)',
             srcset:
               './assets/snowflake-1-md.jpg, ./assets/snowflake-1-lg.jpg 4x'
           }
@@ -123,7 +123,7 @@ export class HomeComponent implements OnInit {
         'City at night',
         [
           {
-            media: '(max-width: 960px)',
+            media: '(max-width: 1024px)',
             srcset: './assets/mesh-1-md.jpg, ./assets/mesh-1-lg.jpg 4x'
           }
         ]
