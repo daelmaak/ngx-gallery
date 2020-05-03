@@ -76,7 +76,21 @@ export class GalleryVideo extends GalleryItem {
   }
 }
 
-export interface GalleryItemInternal extends GalleryItem {
+export interface GalleryItemEvent {
+  /**
+   * Index of the item
+   */
+  index: number;
+
+  item: GalleryItem;
+
+  /**
+   * DOM event
+   */
+  event: Event;
+}
+
+export interface GalleryItemInternal extends GalleryImage, GalleryVideo {
   /**
    * Marks item as loaded once its media gets loaded
    */
@@ -96,18 +110,4 @@ export interface GalleryItemInternal extends GalleryItem {
    * `true` when thumbnail couldn't be loaded
    */
   _thumbFailed?: boolean;
-}
-
-export interface GalleryItemEvent {
-  /**
-   * Index of the item
-   */
-  index: number;
-
-  item: GalleryItem;
-
-  /**
-   * DOM event
-   */
-  event: Event;
 }

@@ -31,11 +31,7 @@ import {
   UA,
   VerticalOrientation
 } from '../../core';
-import {
-  GalleryImage,
-  GalleryItemInternal,
-  GalleryVideo
-} from '../../core/gallery-item';
+import { GalleryItemInternal, GalleryVideo } from '../../core/gallery-item';
 
 @Component({
   selector: 'doe-viewer',
@@ -319,10 +315,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.selectedIndex = index;
     this.selection.emit(index);
     this.center();
-  }
-
-  toImage(item: GalleryItemInternal): GalleryImage {
-    return item instanceof GalleryImage && item;
   }
 
   onDragstart(e: Event) {
