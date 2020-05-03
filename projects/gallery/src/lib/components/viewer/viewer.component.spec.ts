@@ -4,7 +4,7 @@ import {
   DebugElement,
   SimpleChange,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import {
   async,
@@ -12,7 +12,7 @@ import {
   fakeAsync,
   flush,
   TestBed,
-  tick
+  tick,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -36,11 +36,11 @@ describe('ViewerComponent', () => {
         ChevronIconComponent,
         CounterComponent,
         SafePipe,
-        TestViewerContainerComponent
-      ]
+        TestCustomErrorComponent,
+      ],
     })
       .overrideComponent(ViewerComponent, {
-        set: { changeDetection: ChangeDetectionStrategy.Default }
+        set: { changeDetection: ChangeDetectionStrategy.Default },
       })
       .compileComponents();
   }));
@@ -59,7 +59,7 @@ describe('ViewerComponent', () => {
 
     it('should succeed also with empty items', () => {
       const changes = {
-        items: new SimpleChange(null, [], true)
+        items: new SimpleChange(null, [], true),
       };
       component.ngOnChanges(changes);
       fixture.detectChanges();
@@ -72,7 +72,7 @@ describe('ViewerComponent', () => {
     it('should display items even though they have been set later', fakeAsync(() => {
       component.items = [];
       let changes = {
-        items: new SimpleChange(null, component.items, true)
+        items: new SimpleChange(null, component.items, true),
       };
       component.ngOnChanges(changes);
       fixture.detectChanges();
@@ -81,7 +81,7 @@ describe('ViewerComponent', () => {
 
       component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
       changes = {
-        items: new SimpleChange([], component.items, false)
+        items: new SimpleChange([], component.items, false),
       };
       component.ngOnChanges(changes);
       fixture.detectChanges();
@@ -95,7 +95,7 @@ describe('ViewerComponent', () => {
       component.selectedIndex = 1;
       component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
       const changes = {
-        items: new SimpleChange(null, component.items, true)
+        items: new SimpleChange(null, component.items, true),
       };
       component.ngOnChanges(changes);
       fixture.detectChanges();
@@ -111,11 +111,11 @@ describe('ViewerComponent', () => {
   });
 
   describe('error handling', () => {
-    let testViewerContainer: TestViewerContainerComponent;
-    let testViewerFixture: ComponentFixture<TestViewerContainerComponent>;
+    let testViewerContainer: TestCustomErrorComponent;
+    let testViewerFixture: ComponentFixture<TestCustomErrorComponent>;
 
     beforeEach(() => {
-      testViewerFixture = TestBed.createComponent(TestViewerContainerComponent);
+      testViewerFixture = TestBed.createComponent(TestCustomErrorComponent);
       testViewerContainer = testViewerFixture.componentInstance;
     });
 
@@ -124,13 +124,13 @@ describe('ViewerComponent', () => {
 
       const items = [
         { src: 'src1', _failed: true },
-        { src: 'src2' }
+        { src: 'src2' },
       ] as GalleryItemInternal[];
       component.items = items;
       component.errorTemplate = testViewerContainer.errorTemplate;
 
       const changes = {
-        items: new SimpleChange(null, items, true)
+        items: new SimpleChange(null, items, true),
       };
       component.ngOnChanges(changes);
       fixture.detectChanges();
@@ -154,7 +154,7 @@ describe('ViewerComponent', () => {
       component.imageCounter = false;
       component.items = [new GalleryImage('src1', null, null, 'description1')];
       const changes = {
-        items: new SimpleChange(null, component.items, true)
+        items: new SimpleChange(null, component.items, true),
       };
       component.ngOnChanges(changes);
       fixture.detectChanges();
@@ -171,8 +171,8 @@ describe('ViewerComponent', () => {
     <ng-template #errorTemplate>
       <div class="custom-error">Error !</div>
     </ng-template>
-  `
+  `,
 })
-export class TestViewerContainerComponent {
+export class TestCustomErrorComponent {
   @ViewChild('errorTemplate', { static: true }) errorTemplate: TemplateRef<any>;
 }

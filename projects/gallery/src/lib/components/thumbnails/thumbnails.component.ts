@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -14,7 +13,7 @@ import {
   SimpleChanges,
   TemplateRef,
   ViewChild,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 
@@ -26,10 +25,9 @@ import { GalleryItemInternal, GalleryItemEvent } from '../../core/gallery-item';
   selector: 'doe-thumbnails',
   templateUrl: './thumbnails.component.html',
   styleUrls: ['./thumbnails.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ThumbnailsComponent
-  implements OnChanges, AfterViewInit, OnDestroy {
+export class ThumbnailsComponent implements OnChanges, OnDestroy {
   @Input()
   items: GalleryItemInternal[] = [];
 
@@ -135,19 +133,18 @@ export class ThumbnailsComponent
         this.observeArrows();
       }
       if (!prevItems.length) {
-        setTimeout(() => this.centerThumbIfNeeded(this.selectedIndex));
+        setTimeout(() => {
+          this.centerThumbIfNeeded(this.selectedIndex);
+          this.smoothScrollAllowed = true;
+        });
       }
     }
-  }
-
-  ngAfterViewInit() {
-    this.centerThumbIfNeeded(this.selectedIndex);
-    this.smoothScrollAllowed = true;
   }
 
   ngOnDestroy() {
     this.destroy$.next(null);
     this.destroy$.complete();
+    this.arrowObserver && this.arrowObserver.disconnect();
   }
 
   slide(direction: number) {
@@ -201,8 +198,11 @@ export class ThumbnailsComponent
   }
 
   select(index: number) {
+    this.selectedIndex = index;
+    this.cd.detectChanges();
+
     if (this.autoScroll) {
-      this.centerThumbIfNeeded(index);
+      setTimeout(() => this.centerThumbIfNeeded(index));
     }
   }
 
@@ -219,7 +219,7 @@ export class ThumbnailsComponent
     emitter.emit({
       index,
       item,
-      event
+      event,
     });
   }
 
@@ -290,7 +290,7 @@ export class ThumbnailsComponent
     if (!this.arrowObserver) {
       this.arrowObserver = new IntersectionObserver(this.onArrowsObserved, {
         root: this.thumbListRef.nativeElement,
-        threshold: 1.0
+        threshold: 1.0,
       });
     } else {
       this.arrowObserver.disconnect();
