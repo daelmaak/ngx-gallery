@@ -143,6 +143,26 @@ describe('ViewerComponent', () => {
       expect(itemEls[1].query(By.css('.custom-error'))).toBeFalsy();
     });
   });
+
+  describe('descriptions', () => {
+    beforeEach(() => {
+      component.descriptions = true;
+    });
+
+    it(`shouldn't give description class above-counter when counter position set, but counter is disabled`, () => {
+      component.imageCounterOrientation = 'bottom';
+      component.imageCounter = false;
+      component.items = [new GalleryImage('src1', null, null, 'description1')];
+      const changes = {
+        items: new SimpleChange(null, component.items, true)
+      };
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+
+      const descContainer = de.query(By.css('.description-container'));
+      expect(descContainer.classes['above-counter']).toBeFalsy();
+    });
+  });
 });
 
 @Component({
