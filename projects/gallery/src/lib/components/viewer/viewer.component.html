@@ -101,6 +101,10 @@
   </li>
 </ul>
 
+<ng-container *ngIf="items?.length <= 0">
+  <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+</ng-container>
+
 <div *ngIf="showNextArrow" class="next arrow" (click)="next()">
   <doe-chevron-icon
     *ngIf="!arrowTemplate; else arrowTemplate"

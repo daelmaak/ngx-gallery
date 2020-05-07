@@ -8,7 +8,7 @@ import {
   Input,
   Output,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 
 import {
@@ -20,7 +20,7 @@ import {
   ObjectFit,
   Orientation,
   OrientationFlag,
-  VerticalOrientation
+  VerticalOrientation,
 } from '../../core';
 import { defaultAria } from '../../core/aria';
 import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
@@ -30,7 +30,7 @@ import { ViewerComponent } from '../viewer/viewer.component';
   selector: 'doe-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GalleryComponent {
   @Input()
@@ -67,7 +67,7 @@ export class GalleryComponent {
   loading: Loading = 'auto';
 
   @Input()
-  loop = true;
+  loop = false;
 
   @Input()
   objectFit: ObjectFit = 'cover';
