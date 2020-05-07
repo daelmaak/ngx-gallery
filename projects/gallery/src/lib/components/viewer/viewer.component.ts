@@ -175,11 +175,15 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
           maxDeltaY = maxDeltaX = 0;
         };
 
+        const ondragstart = (e: DragEvent) => e.preventDefault();
+
         imageList.addEventListener('mousedown', onmousedown, listenerOpts);
         imageList.addEventListener('click', onclick, { capture: true });
+        imageList.addEventListener('dragstart', ondragstart);
         this.destroy$.subscribe(() => {
           imageList.removeEventListener('mousedown', onmousedown);
           imageList.removeEventListener('click', onclick);
+          imageList.removeEventListener('dragstart', ondragstart);
         });
       });
     }
@@ -315,12 +319,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.selectedIndex = index;
     this.selection.emit(index);
     this.center();
-  }
-
-  onDragstart(e: Event) {
-    if (this.mouseGestures) {
-      e.preventDefault();
-    }
   }
 
   onImageClick(index: number, item: GalleryItemInternal, event: Event) {
