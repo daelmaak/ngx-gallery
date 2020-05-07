@@ -14,6 +14,7 @@ import {
   GalleryItemEvent,
   GalleryImage,
 } from 'projects/gallery/src/public-api';
+import { GalleryItemInternal } from 'projects/gallery/src/lib/core/gallery-item';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
-  images: Observable<GalleryItem[]>;
+  images: GalleryItem[];
+  items: Observable<GalleryItem[]>;
 
   displayGallery = true;
   imageLoadingLatency = 0;
@@ -39,7 +41,7 @@ export class HomeComponent implements OnInit {
     imageCounterOrientation: 'bottom',
     objectFit: 'cover',
     loading: 'lazy',
-    loop: true,
+    loop: false,
     thumbs: true,
     thumbsAutoScroll: true,
     thumbsOrientation: 'bottom',
@@ -55,7 +57,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.images = of([
+    this.images = [
       new GalleryImage(
         './assets/forest-1-lg.jpg',
         './assets/forest-1-sm.jpg',
@@ -129,7 +131,9 @@ export class HomeComponent implements OnInit {
           },
         ]
       ),
-    ]).pipe(
+    ];
+
+    this.items = of(this.images).pipe(
       switchMap(items =>
         defer(() => of(items).pipe(delay(this.imageLoadingLatency)))
       )
@@ -145,6 +149,10 @@ export class HomeComponent implements OnInit {
   reloadGallery() {
     this.displayGallery = false;
     this.cd.detectChanges();
+    this.images.forEach((i: GalleryItemInternal) => {
+      i._loaded = false;
+      i._seen = false;
+    });
     this.displayGallery = true;
     this.cd.detectChanges();
   }

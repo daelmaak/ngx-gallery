@@ -173,7 +173,7 @@
 <div class="gallery-container">
   <doe-gallery
     *ngIf="displayGallery"
-    [items]="images | async"
+    [items]="items | async"
     [selectedIndex]="+galleryConfig.selectedIndex"
     [arrows]="galleryConfig.arrows"
     [descriptions]="galleryConfig.descriptions"
