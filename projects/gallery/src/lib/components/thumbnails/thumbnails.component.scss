@@ -121,6 +121,10 @@ li {
   position: relative;
   cursor: pointer;
 
+  &.initial-item {
+    visibility: hidden;
+  }
+
   &.selected {
     &::after {
       content: '';
