@@ -15,7 +15,7 @@ import {
   SimpleChanges,
   TemplateRef,
   ViewChild,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -29,7 +29,7 @@ import {
   ObjectFit,
   OrientationFlag,
   UA,
-  VerticalOrientation
+  VerticalOrientation,
 } from '../../core';
 import { GalleryItemInternal, GalleryVideo } from '../../core/gallery-item';
 
@@ -38,7 +38,7 @@ import { GalleryItemInternal, GalleryVideo } from '../../core/gallery-item';
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [trigger('remove', [transition(':leave', animate('0ms 100ms'))])]
+  animations: [trigger('remove', [transition(':leave', animate('0ms 100ms'))])],
 })
 export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() items: GalleryItemInternal[];
@@ -115,7 +115,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
     if (items && items.currentValue && items.currentValue.length) {
-      setTimeout(() => this.onResize());
+      this.onResize();
 
       const selectedItem = items.currentValue[this.selectedIndex];
       if (selectedItem) {
@@ -126,7 +126,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnInit() {
     const listenerOpts = {
-      passive: true
+      passive: true,
     };
 
     if (isBrowser) {
@@ -239,7 +239,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
         imageList.addEventListener('touchstart', ontouchstart, listenerOpts);
         document.addEventListener('touchmove', ontouchmove, {
-          passive: !UA.ios
+          passive: !UA.ios,
         });
         document.addEventListener('touchend', ontouchend, listenerOpts);
         this.destroy$.subscribe(() => {
@@ -327,7 +327,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.imageClick.emit({
       event,
       item,
-      index
+      index,
     });
   }
 

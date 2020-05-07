@@ -10,7 +10,7 @@
   tabindex="0"
   [attr.aria-label]="aria?.thumbnailsLabel"
 >
-  <li *ngIf="!items || !items.length"></li>
+  <li *ngIf="!items || !items.length" class="initial-item"></li>
   <li
     #thumb
     *ngFor="let item of items; let i = index"

@@ -121,6 +121,10 @@ li {
   position: relative;
   cursor: pointer;
 
+  &.initial-item {
+    visibility: hidden;
+  }
+
   &.selected {
     &::after {
       content: '';
@@ -158,6 +162,7 @@ img {
 
   .icon {
     font-size: 20px;
+    color: whitesmoke;
   }
 }
 

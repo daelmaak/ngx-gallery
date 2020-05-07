@@ -40,14 +40,10 @@
   (selection)="_selectInternal($event); thumbnails?.select($event)"
 ></doe-viewer>
 
-<ng-container *ngIf="!items?.length">
-  <ng-container
-    *ngTemplateOutlet="loadingTemplate || defaultLoadingTemplate"
-  ></ng-container>
-</ng-container>
-
 <ng-template #defaultLoadingTemplate>
   <div class="loading">
-    <div class="spinner"></div>
+    <div></div>
+    <div></div>
+    <div></div>
   </div>
 </ng-template>
