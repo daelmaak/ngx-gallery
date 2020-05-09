@@ -1,4 +1,4 @@
-# Doe Gallery (former Imagery)
+# Doe Gallery
 
 Performant, responsive, easy to use Angular 8+ gallery
 
@@ -8,13 +8,14 @@ Performant, responsive, easy to use Angular 8+ gallery
 [**Stackblitz**](https://stackblitz.com/edit/ngx-doe-gallery) |
 [**Docs**](https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API)
 
-## Why ngx-doe-gallery
+## Why ngx-doe-gallery?
 
 Because it gives you the doe eyes! Seriously though, use it if you need:
 
 - Great performance and feel both on mobile and desktop
-- Very small - gallery itself has just 8kB gzipped! It also packs no dependencies
-- Easy to use and customize
+- Very small size - gallery itself has just 8kB gzipped! It also packs no dependencies
+- Easy usage and lots of customizations
+- It just works!
 
 ## Installation
 
@@ -33,18 +34,14 @@ import { GalleryModule } from 'ngx-doe-gallery';
 ...
 ```
 
-In your component class
+In your component
 
 ```
-import { GalleryItem } from 'ngx-doe-gallery';
+import { GalleryImage } from 'ngx-doe-gallery';
 
 @Component({...})
 export class AppComponent {
-  images: GalleryItem[] = [
-      {
-        src: '/assets/kitten1.jpg'
-      }
-  ]
+  images = [ new GalleryImage('kitten1.jpg') ]
 }
 ```
 
