@@ -280,11 +280,14 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   prev() {
-    this.select(this.selectedIndex - 1);
+    // NOTE: the run() is necessary here before
+    // https://stackoverflow.com/questions/61712865/angular-8-9-click-event-handler-not-triggering-change-detection
+    // is resolved
+    this.zone.run(() => this.select(this.selectedIndex - 1));
   }
 
   next() {
-    this.select(this.selectedIndex + 1);
+    this.zone.run(() => this.select(this.selectedIndex + 1));
   }
 
   select(index: number) {
