@@ -18,6 +18,11 @@
     "image",
     "picture"
   ],
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "not IE_Mob 11"
+  ],
   "engines": {
     "node": ">=10.0.0"
   },
