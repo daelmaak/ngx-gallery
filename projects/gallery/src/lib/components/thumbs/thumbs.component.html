@@ -1,4 +1,8 @@
-<div *ngIf="showStartArrow" class="thumb-nav prev" (click)="slide(-1)">
+<div
+  *ngIf="showStartArrow"
+  class="doe-thumbs-arrow doe-thumbs-arrow-prev"
+  (click)="slide(-1)"
+>
   <div *ngIf="!arrowTemplate; else arrowTemplate">
     <doe-chevron-icon></doe-chevron-icon>
   </div>
@@ -10,11 +14,11 @@
   tabindex="0"
   [attr.aria-label]="aria?.thumbnailsLabel"
 >
-  <li *ngIf="!items || !items.length" class="initial-item"></li>
+  <li *ngIf="!items || !items.length" class="doe-thumbs-initial-item"></li>
   <li
     #thumb
     *ngFor="let item of items; let i = index"
-    [class.selected]="i === selectedIndex"
+    [class.doe-thumbs-item--selected]="i === selectedIndex"
     aria-hidden="true"
     (click)="emitEvent(i, item, $event, thumbClick)"
     (mouseenter)="emitEvent(i, item, $event, thumbHover)"
@@ -27,8 +31,11 @@
       />
 
       <ng-container *ngIf="item._thumbFailed">
-        <div *ngIf="!errorTemplate; else errorTemplate" class="error">
-          <div class="icon">⚠</div>
+        <div
+          *ngIf="!errorTemplate; else errorTemplate"
+          class="doe-thumbs-error"
+        >
+          <div class="doe-thumbs-error-icon">⚠</div>
         </div>
       </ng-container>
     </ng-container>
@@ -44,7 +51,11 @@
   </li>
 </ul>
 
-<div *ngIf="showEndArrow" class="thumb-nav next" (click)="slide(1)">
+<div
+  *ngIf="showEndArrow"
+  class="doe-thumbs-arrow doe-thumbs-arrow-next"
+  (click)="slide(1)"
+>
   <div *ngIf="!arrowTemplate; else arrowTemplate">
     <doe-chevron-icon></doe-chevron-icon>
   </div>

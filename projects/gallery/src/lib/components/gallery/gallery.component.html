@@ -1,4 +1,4 @@
-<doe-thumbnails
+<doe-thumbs
   *ngIf="thumbs"
   [items]="items"
   [selectedIndex]="selectedIndex"
@@ -13,7 +13,7 @@
   [aria]="aria"
   (thumbClick)="onThumbClick($event)"
   (thumbHover)="thumbHover.emit($event)"
-></doe-thumbnails>
+></doe-thumbs>
 
 <doe-viewer
   tabindex="0"
@@ -37,11 +37,11 @@
   [aria]="aria"
   (imageClick)="imageClick.emit($event)"
   (descriptionClick)="descriptionClick.emit($event)"
-  (selection)="_selectInternal($event); thumbnails?.select($event)"
+  (selection)="_selectInternal($event); thumbsRef?.select($event)"
 ></doe-viewer>
 
 <ng-template #defaultLoadingTemplate>
-  <div class="loading">
+  <div class="doe-loading">
     <div></div>
     <div></div>
     <div></div>

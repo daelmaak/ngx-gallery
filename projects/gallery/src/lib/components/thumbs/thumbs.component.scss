@@ -5,9 +5,11 @@ $arrow-btn-dimension: 30px;
 :host {
   flex: 1 0 auto;
   position: relative;
+}
 
-  &.top,
-  &.bottom {
+:host.doe-thumbs {
+  &--top,
+  &--bottom {
     width: 100%;
 
     ul {
@@ -33,7 +35,7 @@ $arrow-btn-dimension: 30px;
       }
     }
 
-    .thumb-nav {
+    .doe-thumbs-arrow {
       top: 0;
       height: 100%;
 
@@ -42,18 +44,18 @@ $arrow-btn-dimension: 30px;
         height: 100%;
       }
 
-      &.prev {
+      &-prev {
         left: 0;
       }
 
-      &.next {
+      &-next {
         right: 0;
       }
     }
   }
 
-  &.left,
-  &.right {
+  &--left,
+  &--right {
     height: 100%;
 
     ul {
@@ -66,7 +68,7 @@ $arrow-btn-dimension: 30px;
       border-top: 0;
     }
 
-    .thumb-nav {
+    .doe-thumbs-arrow {
       width: 100%;
 
       > div {
@@ -78,18 +80,18 @@ $arrow-btn-dimension: 30px;
         transform: rotate(90deg);
       }
 
-      &.prev {
+      &-prev {
         top: 0;
       }
 
-      &.next {
+      &-next {
         bottom: 0;
       }
     }
   }
 
-  &.bottom,
-  &.right {
+  &--bottom,
+  &--right {
     order: 1;
   }
 }
@@ -121,11 +123,11 @@ li {
   position: relative;
   cursor: pointer;
 
-  &.initial-item {
+  &.doe-thumbs-initial-item {
     visibility: hidden;
   }
 
-  &.selected {
+  &.doe-thumbs-item--selected {
     &::after {
       content: '';
       display: block;
@@ -148,7 +150,7 @@ img {
   object-fit: cover;
 }
 
-.error {
+.doe-thumbs-error {
   position: absolute;
   left: 0;
   top: 0;
@@ -160,18 +162,18 @@ img {
   align-items: center;
   background: #222;
 
-  .icon {
+  &-icon {
     font-size: 20px;
     color: whitesmoke;
   }
 }
 
-.thumb-nav {
+.doe-thumbs-arrow {
   position: absolute;
   cursor: pointer;
   z-index: 10;
 
-  &.prev {
+  &-prev {
     transform: rotate(180deg);
   }
 

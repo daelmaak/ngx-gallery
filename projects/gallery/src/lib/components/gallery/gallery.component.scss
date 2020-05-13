@@ -7,16 +7,14 @@
   background-color: #252525;
   border-radius: 5px;
 
-  &.column {
+  &.doe-gallery--column {
     flex-direction: column;
-  }
-
-  &::ng-deep {
-    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   }
 }
 
 :host::ng-deep {
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+
   button {
     border: none;
   }
@@ -28,7 +26,7 @@
   }
 }
 
-.loading {
+.doe-loading {
   display: flex;
   justify-content: center;
   align-items: center;

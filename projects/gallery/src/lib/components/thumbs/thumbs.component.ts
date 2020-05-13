@@ -22,62 +22,35 @@ import { Aria } from '../../core/aria';
 import { GalleryItemInternal, GalleryItemEvent } from '../../core/gallery-item';
 
 @Component({
-  selector: 'doe-thumbnails',
-  templateUrl: './thumbnails.component.html',
-  styleUrls: ['./thumbnails.component.scss'],
+  selector: 'doe-thumbs',
+  templateUrl: './thumbs.component.html',
+  styleUrls: ['./thumbs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ThumbnailsComponent implements OnChanges, OnDestroy {
-  @Input()
-  items: GalleryItemInternal[] = [];
-
-  @Input()
-  selectedIndex: number;
-
-  @Input()
-  aria: Aria;
-
-  @Input()
-  @HostBinding('class')
-  orientation: Orientation;
-
-  @Input()
-  arrows: boolean;
-
-  @Input()
-  arrowSlideByLength: number;
-
-  @Input()
-  autoScroll: boolean;
-
+export class ThumbsComponent implements OnChanges, OnDestroy {
+  @Input() items: GalleryItemInternal[] = [];
+  @Input() selectedIndex: number;
+  @Input() aria: Aria;
+  @Input() orientation: Orientation;
+  @Input() arrows: boolean;
+  @Input() arrowSlideByLength: number;
+  @Input() autoScroll: boolean;
+  @Input() thumbTemplate: TemplateRef<any>;
+  @Input() arrowTemplate: TemplateRef<void>;
+  @Input() errorTemplate: TemplateRef<any>;
   @Input()
   set scrollBehavior(val: ScrollBehavior) {
     this._scrollBehavior = val || 'smooth';
   }
-
   get scrollBehavior() {
     return this.smoothScrollAllowed ? this._scrollBehavior : 'auto';
   }
 
-  @Input()
-  thumbTemplate: TemplateRef<any>;
+  @Output() thumbClick = new EventEmitter<GalleryItemEvent>();
+  @Output() thumbHover = new EventEmitter<GalleryItemEvent>();
 
-  @Input()
-  arrowTemplate: TemplateRef<void>;
-
-  @Input()
-  errorTemplate: TemplateRef<any>;
-
-  @Output()
-  thumbClick = new EventEmitter<GalleryItemEvent>();
-
-  @Output()
-  thumbHover = new EventEmitter<GalleryItemEvent>();
-
-  @ViewChild('thumbs', { static: true })
-  thumbListRef: ElementRef<HTMLElement>;
-  @ViewChildren('thumb')
-  thumbsRef: QueryList<ElementRef<HTMLElement>>;
+  @ViewChild('thumbs', { static: true }) thumbListRef: ElementRef<HTMLElement>;
+  @ViewChildren('thumb') thumbsRef: QueryList<ElementRef<HTMLElement>>;
 
   showStartArrow = false;
   showEndArrow = false;
@@ -90,6 +63,11 @@ export class ThumbnailsComponent implements OnChanges, OnDestroy {
   private smoothScrollAllowed = false;
 
   private scrollId: number;
+
+  @HostBinding('class')
+  get cssClass() {
+    return `doe-thumbs--${this.orientation}`;
+  }
 
   private get scrollKey(): string {
     return this.vertical ? 'scrollTop' : 'scrollLeft';
@@ -154,8 +132,8 @@ export class ThumbnailsComponent implements OnChanges, OnDestroy {
       delta = this.arrowSlideByLength;
     } else {
       // Note: Slide by the full height/width of the gallery
-      // or by the overflow of the thumbnails - to prevent unnecessary requestAnimationFrame calls while trying to scroll
-      // outside of the min/max scroll of the thumbnails
+      // or by the overflow of the thumbs - to prevent unnecessary requestAnimationFrame calls while trying to scroll
+      // outside of the min/max scroll of the thumbs
       const thumbList = this.thumbListRef.nativeElement as HTMLElement;
       const thumbListScrollAxis = this.vertical
         ? thumbList.scrollHeight

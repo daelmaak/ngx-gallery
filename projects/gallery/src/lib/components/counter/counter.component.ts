@@ -2,7 +2,7 @@ import {
   Component,
   ChangeDetectionStrategy,
   Input,
-  HostBinding
+  HostBinding,
 } from '@angular/core';
 
 import { VerticalOrientation } from '../../core';
@@ -11,12 +11,12 @@ import { VerticalOrientation } from '../../core';
   selector: 'doe-counter',
   template: `
     <span aria-hidden="true">
-      {{ selectedIndex + 1 }}<span class="delimiter">/</span
+      {{ selectedIndex + 1 }}<span class="doe-counter-delimiter">/</span
       >{{ itemQuantity || 0 }}
     </span>
   `,
   styleUrls: ['./counter.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterComponent {
   @Input()

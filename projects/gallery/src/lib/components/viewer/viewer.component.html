@@ -1,18 +1,22 @@
-<div *ngIf="showPrevArrow" class="prev arrow" (click)="prev()">
+<div
+  *ngIf="showPrevArrow"
+  class="doe-viewer-arrow doe-viewer-arrow-prev"
+  (click)="prev()"
+>
   <doe-chevron-icon
     *ngIf="!arrowTemplate; else arrowTemplate"
   ></doe-chevron-icon>
 </div>
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
-  <li *ngIf="!items?.length" class="initial-item"></li>
+  <li *ngIf="!items?.length" class="doe-viewer-initial-item"></li>
   <li
     #items
     *ngFor="let item of items; let i = index"
-    [class.selected]="i === selectedIndex"
+    [class.doe-viewer-item--selected]="i === selectedIndex"
     tabindex="0"
     [attr.aria-label]="item.alt"
-    [attr.aria-describedby]="'imgr-desc-' + i"
+    [attr.aria-describedby]="'doe-viewer-aria-description-' + i"
     (click)="onImageClick(i, item, $event)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
@@ -31,7 +35,7 @@
             <img
               [src]="src"
               [alt]="item.alt"
-              [class.loading]="item._seen && !item._loaded"
+              [class.doe-viewer-media-loading]="item._seen && !item._loaded"
               [style.objectFit]="objectFit"
               (load)="onItemLoaded(item, $event)"
               (error)="onItemErrored(item, $event)"
@@ -43,7 +47,7 @@
             *ngIf="!isYoutube(item) && isVideo(i)"
             [src]="src"
             [poster]="item.thumbSrc"
-            [class.loading]="item._seen && !item._loaded"
+            [class.doe-viewer-media-loading]="item._seen && !item._loaded"
             [style.objectFit]="objectFit"
             controls
             playsinline
@@ -68,9 +72,12 @@
       </ng-container>
 
       <ng-container *ngIf="item._failed">
-        <div *ngIf="!errorTemplate; else errorTemplate" class="error">
-          <div class="icon">⚠</div>
-          <p class="text">
+        <div
+          *ngIf="!errorTemplate; else errorTemplate"
+          class="doe-viewer-error"
+        >
+          <div class="doe-viewer-error-icon">⚠</div>
+          <p class="doe-viewer-error-text">
             {{ errorText || 'Loading of this media failed' }}
           </p>
         </div>
@@ -78,8 +85,8 @@
     </ng-container>
 
     <span
-      [id]="'imgr-desc-' + i"
-      class="aria-description"
+      [id]="'doe-viewer-aria-description-' + i"
+      class="doe-viewer-aria-description"
       [innerHTML]="item.description"
       aria-hidden="true"
     ></span>
@@ -104,7 +111,11 @@
   <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
 </ng-container>
 
-<div *ngIf="showNextArrow" class="next arrow" (click)="next()">
+<div
+  *ngIf="showNextArrow"
+  class="doe-viewer-arrow doe-viewer-arrow-next"
+  (click)="next()"
+>
   <doe-chevron-icon
     *ngIf="!arrowTemplate; else arrowTemplate"
   ></doe-chevron-icon>
@@ -119,13 +130,15 @@
 
 <div
   *ngIf="descriptions && items"
-  class="description-container"
-  [class.above-counter]="imageCounter && imageCounterOrientation === 'bottom'"
+  class="doe-viewer-description"
+  [class.doe-viewer-description--above-counter]="
+    imageCounter && imageCounterOrientation === 'bottom'
+  "
   aria-hidden="true"
 >
   <div
     *ngIf="items[selectedIndex]?.description as description"
-    class="description"
+    class="doe-viewer-description-inner"
     [innerHTML]="description"
     (click)="descriptionClick.emit($event)"
   ></div>

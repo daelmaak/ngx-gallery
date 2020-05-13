@@ -4,29 +4,29 @@ import {
   DebugElement,
 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { GalleryImage } from '../../core';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
-import { ThumbnailsComponent } from './thumbnails.component';
-import { By } from '@angular/platform-browser';
+import { ThumbsComponent } from './thumbs.component';
 
 describe('ThumbnailsComponent', () => {
-  let component: ThumbnailsComponent;
-  let fixture: ComponentFixture<ThumbnailsComponent>;
+  let component: ThumbsComponent;
+  let fixture: ComponentFixture<ThumbsComponent>;
   let de: DebugElement;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ThumbnailsComponent, ChevronIconComponent],
+      declarations: [ThumbsComponent, ChevronIconComponent],
     })
-      .overrideComponent(ThumbnailsComponent, {
+      .overrideComponent(ThumbsComponent, {
         set: { changeDetection: ChangeDetectionStrategy.Default },
       })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ThumbnailsComponent);
+    fixture = TestBed.createComponent(ThumbsComponent);
     component = fixture.componentInstance;
     de = fixture.debugElement;
   });
@@ -55,9 +55,9 @@ describe('ThumbnailsComponent', () => {
 
       const itemEls = de.queryAll(By.css('li'));
 
-      expect(itemEls[0].classes.selected).toBeFalsy();
-      expect(itemEls[1].classes.selected).toBeTruthy();
-      expect(itemEls[2].classes.selected).toBeFalsy();
+      expect(itemEls[0].classes['doe-thumbs-item--selected']).toBeFalsy();
+      expect(itemEls[1].classes['doe-thumbs-item--selected']).toBeTruthy();
+      expect(itemEls[2].classes['doe-thumbs-item--selected']).toBeFalsy();
     });
   });
 });

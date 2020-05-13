@@ -23,7 +23,7 @@ import {
   VerticalOrientation,
 } from '../../core';
 import { defaultAria } from '../../core/aria';
-import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
+import { ThumbsComponent } from '../thumbs/thumbs.component';
 import { ViewerComponent } from '../viewer/viewer.component';
 
 @Component({
@@ -127,19 +127,19 @@ export class GalleryComponent {
   selection = new EventEmitter<GalleryItem>();
 
   @ViewChild(ViewerComponent, { static: false })
-  imageViewer: ViewerComponent;
+  viewerRef: ViewerComponent;
 
-  @ViewChild(ThumbnailsComponent, { static: false })
-  thumbnails: ThumbnailsComponent;
+  @ViewChild(ThumbsComponent, { static: false })
+  thumbsRef: ThumbsComponent;
 
   @ViewChild(ViewerComponent, { static: false, read: ElementRef })
-  imageViewerEl: ElementRef<HTMLElement>;
+  viewerElRef: ElementRef<HTMLElement>;
 
   @HostBinding('tabindex')
   _tabindex = 0;
 
-  @HostBinding('class.column')
-  get galleryCollumn() {
+  @HostBinding('class.doe-gallery--column')
+  get galleryColumn() {
     return (
       this.thumbsOrientation === 'top' || this.thumbsOrientation === 'bottom'
     );
@@ -161,33 +161,33 @@ export class GalleryComponent {
   }
 
   focus() {
-    this.imageViewerEl.nativeElement.focus();
+    this.viewerElRef.nativeElement.focus();
   }
 
   @HostListener('keydown.arrowright')
   next() {
-    this.imageViewer.next();
+    this.viewerRef.next();
   }
 
   @HostListener('keydown.arrowleft')
   prev() {
-    this.imageViewer.prev();
+    this.viewerRef.prev();
   }
 
   onThumbClick(event: GalleryItemEvent) {
-    this.imageViewer.select(event.index);
+    this.viewerRef.select(event.index);
     this.thumbClick.emit(event);
     this._selectInternal(event.index);
   }
 
   select(index: number) {
-    this.imageViewer.select(index);
-    this.thumbnails.select(index);
+    this.viewerRef.select(index);
+    this.thumbsRef.select(index);
     this._selectInternal(index);
   }
 
   slideThumbs(direction: number) {
-    this.thumbnails.slide(direction);
+    this.thumbsRef.slide(direction);
   }
 
   _selectInternal(index: number) {

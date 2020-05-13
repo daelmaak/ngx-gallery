@@ -1,17 +1,16 @@
+import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { MockComponent, MockPipe } from 'ng-mocks';
-
-import { GalleryComponent } from './gallery.component';
-import { ViewerComponent } from '../viewer/viewer.component';
-import { ThumbnailsComponent } from '../thumbnails/thumbnails.component';
-import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
-import { CounterComponent } from '../counter/counter.component';
-import { SafePipe } from '../../pipes/safe.pipe';
-import { DebugElement, SimpleChange } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent, MockPipe } from 'ng-mocks';
+
 import { GalleryImage } from '../../core';
+import { SafePipe } from '../../pipes/safe.pipe';
+import { CounterComponent } from '../counter/counter.component';
+import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
+import { ThumbsComponent } from '../thumbs/thumbs.component';
+import { ViewerComponent } from '../viewer/viewer.component';
+import { GalleryComponent } from './gallery.component';
 
 describe('GalleryComponent', () => {
   let component: GalleryComponent;
@@ -24,11 +23,11 @@ describe('GalleryComponent', () => {
       declarations: [
         GalleryComponent,
         ViewerComponent,
-        ThumbnailsComponent,
+        ThumbsComponent,
         MockComponent(ChevronIconComponent),
         MockComponent(CounterComponent),
-        MockPipe(SafePipe)
-      ]
+        MockPipe(SafePipe),
+      ],
     }).compileComponents();
   }));
 
@@ -60,13 +59,13 @@ describe('GalleryComponent', () => {
       expect(imageClickSpy).toHaveBeenCalledWith({
         item: component.items[1],
         index: 1,
-        event: mockedClick
+        event: mockedClick,
       });
     });
 
     it('should emit event when thumbnail clicked', () => {
       const thumbClickSpy = spyOn(component.thumbClick, 'emit');
-      const secondThumb = de.queryAll(By.css('doe-thumbnails ul li'))[1];
+      const secondThumb = de.queryAll(By.css('doe-thumbs ul li'))[1];
 
       const mockedClick = { name: 'mocked-event' };
       secondThumb.triggerEventHandler('click', mockedClick);
@@ -75,13 +74,13 @@ describe('GalleryComponent', () => {
       expect(thumbClickSpy).toHaveBeenCalledWith({
         item: component.items[1],
         index: 1,
-        event: mockedClick
+        event: mockedClick,
       });
     });
 
     it('should emit event when thumbnail hovered', () => {
       const thumbHoverSpy = spyOn(component.thumbHover, 'emit');
-      const secondThumb = de.queryAll(By.css('doe-thumbnails ul li'))[1];
+      const secondThumb = de.queryAll(By.css('doe-thumbs ul li'))[1];
 
       const mockedMouseenter = { name: 'mocked-event' };
       secondThumb.triggerEventHandler('mouseenter', mockedMouseenter);
@@ -90,7 +89,7 @@ describe('GalleryComponent', () => {
       expect(thumbHoverSpy).toHaveBeenCalledWith({
         item: component.items[1],
         index: 1,
-        event: mockedMouseenter
+        event: mockedMouseenter,
       });
     });
   });
