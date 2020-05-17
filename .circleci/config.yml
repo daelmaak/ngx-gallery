@@ -32,6 +32,9 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - 'f8:9e:98:05:cd:42:be:49:33:75:bc:9d:88:36:ab:9e'
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@latest'
       - restore_cache: # special step to restore the dependency cache
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           key: dependency-cache-{{ checksum "package-lock.json" }}
@@ -58,4 +61,9 @@ workflows:
   build:
     jobs:
       - build
-      - build-and-deploy-demo
+      - build-and-deploy-demo:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
