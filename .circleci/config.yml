@@ -51,12 +51,10 @@ jobs:
       - run: |
           git config --global user.email "daniel.macak@email.cz"
           git config --global user.name "Daniel Macak"
-      - run:
-          name: commit
-          command: git commit -am 'Docs generated [ci skip]'
-      - run:
-          name: push
-          command: git push
+      - run: |
+          git add .
+          git commit -am 'Docs generated [ci skip]'
+          git push
 workflows:
   build:
     jobs:
