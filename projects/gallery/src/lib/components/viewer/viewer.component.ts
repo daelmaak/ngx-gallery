@@ -162,7 +162,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
           const time = e.timeStamp - mousedown.timeStamp;
           const distance = mousedown.x - e.x;
 
-          this.selectBySwipeStats(time, distance);
+          this.zone.run(() => this.selectBySwipeStats(time, distance));
 
           document.removeEventListener('mousemove', onmousemove);
           document.removeEventListener('mouseup', onmouseup);
@@ -234,7 +234,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
             const distance =
               touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
 
-            this.selectBySwipeStats(time, distance);
+            this.zone.run(() => this.selectBySwipeStats(time, distance));
           }
           horizontal = null;
           touchstart = null;
@@ -280,14 +280,11 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   prev() {
-    // NOTE: the run() is necessary here before
-    // https://stackoverflow.com/questions/61712865/angular-8-9-click-event-handler-not-triggering-change-detection
-    // is resolved
-    this.zone.run(() => this.select(this.selectedIndex - 1));
+    this.select(this.selectedIndex - 1);
   }
 
   next() {
-    this.zone.run(() => this.select(this.selectedIndex + 1));
+    this.select(this.selectedIndex + 1);
   }
 
   select(index: number) {
@@ -392,7 +389,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     } else {
       this.select(Math.round(this.listX / this.itemWidth));
     }
-    this.cd.detectChanges();
   }
 
   private shift(x: number) {
