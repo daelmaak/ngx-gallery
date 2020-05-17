@@ -32,12 +32,22 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - 'f8:9e:98:05:cd:42:be:49:33:75:bc:9d:88:36:ab:9e'
+      - restore_cache: # special step to restore the dependency cache
+          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: install
           command: npm ci
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
       - run:
           name: build-demo
           command: npm run build:demo
+      - run: |
+          git config --global user.email "daniel.macak@email.cz"
+          git config --global user.name "Daniel Macak"
       - run:
           name: commit
           command: git commit -am 'Docs generated [ci skip]'
