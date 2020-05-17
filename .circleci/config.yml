@@ -24,7 +24,28 @@ jobs:
       - run:
           name: test
           command: npm run test:ci
+  build-and-deploy-demo:
+    docker:
+      - image: circleci/node:12:15
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - 'f8:9e:98:05:cd:42:be:49:33:75:bc:9d:88:36:ab:9e'
+      - run:
+          name: install
+          command: npm ci
+      - run:
+          name: build-demo
+          command: npm run build:demo
+      - run:
+          name: commit
+          command: git commit -am 'Docs generated [ci skip]'
+      - run:
+          name: push
+          command: git push
 workflows:
   build:
     jobs:
       - build
+      - build-and-deploy-demo
