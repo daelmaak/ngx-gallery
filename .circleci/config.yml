@@ -53,7 +53,7 @@ jobs:
           git config --global user.name "Daniel Macak"
       - run: |
           git add .
-          git commit -am 'Docs generated [ci skip]'
+          git diff --quiet && git diff --staged --quiet || git commit -am 'Docs generated [ci skip]'
           git push
 workflows:
   build:
