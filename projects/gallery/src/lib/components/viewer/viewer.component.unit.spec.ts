@@ -11,7 +11,7 @@ describe('ViewerComponent Unit', () => {
         new GalleryImage('src1'),
         new GalleryImage('src2'),
         new GalleryImage('src3'),
-        new GalleryImage('src4')
+        new GalleryImage('src4'),
       ];
       viewer.loading = 'lazy';
       viewer.selectedIndex = 0;
@@ -42,10 +42,16 @@ describe('ViewerComponent Unit', () => {
       expect(viewer.getSrc(viewer.items[2])).toBeTruthy();
     });
 
-    it('should load items around selected item even though lazy loading is on, with overlap to the end of list if looping is on', () => {
-      viewer.loop = true;
-      expect(viewer.getSrc(viewer.items[1])).toBeTruthy();
-      expect(viewer.getSrc(viewer.items[3])).toBeTruthy();
+    it('should load 5 items if 3 are visible', () => {
+      viewer.items.push(new GalleryImage('src5'), new GalleryImage('src6'));
+      viewer.selectedIndex = 3;
+      viewer['viewerWidth'] = 600;
+      viewer['itemWidth'] = 400;
+
+      viewer.items.slice(1).forEach(i => {
+        expect(viewer.getSrc(i)).toBeTruthy();
+      });
+      expect(viewer.getSrc(viewer.items[0])).toBeFalsy();
     });
   });
 });

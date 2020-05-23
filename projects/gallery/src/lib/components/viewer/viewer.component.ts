@@ -109,9 +109,11 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   ngOnChanges({ thumbsOrientation, items }: SimpleChanges) {
     if (thumbsOrientation && !thumbsOrientation.firstChange) {
       if (!(thumbsOrientation.currentValue & thumbsOrientation.previousValue)) {
-        requestAnimationFrame(() => {
+        setTimeout(() => {
           this.readDimensions();
           this.center();
+          // accounts for multiple items visible in viewport, which need calculated dimensions
+          this.cd.detectChanges();
         });
       }
     }
@@ -267,15 +269,14 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     return !this.lazyLoading || item._seen || inProximity ? item.src : '';
   }
 
-  // TODO test
   isInScrollportProximity(index: number) {
     const distance = Math.abs(this.selectedIndex - index);
+    // the spread makes sure, that also 1 item outside of the visible scrollport in both directions is rendered
+    // so if 3 items are displayed (although 2 partially), 5 items will be "in scroll proximity"
     const spread =
-      Math.ceil(Math.ceil(this.viewerWidth / this.itemWidth) / 2) || 1;
-    return (
-      (distance === this.items.length - spread && this.loop) ||
-      distance <= spread
-    );
+      Math.floor(Math.ceil(this.viewerWidth / (this.itemWidth + 1)) / 2) + 1 ||
+      1;
+    return distance <= spread;
   }
 
   isYoutube(item: GalleryItemInternal) {
