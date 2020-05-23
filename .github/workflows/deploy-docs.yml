@@ -5,7 +5,8 @@ name: Build & Deploy docs
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
-  push
+  push:
+    branches: [deploy-docs-action]
   release:
     types:
       - created
@@ -30,7 +31,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install and Build 🔧 
+      - name: Install and Build 🔧
         run: |
           npm ci
           npm run build:demo
