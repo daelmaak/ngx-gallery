@@ -72,6 +72,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   private destroy$ = new Subject();
   // this flag is supposed to prevent unnecessary loading of other than selected images
   private itemWidth: number;
+  private viewerWidth: number;
   private listX = 0;
 
   set noAnimation(value: boolean) {
@@ -108,9 +109,11 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   ngOnChanges({ thumbsOrientation, items }: SimpleChanges) {
     if (thumbsOrientation && !thumbsOrientation.firstChange) {
       if (!(thumbsOrientation.currentValue & thumbsOrientation.previousValue)) {
-        requestAnimationFrame(() => {
-          this.itemWidth = this.getItemWidth();
+        setTimeout(() => {
+          this.readDimensions();
           this.center();
+          // accounts for multiple items visible in viewport, which need calculated dimensions
+          this.cd.detectChanges();
         });
       }
     }
@@ -268,7 +271,12 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   isInScrollportProximity(index: number) {
     const distance = Math.abs(this.selectedIndex - index);
-    return (distance === this.items.length - 1 && this.loop) || distance <= 1;
+    // the spread makes sure, that also 1 item outside of the visible scrollport in both directions is rendered
+    // so if 3 items are displayed (although 2 partially), 5 items will be "in scroll proximity"
+    const spread =
+      Math.floor(Math.ceil(this.viewerWidth / (this.itemWidth + 1)) / 2) + 1 ||
+      1;
+    return distance <= spread;
   }
 
   isYoutube(item: GalleryItemInternal) {
@@ -361,10 +369,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.shift(this.selectedIndex * this.itemWidth);
   }
 
-  private getItemWidth() {
-    return this.hostRef.nativeElement.querySelector('li').offsetWidth;
-  }
-
   private onResize = () => {
     // the setTimeout is here due to getItemWidth call
     // it prevents situations where layout calculations are invalidated before the call
@@ -374,7 +378,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       if (!this.items || !this.items.length) {
         this.shift(0);
       } else {
-        this.itemWidth = this.getItemWidth();
+        this.readDimensions();
         this.center();
       }
 
@@ -382,6 +386,11 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       setTimeout(() => (this.noAnimation = false));
     });
   };
+
+  private readDimensions() {
+    this.viewerWidth = this.hostRef.nativeElement.offsetWidth;
+    this.itemWidth = this.hostRef.nativeElement.querySelector('li').offsetWidth;
+  }
 
   private selectBySwipeStats(time: number, distance: number) {
     if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
@@ -392,8 +401,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private shift(x: number) {
-    const imageListEl = this.itemListRef.nativeElement;
-    imageListEl.style.transform = `translate3d(${-(this.listX = x)}px, 0, 0)`;
+    x = x - (this.viewerWidth - this.itemWidth) / 2;
+    this.itemListRef.nativeElement.style.transform = `translate3d(${-(this.listX = x)}px, 0, 0)`;
   }
 
   private shiftByDelta = (delta: number) => {
