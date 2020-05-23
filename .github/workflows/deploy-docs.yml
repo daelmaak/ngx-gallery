@@ -1,14 +1,15 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Deploy docs
+name: Build & Deploy docs
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
+  push
   release:
     types:
       - created
-    branches: [ deploy-docs-action ]
+    branches: [deploy-docs-action]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -23,21 +24,20 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
 
-    - name: npm install
-      run: npm ci
+      - name: Install and Build 🔧 
+        run: |
+          npm ci
+          npm run build:demo
 
-    - name: build-demo
-      run: npm run build:demo
-      
-    - name: commit & push
-      run: |
-        git add .
-        git diff --quiet && git diff --staged --quiet || git commit -am 'Docs generated [ci skip]'
-        git push
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs # The folder the action should deploy.
