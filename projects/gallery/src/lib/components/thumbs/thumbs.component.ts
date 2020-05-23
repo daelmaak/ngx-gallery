@@ -17,7 +17,12 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { isBrowser, Orientation, SUPPORT } from '../../core';
+import {
+  isBrowser,
+  Orientation,
+  SUPPORT,
+  ThumbTemplateContext,
+} from '../../core';
 import { Aria } from '../../core/aria';
 import { GalleryItemInternal, GalleryItemEvent } from '../../core/gallery-item';
 
@@ -35,9 +40,9 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
   @Input() arrows: boolean;
   @Input() arrowSlideByLength: number;
   @Input() autoScroll: boolean;
-  @Input() thumbTemplate: TemplateRef<any>;
+  @Input() thumbTemplate: TemplateRef<ThumbTemplateContext>;
   @Input() arrowTemplate: TemplateRef<void>;
-  @Input() errorTemplate: TemplateRef<any>;
+  @Input() errorTemplate: TemplateRef<void>;
   @Input()
   set scrollBehavior(val: ScrollBehavior) {
     this._scrollBehavior = val || 'smooth';

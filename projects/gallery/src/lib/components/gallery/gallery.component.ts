@@ -21,6 +21,7 @@ import {
   Orientation,
   OrientationFlag,
   VerticalOrientation,
+  ThumbTemplateContext,
 } from '../../core';
 import { defaultAria } from '../../core/aria';
 import { ThumbsComponent } from '../thumbs/thumbs.component';
@@ -103,13 +104,13 @@ export class GalleryComponent {
   thumbsScrollBehavior: ScrollBehavior = 'smooth';
 
   @Input()
-  thumbTemplate: TemplateRef<any>;
+  thumbTemplate: TemplateRef<ThumbTemplateContext>;
 
   @Input()
   thumbsArrowTemplate: TemplateRef<void>;
 
   @Input()
-  thumbErrorTemplate: TemplateRef<any>;
+  thumbErrorTemplate: TemplateRef<void>;
 
   @Output()
   imageClick = new EventEmitter<GalleryItemEvent>();
@@ -138,19 +139,19 @@ export class GalleryComponent {
   @HostBinding('tabindex')
   _tabindex = 0;
 
-  @HostBinding('class.doe-gallery--column')
-  get galleryColumn() {
-    return (
-      this.thumbsOrientation === 'top' || this.thumbsOrientation === 'bottom'
-    );
-  }
-
   @HostBinding('attr.aria-label')
   get ariaLabel() {
     return this.aria && this.aria.galleryLabel;
   }
 
-  get thumbsOrientationFlag(): OrientationFlag {
+  @HostBinding('class.doe-gallery--column')
+  get _galleryColumn() {
+    return (
+      this.thumbsOrientation === 'top' || this.thumbsOrientation === 'bottom'
+    );
+  }
+
+  get _thumbsOrientationFlag(): OrientationFlag {
     if (
       this.thumbsOrientation === 'top' ||
       this.thumbsOrientation === 'bottom'
@@ -174,12 +175,6 @@ export class GalleryComponent {
     this.viewerRef.prev();
   }
 
-  onThumbClick(event: GalleryItemEvent) {
-    this.viewerRef.select(event.index);
-    this.thumbClick.emit(event);
-    this._selectInternal(event.index);
-  }
-
   select(index: number) {
     this.viewerRef.select(index);
     this.thumbsRef.select(index);
@@ -188,6 +183,12 @@ export class GalleryComponent {
 
   slideThumbs(direction: number) {
     this.thumbsRef.slide(direction);
+  }
+
+  _onThumbClick(event: GalleryItemEvent) {
+    this.viewerRef.select(event.index);
+    this.thumbClick.emit(event);
+    this._selectInternal(event.index);
   }
 
   _selectInternal(index: number) {

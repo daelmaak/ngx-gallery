@@ -70,19 +70,18 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   UA = UA;
 
   private destroy$ = new Subject();
-  // this flag is supposed to prevent unnecessary loading of other than selected images
   private itemWidth: number;
   private viewerWidth: number;
   private listX = 0;
+
+  get lazyLoading() {
+    return this.loading === 'lazy';
+  }
 
   set noAnimation(value: boolean) {
     this.itemListRef.nativeElement.style.transitionDuration = value
       ? '0ms'
       : '';
-  }
-
-  get lazyLoading() {
-    return this.loading === 'lazy';
   }
 
   get showArrow() {

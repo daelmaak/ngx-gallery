@@ -11,7 +11,7 @@
   [arrowTemplate]="thumbsArrowTemplate"
   [errorTemplate]="thumbErrorTemplate"
   [aria]="aria"
-  (thumbClick)="onThumbClick($event)"
+  (thumbClick)="_onThumbClick($event)"
   (thumbHover)="thumbHover.emit($event)"
 ></doe-thumbs>
 
@@ -32,7 +32,7 @@
   [loadingTemplate]="loadingTemplate || defaultLoadingTemplate"
   [errorTemplate]="errorTemplate"
   [loop]="loop"
-  [thumbsOrientation]="thumbsOrientationFlag"
+  [thumbsOrientation]="_thumbsOrientationFlag"
   [arrowTemplate]="arrowTemplate"
   [aria]="aria"
   (imageClick)="imageClick.emit($event)"

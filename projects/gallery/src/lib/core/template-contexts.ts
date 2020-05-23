@@ -6,3 +6,9 @@ export interface ItemTemplateContext {
   item: GalleryItem;
   seen: boolean;
 }
+
+export interface ThumbTemplateContext {
+  index: number;
+  selectedIndex: number;
+  item: GalleryItem;
+}
