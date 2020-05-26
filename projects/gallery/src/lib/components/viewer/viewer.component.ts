@@ -67,6 +67,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
+  displayedItems: GalleryItemInternal[];
+
   UA = UA;
 
   private destroy$ = new Subject();
@@ -123,6 +125,12 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       if (selectedItem) {
         selectedItem._seen = true;
       }
+
+      this.displayedItems = [
+        ...this.items.slice(-2),
+        ...this.items,
+        ...this.items.slice(0, 2),
+      ];
     }
   }
 
@@ -155,7 +163,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         const onmousemove = (e: MouseEvent) => {
           maxDeltaX = Math.max(Math.abs(mousedown.x - e.x));
           maxDeltaY = Math.max(Math.abs(mousedown.y - e.y));
-          this.shiftByDelta(mousedown.x - e.x);
+          this.shiftByDelta(e.movementX);
         };
 
         const onmouseup = (e: MouseEvent) => {
@@ -263,9 +271,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   getSrc(item: GalleryItemInternal) {
-    const index = this.items.indexOf(item);
-    const inProximity = this.isInScrollportProximity(index);
-    return !this.lazyLoading || item._seen || inProximity ? item.src : '';
+    return item.src;
   }
 
   isInScrollportProximity(index: number) {
@@ -305,12 +311,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       return;
     }
 
-    if (index < 0) {
-      index = this.items.length - 1;
-    } else if (index >= this.items.length) {
-      index = 0;
-    }
-
     // stop video when navigating away from it
     if (this.isVideo(this.selectedIndex)) {
       const videoEl: HTMLMediaElement = this.itemsRef
@@ -322,10 +322,38 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
 
+    if (index < 0 || index >= this.items.length) {
+      if (index < 0) {
+        index = this.items.length - 1;
+      } else {
+        index = 0;
+      }
+
+      this.noAnimation = true;
+
+      setTimeout(() => {
+        const centeringOffset = (this.viewerWidth - this.itemWidth) / 2;
+        const outOfCenterShift =
+          (this.listX % this.itemWidth) - centeringOffset;
+        const baseShift =
+          (index + (index === 0 ? 1 : outOfCenterShift ? 2 : 3)) *
+          this.itemWidth;
+
+        const shift = baseShift + outOfCenterShift - centeringOffset;
+        this.shift(shift);
+
+        setTimeout(() => {
+          this.noAnimation = false;
+          this.center();
+        });
+      });
+    } else {
+      this.center();
+    }
+
     this.items[index]._seen = true;
     this.selectedIndex = index;
     this.selection.emit(index);
-    this.center();
   }
 
   onImageClick(index: number, item: GalleryItemInternal, event: Event) {
@@ -365,7 +393,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private center() {
-    this.shift(this.selectedIndex * this.itemWidth);
+    setTimeout(() => {
+      const centeringOffset = (this.viewerWidth - this.itemWidth) / 2;
+      this.shift((this.selectedIndex + 2) * this.itemWidth - centeringOffset);
+    });
   }
 
   private onResize = () => {
@@ -395,16 +426,15 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
       this.select(this.selectedIndex + Math.sign(distance));
     } else {
-      this.select(Math.round(this.listX / this.itemWidth));
+      this.select(Math.round(this.listX / this.itemWidth - 2));
     }
   }
 
   private shift(x: number) {
-    x = x - (this.viewerWidth - this.itemWidth) / 2;
     this.itemListRef.nativeElement.style.transform = `translate3d(${-(this.listX = x)}px, 0, 0)`;
   }
 
   private shiftByDelta = (delta: number) => {
-    this.shift(this.selectedIndex * this.itemWidth + delta);
+    this.shift(this.listX - delta);
   };
 }
