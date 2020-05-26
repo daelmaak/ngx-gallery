@@ -323,22 +323,16 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     if (index < 0 || index >= this.items.length) {
-      if (index < 0) {
-        index = this.items.length - 1;
-      } else {
-        index = 0;
-      }
-
+      // if looping
+      const { itemWidth, listX, viewerWidth } = this;
+      index = index < 0 ? this.items.length - 1 : 0;
       this.noAnimation = true;
 
       setTimeout(() => {
-        const centeringOffset = (this.viewerWidth - this.itemWidth) / 2;
-        const outOfCenterShift =
-          (this.listX % this.itemWidth) - centeringOffset;
+        const centeringOffset = (viewerWidth - itemWidth) / 2;
+        const outOfCenterShift = (listX + centeringOffset) % itemWidth;
         const baseShift =
-          (index + (index === 0 ? 1 : outOfCenterShift ? 2 : 3)) *
-          this.itemWidth;
-
+          (index + (index === 0 ? 1 : outOfCenterShift ? 2 : 3)) * itemWidth;
         const shift = baseShift + outOfCenterShift - centeringOffset;
         this.shift(shift);
 
@@ -348,6 +342,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         });
       });
     } else {
+      // non loop
       this.center();
     }
 
