@@ -307,12 +307,9 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   select(index: number) {
-    if (this.selectedIndex === index) {
-      this.center();
-      return;
-    }
+    const indexOutOfBounds = index < 0 || index >= this.items.length;
 
-    if (!this.loop && (index < 0 || index >= this.items.length)) {
+    if (this.selectedIndex === index || (!this.loop && indexOutOfBounds)) {
       this.center();
       return;
     }
@@ -328,7 +325,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
 
-    if (index < 0 || index >= this.items.length) {
+    if (indexOutOfBounds) {
       // if looping
       const { itemWidth, listX, viewerWidth } = this;
       index = index < 0 ? this.items.length - 1 : 0;
@@ -347,14 +344,15 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
           this.center();
         });
       });
-    } else {
-      // non loop
-      this.center();
     }
 
     this.items[index]._seen = true;
     this.selectedIndex = index;
     this.selection.emit(index);
+
+    if (!indexOutOfBounds) {
+      this.center();
+    }
   }
 
   onImageClick(index: number, item: GalleryItemInternal, event: Event) {
@@ -394,13 +392,11 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private center() {
-    setTimeout(() => {
-      const centeringOffset = (this.viewerWidth - this.itemWidth) / 2;
-      this.shift(
-        (this.selectedIndex + (this.loop ? 2 : 0)) * this.itemWidth -
-          centeringOffset
-      );
-    });
+    const centeringOffset = (this.viewerWidth - this.itemWidth) / 2;
+    this.shift(
+      (this.selectedIndex + (this.loop ? 2 : 0)) * this.itemWidth -
+        centeringOffset
+    );
   }
 
   private onResize = () => {
