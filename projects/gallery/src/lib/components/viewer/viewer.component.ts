@@ -107,7 +107,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     private zone: NgZone
   ) {}
 
-  ngOnChanges({ thumbsOrientation, items }: SimpleChanges) {
+  ngOnChanges({ thumbsOrientation, items, loop }: SimpleChanges) {
     if (thumbsOrientation && !thumbsOrientation.firstChange) {
       if (!(thumbsOrientation.currentValue & thumbsOrientation.previousValue)) {
         setTimeout(() => {
@@ -120,18 +120,24 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
     if (items && items.currentValue && items.currentValue.length) {
       this.onResize();
+      this.setDisplayedItems(this.loop);
 
       const selectedItem = items.currentValue[this.selectedIndex];
       if (selectedItem) {
         selectedItem._seen = true;
       }
-
-      this.displayedItems = [
-        ...this.items.slice(-2),
-        ...this.items,
-        ...this.items.slice(0, 2),
-      ];
     }
+    if (loop && this.items) {
+      this.setDisplayedItems(loop.currentValue);
+      this.center();
+    }
+  }
+
+  private setDisplayedItems(loop: boolean) {
+    const { items } = this;
+    this.displayedItems = loop
+      ? [...items.slice(-2), ...items, ...items.slice(0, 2)]
+      : items;
   }
 
   ngOnInit() {
@@ -390,7 +396,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   private center() {
     setTimeout(() => {
       const centeringOffset = (this.viewerWidth - this.itemWidth) / 2;
-      this.shift((this.selectedIndex + 2) * this.itemWidth - centeringOffset);
+      this.shift(
+        (this.selectedIndex + (this.loop ? 2 : 0)) * this.itemWidth -
+          centeringOffset
+      );
     });
   }
 
