@@ -23,7 +23,7 @@
   >
     <ng-container *ngIf="!itemTemplate; else customTemplate">
       <ng-container *ngIf="!UA.ios || isInScrollportProximity(i)">
-        <ng-container *ngIf="getSrc(item); let src">
+        <ng-container *ngIf="getSrc(item, i); let src">
           <picture *ngIf="!isVideo(i)" @remove>
             <source
               *ngFor="let source of item.pictureSources"

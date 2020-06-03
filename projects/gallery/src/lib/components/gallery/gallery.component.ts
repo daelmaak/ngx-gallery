@@ -65,6 +65,9 @@ export class GalleryComponent {
   imageCounterOrientation: VerticalOrientation = 'bottom';
 
   @Input()
+  itemWidth: string;
+
+  @Input()
   loading: Loading = 'auto';
 
   @Input()

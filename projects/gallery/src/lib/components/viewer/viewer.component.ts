@@ -60,6 +60,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() thumbsOrientation: OrientationFlag;
   @Input() aria: Aria;
 
+  @Input() set itemWidth(val: string) {
+    this.itemListRef.nativeElement.style.setProperty('--item-width', val);
+  }
+
   @Output() imageClick = new EventEmitter<GalleryItemEvent>();
   @Output() descriptionClick = new EventEmitter<Event>();
   @Output() selection = new EventEmitter<number>();
@@ -72,8 +76,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   UA = UA;
 
   private destroy$ = new Subject();
-  private itemWidth: number;
-  private viewerWidth: number;
+  private itemWidthPx: number;
+  private viewerWidthPx: number;
   private listX = 0;
 
   get lazyLoading() {
@@ -233,8 +237,11 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
           }
 
           if (horizontal) {
+            this.shiftByDelta(
+              moveTouch.clientX -
+                (lastTouchmove || touchstart).touches[0].clientX
+            );
             lastTouchmove = e;
-            this.shiftByDelta(startTouch.clientX - moveTouch.clientX);
             if (UA.ios) {
               e.preventDefault();
               e.stopPropagation();
@@ -276,17 +283,32 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  getSrc(item: GalleryItemInternal) {
-    return item.src;
+  getSrc(item: GalleryItemInternal, index: number) {
+    const inProximity = this.isInScrollportProximity(index);
+    return !this.lazyLoading || item._seen || inProximity ? item.src : '';
   }
 
   isInScrollportProximity(index: number) {
-    const distance = Math.abs(this.selectedIndex - index);
     // the spread makes sure, that also 1 item outside of the visible scrollport in both directions is rendered
     // so if 3 items are displayed (although 2 partially), 5 items will be "in scroll proximity"
     const spread =
-      Math.floor(Math.ceil(this.viewerWidth / (this.itemWidth + 1)) / 2) + 1 ||
-      1;
+      Math.floor(Math.ceil(this.viewerWidthPx / (this.itemWidthPx + 1)) / 2) +
+        1 || 1;
+
+    // TODO find more intelligent way to determine visibility of the fringe items. Find a solution suitable for iPhone
+    if (this.loop) {
+      index -= 2;
+
+      if (
+        this.selectedIndex === 0 ||
+        this.selectedIndex === this.items.length - 1
+      ) {
+        if (index === 0 || index === this.items.length - 1) {
+          return true;
+        }
+      }
+    }
+    const distance = Math.abs(this.selectedIndex - index);
     return distance <= spread;
   }
 
@@ -327,15 +349,15 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     if (indexOutOfBounds) {
       // if looping
-      const { itemWidth, listX, viewerWidth } = this;
+      const { itemWidthPx, viewerWidthPx, listX } = this;
       index = index < 0 ? this.items.length - 1 : 0;
       this.noAnimation = true;
 
       setTimeout(() => {
-        const centeringOffset = (viewerWidth - itemWidth) / 2;
-        const outOfCenterShift = (listX + centeringOffset) % itemWidth;
+        const centeringOffset = (viewerWidthPx - itemWidthPx) / 2;
+        const outOfCenterShift = (listX + centeringOffset) % itemWidthPx;
         const baseShift =
-          (index + (index === 0 ? 1 : outOfCenterShift ? 2 : 3)) * itemWidth;
+          (index + (index === 0 ? 1 : outOfCenterShift ? 2 : 3)) * itemWidthPx;
         const shift = baseShift + outOfCenterShift - centeringOffset;
         this.shift(shift);
 
@@ -392,9 +414,9 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private center() {
-    const centeringOffset = (this.viewerWidth - this.itemWidth) / 2;
+    const centeringOffset = (this.viewerWidthPx - this.itemWidthPx) / 2;
     this.shift(
-      (this.selectedIndex + (this.loop ? 2 : 0)) * this.itemWidth -
+      (this.selectedIndex + (this.loop ? 2 : 0)) * this.itemWidthPx -
         centeringOffset
     );
   }
@@ -418,15 +440,18 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   };
 
   private readDimensions() {
-    this.viewerWidth = this.hostRef.nativeElement.offsetWidth;
-    this.itemWidth = this.hostRef.nativeElement.querySelector('li').offsetWidth;
+    this.viewerWidthPx = this.hostRef.nativeElement.offsetWidth;
+    this.itemWidthPx = this.hostRef.nativeElement.querySelector(
+      'li'
+    ).offsetWidth;
   }
 
   private selectBySwipeStats(time: number, distance: number) {
     if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
       this.select(this.selectedIndex + Math.sign(distance));
     } else {
-      this.select(Math.round(this.listX / this.itemWidth - 2));
+      // TODO remove -2 when this.loop = false
+      this.select(Math.round(this.listX / this.itemWidthPx - 2));
     }
   }
 
