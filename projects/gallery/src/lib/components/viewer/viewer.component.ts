@@ -450,8 +450,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
       this.select(this.selectedIndex + Math.sign(distance));
     } else {
-      // TODO remove -2 when this.loop = false
-      this.select(Math.round(this.listX / this.itemWidthPx - 2));
+      // TODO test
+      this.select(
+        Math.round(this.listX / this.itemWidthPx - (this.loop ? 1 : -1))
+      );
     }
   }
 
