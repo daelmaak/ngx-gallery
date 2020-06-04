@@ -22,7 +22,7 @@
     (keydown.shift.Tab)="onTab(i - 1)"
   >
     <ng-container *ngIf="!itemTemplate; else customTemplate">
-      <ng-container *ngIf="!UA.ios || isInScrollportProximity(i)">
+      <ng-container *ngIf="isInScrollportProximity(i)">
         <ng-container *ngIf="getSrc(item); let src">
           <picture *ngIf="!isVideo(i)" @remove>
             <source
