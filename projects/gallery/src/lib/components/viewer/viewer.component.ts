@@ -38,15 +38,7 @@ import { GalleryItemInternal, GalleryVideo } from '../../core/gallery-item';
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('appear', [
-      transition(':leave', animate('100ms 250ms', style({ opacity: 0 }))),
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate(200, style({ opacity: 1 })),
-      ]),
-    ]),
-  ],
+  animations: [trigger('remove', [transition(':leave', animate('0ms 100ms'))])],
 })
 export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() items: GalleryItemInternal[];
@@ -80,7 +72,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   private destroy$ = new Subject();
   private itemWidth: number;
   private viewerWidth: number;
-  private listX = 0;
 
   get lazyLoading() {
     return this.loading === 'lazy';
@@ -403,13 +394,13 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
       this.select(this.selectedIndex + Math.sign(distance));
     } else {
-      this.select(Math.round(this.listX / this.itemWidth));
+      this.center();
     }
   }
 
   private shift(x: number) {
     x = x - (this.viewerWidth - this.itemWidth) / 2;
-    this.itemListRef.nativeElement.style.transform = `translate3d(${-(this.listX = x)}px, 0, 0)`;
+    this.itemListRef.nativeElement.style.transform = `translate3d(${-x}px, 0, 0)`;
   }
 
   private shiftByDelta = (delta: number) => {
