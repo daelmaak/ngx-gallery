@@ -17,14 +17,14 @@
     tabindex="0"
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'doe-viewer-aria-description-' + i"
-    (click)="onImageClick(i, item, $event)"
+    (click)="onImageClick(item, $event)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
   >
     <ng-container *ngIf="!itemTemplate; else customTemplate">
-      <ng-container *ngIf="!UA.ios || isInScrollportProximity(i)">
+      <ng-container *ngIf="isInScrollportProximity(i)">
         <ng-container *ngIf="getSrc(item, i); let src">
-          <picture *ngIf="!isVideo(i)" @remove>
+          <picture *ngIf="!isVideo(item)" @remove>
             <source
               *ngFor="let source of item.pictureSources"
               [srcset]="source.srcset"
@@ -44,7 +44,7 @@
           <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
           <video
             @remove
-            *ngIf="!isYoutube(item) && isVideo(i)"
+            *ngIf="!isYoutube(item) && isVideo(item)"
             [src]="src"
             [poster]="item.thumbSrc"
             [class.doe-viewer-media-loading]="item._seen && !item._loaded"
@@ -96,7 +96,7 @@
         *ngTemplateOutlet="
           itemTemplate;
           context: {
-            index: i,
+            index: items.indexOf(item),
             selectedIndex: selectedIndex,
             item: item,
             seen: item._seen

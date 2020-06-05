@@ -61,7 +61,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() aria: Aria;
 
   @Input() set itemWidth(val: string) {
-    this.itemListRef.nativeElement.style.setProperty('--item-width', val);
+    this.itemListRef.nativeElement.style.setProperty('--item-width', val || '');
   }
 
   @Output() imageClick = new EventEmitter<GalleryItemEvent>();
@@ -72,13 +72,16 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
   displayedItems: GalleryItemInternal[];
-
   UA = UA;
 
-  private destroy$ = new Subject();
-  private itemWidthPx: number;
-  private viewerWidthPx: number;
-  private listX = 0;
+  private _destroy$ = new Subject();
+  private _itemWidth: number;
+  private _viewerWidth: number;
+  private _listX = 0;
+
+  get fringeCount() {
+    return this.loop ? 1 : 0;
+  }
 
   get lazyLoading() {
     return this.loading === 'lazy';
@@ -111,7 +114,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     private zone: NgZone
   ) {}
 
-  ngOnChanges({ thumbsOrientation, items, loop }: SimpleChanges) {
+  ngOnChanges({ thumbsOrientation, items }: SimpleChanges) {
     if (thumbsOrientation && !thumbsOrientation.firstChange) {
       if (!(thumbsOrientation.currentValue & thumbsOrientation.previousValue)) {
         setTimeout(() => {
@@ -124,23 +127,19 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
     if (items && items.currentValue && items.currentValue.length) {
       this.onResize();
-      this.setDisplayedItems(this.loop);
+      this.setDisplayedItems();
 
       const selectedItem = items.currentValue[this.selectedIndex];
       if (selectedItem) {
         selectedItem._seen = true;
       }
     }
-    if (loop && this.items) {
-      this.setDisplayedItems(loop.currentValue);
-      this.center();
-    }
   }
 
-  private setDisplayedItems(loop: boolean) {
-    const { items } = this;
+  private setDisplayedItems() {
+    const { fringeCount, items, loop } = this;
     this.displayedItems = loop
-      ? [...items.slice(-2), ...items, ...items.slice(0, 2)]
+      ? [...items.slice(-fringeCount), ...items, ...items.slice(0, fringeCount)]
       : items;
   }
 
@@ -151,7 +150,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     if (isBrowser) {
       fromEvent(window, 'resize', listenerOpts)
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntil(this._destroy$))
         .subscribe(this.onResize);
     }
 
@@ -200,7 +199,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         imageList.addEventListener('mousedown', onmousedown, listenerOpts);
         imageList.addEventListener('click', onclick, { capture: true });
         imageList.addEventListener('dragstart', ondragstart);
-        this.destroy$.subscribe(() => {
+        this._destroy$.subscribe(() => {
           imageList.removeEventListener('mousedown', onmousedown);
           imageList.removeEventListener('click', onclick);
           imageList.removeEventListener('dragstart', ondragstart);
@@ -269,7 +268,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
           passive: !UA.ios,
         });
         document.addEventListener('touchend', ontouchend, listenerOpts);
-        this.destroy$.subscribe(() => {
+        this._destroy$.subscribe(() => {
           imageList.removeEventListener('touchstart', ontouchstart);
           document.removeEventListener('touchmove', ontouchmove);
           document.removeEventListener('touchend', ontouchend);
@@ -279,8 +278,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.destroy$.next(null);
-    this.destroy$.complete();
+    this._destroy$.next(null);
+    this._destroy$.complete();
   }
 
   getSrc(item: GalleryItemInternal, index: number) {
@@ -289,35 +288,28 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   isInScrollportProximity(index: number) {
+    // TODO test that normal items and fringe items are considered to be in scroll proximity on the other side of slider
+    if (this.loop) {
+      index -= this.fringeCount;
+    }
     // the spread makes sure, that also 1 item outside of the visible scrollport in both directions is rendered
     // so if 3 items are displayed (although 2 partially), 5 items will be "in scroll proximity"
     const spread =
-      Math.floor(Math.ceil(this.viewerWidthPx / (this.itemWidthPx + 1)) / 2) +
+      Math.floor(Math.ceil(this._viewerWidth / (this._itemWidth + 1)) / 2) +
         1 || 1;
-
-    // TODO find more intelligent way to determine visibility of the fringe items. Find a solution suitable for iPhone
-    if (this.loop) {
-      index -= 2;
-
-      if (
-        this.selectedIndex === 0 ||
-        this.selectedIndex === this.items.length - 1
-      ) {
-        if (index === 0 || index === this.items.length - 1) {
-          return true;
-        }
-      }
-    }
     const distance = Math.abs(this.selectedIndex - index);
-    return distance <= spread;
+    return (
+      (this.loop && Math.abs(distance - this.items.length) <= spread) ||
+      distance <= spread
+    );
   }
 
   isYoutube(item: GalleryItemInternal) {
     return !!item.src.match(/youtube.*\/embed\//);
   }
 
-  isVideo(index: number) {
-    return this.items[index] instanceof GalleryVideo;
+  isVideo(item: GalleryItemInternal) {
+    return item instanceof GalleryVideo;
   }
 
   prev() {
@@ -337,7 +329,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     // stop video when navigating away from it
-    if (this.isVideo(this.selectedIndex)) {
+    if (this.isVideo(this.items[index])) {
       const videoEl: HTMLMediaElement = this.itemsRef
         .toArray()
         [this.selectedIndex].nativeElement.querySelector('video');
@@ -347,19 +339,24 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
 
+    // if infinite looping
     if (indexOutOfBounds) {
-      // if looping
-      const { itemWidthPx, viewerWidthPx, listX } = this;
+      const { fringeCount, _itemWidth, _viewerWidth, _listX } = this;
       index = index < 0 ? this.items.length - 1 : 0;
       this.noAnimation = true;
 
       setTimeout(() => {
-        const centeringOffset = (viewerWidthPx - itemWidthPx) / 2;
-        const outOfCenterShift = (listX + centeringOffset) % itemWidthPx;
+        const centeringOffset = (_viewerWidth - _itemWidth) / 2;
+        const dragShift = (_listX + centeringOffset) % _itemWidth;
         const baseShift =
-          (index + (index === 0 ? 1 : outOfCenterShift ? 2 : 3)) * itemWidthPx;
-        const shift = baseShift + outOfCenterShift - centeringOffset;
-        this.shift(shift);
+          (index +
+            (index === 0
+              ? fringeCount - 1
+              : dragShift
+              ? fringeCount
+              : fringeCount + 1)) *
+          _itemWidth;
+        this.shift(baseShift + dragShift - centeringOffset);
 
         setTimeout(() => {
           this.noAnimation = false;
@@ -377,11 +374,11 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
-  onImageClick(index: number, item: GalleryItemInternal, event: Event) {
+  onImageClick(item: GalleryItemInternal, event: Event) {
     this.imageClick.emit({
       event,
       item,
-      index,
+      index: this.items.indexOf(item),
     });
   }
 
@@ -414,9 +411,9 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private center() {
-    const centeringOffset = (this.viewerWidthPx - this.itemWidthPx) / 2;
+    const centeringOffset = (this._viewerWidth - this._itemWidth) / 2;
     this.shift(
-      (this.selectedIndex + (this.loop ? 2 : 0)) * this.itemWidthPx -
+      (this.selectedIndex + this.fringeCount) * this._itemWidth -
         centeringOffset
     );
   }
@@ -440,8 +437,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   };
 
   private readDimensions() {
-    this.viewerWidthPx = this.hostRef.nativeElement.offsetWidth;
-    this.itemWidthPx = this.hostRef.nativeElement.querySelector(
+    this._viewerWidth = this.hostRef.nativeElement.offsetWidth;
+    this._itemWidth = this.hostRef.nativeElement.querySelector(
       'li'
     ).offsetWidth;
   }
@@ -450,18 +447,15 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
       this.select(this.selectedIndex + Math.sign(distance));
     } else {
-      // TODO test
-      this.select(
-        Math.round(this.listX / this.itemWidthPx - (this.loop ? 1 : -1))
-      );
+      this.center();
     }
   }
 
   private shift(x: number) {
-    this.itemListRef.nativeElement.style.transform = `translate3d(${-(this.listX = x)}px, 0, 0)`;
+    this.itemListRef.nativeElement.style.transform = `translate3d(${-(this._listX = x)}px, 0, 0)`;
   }
 
   private shiftByDelta = (delta: number) => {
-    this.shift(this.listX - delta);
+    this.shift(this._listX - delta);
   };
 }
