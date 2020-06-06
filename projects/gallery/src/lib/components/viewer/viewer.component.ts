@@ -406,10 +406,18 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     );
   }
 
+  private getFringeCount() {
+    return this.loop
+      ? Math.min(
+          Math.ceil(this._viewerWidth / (this._itemWidth + 1)),
+          this.items.length
+        )
+      : 0;
+  }
+
   private onResize = () => {
-    // the setTimeout is here due to getItemWidth call
-    // it prevents situations where layout calculations are invalidated before the call
-    // this prevents unnecessary layout recalculation
+    // the setTimeout is here to prevent layout trashing when inquiring layout properties like offsetWidth
+    // using setTimeout increases chance the trashing will be avoided and cashed layout calculation will be used
     setTimeout(() => {
       const { items } = this;
 
@@ -419,12 +427,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         this.shift(0);
       } else {
         this.readDimensions();
-        this._fringeCount = this.loop
-          ? Math.min(
-              Math.ceil(this._viewerWidth / (this._itemWidth - 1)),
-              items.length
-            )
-          : 0;
+        this._fringeCount = this.getFringeCount();
         this.displayedItems = this.loop
           ? [
               ...items.slice(-this._fringeCount),
