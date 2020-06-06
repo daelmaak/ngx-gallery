@@ -16,6 +16,11 @@
 }
 
 ul {
+  // The small subtraction mitigates FF's lazy image displaying. If img1 takes entire scrollport of the viewer, next image img2 is completely outside and not rendered by FF
+  // When navigating to img2, there is a brief flash of background while FF renders the second image
+  // Setting item width to number very close to 100% forces FF to prerender the second image, without unwanted flashes on navigation
+  --item-width: calc(100% - 0.01px);
+
   display: flex;
   width: 100%;
   height: 100%;
@@ -36,10 +41,7 @@ li {
   align-items: center;
   flex: none;
   position: relative;
-  // This mitigates FF's lazy image displaying. If img1 takes entire scrollport of the viewer, next image img2 is completely outside and not rendered by FF
-  // When navigating to img2, there is a brief flash of background while FF renders the second image
-  // Setting item width to number very close to 100% forces FF to prerender the second image, without unwanted flashes on navigation
-  width: 99.9999%;
+  width: var(--item-width);
   user-select: none;
   outline: 0;
 }

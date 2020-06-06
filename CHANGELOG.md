@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Infinite loop when navigating between items, activated by setting `[loop]` @Input to `true`. This now replaces old way of looping, which always slid through all the middle items.
+- `[itemWidth]` @Input. This input accepts any valid css width value, which in turn sets width of individual gallery items.
+
 ### Changed
 
 - Detaching items from DOM which are out of scroll proximity. That means that in any given time, only visible items are displayed together with not yet displayed item on each side closest to the displayed ones. That means that if items 4,5,6 are visible, also items 3 and 7 will be in the DOM, but others won't.
+
+### Removed
+
+- Old way of looping, which always slid through all the middle items.
 
 ## [1.0.0-alpha.0] - 2020-05-23
 

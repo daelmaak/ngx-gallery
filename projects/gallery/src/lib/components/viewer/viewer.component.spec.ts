@@ -122,9 +122,7 @@ describe('ViewerComponent', () => {
       testViewerContainer = testViewerFixture.componentInstance;
     });
 
-    it('should not display custom error on items where the loading was successful', () => {
-      testViewerFixture.detectChanges();
-
+    it('should not display custom error on items where the loading was successful', fakeAsync(() => {
       const items = [
         { src: 'src1', _failed: true },
         { src: 'src2' },
@@ -137,6 +135,7 @@ describe('ViewerComponent', () => {
       };
       component.ngOnChanges(changes);
       fixture.detectChanges();
+      tick();
 
       const itemEls = de.queryAll(By.css('li'));
       const customErrors = de.queryAll(By.css('li .custom-error'));
@@ -144,7 +143,7 @@ describe('ViewerComponent', () => {
       expect(customErrors.length).toBe(1);
       expect(itemEls[0].query(By.css('.custom-error'))).toBeTruthy();
       expect(itemEls[1].query(By.css('.custom-error'))).toBeFalsy();
-    });
+    }));
   });
 
   describe('descriptions', () => {
