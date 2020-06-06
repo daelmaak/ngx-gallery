@@ -60,6 +60,7 @@ describe('ViewerComponent Unit', () => {
       viewer.loop = true;
       viewer['_viewerWidth'] = 600;
       viewer['_itemWidth'] = 600;
+      viewer['_fringeCount'] = 1;
     });
 
     it('should consider selected item in proximity', () => {

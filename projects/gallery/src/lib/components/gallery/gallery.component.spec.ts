@@ -1,5 +1,11 @@
 import { DebugElement } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent, MockPipe } from 'ng-mocks';
@@ -43,10 +49,11 @@ describe('GalleryComponent', () => {
   });
 
   describe('emitters', () => {
-    beforeEach(() => {
+    beforeEach(fakeAsync(() => {
       component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
       fixture.detectChanges();
-    });
+      tick();
+    }));
 
     it('should emit event when viewer image clicked', () => {
       const imageClickSpy = spyOn(component.imageClick, 'emit');

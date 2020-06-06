@@ -9,7 +9,7 @@
 </div>
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
-  <li *ngIf="!items?.length" class="doe-viewer-initial-item"></li>
+  <li *ngIf="!displayedItems?.length" class="doe-viewer-initial-item"></li>
   <li
     #items
     *ngFor="let item of displayedItems; let i = index"

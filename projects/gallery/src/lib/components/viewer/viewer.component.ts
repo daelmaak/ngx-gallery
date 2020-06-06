@@ -75,13 +75,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   UA = UA;
 
   private _destroy$ = new Subject();
+  private _fringeCount: number;
   private _itemWidth: number;
   private _viewerWidth: number;
   private _listX = 0;
-
-  get fringeCount() {
-    return this.loop ? 1 : 0;
-  }
 
   get lazyLoading() {
     return this.loading === 'lazy';
@@ -127,20 +124,12 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
     if (items && items.currentValue && items.currentValue.length) {
       this.onResize();
-      this.setDisplayedItems();
 
       const selectedItem = items.currentValue[this.selectedIndex];
       if (selectedItem) {
         selectedItem._seen = true;
       }
     }
-  }
-
-  private setDisplayedItems() {
-    const { fringeCount, items, loop } = this;
-    this.displayedItems = loop
-      ? [...items.slice(-fringeCount), ...items, ...items.slice(0, fringeCount)]
-      : items;
   }
 
   ngOnInit() {
@@ -289,7 +278,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   isInScrollportProximity(index: number) {
     if (this.loop) {
-      index -= this.fringeCount;
+      index -= this._fringeCount;
     }
     // the spread makes sure, that also 1 item outside of the visible scrollport in both directions is rendered
     // so if 3 items are displayed (although 2 partially), 5 items will be "in scroll proximity"
@@ -340,7 +329,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     // if infinite looping
     if (indexOutOfBounds) {
-      const { fringeCount, _itemWidth, _viewerWidth, _listX } = this;
+      const { _fringeCount, _itemWidth, _viewerWidth, _listX } = this;
       index = index < 0 ? this.items.length - 1 : 0;
       this.noAnimation = true;
 
@@ -350,10 +339,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         const baseShift =
           (index +
             (index === 0
-              ? fringeCount - 1
+              ? _fringeCount - 1
               : dragShift
-              ? fringeCount
-              : fringeCount + 1)) *
+              ? _fringeCount
+              : _fringeCount + 1)) *
           _itemWidth;
         this.shift(baseShift + dragShift - centeringOffset);
 
@@ -412,7 +401,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   private center() {
     const centeringOffset = (this._viewerWidth - this._itemWidth) / 2;
     this.shift(
-      (this.selectedIndex + this.fringeCount) * this._itemWidth -
+      (this.selectedIndex + this._fringeCount) * this._itemWidth -
         centeringOffset
     );
   }
@@ -422,11 +411,25 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     // it prevents situations where layout calculations are invalidated before the call
     // this prevents unnecessary layout recalculation
     setTimeout(() => {
+      const { items } = this;
+
       this.noAnimation = true;
-      if (!this.items || !this.items.length) {
+
+      if (!items || !items.length) {
         this.shift(0);
       } else {
         this.readDimensions();
+        this._fringeCount = this.loop
+          ? Math.ceil(this._viewerWidth / (this._itemWidth - 1))
+          : 0;
+        this.displayedItems = this.loop
+          ? [
+              ...items.slice(-this._fringeCount),
+              ...items,
+              ...items.slice(0, this._fringeCount),
+            ]
+          : items;
+        this.cd.detectChanges();
         this.center();
       }
 
