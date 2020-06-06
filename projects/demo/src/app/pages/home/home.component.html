@@ -91,12 +91,12 @@
     </section>
 
     <section>
-      <mat-checkbox name="loop" [(ngModel)]="galleryConfig.loop"
+      <mat-checkbox
+        name="loop"
+        [(ngModel)]="galleryConfig.loop"
+        (change)="reloadGallery()"
         >Loop</mat-checkbox
       >
-      <button mat-raised-button (click)="reloadGallery()">
-        Confirm loop
-      </button>
     </section>
 
     <section>
