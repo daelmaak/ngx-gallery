@@ -1,7 +1,7 @@
 <div
   *ngIf="showPrevArrow"
   class="doe-viewer-arrow doe-viewer-arrow-prev"
-  (click)="prev()"
+  (click)="selectByDelta(-1)"
 >
   <doe-chevron-icon
     *ngIf="!arrowTemplate; else arrowTemplate"
@@ -114,7 +114,7 @@
 <div
   *ngIf="showNextArrow"
   class="doe-viewer-arrow doe-viewer-arrow-next"
-  (click)="next()"
+  (click)="selectByDelta(1)"
 >
   <doe-chevron-icon
     *ngIf="!arrowTemplate; else arrowTemplate"

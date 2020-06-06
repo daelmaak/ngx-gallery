@@ -300,16 +300,12 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     return item instanceof GalleryVideo;
   }
 
-  prev() {
-    this.select(this.selectedIndex - 1);
-  }
-
-  next() {
-    this.select(this.selectedIndex + 1);
+  selectByDelta(delta: number) {
+    this.select(this.selectedIndex + delta);
   }
 
   select(index: number) {
-    const indexOutOfBounds = index < 0 || index >= this.items.length;
+    const indexOutOfBounds = !this.items[index];
 
     if (this.selectedIndex === index || (!this.loop && indexOutOfBounds)) {
       this.center();

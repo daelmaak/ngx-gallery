@@ -170,12 +170,12 @@ export class GalleryComponent {
 
   @HostListener('keydown.arrowright')
   next() {
-    this.viewerRef.next();
+    this.viewerRef.selectByDelta(1);
   }
 
   @HostListener('keydown.arrowleft')
   prev() {
-    this.viewerRef.prev();
+    this.viewerRef.selectByDelta(-1);
   }
 
   select(index: number) {
