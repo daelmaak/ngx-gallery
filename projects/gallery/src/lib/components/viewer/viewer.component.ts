@@ -288,7 +288,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   isInScrollportProximity(index: number) {
-    // TODO test that normal items and fringe items are considered to be in scroll proximity on the other side of slider
     if (this.loop) {
       index -= this.fringeCount;
     }

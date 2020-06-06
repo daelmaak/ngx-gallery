@@ -78,6 +78,11 @@ describe('ViewerComponent Unit', () => {
       expect(viewer.isInScrollportProximity(5)).toBeTruthy();
     });
 
+    it('should consider fringe item on the opposite side of slider in proximity if last item selected', () => {
+      viewer.selectedIndex = 3;
+      expect(viewer.isInScrollportProximity(0)).toBeTruthy();
+    });
+
     it('should consider regular item on the opposite side of slider in proximity if first item selected', () => {
       expect(viewer.isInScrollportProximity(4)).toBeTruthy();
     });
