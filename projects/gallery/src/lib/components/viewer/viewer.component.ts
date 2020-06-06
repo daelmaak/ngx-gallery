@@ -420,7 +420,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       } else {
         this.readDimensions();
         this._fringeCount = this.loop
-          ? Math.ceil(this._viewerWidth / (this._itemWidth - 1))
+          ? Math.min(
+              Math.ceil(this._viewerWidth / (this._itemWidth - 1)),
+              items.length
+            )
           : 0;
         this.displayedItems = this.loop
           ? [
