@@ -39,6 +39,7 @@ export class HomeComponent implements OnInit {
     touchGestures: true,
     imageCounter: true,
     imageCounterOrientation: 'bottom',
+    itemWidth: '',
     objectFit: 'cover',
     loading: 'lazy',
     loop: false,

@@ -79,9 +79,24 @@
     </section>
 
     <section>
+      <mat-form-field>
+        <label>Item width</label>
+        <input
+          name="itemWidth"
+          matInput
+          [(ngModel)]="galleryConfig.itemWidth"
+          (change)="reloadGallery()"
+        />
+      </mat-form-field>
+    </section>
+
+    <section>
       <mat-checkbox name="loop" [(ngModel)]="galleryConfig.loop"
         >Loop</mat-checkbox
       >
+      <button mat-raised-button (click)="reloadGallery()">
+        Confirm loop
+      </button>
     </section>
 
     <section>
@@ -181,6 +196,7 @@
     [touchGestures]="galleryConfig.touchGestures"
     [imageCounter]="galleryConfig.imageCounter"
     [imageCounterOrientation]="galleryConfig.imageCounterOrientation"
+    [itemWidth]="galleryConfig.itemWidth"
     [objectFit]="galleryConfig.objectFit"
     [loading]="galleryConfig.loading"
     [loop]="galleryConfig.loop"
