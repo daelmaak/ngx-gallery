@@ -7,7 +7,8 @@ Performant, responsive, easy to use Angular 8+ gallery
 
 [**Demo**](https://daelmaak.github.io/ngx-doe-gallery/) |
 [**Stackblitz**](https://stackblitz.com/edit/ngx-doe-gallery) |
-[**Docs**](https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API)
+[**Docs**](https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API) |
+[**Changelog**](https://github.com/daelmaak/ngx-doe-gallery/blob/master/CHANGELOG.md)
 
 ## Why ngx-doe-gallery?
 
