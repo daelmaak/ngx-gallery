@@ -165,12 +165,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const onmouseup = (e: MouseEvent) => {
-          this.noAnimation = false;
-
-          const time = e.timeStamp - mousedown.timeStamp;
           const distance = mousedown.x - e.x;
 
-          this.zone.run(() => this.selectBySwipeStats(time, distance));
+          this.noAnimation = false;
+          this.zone.run(() => this.selectBySwipeStats(distance));
 
           document.removeEventListener('mousemove', onmousemove);
           document.removeEventListener('mouseup', onmouseup);
@@ -241,11 +239,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
           this.noAnimation = false;
 
           if (lastTouchmove) {
-            const time = lastTouchmove.timeStamp - touchstart.timeStamp;
             const distance =
               touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
 
-            this.zone.run(() => this.selectBySwipeStats(time, distance));
+            this.zone.run(() => this.selectBySwipeStats(distance));
           }
           horizontal = null;
           touchstart = null;
@@ -312,6 +309,26 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       return;
     }
 
+    // if infinite looping
+    if (this.loop && indexOutOfBounds) {
+      const origIndex = index;
+      index = origIndex - Math.sign(index) * this.items.length;
+
+      this.noAnimation = true;
+
+      setTimeout(() => {
+        const shift =
+          this._listX -
+          Math.sign(origIndex) * this.items.length * this._itemWidth;
+        this.shift(shift);
+
+        setTimeout(() => {
+          this.noAnimation = false;
+          this.center();
+        });
+      });
+    }
+
     // stop video when navigating away from it
     if (this.isVideo(this.items[index])) {
       const videoEl: HTMLMediaElement = this.itemsRef
@@ -321,32 +338,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       if (videoEl) {
         videoEl.pause();
       }
-    }
-
-    // if infinite looping
-    if (indexOutOfBounds) {
-      const { _fringeCount, _itemWidth, _viewerWidth, _listX } = this;
-      index = index < 0 ? this.items.length - 1 : 0;
-      this.noAnimation = true;
-
-      setTimeout(() => {
-        const centeringOffset = (_viewerWidth - _itemWidth) / 2;
-        const dragShift = (_listX + centeringOffset) % _itemWidth;
-        const baseShift =
-          (index +
-            (index === 0
-              ? _fringeCount - 1
-              : dragShift
-              ? _fringeCount
-              : _fringeCount + 1)) *
-          _itemWidth;
-        this.shift(baseShift + dragShift - centeringOffset);
-
-        setTimeout(() => {
-          this.noAnimation = false;
-          this.center();
-        });
-      });
     }
 
     this.items[index]._seen = true;
@@ -447,9 +438,11 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     ).offsetWidth;
   }
 
-  private selectBySwipeStats(time: number, distance: number) {
-    if (Math.abs(time / distance) < 4 && Math.abs(distance) > 20) {
-      this.select(this.selectedIndex + Math.sign(distance));
+  private selectBySwipeStats(distance: number) {
+    const indexDelta = Math.ceil((Math.abs(distance) - 25) / this._itemWidth);
+
+    if (indexDelta) {
+      this.selectByDelta(indexDelta * Math.sign(distance));
     } else {
       this.center();
     }

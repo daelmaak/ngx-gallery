@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Infinite loop when navigating between items, activated by setting `[loop]` @Input to `true`. This now replaces old way of looping, which always slid through all the middle items.
 - `[itemWidth]` @Input. This input accepts any valid css width value, which in turn sets width of individual gallery items.
+- Ability to jump over items when dragging far enough. Previosly, only adjacent items could be selected, no matter how far one dragged.
 
 ### Changed
 
