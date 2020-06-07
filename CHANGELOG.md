@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+...
+
+## [1.0.0-alpha.1] - 2020-06-07
+
 ### Added
 
 - Infinite loop when navigating between items, activated by setting `[loop]` @Input to `true`. This now replaces old way of looping, which always slid through all the middle items.
@@ -32,5 +36,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed background flashes in Firefox when new images slide into doe-viewer's scrollport.
 
-[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-alpha.0...HEAD
+[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-alpha.1...HEAD
+[1.0.0-alpha.1]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-alpha.0...v1.0.0-alpha.1
 [1.0.0-alpha.0]: https://github.com/daelmaak/ngx-doe-gallery/compare/v0.1.0-alpha.6...v1.0.0-alpha.0
