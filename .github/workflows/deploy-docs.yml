@@ -5,6 +5,12 @@ name: Build & Deploy docs
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
+  # When one doesn't create release on github, the gh actions don't get triggered when reacting only on 'release'
+  # This makes the gh actions trigger also when git tag is pushed.
+  push:
+    tags:
+      - 'v*'
+    branches: [master]
   release:
     types:
       - created
