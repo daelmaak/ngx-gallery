@@ -54,16 +54,16 @@
     </section>
 
     <section>
-      <mat-checkbox name="imageCounter" [(ngModel)]="galleryConfig.imageCounter"
-        >Image counter</mat-checkbox
+      <mat-checkbox name="counter" [(ngModel)]="galleryConfig.counter"
+        >Counter</mat-checkbox
       >
     </section>
 
     <section>
-      <label>Image counter orientation:</label>
+      <label>Counter orientation:</label>
       <mat-radio-group
-        name="imageCounterOrientation"
-        [(ngModel)]="galleryConfig.imageCounterOrientation"
+        name="counterOrientation"
+        [(ngModel)]="galleryConfig.counterOrientation"
       >
         <mat-radio-button value="top">top</mat-radio-button>
         <mat-radio-button value="bottom">bottom</mat-radio-button>
@@ -194,8 +194,8 @@
     [descriptions]="galleryConfig.descriptions"
     [mouseGestures]="galleryConfig.mouseGestures"
     [touchGestures]="galleryConfig.touchGestures"
-    [imageCounter]="galleryConfig.imageCounter"
-    [imageCounterOrientation]="galleryConfig.imageCounterOrientation"
+    [counter]="galleryConfig.counter"
+    [counterOrientation]="galleryConfig.counterOrientation"
     [itemWidth]="galleryConfig.itemWidth"
     [objectFit]="galleryConfig.objectFit"
     [loading]="galleryConfig.loading"

@@ -59,10 +59,10 @@ export class GalleryComponent {
   touchGestures = true;
 
   @Input()
-  imageCounter = true;
+  counter = true;
 
   @Input()
-  imageCounterOrientation: VerticalOrientation = 'bottom';
+  counterOrientation: VerticalOrientation = 'bottom';
 
   @Input()
   itemWidth: string;

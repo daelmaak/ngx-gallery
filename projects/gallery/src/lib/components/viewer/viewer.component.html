@@ -122,17 +122,17 @@
 </div>
 
 <doe-counter
-  *ngIf="imageCounter && items?.length"
+  *ngIf="counter && items?.length"
   [itemQuantity]="items?.length"
   [selectedIndex]="selectedIndex"
-  [orientation]="imageCounterOrientation"
+  [orientation]="counterOrientation"
 ></doe-counter>
 
 <div
   *ngIf="descriptions && items"
   class="doe-viewer-description"
   [class.doe-viewer-description--above-counter]="
-    imageCounter && imageCounterOrientation === 'bottom'
+    counter && counterOrientation === 'bottom'
   "
   aria-hidden="true"
 >

@@ -48,8 +48,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() errorText: string;
   @Input() mouseGestures: boolean;
   @Input() touchGestures: boolean;
-  @Input() imageCounter: boolean;
-  @Input() imageCounterOrientation: VerticalOrientation;
+  @Input() counter: boolean;
+  @Input() counterOrientation: VerticalOrientation;
   @Input() loading: Loading;
   @Input() loop: boolean;
   @Input() objectFit: ObjectFit;
