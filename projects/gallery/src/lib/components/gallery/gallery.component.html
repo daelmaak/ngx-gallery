@@ -38,7 +38,7 @@
   [aria]="aria"
   (imageClick)="imageClick.emit($event)"
   (descriptionClick)="descriptionClick.emit($event)"
-  (selection)="_selectInternal($event); thumbsRef?.select($event)"
+  (selection)="_selectInternal($event); _thumbsRef?.select($event)"
 ></doe-viewer>
 
 <ng-template #defaultLoadingTemplate>
