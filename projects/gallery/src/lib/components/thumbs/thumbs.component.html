@@ -1,5 +1,5 @@
 <div
-  *ngIf="showStartArrow"
+  *ngIf="_showStartArrow"
   class="doe-thumbs-arrow doe-thumbs-arrow-prev"
   (click)="slide(-1)"
 >
@@ -52,7 +52,7 @@
 </ul>
 
 <div
-  *ngIf="showEndArrow"
+  *ngIf="_showEndArrow"
   class="doe-thumbs-arrow doe-thumbs-arrow-next"
   (click)="slide(1)"
 >
