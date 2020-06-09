@@ -9,10 +9,10 @@
 </div>
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
-  <li *ngIf="!displayedItems?.length" class="doe-viewer-initial-item"></li>
+  <li *ngIf="!_displayedItems?.length" class="doe-viewer-initial-item"></li>
   <li
     #items
-    *ngFor="let item of displayedItems; let i = index"
+    *ngFor="let item of _displayedItems; let i = index"
     [class.doe-viewer-item--selected]="i === selectedIndex"
     tabindex="0"
     [attr.aria-label]="item.alt"

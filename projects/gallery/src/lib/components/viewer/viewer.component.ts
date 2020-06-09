@@ -71,23 +71,23 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
-  displayedItems: GalleryItemInternal[];
   UA = UA;
 
+  _displayedItems: GalleryItemInternal[];
   private _destroy$ = new Subject();
   private _fringeCount: number;
   private _itemWidth: number;
   private _viewerWidth: number;
   private _listX = 0;
 
-  get lazyLoading() {
-    return this.loading === 'lazy';
-  }
-
-  set noAnimation(value: boolean) {
+  set _noAnimation(value: boolean) {
     this.itemListRef.nativeElement.style.transitionDuration = value
       ? '0ms'
       : '';
+  }
+
+  get lazyLoading() {
+    return this.loading === 'lazy';
   }
 
   get showArrow() {
@@ -106,9 +106,9 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   constructor(
-    private hostRef: ElementRef<HTMLElement>,
-    private cd: ChangeDetectorRef,
-    private zone: NgZone
+    private _hostRef: ElementRef<HTMLElement>,
+    private _cd: ChangeDetectorRef,
+    private _zone: NgZone
   ) {}
 
   ngOnChanges({ thumbsOrientation, items }: SimpleChanges) {
@@ -118,7 +118,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
           this.readDimensions();
           this.center();
           // accounts for multiple items visible in viewport, which need calculated dimensions
-          this.cd.detectChanges();
+          this._cd.detectChanges();
         });
       }
     }
@@ -144,7 +144,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     if (isBrowser && this.mouseGestures) {
-      this.zone.runOutsideAngular(() => {
+      this._zone.runOutsideAngular(() => {
         const imageList = this.itemListRef.nativeElement;
         let mousedown: MouseEvent;
         let maxDeltaX = 0;
@@ -152,7 +152,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
         const onmousedown = (e: MouseEvent) => {
           mousedown = e;
-          this.noAnimation = true;
+          this._noAnimation = true;
 
           document.addEventListener('mousemove', onmousemove, listenerOpts);
           document.addEventListener('mouseup', onmouseup, listenerOpts);
@@ -167,8 +167,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         const onmouseup = (e: MouseEvent) => {
           const distance = mousedown.x - e.x;
 
-          this.noAnimation = false;
-          this.zone.run(() => this.selectBySwipeStats(distance));
+          this._noAnimation = false;
+          this._zone.run(() => this.selectBySwipeStats(distance));
 
           document.removeEventListener('mousemove', onmousemove);
           document.removeEventListener('mouseup', onmouseup);
@@ -195,7 +195,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     if (isBrowser && this.touchGestures) {
-      this.zone.runOutsideAngular(() => {
+      this._zone.runOutsideAngular(() => {
         const imageList = this.itemListRef.nativeElement;
         let horizontal = null;
         let touchstart: TouchEvent;
@@ -203,7 +203,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
         const ontouchstart = (e: TouchEvent) => {
           touchstart = e;
-          this.noAnimation = true;
+          this._noAnimation = true;
         };
 
         const ontouchmove = (e: TouchEvent) => {
@@ -236,13 +236,13 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         };
 
         const ontouchend = () => {
-          this.noAnimation = false;
+          this._noAnimation = false;
 
           if (lastTouchmove) {
             const distance =
               touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
 
-            this.zone.run(() => this.selectBySwipeStats(distance));
+            this._zone.run(() => this.selectBySwipeStats(distance));
           }
           horizontal = null;
           touchstart = null;
@@ -314,7 +314,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       const origIndex = index;
       index = origIndex - Math.sign(index) * this.items.length;
 
-      this.noAnimation = true;
+      this._noAnimation = true;
 
       setTimeout(() => {
         const shift =
@@ -323,7 +323,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         this.shift(shift);
 
         setTimeout(() => {
-          this.noAnimation = false;
+          this._noAnimation = false;
           this.center();
         });
       });
@@ -362,7 +362,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     if (nextItemIndex >= 0 && nextItemIndex < this.items.length) {
       this.select(nextItemIndex);
       // focusing an item literally scrolls the item list, so I have to scroll it back
-      requestAnimationFrame(() => (this.hostRef.nativeElement.scrollLeft = 0));
+      requestAnimationFrame(() => (this._hostRef.nativeElement.scrollLeft = 0));
     }
   }
 
@@ -372,7 +372,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     // elements with empty src also get loaded event, therefore the check
     if (target.getAttribute('src')) {
       item._loaded = true;
-      this.cd.detectChanges();
+      this._cd.detectChanges();
     }
   }
 
@@ -381,7 +381,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     if (target.getAttribute('src')) {
       item._failed = true;
-      this.cd.detectChanges();
+      this._cd.detectChanges();
     }
   }
 
@@ -408,32 +408,32 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     setTimeout(() => {
       const { items } = this;
 
-      this.noAnimation = true;
+      this._noAnimation = true;
 
       if (!items || !items.length) {
         this.shift(0);
       } else {
         this.readDimensions();
         this._fringeCount = this.getFringeCount();
-        this.displayedItems = this.loop
+        this._displayedItems = this.loop
           ? [
               ...items.slice(-this._fringeCount),
               ...items,
               ...items.slice(0, this._fringeCount),
             ]
           : items;
-        this.cd.detectChanges();
+        this._cd.detectChanges();
         this.center();
       }
 
       // the setTimeout makes sure that the animation is allowed AFTER the list was shifted
-      setTimeout(() => (this.noAnimation = false));
+      setTimeout(() => (this._noAnimation = false));
     });
   };
 
   private readDimensions() {
-    this._viewerWidth = this.hostRef.nativeElement.offsetWidth;
-    this._itemWidth = this.hostRef.nativeElement.querySelector(
+    this._viewerWidth = this._hostRef.nativeElement.offsetWidth;
+    this._itemWidth = this._hostRef.nativeElement.querySelector(
       'li'
     ).offsetWidth;
   }
