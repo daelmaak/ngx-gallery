@@ -7,11 +7,9 @@
           name="selectedIndex"
           matInput
           [(ngModel)]="galleryConfig.selectedIndex"
+          (change)="reloadGallery()"
         />
       </mat-form-field>
-      <button mat-raised-button (click)="reloadGallery()">
-        Apply index
-      </button>
     </section>
 
     <section>
@@ -33,11 +31,9 @@
       <mat-checkbox
         name="mouseGestures"
         [(ngModel)]="galleryConfig.mouseGestures"
+        (change)="reloadGallery()"
       >
         Mouse Gestures
-        <button mat-raised-button (click)="reloadGallery()">
-          Apply gestures
-        </button>
       </mat-checkbox>
     </section>
 
@@ -45,11 +41,9 @@
       <mat-checkbox
         name="touchGestures"
         [(ngModel)]="galleryConfig.touchGestures"
+        (change)="reloadGallery()"
       >
         Touch Gestures
-        <button mat-raised-button (click)="reloadGallery()">
-          Apply gestures
-        </button>
       </mat-checkbox>
     </section>
 
@@ -101,13 +95,14 @@
 
     <section>
       <label>Image loading strategy:</label>
-      <mat-radio-group name="loading" [(ngModel)]="galleryConfig.loading">
+      <mat-radio-group
+        name="loading"
+        [(ngModel)]="galleryConfig.loading"
+        (change)="reloadGallery()"
+      >
         <mat-radio-button value="auto">auto</mat-radio-button>
         <mat-radio-button value="lazy">lazy</mat-radio-button>
       </mat-radio-group>
-      <button mat-raised-button (click)="reloadGallery()">
-        Apply loading strategy
-      </button>
     </section>
   </div>
 
@@ -176,11 +171,9 @@
           name="imageLoadingLatency"
           matInput
           [(ngModel)]="imageLoadingLatency"
+          (change)="reloadGallery()"
         />
       </mat-form-field>
-      <button mat-raised-button (click)="reloadGallery()">
-        Confirm latency
-      </button>
     </section>
   </div>
 </form>
