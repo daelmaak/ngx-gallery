@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-...
+### Fixed
+
+- Looping only when there are more than 1 items in the gallery.
 
 ## [1.0.0-alpha.1] - 2020-06-07
 
