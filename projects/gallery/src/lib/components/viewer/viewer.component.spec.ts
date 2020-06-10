@@ -152,8 +152,8 @@ describe('ViewerComponent', () => {
     });
 
     it(`shouldn't give description class above-counter when counter position set, but counter is disabled`, () => {
-      component.imageCounterOrientation = 'bottom';
-      component.imageCounter = false;
+      component.counterOrientation = 'bottom';
+      component.counter = false;
       component.items = [new GalleryImage('src1', null, null, 'description1')];
       const changes = {
         items: new SimpleChange(null, component.items, true),

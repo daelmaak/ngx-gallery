@@ -9,10 +9,10 @@
 </div>
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
-  <li *ngIf="!displayedItems?.length" class="doe-viewer-initial-item"></li>
+  <li *ngIf="!_displayedItems?.length" class="doe-viewer-initial-item"></li>
   <li
     #items
-    *ngFor="let item of displayedItems; let i = index"
+    *ngFor="let item of _displayedItems; let i = index"
     [class.doe-viewer-item--selected]="i === selectedIndex"
     tabindex="0"
     [attr.aria-label]="item.alt"
@@ -122,17 +122,17 @@
 </div>
 
 <doe-counter
-  *ngIf="imageCounter && items?.length"
+  *ngIf="counter && items?.length"
   [itemQuantity]="items?.length"
   [selectedIndex]="selectedIndex"
-  [orientation]="imageCounterOrientation"
+  [orientation]="counterOrientation"
 ></doe-counter>
 
 <div
   *ngIf="descriptions && items"
   class="doe-viewer-description"
   [class.doe-viewer-description--above-counter]="
-    imageCounter && imageCounterOrientation === 'bottom'
+    counter && counterOrientation === 'bottom'
   "
   aria-hidden="true"
 >

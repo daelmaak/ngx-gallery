@@ -24,8 +24,8 @@
   [errorText]="errorText"
   [mouseGestures]="mouseGestures"
   [touchGestures]="touchGestures"
-  [imageCounter]="imageCounter"
-  [imageCounterOrientation]="imageCounterOrientation"
+  [counter]="counter"
+  [counterOrientation]="counterOrientation"
   [itemWidth]="itemWidth"
   [objectFit]="objectFit"
   [loading]="loading"
@@ -38,7 +38,7 @@
   [aria]="aria"
   (imageClick)="imageClick.emit($event)"
   (descriptionClick)="descriptionClick.emit($event)"
-  (selection)="_selectInternal($event); thumbsRef?.select($event)"
+  (selection)="_selectInternal($event); _thumbsRef?.select($event)"
 ></doe-viewer>
 
 <ng-template #defaultLoadingTemplate>
