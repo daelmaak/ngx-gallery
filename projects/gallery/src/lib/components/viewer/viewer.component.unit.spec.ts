@@ -133,4 +133,15 @@ describe('ViewerComponent Unit', () => {
       expect(fringeCount).toBe(3);
     });
   });
+
+  describe('looping', () => {
+    beforeEach(() => {
+      viewer.loop = true;
+      viewer.items = [new GalleryImage('src1')];
+    });
+
+    it('should disabled looping if there is just 1 item', () => {
+      expect(viewer.loop).toBe(false);
+    });
+  });
 });

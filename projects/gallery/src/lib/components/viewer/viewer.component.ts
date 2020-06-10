@@ -51,7 +51,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() counter: boolean;
   @Input() counterOrientation: VerticalOrientation;
   @Input() loading: Loading;
-  @Input() loop: boolean;
   @Input() objectFit: ObjectFit;
   @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
   @Input() loadingTemplate: TemplateRef<void>;
@@ -59,6 +58,13 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() arrowTemplate: TemplateRef<void>;
   @Input() thumbsOrientation: OrientationFlag;
   @Input() aria: Aria;
+  @Input()
+  set loop(val: boolean) {
+    this._loop = val;
+  }
+  get loop() {
+    return this.items && this.items.length > 1 && this._loop;
+  }
 
   @Input() set itemWidth(val: string) {
     this.itemListRef.nativeElement.style.setProperty('--item-width', val || '');
@@ -77,6 +83,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   private _destroy$ = new Subject();
   private _fringeCount: number;
   private _itemWidth: number;
+  private _loop: boolean;
   private _viewerWidth: number;
   private _listX = 0;
 
