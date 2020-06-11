@@ -3,7 +3,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Route } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,7 +13,7 @@ import { MatRadioModule } from '@angular/material/radio';
 
 import { AppComponent } from './app.component';
 import { GalleryModule } from 'projects/gallery/src/public-api';
-import { HomeComponent } from './pages/home/home.component';
+import { DemoWholeConfig } from './components/demo-whole-config/demo-whole-config.component';
 import { HeaderComponent } from './components/header/header.component';
 
 const materialModules = [
@@ -24,18 +23,11 @@ const materialModules = [
   MatIconModule,
   MatInputModule,
   MatRadioModule,
-  MatToolbarModule
-];
-
-const routes: Route[] = [
-  {
-    path: '',
-    component: HomeComponent
-  }
+  MatToolbarModule,
 ];
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, HeaderComponent],
+  declarations: [AppComponent, DemoWholeConfig, HeaderComponent],
   imports: [
     ...materialModules,
     BrowserModule,
@@ -43,9 +35,8 @@ const routes: Route[] = [
     CommonModule,
     FormsModule,
     GalleryModule,
-    RouterModule.forRoot(routes)
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

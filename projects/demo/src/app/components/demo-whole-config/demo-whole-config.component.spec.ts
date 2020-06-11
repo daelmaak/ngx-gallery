@@ -8,7 +8,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 
 import { GalleryModule } from 'projects/gallery/src/public-api';
-import { HomeComponent } from './home.component';
+import { HomeComponent } from './demo-whole-config.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -25,9 +25,9 @@ describe('HomeComponent', () => {
         MatFormFieldModule,
         MatRadioModule,
         MatRadioModule,
-        GalleryModule
+        GalleryModule,
       ],
-      declarations: [HomeComponent]
+      declarations: [HomeComponent],
     }).compileComponents();
   }));
 

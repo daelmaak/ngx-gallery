@@ -1,10 +1,27 @@
 header {
   width: 100%;
+  padding-bottom: 20px;
+  box-shadow: 0 1px 1px #bdbdbd;
+  z-index: 1;
+  position: relative;
 }
 
-mat-toolbar {
-  background-color: #641fb7;
-  color: white;
+.header-inner-container {
+  width: 800px;
+  max-width: 100vw;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.1em;
+  color: #313131;
 }
 
 a {
@@ -16,19 +33,17 @@ a {
   }
 }
 
-.app-title {
-  text-decoration: none;
-  outline: 0;
-  border: none;
-}
-
 .links {
-  display: flex;
-  margin-left: auto;
+  margin: 0 auto;
+  text-align: center;
 
   .link {
     display: inline-block;
     margin-right: 15px;
+
+    &:nth-of-type(1) {
+      opacity: 0.85;
+    }
 
     &:nth-last-of-type(1) {
       margin-right: 0;
@@ -45,26 +60,7 @@ a {
 
   .npm-link {
     img {
-      transform: scale(1.1) translateY(3px);
-    }
-  }
-}
-
-.menu {
-  margin: 2px auto 0;
-  height: 100%;
-  list-style-type: none;
-  font-size: 18px;
-  font-weight: 400;
-
-  li {
-    height: 100%;
-    line-height: 64px;
-    padding: 0 10px;
-    cursor: pointer;
-
-    &:hover {
-      font-weight: 500;
+      transform: scale(1.3) translateY(3px);
     }
   }
 }

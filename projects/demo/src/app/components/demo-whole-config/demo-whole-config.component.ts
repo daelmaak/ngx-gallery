@@ -17,12 +17,12 @@ import {
 import { GalleryItemInternal } from 'projects/gallery/src/lib/core/gallery-item';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  selector: 'app-demo-whole-config',
+  templateUrl: './demo-whole-config.component.html',
+  styleUrls: ['./demo-whole-config.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit {
+export class DemoWholeConfig implements OnInit {
   images: GalleryItem[];
   items: Observable<GalleryItem[]>;
 
