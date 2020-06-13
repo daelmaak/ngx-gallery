@@ -1,7 +1,7 @@
 :host {
   display: grid;
   grid-template-columns: 230px auto;
-  grid-template-rows: 180px calc(100% - 180px) 64px;
+  grid-template-rows: 180px auto 64px;
 }
 
 app-header {
@@ -11,6 +11,7 @@ app-header {
 
 aside {
   grid-column: 1;
+  grid-row: 2 / span 2;
   position: sticky;
   top: 0;
   max-height: 100vh;
@@ -27,11 +28,11 @@ aside {
 
   li {
     padding: 8px 0;
+  }
 
-    a {
-      text-decoration: none;
-      color: #5b5b5b;
-    }
+  a {
+    text-decoration: none;
+    color: #5b5b5b;
   }
 
   .menu-heading {
@@ -49,18 +50,20 @@ main {
   margin: 0 auto;
   width: 100%;
   background: #fafafa;
-  padding-top: 10px;
 
   @media (max-width: 767px) {
     max-width: 100%;
+  }
+
+  h2 {
+    margin: 0 0 0 30px;
+    padding: 0.83em 0 0.4em;
+    font-size: 2.5em;
   }
 }
 
 footer {
   grid-column: 2 / span 1;
-  // grid-row: 3;
-  width: 100%;
-  height: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
