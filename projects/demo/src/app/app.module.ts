@@ -15,6 +15,9 @@ import { AppComponent } from './app.component';
 import { GalleryModule } from 'projects/gallery/src/public-api';
 import { DemoWholeConfig } from './components/demo-whole-config/demo-whole-config.component';
 import { HeaderComponent } from './components/header/header.component';
+import { ShowcaseComponent } from './components/showcase/showcase.component';
+import { DemoThumbsOrientationComponent } from './components/demo-thumbs-orientation/demo-thumbs-orientation.component';
+import { DemoMultipleItemsComponent } from './components/demo-multiple-items/demo-multiple-items.component';
 
 const materialModules = [
   MatButtonModule,
@@ -27,7 +30,14 @@ const materialModules = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, DemoWholeConfig, HeaderComponent],
+  declarations: [
+    AppComponent,
+    DemoWholeConfig,
+    HeaderComponent,
+    ShowcaseComponent,
+    DemoThumbsOrientationComponent,
+    DemoMultipleItemsComponent,
+  ],
   imports: [
     ...materialModules,
     BrowserModule,
