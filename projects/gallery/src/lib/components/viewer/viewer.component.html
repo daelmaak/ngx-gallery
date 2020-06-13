@@ -14,6 +14,7 @@
     #items
     *ngFor="let item of _displayedItems; let i = index"
     [class.doe-viewer-item--selected]="i === selectedIndex"
+    [class.doe-viewer-item--failed]="item._failed"
     tabindex="0"
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'doe-viewer-aria-description-' + i"

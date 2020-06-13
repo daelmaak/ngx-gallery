@@ -19,6 +19,7 @@
     #thumb
     *ngFor="let item of items; let i = index"
     [class.doe-thumbs-item--selected]="i === selectedIndex"
+    [class.doe-thumbs-item--failed]="item._thumbFailed"
     aria-hidden="true"
     (click)="emitEvent(i, item, $event, thumbClick)"
     (mouseenter)="emitEvent(i, item, $event, thumbHover)"
