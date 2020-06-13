@@ -65,7 +65,10 @@
               "projects/demo/src/favicon.ico",
               "projects/demo/src/assets"
             ],
-            "styles": ["projects/demo/src/styles.scss"],
+            "styles": [
+              "projects/demo/src/styles.scss",
+              "projects/demo/src/fonts.scss"
+            ],
             "scripts": []
           },
           "configurations": {
