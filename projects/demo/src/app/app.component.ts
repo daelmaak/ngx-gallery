@@ -55,4 +55,13 @@ export class AppComponent {
     new GalleryImage('./assets/tulip-1-lg.jpg', null, 'Tulip'),
     ...this.images,
   ];
+
+  erroredImages = [
+    new GalleryImage(
+      './assets/non-existing-picture.jpg',
+      null,
+      'Non-existing picture'
+    ),
+    ...this.extendedImages.slice(2, 4),
+  ];
 }

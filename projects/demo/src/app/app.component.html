@@ -13,7 +13,7 @@
         >
       </li>
       <li><a href="#demo-descriptions">Descriptions</a></li>
-      <li><a href="#">Error handling</a></li>
+      <li><a href="#demo-error-handling">Error handling</a></li>
       <li><a href="#">Image source sets</a></li>
       <li><a href="#">Videos</a></li>
       <li><a href="#">Youtube</a></li>
@@ -52,6 +52,10 @@
 
   <app-showcase id="demo-descriptions" heading="Descriptions">
     <doe-gallery [items]="images" [descriptions]="true"></doe-gallery>
+  </app-showcase>
+
+  <app-showcase id="demo-error-handling" heading="Error handling">
+    <doe-gallery [items]="erroredImages"></doe-gallery>
   </app-showcase>
 
   <app-showcase id="demo-full-config">
