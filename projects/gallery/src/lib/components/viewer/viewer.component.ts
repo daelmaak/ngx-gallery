@@ -31,7 +31,7 @@ import {
   UA,
   VerticalOrientation,
 } from '../../core';
-import { GalleryItemInternal, GalleryVideo } from '../../core/gallery-item';
+import { GalleryItemInternal, isVideo } from '../../core/gallery-item';
 
 @Component({
   selector: 'doe-viewer',
@@ -77,6 +77,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
   @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
+  isVideo = isVideo;
   UA = UA;
 
   _displayedItems: GalleryItemInternal[];
@@ -298,10 +299,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   isYoutube(item: GalleryItemInternal) {
     return !!item.src.match(/youtube.*\/embed\//);
-  }
-
-  isVideo(item: GalleryItemInternal) {
-    return item instanceof GalleryVideo;
   }
 
   selectByDelta(delta: number) {

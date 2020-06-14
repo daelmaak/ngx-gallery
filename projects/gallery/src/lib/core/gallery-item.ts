@@ -111,3 +111,5 @@ export interface GalleryItemInternal extends GalleryImage, GalleryVideo {
    */
   _thumbFailed?: boolean;
 }
+
+export const isVideo = (item: GalleryItem) => item instanceof GalleryVideo;

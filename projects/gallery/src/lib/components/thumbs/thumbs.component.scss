@@ -161,10 +161,46 @@ img {
   justify-content: center;
   align-items: center;
   background: #e8e8e8;
+  border-left: 1px solid #cecece;
 
   &-icon {
-    font-size: 28px;
-    color: #424242;
+    $icon-color: #a5a5a5;
+
+    &:not(&--video) {
+      position: relative;
+      border-left: 16px solid transparent;
+      border-right: 16px solid transparent;
+      border-bottom: 28px solid $icon-color;
+      margin-left: -8px;
+
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+      }
+
+      &::before {
+        height: 10px;
+        width: 10px;
+        background-color: $icon-color;
+        border-radius: 100%;
+        left: 14px;
+      }
+
+      &::after {
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+        border-bottom: 17px solid $icon-color;
+        top: 11px;
+      }
+    }
+
+    &--video {
+      border-top: 16px solid transparent;
+      border-bottom: 16px solid transparent;
+      border-left: 28px solid $icon-color;
+      margin-left: 9px;
+    }
   }
 }
 

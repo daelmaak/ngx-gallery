@@ -24,7 +24,11 @@ import {
   ThumbTemplateContext,
 } from '../../core';
 import { Aria } from '../../core/aria';
-import { GalleryItemInternal, GalleryItemEvent } from '../../core/gallery-item';
+import {
+  GalleryItemInternal,
+  GalleryItemEvent,
+  isVideo,
+} from '../../core/gallery-item';
 
 @Component({
   selector: 'doe-thumbs',
@@ -56,6 +60,8 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
 
   @ViewChild('thumbs', { static: true }) thumbListRef: ElementRef<HTMLElement>;
   @ViewChildren('thumb') thumbsRef: QueryList<ElementRef<HTMLElement>>;
+
+  isVideo = isVideo;
 
   _showStartArrow = false;
   _showEndArrow = false;

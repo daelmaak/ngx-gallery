@@ -19,7 +19,6 @@
     #thumb
     *ngFor="let item of items; let i = index"
     [class.doe-thumbs-item--selected]="i === selectedIndex"
-    [class.doe-thumbs-item--failed]="item._thumbFailed"
     aria-hidden="true"
     (click)="emitEvent(i, item, $event, thumbClick)"
     (mouseenter)="emitEvent(i, item, $event, thumbHover)"
@@ -36,7 +35,10 @@
           *ngIf="!errorTemplate; else errorTemplate"
           class="doe-thumbs-error"
         >
-          <div class="doe-thumbs-error-icon">⚠</div>
+          <div
+            class="doe-thumbs-error-icon"
+            [class.doe-thumbs-error-icon--video]="isVideo(item)"
+          ></div>
         </div>
       </ng-container>
     </ng-container>
