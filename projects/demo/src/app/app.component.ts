@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GalleryImage } from 'projects/gallery/src/lib/core';
+import { GalleryImage, GalleryVideo } from 'projects/gallery/src/lib/core';
 
 @Component({
   selector: 'app-root',
@@ -62,6 +62,16 @@ export class AppComponent {
       null,
       'Non-existing picture'
     ),
+    new GalleryVideo(
+      './assets/non-existing-video.jpg',
+      null,
+      'Non-existing video'
+    ),
     ...this.extendedImages.slice(2, 4),
+  ];
+
+  videos = [
+    new GalleryVideo('https://www.youtube.com/embed/80_39eAx3z8'),
+    new GalleryVideo('./assets/beach-1.mp4'),
   ];
 }

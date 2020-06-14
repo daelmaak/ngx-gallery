@@ -14,9 +14,7 @@
       </li>
       <li><a href="#demo-descriptions">Descriptions</a></li>
       <li><a href="#demo-error-handling">Error handling</a></li>
-      <li><a href="#">Image source sets</a></li>
-      <li><a href="#">Videos</a></li>
-      <li><a href="#">Youtube</a></li>
+      <li><a href="#demo-videos">Videos</a></li>
       <li><a href="#">Custom loading</a></li>
       <li><a href="#">Custom error handling</a></li>
       <li><a href="#demo-full-config">Full configuration</a></li>
@@ -56,6 +54,14 @@
 
   <app-showcase id="demo-error-handling" heading="Error handling">
     <doe-gallery [items]="erroredImages"></doe-gallery>
+  </app-showcase>
+
+  <app-showcase
+    id="demo-videos"
+    heading="Videos"
+    subheading="both YouTube and native videos"
+  >
+    <doe-gallery [items]="videos"></doe-gallery>
   </app-showcase>
 
   <app-showcase id="demo-full-config">
