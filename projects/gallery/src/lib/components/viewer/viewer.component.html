@@ -47,7 +47,7 @@
             @remove
             *ngIf="!isYoutube(item) && isVideo(item)"
             [src]="src"
-            [poster]="item.thumbSrc"
+            [poster]="item.thumbSrc || ''"
             [class.doe-viewer-media-loading]="item._seen && !item._loaded"
             [style.objectFit]="objectFit"
             controls
