@@ -376,6 +376,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     // elements with empty src also get loaded event, therefore the check
     if (target.getAttribute('src')) {
       item._loaded = true;
+      item._failed = false;
       this._cd.detectChanges();
     }
   }
