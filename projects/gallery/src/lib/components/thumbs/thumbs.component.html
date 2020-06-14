@@ -25,7 +25,7 @@
   >
     <ng-container *ngIf="!thumbTemplate; else customThumbTemplate">
       <img
-        [src]="item.thumbSrc || item.src"
+        [src]="item.thumbSrc || (item._failed ? '' : item.src)"
         [alt]="item.alt"
         (error)="onItemErrored(item)"
       />
