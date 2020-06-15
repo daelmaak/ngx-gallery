@@ -11,7 +11,7 @@
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
   <li *ngIf="!_displayedItems?.length" class="doe-viewer-initial-item"></li>
   <li
-    #items
+    #itemsRef
     *ngFor="let item of _displayedItems; let i = index"
     [class.doe-viewer-item--selected]="i === selectedIndex"
     tabindex="0"
@@ -96,7 +96,7 @@
         *ngTemplateOutlet="
           itemTemplate;
           context: {
-            index: items.indexOf(item),
+            index: items?.indexOf(item),
             selectedIndex: selectedIndex,
             item: item,
             seen: item._seen

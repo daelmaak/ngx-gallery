@@ -75,7 +75,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Output() selection = new EventEmitter<number>();
 
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
-  @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
+  @ViewChildren('itemsRef') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
   isVideo = isVideo;
   UA = UA;
