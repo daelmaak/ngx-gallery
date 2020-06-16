@@ -15,8 +15,11 @@
       <li><a href="#demo-descriptions">Descriptions</a></li>
       <li><a href="#demo-error-handling">Error handling</a></li>
       <li><a href="#demo-videos">Videos</a></li>
-      <li><a href="#">Custom loading</a></li>
-      <li><a href="#">Custom error handling</a></li>
+      <li>
+        <a href="#demo-custom"
+          >Custom items, arrows, loading and error handling</a
+        >
+      </li>
       <li><a href="#demo-full-config">Full configuration</a></li>
       <li><a href="#">w/ preselected item</a></li>
     </ul>
@@ -62,6 +65,13 @@
     subheading="both YouTube and native videos"
   >
     <doe-gallery [items]="videos"></doe-gallery>
+  </app-showcase>
+
+  <app-showcase
+    id="demo-custom"
+    heading="Custom items, arrows, loading and error handling"
+  >
+    <app-demo-custom-templates></app-demo-custom-templates>
   </app-showcase>
 
   <app-showcase id="demo-full-config">

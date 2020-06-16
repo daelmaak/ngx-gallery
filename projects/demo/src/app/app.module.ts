@@ -18,6 +18,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ShowcaseComponent } from './components/showcase/showcase.component';
 import { DemoThumbsOrientationComponent } from './components/demo-thumbs-orientation/demo-thumbs-orientation.component';
 import { DemoMultipleItemsComponent } from './components/demo-multiple-items/demo-multiple-items.component';
+import { DemoCustomTemplatesComponent } from './components/demo-custom-templates/demo-custom-templates.component';
 
 const materialModules = [
   MatButtonModule,
@@ -37,6 +38,7 @@ const materialModules = [
     ShowcaseComponent,
     DemoThumbsOrientationComponent,
     DemoMultipleItemsComponent,
+    DemoCustomTemplatesComponent,
   ],
   imports: [
     ...materialModules,
