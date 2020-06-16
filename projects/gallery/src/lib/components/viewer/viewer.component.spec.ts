@@ -36,7 +36,7 @@ describe('ViewerComponent', () => {
         ChevronIconComponent,
         CounterComponent,
         SafePipe,
-        TestCustomErrorComponent,
+        TestCustomTemplatesComponent,
       ],
     })
       .overrideComponent(ViewerComponent, {
@@ -114,12 +114,14 @@ describe('ViewerComponent', () => {
   });
 
   describe('error handling', () => {
-    let testViewerContainer: TestCustomErrorComponent;
-    let testViewerFixture: ComponentFixture<TestCustomErrorComponent>;
+    let templateContainer: TestCustomTemplatesComponent;
+    let templateContainerFixture: ComponentFixture<TestCustomTemplatesComponent>;
 
     beforeEach(() => {
-      testViewerFixture = TestBed.createComponent(TestCustomErrorComponent);
-      testViewerContainer = testViewerFixture.componentInstance;
+      templateContainerFixture = TestBed.createComponent(
+        TestCustomTemplatesComponent
+      );
+      templateContainer = templateContainerFixture.componentInstance;
     });
 
     it('should not display custom error on items where the loading was successful', fakeAsync(() => {
@@ -128,7 +130,7 @@ describe('ViewerComponent', () => {
         { src: 'src2' },
       ] as GalleryItemInternal[];
       component.items = items;
-      component.errorTemplate = testViewerContainer.errorTemplate;
+      component.errorTemplate = templateContainer.errorTemplate;
 
       const changes = {
         items: new SimpleChange(null, items, true),
@@ -144,6 +146,39 @@ describe('ViewerComponent', () => {
       expect(itemEls[0].query(By.css('.custom-error'))).toBeTruthy();
       expect(itemEls[1].query(By.css('.custom-error'))).toBeFalsy();
     }));
+  });
+
+  describe('custom', () => {
+    let templateContainer: TestCustomTemplatesComponent;
+    let templateContainerFixture: ComponentFixture<TestCustomTemplatesComponent>;
+
+    beforeEach(() => {
+      templateContainerFixture = TestBed.createComponent(
+        TestCustomTemplatesComponent
+      );
+      templateContainer = templateContainerFixture.componentInstance;
+    });
+
+    describe('item template', () => {
+      it('should display item content', fakeAsync(() => {
+        const items = [{ src: 'src1' }] as GalleryItemInternal[];
+
+        component.items = items;
+        component.itemTemplate = templateContainer.itemTemplate;
+
+        const changes = {
+          items: new SimpleChange(null, items, true),
+        };
+        component.ngOnChanges(changes);
+        fixture.detectChanges();
+        tick();
+
+        const itemEls = de.queryAll(By.css('li'));
+
+        expect(itemEls.length).toBe(1);
+        expect(itemEls[0].query(By.css('.custom-item'))).toBeTruthy();
+      }));
+    });
   });
 
   describe('descriptions', () => {
@@ -170,13 +205,16 @@ describe('ViewerComponent', () => {
 });
 
 @Component({
-  selector: 'doe-test-viewer-wrapper',
   template: `
     <ng-template #errorTemplate>
       <div class="custom-error">Error !</div>
     </ng-template>
+    <ng-template #itemTemplate>
+      <div class="custom-item"></div>
+    </ng-template>
   `,
 })
-export class TestCustomErrorComponent {
+export class TestCustomTemplatesComponent {
   @ViewChild('errorTemplate', { static: true }) errorTemplate: TemplateRef<any>;
+  @ViewChild('itemTemplate', { static: true }) itemTemplate: TemplateRef<any>;
 }
