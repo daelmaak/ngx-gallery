@@ -18,6 +18,8 @@
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'doe-viewer-aria-description-' + i"
     (click)="onImageClick(item, $event)"
+    (doe-media-load)="onItemLoaded(item, $event.detail)"
+    (doe-media-error)="onItemErrored(item, $event.detail)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
   >
@@ -66,22 +68,19 @@
           ></iframe>
         </ng-container>
       </ng-container>
+    </ng-container>
 
-      <ng-container *ngIf="item._seen && !item._loaded && !item._failed">
-        <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
-      </ng-container>
+    <ng-container *ngIf="item._seen && !item._loaded && !item._failed">
+      <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+    </ng-container>
 
-      <ng-container *ngIf="item._failed">
-        <div
-          *ngIf="!errorTemplate; else errorTemplate"
-          class="doe-viewer-error"
-        >
-          <div class="doe-viewer-error-icon">⚠</div>
-          <p class="doe-viewer-error-text">
-            {{ errorText || 'Loading of this media failed' }}
-          </p>
-        </div>
-      </ng-container>
+    <ng-container *ngIf="item._failed">
+      <div *ngIf="!errorTemplate; else errorTemplate" class="doe-viewer-error">
+        <div class="doe-viewer-error-icon">⚠</div>
+        <p class="doe-viewer-error-text">
+          {{ errorText || 'Loading of this media failed' }}
+        </p>
+      </div>
     </ng-container>
 
     <span
@@ -99,7 +98,8 @@
             index: items?.indexOf(item),
             selectedIndex: selectedIndex,
             item: item,
-            seen: item._seen
+            seen: item._seen,
+            video: isVideo(item)
           }
         "
       ></ng-container>

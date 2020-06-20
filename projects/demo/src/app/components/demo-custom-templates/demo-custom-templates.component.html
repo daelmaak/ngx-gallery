@@ -5,10 +5,11 @@
   [errorTemplate]="customError"
 ></doe-gallery>
 
-<ng-template #customItem let-item="item">
+<ng-template #customItem let-item="item" let-video="video">
   <div class="custom-item">
     <div class="image-container">
-      <img [src]="item.src" />
+      <img *ngIf="!video" [src]="item.src" doeMedia />
+      <video *ngIf="video" [src]="item.src" controls doeMedia></video>
     </div>
     <p class="description">{{ item.description }}</p>
   </div>

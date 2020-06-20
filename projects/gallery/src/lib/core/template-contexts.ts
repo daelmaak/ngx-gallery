@@ -5,6 +5,7 @@ export interface ItemTemplateContext {
   selectedIndex: number;
   item: GalleryItem;
   seen: boolean;
+  video: boolean;
 }
 
 export interface ThumbTemplateContext {
