@@ -152,7 +152,6 @@ export class DemoWholeConfig implements OnInit {
     this.cd.detectChanges();
     this.images.forEach((i: GalleryItemInternal) => {
       i._loaded = false;
-      i._seen = false;
     });
     this.displayGallery = true;
     this.cd.detectChanges();

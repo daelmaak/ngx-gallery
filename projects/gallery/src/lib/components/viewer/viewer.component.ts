@@ -132,11 +132,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
     if (items && items.currentValue && items.currentValue.length) {
       this.onResize();
-
-      const selectedItem = items.currentValue[this.selectedIndex];
-      if (selectedItem) {
-        selectedItem._seen = true;
-      }
     }
   }
 
@@ -276,11 +271,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  getSrc(item: GalleryItemInternal, index: number) {
-    const inProximity = this.isInScrollportProximity(index);
-    return !this.lazyLoading || item._seen || inProximity ? item.src : '';
-  }
-
   isInScrollportProximity(index: number) {
     if (this.loop) {
       index -= this._fringeCount;
@@ -344,7 +334,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
 
-    this.items[index]._seen = true;
     this.selectedIndex = index;
     this.selection.emit(index);
 

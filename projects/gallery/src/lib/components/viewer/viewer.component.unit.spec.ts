@@ -16,44 +16,7 @@ describe('ViewerComponent Unit', () => {
     viewer.selectedIndex = 0;
   });
 
-  describe('src attribute', () => {
-    it('should be truthy if default loading on', () => {
-      viewer.loading = 'auto';
-      expect(viewer.getSrc(viewer.items[2], 2)).toBeTruthy();
-    });
-
-    it('should be falsy if lazy loading on and item has not been seen nor selected yet', () => {
-      expect(viewer.getSrc(viewer.items[2], 2)).toBeFalsy();
-    });
-
-    it('should be truthy if lazy loading on and item has been seen', () => {
-      viewer.items[2]._seen = true;
-      expect(viewer.getSrc(viewer.items[2], 2)).toBeTruthy();
-    });
-
-    it('should be truthy if lazy loading on and item has been selected', () => {
-      viewer.selectedIndex = 2;
-      expect(viewer.getSrc(viewer.items[2], 2)).toBeTruthy();
-    });
-
-    it('should load items around selected item even though lazy loading is on', () => {
-      viewer.selectedIndex = 1;
-      expect(viewer.getSrc(viewer.items[0], 0)).toBeTruthy();
-      expect(viewer.getSrc(viewer.items[2], 2)).toBeTruthy();
-    });
-
-    it('should load 5 items if 3 are visible', () => {
-      viewer.items.push(new GalleryImage('src5'), new GalleryImage('src6'));
-      viewer.selectedIndex = 3;
-      viewer['_viewerWidth'] = 600;
-      viewer['_itemWidth'] = 400;
-
-      viewer.items.slice(1).forEach(i => {
-        expect(viewer.getSrc(i, viewer.items.indexOf(i))).toBeTruthy();
-      });
-      expect(viewer.getSrc(viewer.items[0], 0)).toBeFalsy();
-    });
-  });
+  describe('src attribute', () => {});
 
   describe('scroll proximity in loop mode', () => {
     beforeEach(() => {

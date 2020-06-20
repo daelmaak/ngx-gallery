@@ -4,7 +4,6 @@ export interface ItemTemplateContext {
   index: number;
   selectedIndex: number;
   item: GalleryItem;
-  seen: boolean;
   video: boolean;
 }
 
