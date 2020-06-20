@@ -18,56 +18,56 @@
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'doe-viewer-aria-description-' + i"
     (click)="onImageClick(item, $event)"
+    (doe-media-load)="onItemLoaded(item, $event.detail)"
+    (doe-media-error)="onItemErrored(item, $event.detail)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
   >
-    <ng-container *ngIf="!itemTemplate; else customTemplate">
-      <ng-container *ngIf="isInScrollportProximity(i)">
-        <ng-container *ngIf="getSrc(item, i); let src">
-          <picture *ngIf="!isVideo(item)" @remove>
-            <source
-              *ngFor="let source of item.pictureSources"
-              [srcset]="source.srcset"
-              [attr.media]="source.media"
-              [attr.sizes]="source.sizes"
-              [attr.type]="source.type"
-            />
-            <img
-              [src]="src"
-              [alt]="item.alt"
-              [class.doe-viewer-media-loading]="item._seen && !item._loaded"
-              [style.objectFit]="objectFit"
-              (load)="onItemLoaded(item, $event)"
-              (error)="onItemErrored(item, $event)"
-            />
-          </picture>
-          <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
-          <video
-            @remove
-            *ngIf="!isYoutube(item) && isVideo(item)"
-            [src]="src"
-            [poster]="item.thumbSrc || ''"
-            [class.doe-viewer-media-loading]="item._seen && !item._loaded"
+    <ng-container *ngIf="!lazyLoading || isInScrollportProximity(i)">
+      <ng-container *ngIf="!itemTemplate; else customTemplate">
+        <picture *ngIf="!isVideo(item)" @remove>
+          <source
+            *ngFor="let source of item.pictureSources"
+            [srcset]="source.srcset"
+            [attr.media]="source.media"
+            [attr.sizes]="source.sizes"
+            [attr.type]="source.type"
+          />
+          <img
+            [src]="item.src"
+            [alt]="item.alt"
+            [class.doe-viewer-media-loading]="!item._loaded"
             [style.objectFit]="objectFit"
-            controls
-            playsinline
-            (loadedmetadata)="onItemLoaded(item, $event)"
-            (error)="onItemErrored(item, $event)"
-          ></video>
-
-          <iframe
-            @remove
-            *ngIf="isYoutube(item)"
-            [src]="src | safe"
-            frameborder="0"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
             (load)="onItemLoaded(item, $event)"
-          ></iframe>
-        </ng-container>
+            (error)="onItemErrored(item, $event)"
+          />
+        </picture>
+        <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
+        <video
+          @remove
+          *ngIf="!isYoutube(item) && isVideo(item)"
+          [src]="item.src"
+          [poster]="item.thumbSrc || ''"
+          [class.doe-viewer-media-loading]="!item._loaded"
+          [style.objectFit]="objectFit"
+          controls
+          playsinline
+          (loadedmetadata)="onItemLoaded(item, $event)"
+          (error)="onItemErrored(item, $event)"
+        ></video>
+
+        <iframe
+          @remove
+          *ngIf="isYoutube(item)"
+          [src]="item.src | safe"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          (load)="onItemLoaded(item, $event)"
+        ></iframe>
       </ng-container>
 
-      <ng-container *ngIf="item._seen && !item._loaded && !item._failed">
+      <ng-container *ngIf="!item._loaded && !item._failed">
         <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
       </ng-container>
 
@@ -82,14 +82,14 @@
           </p>
         </div>
       </ng-container>
-    </ng-container>
 
-    <span
-      [id]="'doe-viewer-aria-description-' + i"
-      class="doe-viewer-aria-description"
-      [innerHTML]="item.description"
-      aria-hidden="true"
-    ></span>
+      <span
+        [id]="'doe-viewer-aria-description-' + i"
+        class="doe-viewer-aria-description"
+        [innerHTML]="item.description"
+        aria-hidden="true"
+      ></span>
+    </ng-container>
 
     <ng-template #customTemplate>
       <ng-container
@@ -99,7 +99,7 @@
             index: items?.indexOf(item),
             selectedIndex: selectedIndex,
             item: item,
-            seen: item._seen
+            video: isVideo(item)
           }
         "
       ></ng-container>

@@ -5,6 +5,7 @@ import {
   SimpleChange,
   TemplateRef,
   ViewChild,
+  SimpleChanges,
 } from '@angular/core';
 import {
   async,
@@ -110,6 +111,91 @@ describe('ViewerComponent', () => {
       expect(de.query(By.css('ul')).nativeElement.style.transform).toMatch(
         /translate3d\(-\d+px, 0px, 0px\)/
       );
+    }));
+  });
+
+  describe('item loading', () => {
+    let changes: SimpleChanges;
+
+    beforeEach(() => {
+      component.items = [
+        new GalleryImage('src1'),
+        new GalleryImage('src2'),
+        new GalleryImage('src3'),
+        new GalleryImage('src4'),
+      ];
+      component.loading = 'lazy';
+      component.selectedIndex = 0;
+      changes = {
+        items: new SimpleChange(null, component.items, true),
+      };
+    });
+
+    it('should display all items if default loading on', fakeAsync(() => {
+      component.loading = 'auto';
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+
+      const items = de.queryAll(By.css('li picture'));
+
+      expect(items.length).toBe(4);
+    }));
+
+    it('should not display item outside scroll proximity if lazy loading on', fakeAsync(() => {
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+
+      const items = de.queryAll(By.css('li picture'));
+
+      expect(items.length).toBe(2);
+    }));
+
+    it('should display items if lazy loading on and items are in scroll proximity', fakeAsync(() => {
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+
+      const itemList = de.query(By.css('ul'));
+
+      expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src3]'))).toBeFalsy();
+      expect(itemList.query(By.css('img[src=src4]'))).toBeFalsy();
+    }));
+
+    it('should display last item if first is selected and loop and lazy loading is on', fakeAsync(() => {
+      component.loop = true;
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+
+      const itemList = de.query(By.css('ul'));
+
+      expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src3]'))).toBeFalsy();
+      expect(itemList.query(By.css('img[src=src4]'))).toBeTruthy();
+    }));
+
+    it('should load 5 items if 3 are visible', fakeAsync(() => {
+      component.items.push(new GalleryImage('src5'), new GalleryImage('src6'));
+      component.selectedIndex = 3;
+      component['_viewerWidth'] = 600;
+      component['_itemWidth'] = 400;
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+
+      const itemList = de.query(By.css('ul'));
+
+      expect(itemList.query(By.css('img[src=src1]'))).toBeFalsy();
+      expect(itemList.query(By.css('img[src=src2]'))).toBeFalsy();
+      expect(itemList.query(By.css('img[src=src3]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src4]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src5]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src6]'))).toBeFalsy();
     }));
   });
 

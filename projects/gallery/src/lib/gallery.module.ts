@@ -8,6 +8,7 @@ import { ChevronIconComponent } from './components/icons/chevron/chevron-icon.co
 import { ThumbsComponent } from './components/thumbs/thumbs.component';
 import { ViewerComponent } from './components/viewer/viewer.component';
 import { SafePipe } from './pipes/safe.pipe';
+import { MediaDirective } from './directives/media.directive';
 
 @NgModule({
   declarations: [
@@ -17,8 +18,9 @@ import { SafePipe } from './pipes/safe.pipe';
     ChevronIconComponent,
     CounterComponent,
     SafePipe,
+    MediaDirective,
   ],
   imports: [CommonModule, BrowserAnimationsModule],
-  exports: [GalleryComponent],
+  exports: [GalleryComponent, MediaDirective],
 })
 export class GalleryModule {}

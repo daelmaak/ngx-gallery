@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { GalleryImage } from 'projects/gallery/src/lib/core';
+import { GalleryImage, GalleryVideo } from 'projects/gallery/src/lib/core';
 
 @Component({
   selector: 'app-demo-custom-templates',
@@ -15,6 +15,7 @@ export class DemoCustomTemplatesComponent {
       'Forest',
       'Mysterious forest'
     ),
+    new GalleryVideo('./assets/beach-1.mp4'),
     new GalleryImage(
       './assets/non-existing-image.jpg',
       null,
