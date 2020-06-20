@@ -180,6 +180,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         const onclick = (e: MouseEvent) => {
           if (maxDeltaX > 10 || maxDeltaY > 10) {
             e.stopPropagation();
+            // to prevent playing a video on swipe
+            e.preventDefault();
           }
           maxDeltaY = maxDeltaX = 0;
         };
