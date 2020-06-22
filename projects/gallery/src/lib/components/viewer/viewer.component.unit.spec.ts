@@ -54,6 +54,39 @@ describe('ViewerComponent Unit', () => {
     it('should consider regular items in the middle, which are not fringe nor next to selected item, as out of proximity', () => {
       expect(viewer.isInScrollportProximity(3)).toBeFalsy();
     });
+
+    it(`should display number of items adjacent to the selected, the number being rounded amount of displayed items. 
+       If 2.5 items are displayed, then 3 adjacent items are displayed next to the selected item`, () => {
+      viewer.items.push(new GalleryImage('src5'));
+      viewer.items.push(new GalleryImage('src6'));
+      viewer.items.push(new GalleryImage('src7'));
+      viewer.items.push(new GalleryImage('src8'));
+      viewer.items.push(new GalleryImage('src9'));
+      viewer['_itemWidth'] = 600 / 2.5;
+      viewer['_fringeCount'] = 3;
+
+      expect(viewer.isInScrollportProximity(4)).toBeTruthy();
+      expect(viewer.isInScrollportProximity(5)).toBeTruthy();
+      expect(viewer.isInScrollportProximity(6)).toBeTruthy();
+      expect(viewer.isInScrollportProximity(7)).toBeFalsy();
+      expect(viewer.isInScrollportProximity(8)).toBeFalsy();
+    });
+  });
+
+  describe('scroll proximity in non-loop mode', () => {
+    beforeEach(() => {
+      viewer.loop = false;
+      viewer['_viewerWidth'] = 600;
+      viewer['_itemWidth'] = 600;
+      viewer['_fringeCount'] = 0;
+    });
+
+    it('should not display last items when first item selected, like in loop mode', () => {
+      viewer['_itemWidth'] = 600 / 2.5;
+      viewer.items.push(new GalleryImage('src5'));
+      viewer.items.push(new GalleryImage('src6'));
+      expect(viewer.isInScrollportProximity(4)).toBeFalsy();
+    });
   });
 
   describe('fringe items count in loop mode', () => {
