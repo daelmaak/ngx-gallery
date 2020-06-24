@@ -69,6 +69,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() set itemWidth(val: string) {
     this.itemListRef.nativeElement.style.setProperty('--item-width', val || '');
   }
+  @Input() touched: boolean;
 
   @Output() imageClick = new EventEmitter<GalleryItemEvent>();
   @Output() descriptionClick = new EventEmitter<Event>();
@@ -279,7 +280,9 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
     // the spread makes sure, that also 1 item outside of the visible scrollport in both directions is rendered
     // so if 3 items are displayed (although 2 partially), 5 items will be "in scroll proximity"
-    const spread = Math.round(this._viewerWidth / this._itemWidth) || 1;
+    const spread = this.touched
+      ? Math.round(this._viewerWidth / this._itemWidth) || 1
+      : Math.floor(Math.ceil(this._viewerWidth / this._itemWidth) / 2);
     const distance = Math.abs(this.selectedIndex - index);
     return (
       (this.loop && Math.abs(distance - this.items.length) <= spread) ||

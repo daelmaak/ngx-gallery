@@ -36,6 +36,7 @@
   [thumbsOrientation]="_thumbsOrientationFlag"
   [arrowTemplate]="arrowTemplate"
   [aria]="aria"
+  [touched]="_touched"
   (imageClick)="imageClick.emit($event)"
   (descriptionClick)="descriptionClick.emit($event)"
   (selection)="_selectInternal($event); _thumbsRef?.select($event)"

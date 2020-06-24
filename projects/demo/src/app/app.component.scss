@@ -2,6 +2,10 @@
   display: grid;
   grid-template-columns: 230px calc(100% - 230px);
   grid-template-rows: 180px auto 64px;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 0px 100%;
+  }
 }
 
 app-header {
@@ -16,6 +20,10 @@ aside {
   top: 0;
   max-height: 100vh;
   background-color: #f3f3f3;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
 
   section {
     margin: 25px auto;

@@ -118,6 +118,7 @@ describe('ViewerComponent', () => {
     let changes: SimpleChanges;
 
     beforeEach(() => {
+      component.touched = true;
       component.items = [
         new GalleryImage('src1'),
         new GalleryImage('src2'),
@@ -182,21 +183,58 @@ describe('ViewerComponent', () => {
     it('should load 5 items if 3 are visible', fakeAsync(() => {
       component.items.push(new GalleryImage('src5'), new GalleryImage('src6'));
       component.selectedIndex = 3;
-      component['_viewerWidth'] = 600;
-      component['_itemWidth'] = 400;
       component.ngOnChanges(changes);
       fixture.detectChanges();
       tick();
+      component['_viewerWidth'] = 600;
+      component['_itemWidth'] = 400;
+      fixture.detectChanges();
 
       const itemList = de.query(By.css('ul'));
 
       expect(itemList.query(By.css('img[src=src1]'))).toBeFalsy();
-      expect(itemList.query(By.css('img[src=src2]'))).toBeFalsy();
+      expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
       expect(itemList.query(By.css('img[src=src3]'))).toBeTruthy();
       expect(itemList.query(By.css('img[src=src4]'))).toBeTruthy();
       expect(itemList.query(By.css('img[src=src5]'))).toBeTruthy();
-      expect(itemList.query(By.css('img[src=src6]'))).toBeFalsy();
+      expect(itemList.query(By.css('img[src=src6]'))).toBeTruthy();
     }));
+
+    describe('before touched', () => {
+      beforeEach(() => {
+        component.touched = false;
+      });
+
+      it('should load 3 items if 1.5 items are visible', fakeAsync(() => {
+        component.ngOnChanges(changes);
+        fixture.detectChanges();
+        tick();
+        component['_viewerWidth'] = 600;
+        component['_itemWidth'] = 400;
+        fixture.detectChanges();
+
+        const itemList = de.query(By.css('ul'));
+
+        expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
+        expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
+        expect(itemList.query(By.css('img[src=src3]'))).toBeFalsy();
+      }));
+
+      it('should load just 1 item if just 1 item is visible', fakeAsync(() => {
+        component.ngOnChanges(changes);
+        fixture.detectChanges();
+        tick();
+        component['_viewerWidth'] = 600;
+        component['_itemWidth'] = 600;
+        fixture.detectChanges();
+
+        const itemList = de.query(By.css('ul'));
+
+        expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
+        expect(itemList.query(By.css('img[src=src2]'))).toBeFalsy();
+        expect(itemList.query(By.css('img[src=src3]'))).toBeFalsy();
+      }));
+    });
   });
 
   describe('error handling', () => {
@@ -209,7 +247,6 @@ describe('ViewerComponent', () => {
       );
       templateContainer = templateContainerFixture.componentInstance;
     });
-
     it('should not display custom error on items where the loading was successful', fakeAsync(() => {
       const items = [
         { src: 'src1', _failed: true },

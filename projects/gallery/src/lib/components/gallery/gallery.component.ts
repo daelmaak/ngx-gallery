@@ -9,6 +9,7 @@ import {
   Output,
   TemplateRef,
   ViewChild,
+  ChangeDetectorRef,
 } from '@angular/core';
 
 import {
@@ -75,6 +76,8 @@ export class GalleryComponent {
 
   @HostBinding('tabindex')
   _tabindex = 0;
+  _touched = false;
+  INIT_INTERACTIONS = ['touchstart', 'mousedown', 'keydown'];
 
   @HostBinding('attr.aria-label')
   get ariaLabel() {
@@ -97,6 +100,26 @@ export class GalleryComponent {
     }
     return OrientationFlag.VERTICAL;
   }
+
+  constructor(
+    private cd: ChangeDetectorRef,
+    private hostRef: ElementRef<HTMLElement>
+  ) {
+    this.INIT_INTERACTIONS.forEach(ename =>
+      hostRef.nativeElement.addEventListener(ename, this._onInitInteraction, {
+        passive: true,
+      })
+    );
+  }
+
+  private _onInitInteraction = () => {
+    const hostEl = this.hostRef.nativeElement;
+    this._touched = true;
+    this.cd.detectChanges();
+    this.INIT_INTERACTIONS.forEach(ename =>
+      hostEl.removeEventListener(ename, this._onInitInteraction)
+    );
+  };
 
   focus() {
     this._viewerElRef.nativeElement.focus();

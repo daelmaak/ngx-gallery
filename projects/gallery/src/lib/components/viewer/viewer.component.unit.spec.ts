@@ -20,6 +20,7 @@ describe('ViewerComponent Unit', () => {
 
   describe('scroll proximity in loop mode', () => {
     beforeEach(() => {
+      viewer.touched = true;
       viewer.loop = true;
       viewer['_viewerWidth'] = 600;
       viewer['_itemWidth'] = 600;
