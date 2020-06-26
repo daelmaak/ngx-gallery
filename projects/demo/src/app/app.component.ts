@@ -48,11 +48,31 @@ export class AppComponent {
   ];
 
   extendedImages = [
-    new GalleryImage('./assets/house-1-lg.jpg', null, 'House'),
-    new GalleryImage('./assets/church-1-lg.jpg', null, 'Church hallway'),
-    new GalleryImage('./assets/lens-1-lg.jpg', null, 'Lens'),
-    new GalleryImage('./assets/mountains-1-lg.jpg', null, 'Mountains'),
-    new GalleryImage('./assets/tulip-1-lg.jpg', null, 'Tulip'),
+    new GalleryImage(
+      './assets/house-1-lg.jpg',
+      './assets/house-1-sm.jpg',
+      'House'
+    ),
+    new GalleryImage(
+      './assets/church-1-lg.jpg',
+      './assets/church-1-sm.jpg',
+      'Church hallway'
+    ),
+    new GalleryImage(
+      './assets/lens-1-lg.jpg',
+      './assets/lens-1-sm.jpg',
+      'Lens'
+    ),
+    new GalleryImage(
+      './assets/mountains-1-lg.jpg',
+      './assets/mountains-1-sm.jpg',
+      'Mountains'
+    ),
+    new GalleryImage(
+      './assets/tulip-1-lg.jpg',
+      './assets/tulip-1-sm.jpg',
+      'Tulip'
+    ),
     ...this.images,
   ];
 

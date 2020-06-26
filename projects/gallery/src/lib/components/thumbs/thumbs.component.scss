@@ -53,6 +53,10 @@ $arrow-btn-dimension: 30px;
         right: 0;
       }
     }
+
+    .doe-thumbs-error {
+      border-right: 1px solid #cecece;
+    }
   }
 
   &--left,
@@ -88,6 +92,10 @@ $arrow-btn-dimension: 30px;
       &-next {
         bottom: 0;
       }
+    }
+
+    .doe-thumbs-error {
+      border-bottom: 1px solid #cecece;
     }
   }
 
@@ -161,7 +169,7 @@ img {
   justify-content: center;
   align-items: center;
   background: #e8e8e8;
-  border-left: 1px solid #cecece;
+  box-sizing: border-box;
 
   &-icon {
     $icon-color: #a5a5a5;

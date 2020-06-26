@@ -193,11 +193,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
     }
   }
 
-  onItemErrored(item: GalleryItemInternal) {
-    item._thumbFailed = true;
-  }
-
-  emitEvent(
+  _emitEvent(
     index: number,
     item: GalleryItemInternal,
     event: Event,
@@ -208,6 +204,10 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       item,
       event,
     });
+  }
+
+  _onLoadChange(item: GalleryItemInternal, success: boolean) {
+    item._thumbFailed = !success;
   }
 
   private scroll(totalScrollDelta: number) {
