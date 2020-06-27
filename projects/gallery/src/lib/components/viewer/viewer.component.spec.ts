@@ -325,6 +325,51 @@ describe('ViewerComponent', () => {
       ).toBeFalsy();
     });
   });
+
+  describe('selection', () => {
+    let changes: SimpleChanges;
+
+    beforeEach(() => {
+      component.touched = true;
+      component.items = [
+        new GalleryImage('src1'),
+        new GalleryImage('src2'),
+        new GalleryImage('src3'),
+        new GalleryImage('src4'),
+      ];
+      component.loading = 'lazy';
+      component.selectedIndex = 2;
+      changes = {
+        items: new SimpleChange(null, component.items, true),
+      };
+    });
+
+    it('should select the first item if requested selection is < 0', fakeAsync(() => {
+      spyOn(component, 'shift' as any);
+      spyOn(component, 'center' as any);
+      fixture.detectChanges();
+
+      component.select(-2);
+
+      flush();
+
+      expect(component.selectedIndex).toBe(0);
+    }));
+
+    it('should select the last item if requested selection is >= items length', fakeAsync(() => {
+      spyOn(component, 'shift' as any);
+      spyOn(component, 'center' as any);
+      fixture.detectChanges();
+
+      component.select(10);
+
+      flush();
+
+      expect(component.selectedIndex).toBe(3);
+    }));
+
+    // TODO test shifts, especially in loop mode
+  });
 });
 
 @Component({

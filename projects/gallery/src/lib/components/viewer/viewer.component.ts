@@ -308,14 +308,19 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   select(index: number) {
     const indexOutOfBounds = !this.items[index];
+    const looping = this.loop && indexOutOfBounds;
 
-    if (this.selectedIndex === index || (!this.loop && indexOutOfBounds)) {
-      this.center();
-      return;
+    if (this.selectedIndex === index) {
+      return this.center();
+    }
+
+    // if index is out of bounds but loop is off, then select the first or last item
+    if (!looping && indexOutOfBounds) {
+      index = index < 0 ? 0 : this.items.length - 1;
     }
 
     // if infinite looping
-    if (this.loop && indexOutOfBounds) {
+    if (looping) {
       const origIndex = index;
       index = origIndex - Math.sign(index) * this.items.length;
 
@@ -347,8 +352,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     this.selectedIndex = index;
     this.selection.emit(index);
-
-    if (!indexOutOfBounds) {
+    if (!looping) {
       this.center();
     }
   }
