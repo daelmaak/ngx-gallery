@@ -20,7 +20,10 @@ h3 {
   color: #444444;
   margin: 0;
   padding: 0;
-  font-size: 1.6em;
+
+  @media (min-width: 768px) {
+    font-size: 1.6em;
+  }
 }
 
 .subheading {

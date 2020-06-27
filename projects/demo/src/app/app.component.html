@@ -34,11 +34,19 @@
   </app-showcase>
 
   <app-showcase id="demo-multiple" heading="Multiple items">
-    <app-demo-multiple-items [items]="images"></app-demo-multiple-items>
+    <app-demo-multiple-items
+      [items]="images"
+      [mobile]="mobile"
+    ></app-demo-multiple-items>
   </app-showcase>
 
   <app-showcase id="demo-infinite-loop-multiple" heading="Infinite loop">
-    <doe-gallery [items]="images" [loop]="true" itemWidth="34%"></doe-gallery>
+    <doe-gallery
+      [items]="images"
+      [loop]="true"
+      loading="lazy"
+      [itemWidth]="mobile ? '75%' : '34%'"
+    ></doe-gallery>
   </app-showcase>
 
   <app-showcase
@@ -48,6 +56,7 @@
   >
     <app-demo-thumbs-orientation
       [items]="extendedImages"
+      [mobile]="mobile"
     ></app-demo-thumbs-orientation>
   </app-showcase>
 

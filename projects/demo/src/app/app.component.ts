@@ -94,4 +94,6 @@ export class AppComponent {
     new GalleryVideo('https://www.youtube.com/embed/80_39eAx3z8'),
     new GalleryVideo('./assets/beach-1.mp4'),
   ];
+
+  mobile = matchMedia('(max-width: 767px)').matches;
 }

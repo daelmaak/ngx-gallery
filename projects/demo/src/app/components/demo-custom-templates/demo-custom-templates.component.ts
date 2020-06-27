@@ -15,7 +15,12 @@ export class DemoCustomTemplatesComponent {
       'Forest',
       'Mysterious forest'
     ),
-    new GalleryVideo('./assets/beach-1.mp4'),
+    new GalleryVideo(
+      './assets/beach-1.mp4',
+      null,
+      'Beach',
+      'Video of a beach taken from drone'
+    ),
     new GalleryImage(
       './assets/non-existing-image.jpg',
       null,

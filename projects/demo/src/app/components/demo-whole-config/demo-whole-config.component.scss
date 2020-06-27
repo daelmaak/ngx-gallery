@@ -4,10 +4,14 @@
 }
 
 form {
-  margin: 40px 20px 20px;
+  margin: 20px;
   display: flex;
   justify-content: space-around;
   flex-flow: row wrap;
+
+  > div {
+    margin-right: auto;
+  }
 }
 
 section {
@@ -22,7 +26,7 @@ mat-checkbox {
 }
 
 mat-radio-button {
-  margin-left: 20px;
+  margin: 2px 0 2px 20px;
 }
 
 mat-form-field {
@@ -50,21 +54,12 @@ mat-form-field {
 .gallery-container {
   box-sizing: border-box;
   height: calc(100vh - 64px);
-  padding: 5% 20px 0;
 }
 
 doe-gallery {
   width: 100%;
   height: 95%;
   margin: 0 auto;
-
-  ::ng-deep {
-    doe-viewer {
-      img {
-        margin: 0 auto;
-      }
-    }
-  }
 }
 
 section {

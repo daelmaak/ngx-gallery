@@ -3,6 +3,8 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { GalleryItem } from 'projects/gallery/src/lib/core';
 
@@ -12,13 +14,20 @@ import { GalleryItem } from 'projects/gallery/src/lib/core';
   styleUrls: ['./demo-multiple-items.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DemoMultipleItemsComponent {
+export class DemoMultipleItemsComponent implements OnChanges {
   @Input() items: GalleryItem[];
+  @Input() mobile: boolean;
 
-  itemWidth = 'calc(100% / 2.5)';
+  itemWidth: string;
   showGallery = true;
 
   constructor(private cd: ChangeDetectorRef) {}
+
+  ngOnChanges({ mobile }: SimpleChanges) {
+    if (mobile && mobile.firstChange) {
+      this.itemWidth = this.mobile ? 'calc(100% / 1.5)' : 'calc(100% / 2.5)';
+    }
+  }
 
   reloadGallery() {
     this.showGallery = false;
