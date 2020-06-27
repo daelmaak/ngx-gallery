@@ -56,8 +56,8 @@ describe('ViewerComponent Unit', () => {
       expect(viewer.isInScrollportProximity(3)).toBeFalsy();
     });
 
-    it(`should display number of items adjacent to the selected, the number being rounded amount of displayed items. 
-       If 2.5 items are displayed, then 3 adjacent items are displayed next to the selected item`, () => {
+    it(`should display number of items adjacent to the selected, the number being rounded amount of displayed items.
+       If 2.2 items are displayed, then 3 adjacent items are displayed next to the selected item`, () => {
       viewer.items.push(new GalleryImage('src5'));
       viewer.items.push(new GalleryImage('src6'));
       viewer.items.push(new GalleryImage('src7'));
@@ -72,6 +72,23 @@ describe('ViewerComponent Unit', () => {
       expect(viewer.isInScrollportProximity(7)).toBeFalsy();
       expect(viewer.isInScrollportProximity(8)).toBeFalsy();
     });
+
+    it('should load just 1 item on each side if the item is only by a fraction of a pixel smaller than viewer', () => {
+      viewer.selectedIndex = 2;
+      viewer['_itemWidth'] = 599.5;
+      viewer['_fringeCount'] = 1;
+
+      // fringe item representing the last item, should be loaded
+      expect(viewer.isInScrollportProximity(0)).toBeTruthy();
+      // first item, too far from selected, shouldn't be loaded
+      expect(viewer.isInScrollportProximity(1)).toBeFalsy();
+      // items around selected item, should be loaded
+      expect(viewer.isInScrollportProximity(2)).toBeTruthy();
+      expect(viewer.isInScrollportProximity(3)).toBeTruthy();
+      expect(viewer.isInScrollportProximity(4)).toBeTruthy();
+      // fringe item representing the first item, shouldn't be loaded
+      expect(viewer.isInScrollportProximity(5)).toBeFalsy();
+    });
   });
 
   describe('scroll proximity in non-loop mode', () => {
@@ -82,7 +99,7 @@ describe('ViewerComponent Unit', () => {
       viewer['_fringeCount'] = 0;
     });
 
-    it('should not display last items when first item selected, like in loop mode', () => {
+    it('should not display last items like in loop mode when first item selected', () => {
       viewer['_itemWidth'] = 600 / 2.5;
       viewer.items.push(new GalleryImage('src5'));
       viewer.items.push(new GalleryImage('src6'));

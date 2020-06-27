@@ -289,7 +289,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     // the spread makes sure, that also 1 item outside of the visible scrollport in both directions is rendered
     // so if 3 items are displayed (although 2 partially), 5 items will be "in scroll proximity"
     const spread = this.touched
-      ? Math.round(this._viewerWidth / this._itemWidth) || 1
+      ? Math.ceil(this._viewerWidth / (this._itemWidth + 1)) || 1
       : Math.floor(Math.ceil(this._viewerWidth / this._itemWidth) / 2);
     const distance = Math.abs(this.selectedIndex - index);
     return (
