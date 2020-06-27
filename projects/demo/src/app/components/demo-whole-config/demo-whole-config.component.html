@@ -1,16 +1,6 @@
 <form>
   <div>
-    <section>
-      <mat-form-field>
-        <label>Selected index</label>
-        <input
-          name="selectedIndex"
-          matInput
-          [(ngModel)]="galleryConfig.selectedIndex"
-          (change)="reloadGallery()"
-        />
-      </mat-form-field>
-    </section>
+    <h3>Gallery viewer properties</h3>
 
     <section>
       <mat-checkbox name="arrows" [(ngModel)]="galleryConfig.arrows"
@@ -54,6 +44,15 @@
     </section>
 
     <section>
+      <mat-checkbox
+        name="loop"
+        [(ngModel)]="galleryConfig.loop"
+        (change)="reloadGallery()"
+        >Loop</mat-checkbox
+      >
+    </section>
+
+    <section>
       <label>Counter orientation:</label>
       <mat-radio-group
         name="counterOrientation"
@@ -73,6 +72,18 @@
     </section>
 
     <section>
+      <label>Image loading strategy:</label>
+      <mat-radio-group
+        name="loading"
+        [(ngModel)]="galleryConfig.loading"
+        (change)="reloadGallery()"
+      >
+        <mat-radio-button value="auto">auto</mat-radio-button>
+        <mat-radio-button value="lazy">lazy</mat-radio-button>
+      </mat-radio-group>
+    </section>
+
+    <section>
       <mat-form-field>
         <label>Item width</label>
         <input
@@ -85,28 +96,20 @@
     </section>
 
     <section>
-      <mat-checkbox
-        name="loop"
-        [(ngModel)]="galleryConfig.loop"
-        (change)="reloadGallery()"
-        >Loop</mat-checkbox
-      >
-    </section>
-
-    <section>
-      <label>Image loading strategy:</label>
-      <mat-radio-group
-        name="loading"
-        [(ngModel)]="galleryConfig.loading"
-        (change)="reloadGallery()"
-      >
-        <mat-radio-button value="auto">auto</mat-radio-button>
-        <mat-radio-button value="lazy">lazy</mat-radio-button>
-      </mat-radio-group>
+      <mat-form-field>
+        <label>Selected index</label>
+        <input
+          name="selectedIndex"
+          matInput
+          [(ngModel)]="galleryConfig.selectedIndex"
+          (change)="reloadGallery()"
+        />
+      </mat-form-field>
     </section>
   </div>
 
   <div>
+    <h3>Thumbnails properties</h3>
     <section>
       <mat-checkbox name="thumbs" [(ngModel)]="galleryConfig.thumbs"
         >Thumbnails</mat-checkbox
@@ -118,6 +121,12 @@
         name="thumbsAutoScroll"
         [(ngModel)]="galleryConfig.thumbsAutoScroll"
         >Thumbs autoscroll</mat-checkbox
+      >
+    </section>
+
+    <section>
+      <mat-checkbox name="thumbsArrows" [(ngModel)]="galleryConfig.thumbsArrows"
+        >Thumbnail arrows</mat-checkbox
       >
     </section>
 
@@ -135,9 +144,14 @@
     </section>
 
     <section>
-      <mat-checkbox name="thumbsArrows" [(ngModel)]="galleryConfig.thumbsArrows"
-        >Thumbnail arrows</mat-checkbox
+      <label>Thumbnails scroll behavior:</label>
+      <mat-radio-group
+        name="thumbsScrollBehavior"
+        [(ngModel)]="galleryConfig.thumbsScrollBehavior"
       >
+        <mat-radio-button value="smooth">smooth</mat-radio-button>
+        <mat-radio-button value="auto">auto</mat-radio-button>
+      </mat-radio-group>
     </section>
 
     <section>
@@ -151,18 +165,9 @@
       </mat-form-field>
     </section>
 
-    <section>
-      <label>Thumbnails scroll behavior:</label>
-      <mat-radio-group
-        name="thumbsScrollBehavior"
-        [(ngModel)]="galleryConfig.thumbsScrollBehavior"
-      >
-        <mat-radio-button value="smooth">smooth</mat-radio-button>
-        <mat-radio-button value="auto">auto</mat-radio-button>
-      </mat-radio-group>
-    </section>
+    <br />
 
-    <hr />
+    <h3>Auxiliary</h3>
 
     <section class="image-loading-latency">
       <mat-form-field>
