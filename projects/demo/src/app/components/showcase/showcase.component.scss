@@ -14,6 +14,21 @@
 
 .heading-section {
   padding: 1em 0;
+
+  .hands-on-link {
+    margin-top: 10px;
+    display: flex;
+    text-decoration: none;
+
+    &:visited {
+      color: blue;
+    }
+  }
+
+  img {
+    height: 20px;
+    margin-right: 6px;
+  }
 }
 
 h3 {

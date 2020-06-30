@@ -14,6 +14,7 @@ import {
 export class ShowcaseComponent implements OnInit {
   @Input() heading: string;
   @Input() subheading: string;
+  @Input() handsOnLink: string;
 
   constructor() {}
 

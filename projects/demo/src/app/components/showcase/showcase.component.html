@@ -1,5 +1,13 @@
 <div class="heading-section">
   <h3>{{ heading }}</h3>
+  <a
+    *ngIf="handsOnLink"
+    [href]="handsOnLink"
+    class="hands-on-link"
+    target="_blank"
+  >
+    <img src="./assets/icons/stackblitz-logo-link.svg" /> Edit on StackBlitz</a
+  >
   <div class="subheading">
     {{ subheading }}
     <ng-content select="[subheading]"></ng-content>
