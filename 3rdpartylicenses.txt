@@ -93,12 +93,7 @@ THE SOFTWARE.
 
 @angular/material/radio
 
-@angular/material/toolbar
-
 @angular/platform-browser
-MIT
-
-@angular/router
 MIT
 
 core-js
