@@ -164,12 +164,13 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       return;
     }
 
-    const nextItemEl = this.thumbsRef.toArray()[index].nativeElement;
+    const nextItemRef = this.thumbsRef.toArray()[index];
 
-    if (!nextItemEl) {
+    if (!nextItemRef) {
       return;
     }
 
+    const nextItemEl = nextItemRef.nativeElement;
     const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = nextItemEl;
 
     const itemOffset = this._vertical ? offsetTop : offsetLeft;
