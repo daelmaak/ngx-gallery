@@ -19,7 +19,6 @@
     "test:demo": "ng test --project=demo",
     "test:ci": "npm test -- --watch=false",
     "lint": "ng lint",
-    "version:alpha": "cd projects/gallery && npm version prerelease --preid=alpha",
     "version:beta": "cd projects/gallery && npm version prerelease --preid=beta",
     "upload": "npm run build && cat README.md > dist/gallery/README.md && cd dist/gallery && npm publish",
     "e2e": "ng e2e"
