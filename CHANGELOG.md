@@ -7,9 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `[doeMedia]` directive, which is to be used in custom item templates (`[itemTemplate]` @Input). It is not mandatory, but if used it makes the gallery aware of the custom provided media (<img> or <video>), them failing or successfully loading in particular. Without it, the user is responsible for providing some kind of a loading animation and, if needed, reflect on failure to load media, himself.
+- Gallery now loads only those media, that are displayed in the scrollport of the gallery. Once there is an interaction though of any kind with the gallery, it starts preloading also item which are in immediate proximity of the scrollport, but not visible yet. This is done to improve first load performance.
+- Item enter animation in form of a fade-in.
+
+### Changed
+
+- Custom item template uses now default or provided templates for error and loading states - when main image is being loaded or failed to load, the viewer shows loading animation or error message + icon respectively. Previously, using custom item template meant taking care of displaying loading or error states on user's own.
+- If thumbnail can't be loaded or is simply not provided, a placeholder icon is shown instead, hinting on the type of asset (image/video)
+- If no thumbnail provided, the main image is not used instead anymore, as this was defeating purpose of lazy loading. There is a room for improvement in future releases by eg. displaying placeholder until the main image is loaded, and then using the main image.
+- Selected thumbnail gets a semi-transparent white frame instead of previous thich dash-like rectangle.
+- Gallery background made lighter
+
 ### Fixed
 
 - Looping only when there are more than 1 items in the gallery.
+- Request for video poster is not made if poster not specified. This was failing before with 404.
+- Fixed broken custom viewer item template, which wasn't really working at all due to template variable name conflict.
+- When selecting outside of indexes known to gallery (0...items.length - 1), either the first or the last item is selected in the end.
 
 ## [1.0.0-alpha.1] - 2020-06-07
 
