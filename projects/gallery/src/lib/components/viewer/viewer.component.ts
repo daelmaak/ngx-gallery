@@ -1,4 +1,4 @@
-import { animate, transition, trigger } from '@angular/animations';
+import { animate, transition, trigger, style } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -31,14 +31,22 @@ import {
   UA,
   VerticalOrientation,
 } from '../../core';
-import { GalleryItemInternal, GalleryVideo } from '../../core/gallery-item';
+import { GalleryItemInternal, isVideo } from '../../core/gallery-item';
 
 @Component({
   selector: 'doe-viewer',
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [trigger('remove', [transition(':leave', animate('0ms 100ms'))])],
+  animations: [
+    trigger('remove', [
+      transition(':leave', animate('0ms 100ms')),
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('400ms', style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() items: GalleryItemInternal[];
@@ -69,14 +77,16 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() set itemWidth(val: string) {
     this.itemListRef.nativeElement.style.setProperty('--item-width', val || '');
   }
+  @Input() touched: boolean;
 
   @Output() imageClick = new EventEmitter<GalleryItemEvent>();
   @Output() descriptionClick = new EventEmitter<Event>();
   @Output() selection = new EventEmitter<number>();
 
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
-  @ViewChildren('items') itemsRef: QueryList<ElementRef<HTMLElement>>;
+  @ViewChildren('itemsRef') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
+  isVideo = isVideo;
   UA = UA;
 
   _displayedItems: GalleryItemInternal[];
@@ -131,11 +141,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
     if (items && items.currentValue && items.currentValue.length) {
       this.onResize();
-
-      const selectedItem = items.currentValue[this.selectedIndex];
-      if (selectedItem) {
-        selectedItem._seen = true;
-      }
     }
   }
 
@@ -184,6 +189,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         const onclick = (e: MouseEvent) => {
           if (maxDeltaX > 10 || maxDeltaY > 10) {
             e.stopPropagation();
+            // to prevent playing a video on swipe
+            e.preventDefault();
           }
           maxDeltaY = maxDeltaX = 0;
         };
@@ -275,20 +282,15 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  getSrc(item: GalleryItemInternal, index: number) {
-    const inProximity = this.isInScrollportProximity(index);
-    return !this.lazyLoading || item._seen || inProximity ? item.src : '';
-  }
-
   isInScrollportProximity(index: number) {
     if (this.loop) {
       index -= this._fringeCount;
     }
     // the spread makes sure, that also 1 item outside of the visible scrollport in both directions is rendered
     // so if 3 items are displayed (although 2 partially), 5 items will be "in scroll proximity"
-    const spread =
-      Math.floor(Math.ceil(this._viewerWidth / (this._itemWidth + 1)) / 2) +
-        1 || 1;
+    const spread = this.touched
+      ? Math.ceil(this._viewerWidth / (this._itemWidth + 1)) || 1
+      : Math.floor(Math.ceil(this._viewerWidth / this._itemWidth) / 2);
     const distance = Math.abs(this.selectedIndex - index);
     return (
       (this.loop && Math.abs(distance - this.items.length) <= spread) ||
@@ -300,24 +302,25 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     return !!item.src.match(/youtube.*\/embed\//);
   }
 
-  isVideo(item: GalleryItemInternal) {
-    return item instanceof GalleryVideo;
-  }
-
   selectByDelta(delta: number) {
     this.select(this.selectedIndex + delta);
   }
 
   select(index: number) {
     const indexOutOfBounds = !this.items[index];
+    const looping = this.loop && indexOutOfBounds;
 
-    if (this.selectedIndex === index || (!this.loop && indexOutOfBounds)) {
-      this.center();
-      return;
+    if (this.selectedIndex === index) {
+      return this.center();
+    }
+
+    // if index is out of bounds but loop is off, then select the first or last item
+    if (!looping && indexOutOfBounds) {
+      index = index < 0 ? 0 : this.items.length - 1;
     }
 
     // if infinite looping
-    if (this.loop && indexOutOfBounds) {
+    if (looping) {
       const origIndex = index;
       index = origIndex - Math.sign(index) * this.items.length;
 
@@ -347,11 +350,9 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       }
     }
 
-    this.items[index]._seen = true;
     this.selectedIndex = index;
     this.selection.emit(index);
-
-    if (!indexOutOfBounds) {
+    if (!looping) {
       this.center();
     }
   }
@@ -379,6 +380,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     // elements with empty src also get loaded event, therefore the check
     if (target.getAttribute('src')) {
       item._loaded = true;
+      item._failed = false;
       this._cd.detectChanges();
     }
   }

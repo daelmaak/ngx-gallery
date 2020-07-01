@@ -1,0 +1,17 @@
+<div class="heading-section">
+  <h3>{{ heading }}</h3>
+  <div class="subheading">
+    {{ subheading }}
+    <ng-content select="[subheading]"></ng-content>
+  </div>
+  <a
+    *ngIf="stackblitz"
+    [href]="stackblitz"
+    class="stackblitz-demo-link"
+    target="_blank"
+  >
+    <img src="./assets/icons/stackblitz-logo-link.svg" /> Edit on StackBlitz</a
+  >
+</div>
+
+<ng-content></ng-content>

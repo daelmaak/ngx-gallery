@@ -1,0 +1,16 @@
+<mat-form-field>
+  <mat-label>Item width</mat-label>
+  <input
+    name="itemWidth"
+    matInput
+    [(ngModel)]="itemWidth"
+    (change)="reloadGallery()"
+  />
+</mat-form-field>
+
+<doe-gallery
+  *ngIf="showGallery"
+  [items]="items"
+  [itemWidth]="itemWidth"
+  loading="lazy"
+></doe-gallery>

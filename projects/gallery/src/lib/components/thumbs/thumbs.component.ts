@@ -24,7 +24,11 @@ import {
   ThumbTemplateContext,
 } from '../../core';
 import { Aria } from '../../core/aria';
-import { GalleryItemInternal, GalleryItemEvent } from '../../core/gallery-item';
+import {
+  GalleryItemInternal,
+  GalleryItemEvent,
+  isVideo,
+} from '../../core/gallery-item';
 
 @Component({
   selector: 'doe-thumbs',
@@ -56,6 +60,8 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
 
   @ViewChild('thumbs', { static: true }) thumbListRef: ElementRef<HTMLElement>;
   @ViewChildren('thumb') thumbsRef: QueryList<ElementRef<HTMLElement>>;
+
+  isVideo = isVideo;
 
   _showStartArrow = false;
   _showEndArrow = false;
@@ -159,6 +165,11 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
     }
 
     const nextItemEl = this.thumbsRef.toArray()[index].nativeElement;
+
+    if (!nextItemEl) {
+      return;
+    }
+
     const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = nextItemEl;
 
     const itemOffset = this._vertical ? offsetTop : offsetLeft;
@@ -187,11 +198,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
     }
   }
 
-  onItemErrored(item: GalleryItemInternal) {
-    item._thumbFailed = true;
-  }
-
-  emitEvent(
+  _emitEvent(
     index: number,
     item: GalleryItemInternal,
     event: Event,
@@ -202,6 +209,10 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       item,
       event,
     });
+  }
+
+  _onLoadChange(item: GalleryItemInternal, success: boolean) {
+    item._thumbFailed = !success;
   }
 
   private scroll(totalScrollDelta: number) {

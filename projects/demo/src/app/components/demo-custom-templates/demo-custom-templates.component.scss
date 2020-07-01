@@ -1,0 +1,59 @@
+.custom-item {
+  width: 100%;
+  height: 100%;
+  background-color: #272727;
+
+  .image-container {
+    width: calc(100% - 40px);
+    height: calc(100% - 70px);
+    margin: 20px auto 10px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  img {
+    background-size: cover;
+  }
+
+  .description {
+    height: 40px;
+    margin: 0 20px;
+    color: #dedede;
+  }
+}
+
+.custom-arrow {
+  $icon-size: 40px;
+  width: $icon-size;
+  height: $icon-size;
+  font-size: $icon-size;
+  color: white;
+  text-shadow: 0 0 3px black;
+  margin-right: 20px;
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.custom-error {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #eacbcb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  mat-icon {
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
+  }
+}

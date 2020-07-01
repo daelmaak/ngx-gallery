@@ -1,0 +1,14 @@
+<mat-radio-group name="demoThumbsOrientation" [(ngModel)]="orientation">
+  <mat-radio-button value="top">top</mat-radio-button>
+  <mat-radio-button value="bottom">bottom</mat-radio-button>
+  <mat-radio-button value="left">left</mat-radio-button>
+  <mat-radio-button value="right">right</mat-radio-button>
+</mat-radio-group>
+
+<doe-gallery
+  #gallery
+  [items]="items"
+  loading="lazy"
+  [loop]="true"
+  [thumbsOrientation]="orientation"
+></doe-gallery>

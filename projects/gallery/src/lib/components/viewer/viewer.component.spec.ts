@@ -5,6 +5,7 @@ import {
   SimpleChange,
   TemplateRef,
   ViewChild,
+  SimpleChanges,
 } from '@angular/core';
 import {
   async,
@@ -36,7 +37,7 @@ describe('ViewerComponent', () => {
         ChevronIconComponent,
         CounterComponent,
         SafePipe,
-        TestCustomErrorComponent,
+        TestCustomTemplatesComponent,
       ],
     })
       .overrideComponent(ViewerComponent, {
@@ -113,22 +114,146 @@ describe('ViewerComponent', () => {
     }));
   });
 
-  describe('error handling', () => {
-    let testViewerContainer: TestCustomErrorComponent;
-    let testViewerFixture: ComponentFixture<TestCustomErrorComponent>;
+  describe('item loading', () => {
+    let changes: SimpleChanges;
 
     beforeEach(() => {
-      testViewerFixture = TestBed.createComponent(TestCustomErrorComponent);
-      testViewerContainer = testViewerFixture.componentInstance;
+      component.touched = true;
+      component.items = [
+        new GalleryImage('src1'),
+        new GalleryImage('src2'),
+        new GalleryImage('src3'),
+        new GalleryImage('src4'),
+      ];
+      component.loading = 'lazy';
+      component.selectedIndex = 0;
+      changes = {
+        items: new SimpleChange(null, component.items, true),
+      };
     });
 
+    it('should display all items if default loading on', fakeAsync(() => {
+      component.loading = 'auto';
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+
+      const items = de.queryAll(By.css('li picture'));
+
+      expect(items.length).toBe(4);
+    }));
+
+    it('should not display item outside scroll proximity if lazy loading on', fakeAsync(() => {
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+
+      const items = de.queryAll(By.css('li picture'));
+
+      expect(items.length).toBe(2);
+    }));
+
+    it('should display items if lazy loading on and items are in scroll proximity', fakeAsync(() => {
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+
+      const itemList = de.query(By.css('ul'));
+
+      expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src3]'))).toBeFalsy();
+      expect(itemList.query(By.css('img[src=src4]'))).toBeFalsy();
+    }));
+
+    it('should display last item if first is selected and loop and lazy loading is on', fakeAsync(() => {
+      component.loop = true;
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+
+      const itemList = de.query(By.css('ul'));
+
+      expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src3]'))).toBeFalsy();
+      expect(itemList.query(By.css('img[src=src4]'))).toBeTruthy();
+    }));
+
+    it('should load 5 items if 3 are visible', fakeAsync(() => {
+      component.items.push(new GalleryImage('src5'), new GalleryImage('src6'));
+      component.selectedIndex = 3;
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+      component['_viewerWidth'] = 600;
+      component['_itemWidth'] = 400;
+      fixture.detectChanges();
+
+      const itemList = de.query(By.css('ul'));
+
+      expect(itemList.query(By.css('img[src=src1]'))).toBeFalsy();
+      expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src3]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src4]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src5]'))).toBeTruthy();
+      expect(itemList.query(By.css('img[src=src6]'))).toBeTruthy();
+    }));
+
+    describe('before touched', () => {
+      beforeEach(() => {
+        component.touched = false;
+      });
+
+      it('should load 3 items if 1.5 items are visible', fakeAsync(() => {
+        component.ngOnChanges(changes);
+        fixture.detectChanges();
+        tick();
+        component['_viewerWidth'] = 600;
+        component['_itemWidth'] = 400;
+        fixture.detectChanges();
+
+        const itemList = de.query(By.css('ul'));
+
+        expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
+        expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
+        expect(itemList.query(By.css('img[src=src3]'))).toBeFalsy();
+      }));
+
+      it('should load just 1 item if just 1 item is visible', fakeAsync(() => {
+        component.ngOnChanges(changes);
+        fixture.detectChanges();
+        tick();
+        component['_viewerWidth'] = 600;
+        component['_itemWidth'] = 600;
+        fixture.detectChanges();
+
+        const itemList = de.query(By.css('ul'));
+
+        expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
+        expect(itemList.query(By.css('img[src=src2]'))).toBeFalsy();
+        expect(itemList.query(By.css('img[src=src3]'))).toBeFalsy();
+      }));
+    });
+  });
+
+  describe('error handling', () => {
+    let templateContainer: TestCustomTemplatesComponent;
+    let templateContainerFixture: ComponentFixture<TestCustomTemplatesComponent>;
+
+    beforeEach(() => {
+      templateContainerFixture = TestBed.createComponent(
+        TestCustomTemplatesComponent
+      );
+      templateContainer = templateContainerFixture.componentInstance;
+    });
     it('should not display custom error on items where the loading was successful', fakeAsync(() => {
       const items = [
         { src: 'src1', _failed: true },
         { src: 'src2' },
       ] as GalleryItemInternal[];
       component.items = items;
-      component.errorTemplate = testViewerContainer.errorTemplate;
+      component.errorTemplate = templateContainer.errorTemplate;
 
       const changes = {
         items: new SimpleChange(null, items, true),
@@ -144,6 +269,39 @@ describe('ViewerComponent', () => {
       expect(itemEls[0].query(By.css('.custom-error'))).toBeTruthy();
       expect(itemEls[1].query(By.css('.custom-error'))).toBeFalsy();
     }));
+  });
+
+  describe('custom', () => {
+    let templateContainer: TestCustomTemplatesComponent;
+    let templateContainerFixture: ComponentFixture<TestCustomTemplatesComponent>;
+
+    beforeEach(() => {
+      templateContainerFixture = TestBed.createComponent(
+        TestCustomTemplatesComponent
+      );
+      templateContainer = templateContainerFixture.componentInstance;
+    });
+
+    describe('item template', () => {
+      it('should display item content', fakeAsync(() => {
+        const items = [{ src: 'src1' }] as GalleryItemInternal[];
+
+        component.items = items;
+        component.itemTemplate = templateContainer.itemTemplate;
+
+        const changes = {
+          items: new SimpleChange(null, items, true),
+        };
+        component.ngOnChanges(changes);
+        fixture.detectChanges();
+        tick();
+
+        const itemEls = de.queryAll(By.css('li'));
+
+        expect(itemEls.length).toBe(1);
+        expect(itemEls[0].query(By.css('.custom-item'))).toBeTruthy();
+      }));
+    });
   });
 
   describe('descriptions', () => {
@@ -167,16 +325,64 @@ describe('ViewerComponent', () => {
       ).toBeFalsy();
     });
   });
+
+  describe('selection', () => {
+    let changes: SimpleChanges;
+
+    beforeEach(() => {
+      component.touched = true;
+      component.items = [
+        new GalleryImage('src1'),
+        new GalleryImage('src2'),
+        new GalleryImage('src3'),
+        new GalleryImage('src4'),
+      ];
+      component.loading = 'lazy';
+      component.selectedIndex = 2;
+      changes = {
+        items: new SimpleChange(null, component.items, true),
+      };
+    });
+
+    it('should select the first item if requested selection is < 0', fakeAsync(() => {
+      spyOn(component, 'shift' as any);
+      spyOn(component, 'center' as any);
+      fixture.detectChanges();
+
+      component.select(-2);
+
+      flush();
+
+      expect(component.selectedIndex).toBe(0);
+    }));
+
+    it('should select the last item if requested selection is >= items length', fakeAsync(() => {
+      spyOn(component, 'shift' as any);
+      spyOn(component, 'center' as any);
+      fixture.detectChanges();
+
+      component.select(10);
+
+      flush();
+
+      expect(component.selectedIndex).toBe(3);
+    }));
+
+    // TODO test shifts, especially in loop mode
+  });
 });
 
 @Component({
-  selector: 'doe-test-viewer-wrapper',
   template: `
     <ng-template #errorTemplate>
       <div class="custom-error">Error !</div>
     </ng-template>
+    <ng-template #itemTemplate>
+      <div class="custom-item"></div>
+    </ng-template>
   `,
 })
-export class TestCustomErrorComponent {
+export class TestCustomTemplatesComponent {
   @ViewChild('errorTemplate', { static: true }) errorTemplate: TemplateRef<any>;
+  @ViewChild('itemTemplate', { static: true }) itemTemplate: TemplateRef<any>;
 }

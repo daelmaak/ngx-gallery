@@ -1,7 +1,124 @@
 <app-header></app-header>
 
-<main>
-  <router-outlet></router-outlet>
+<aside>
+  <div class="menu-heading"><a href="#demos">Demos</a></div>
+  <ul>
+    <li><a href="#demo-responsive">Responsive</a></li>
+    <li><a href="#demo-multiple">Multiple items</a></li>
+    <li><a href="#demo-infinite-loop-multiple">Infinite loop</a></li>
+    <li>
+      <a href="#demo-thumbs-orientation">Thumbnails orientation & autoscroll</a>
+    </li>
+    <li><a href="#demo-descriptions">Descriptions</a></li>
+    <li><a href="#demo-error-handling">Error handling</a></li>
+    <li><a href="#demo-videos">Videos</a></li>
+    <li>
+      <a href="#demo-custom"
+        >Custom items, arrows, loading and error handling</a
+      >
+    </li>
+    <li><a href="#demo-full-config">Full configuration</a></li>
+    <li><a href="#">w/ preselected item</a></li>
+  </ul>
+
+  <div class="menu-heading">Misc</div>
+  <ul>
+    <li>
+      <a href="https://github.com/daelmaak/ngx-doe-gallery/wiki" target="_blank"
+        >Documentation</a
+      >
+    </li>
+  </ul>
+</aside>
+
+<main role="main">
+  <div class="main-content">
+    <h2 id="demos">Demos</h2>
+
+    <app-showcase
+      id="demo-responsive"
+      heading="Responsive - resize me!"
+      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-responsive"
+    >
+      <doe-gallery [items]="images" loading="lazy"></doe-gallery>
+    </app-showcase>
+
+    <app-showcase
+      id="demo-multiple"
+      heading="Multiple items"
+      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-multiple-items"
+    >
+      <app-demo-multiple-items
+        [items]="images"
+        [mobile]="mobile"
+      ></app-demo-multiple-items>
+    </app-showcase>
+
+    <app-showcase id="demo-infinite-loop-multiple" heading="Infinite loop">
+      <doe-gallery
+        [items]="images"
+        [loop]="true"
+        loading="lazy"
+        [itemWidth]="mobile ? '75%' : '34%'"
+      ></doe-gallery>
+    </app-showcase>
+
+    <app-showcase
+      id="demo-thumbs-orientation"
+      heading="Thumbnails orientation & autoscroll"
+      subheading="w/ infinite scroll"
+    >
+      <app-demo-thumbs-orientation
+        [items]="extendedImages"
+        [mobile]="mobile"
+      ></app-demo-thumbs-orientation>
+    </app-showcase>
+
+    <app-showcase id="demo-descriptions" heading="Descriptions">
+      <doe-gallery [items]="images" [descriptions]="true"></doe-gallery>
+    </app-showcase>
+
+    <app-showcase id="demo-error-handling" heading="Error handling">
+      <doe-gallery [items]="erroredImages"></doe-gallery>
+    </app-showcase>
+
+    <app-showcase
+      id="demo-videos"
+      heading="Videos"
+      subheading="both YouTube and native videos"
+    >
+      <doe-gallery [items]="videos"></doe-gallery>
+    </app-showcase>
+
+    <app-showcase
+      id="demo-custom"
+      heading="Custom items, arrows and error handling"
+    >
+      <div subheading>
+        You can also have custom loading screen, thumbnails, thumbnail errors
+        and thumbnail navigation arrows. Find out how in the
+        <a
+          href="https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API"
+          target="_blank"
+          >documentation</a
+        >!
+      </div>
+      <app-demo-custom-templates></app-demo-custom-templates>
+    </app-showcase>
+
+    <app-showcase id="demo-full-config" heading="Full configuration">
+      <div subheading>
+        Some properties like custom templates are missing. Checkout them out in
+        the
+        <a
+          href="https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API"
+          target="_blank"
+          >documentation</a
+        >!
+      </div>
+      <app-demo-whole-config></app-demo-whole-config>
+    </app-showcase>
+  </div>
 </main>
 
 <footer>With care from daelmaak</footer>

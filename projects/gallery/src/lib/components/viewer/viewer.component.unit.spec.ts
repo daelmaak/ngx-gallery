@@ -16,47 +16,9 @@ describe('ViewerComponent Unit', () => {
     viewer.selectedIndex = 0;
   });
 
-  describe('src attribute', () => {
-    it('should be truthy if default loading on', () => {
-      viewer.loading = 'auto';
-      expect(viewer.getSrc(viewer.items[2], 2)).toBeTruthy();
-    });
-
-    it('should be falsy if lazy loading on and item has not been seen nor selected yet', () => {
-      expect(viewer.getSrc(viewer.items[2], 2)).toBeFalsy();
-    });
-
-    it('should be truthy if lazy loading on and item has been seen', () => {
-      viewer.items[2]._seen = true;
-      expect(viewer.getSrc(viewer.items[2], 2)).toBeTruthy();
-    });
-
-    it('should be truthy if lazy loading on and item has been selected', () => {
-      viewer.selectedIndex = 2;
-      expect(viewer.getSrc(viewer.items[2], 2)).toBeTruthy();
-    });
-
-    it('should load items around selected item even though lazy loading is on', () => {
-      viewer.selectedIndex = 1;
-      expect(viewer.getSrc(viewer.items[0], 0)).toBeTruthy();
-      expect(viewer.getSrc(viewer.items[2], 2)).toBeTruthy();
-    });
-
-    it('should load 5 items if 3 are visible', () => {
-      viewer.items.push(new GalleryImage('src5'), new GalleryImage('src6'));
-      viewer.selectedIndex = 3;
-      viewer['_viewerWidth'] = 600;
-      viewer['_itemWidth'] = 400;
-
-      viewer.items.slice(1).forEach(i => {
-        expect(viewer.getSrc(i, viewer.items.indexOf(i))).toBeTruthy();
-      });
-      expect(viewer.getSrc(viewer.items[0], 0)).toBeFalsy();
-    });
-  });
-
   describe('scroll proximity in loop mode', () => {
     beforeEach(() => {
+      viewer.touched = true;
       viewer.loop = true;
       viewer['_viewerWidth'] = 600;
       viewer['_itemWidth'] = 600;
@@ -90,6 +52,56 @@ describe('ViewerComponent Unit', () => {
 
     it('should consider regular items in the middle, which are not fringe nor next to selected item, as out of proximity', () => {
       expect(viewer.isInScrollportProximity(3)).toBeFalsy();
+    });
+
+    it(`should display number of items adjacent to the selected, the number being ceiled amount of displayed items.
+       If 2.2 items are displayed, then 3 adjacent items are displayed next to the selected item`, () => {
+      viewer.items.push(new GalleryImage('src5'));
+      viewer.items.push(new GalleryImage('src6'));
+      viewer.items.push(new GalleryImage('src7'));
+      viewer.items.push(new GalleryImage('src8'));
+      viewer.items.push(new GalleryImage('src9'));
+      viewer['_itemWidth'] = 600 / 2.5;
+      viewer['_fringeCount'] = 3;
+
+      expect(viewer.isInScrollportProximity(4)).toBeTruthy();
+      expect(viewer.isInScrollportProximity(5)).toBeTruthy();
+      expect(viewer.isInScrollportProximity(6)).toBeTruthy();
+      expect(viewer.isInScrollportProximity(7)).toBeFalsy();
+      expect(viewer.isInScrollportProximity(8)).toBeFalsy();
+    });
+
+    it('should load just 1 item on each side if the item is only by a fraction of a pixel smaller than viewer', () => {
+      viewer.selectedIndex = 2;
+      viewer['_itemWidth'] = 599.5;
+      viewer['_fringeCount'] = 1;
+
+      // fringe item representing the last item, should be loaded
+      expect(viewer.isInScrollportProximity(0)).toBeTruthy();
+      // first item, too far from selected, shouldn't be loaded
+      expect(viewer.isInScrollportProximity(1)).toBeFalsy();
+      // items around selected item, should be loaded
+      expect(viewer.isInScrollportProximity(2)).toBeTruthy();
+      expect(viewer.isInScrollportProximity(3)).toBeTruthy();
+      expect(viewer.isInScrollportProximity(4)).toBeTruthy();
+      // fringe item representing the first item, shouldn't be loaded
+      expect(viewer.isInScrollportProximity(5)).toBeFalsy();
+    });
+  });
+
+  describe('scroll proximity in non-loop mode', () => {
+    beforeEach(() => {
+      viewer.loop = false;
+      viewer['_viewerWidth'] = 600;
+      viewer['_itemWidth'] = 600;
+      viewer['_fringeCount'] = 0;
+    });
+
+    it('should not display last items like in loop mode when first item selected', () => {
+      viewer['_itemWidth'] = 600 / 2.5;
+      viewer.items.push(new GalleryImage('src5'));
+      viewer.items.push(new GalleryImage('src6'));
+      expect(viewer.isInScrollportProximity(4)).toBeFalsy();
     });
   });
 

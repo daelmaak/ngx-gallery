@@ -5,6 +5,7 @@ $arrow-btn-dimension: 30px;
 :host {
   flex: 1 0 auto;
   position: relative;
+  background-color: #f3f3f3;
 }
 
 :host.doe-thumbs {
@@ -52,6 +53,10 @@ $arrow-btn-dimension: 30px;
         right: 0;
       }
     }
+
+    .doe-thumbs-error {
+      border-right: 1px solid #cecece;
+    }
   }
 
   &--left,
@@ -88,6 +93,10 @@ $arrow-btn-dimension: 30px;
         bottom: 0;
       }
     }
+
+    .doe-thumbs-error {
+      border-bottom: 1px solid #cecece;
+    }
   }
 
   &--bottom,
@@ -119,7 +128,6 @@ li {
   box-sizing: border-box;
   width: 120px;
   height: 80px;
-  border: 1px solid #252525;
   position: relative;
   cursor: pointer;
 
@@ -135,9 +143,9 @@ li {
       left: 0;
       bottom: 0;
       width: 100%;
-      height: 10px;
-      background-color: #ffffffab;
-      box-shadow: 0 0px 1px black;
+      height: 100%;
+      border: 10px solid #ffffffcf;
+      box-sizing: border-box;
     }
   }
 }
@@ -160,11 +168,47 @@ img {
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
-  background: #222;
+  background: #e8e8e8;
+  box-sizing: border-box;
 
   &-icon {
-    font-size: 20px;
-    color: whitesmoke;
+    $icon-color: #a5a5a5;
+
+    &:not(&--video) {
+      position: relative;
+      border-left: 16px solid transparent;
+      border-right: 16px solid transparent;
+      border-bottom: 28px solid $icon-color;
+      margin-left: -8px;
+
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+      }
+
+      &::before {
+        height: 10px;
+        width: 10px;
+        background-color: $icon-color;
+        border-radius: 100%;
+        left: 14px;
+      }
+
+      &::after {
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+        border-bottom: 17px solid $icon-color;
+        top: 11px;
+      }
+    }
+
+    &--video {
+      border-top: 16px solid transparent;
+      border-bottom: 16px solid transparent;
+      border-left: 28px solid $icon-color;
+      margin-left: 9px;
+    }
   }
 }
 

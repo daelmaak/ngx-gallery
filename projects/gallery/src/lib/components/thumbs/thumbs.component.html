@@ -20,14 +20,15 @@
     *ngFor="let item of items; let i = index"
     [class.doe-thumbs-item--selected]="i === selectedIndex"
     aria-hidden="true"
-    (click)="emitEvent(i, item, $event, thumbClick)"
-    (mouseenter)="emitEvent(i, item, $event, thumbHover)"
+    (click)="_emitEvent(i, item, $event, thumbClick)"
+    (mouseenter)="_emitEvent(i, item, $event, thumbHover)"
   >
     <ng-container *ngIf="!thumbTemplate; else customThumbTemplate">
       <img
-        [src]="item.thumbSrc || item.src"
+        [src]="item.thumbSrc || ''"
         [alt]="item.alt"
-        (error)="onItemErrored(item)"
+        (load)="_onLoadChange(item, true)"
+        (error)="_onLoadChange(item, false)"
       />
 
       <ng-container *ngIf="item._thumbFailed">
@@ -35,7 +36,10 @@
           *ngIf="!errorTemplate; else errorTemplate"
           class="doe-thumbs-error"
         >
-          <div class="doe-thumbs-error-icon">⚠</div>
+          <div
+            class="doe-thumbs-error-icon"
+            [class.doe-thumbs-error-icon--video]="isVideo(item)"
+          ></div>
         </div>
       </ng-container>
     </ng-container>

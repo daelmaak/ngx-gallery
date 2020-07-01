@@ -97,11 +97,6 @@ export interface GalleryItemInternal extends GalleryImage, GalleryVideo {
   _loaded?: boolean;
 
   /**
-   * Marks item as seen at least once
-   */
-  _seen?: boolean;
-
-  /**
    * `true` when media couldn't be loaded
    */
   _failed?: boolean;
@@ -111,3 +106,5 @@ export interface GalleryItemInternal extends GalleryImage, GalleryVideo {
    */
   _thumbFailed?: boolean;
 }
+
+export const isVideo = (item: GalleryItem) => item instanceof GalleryVideo;

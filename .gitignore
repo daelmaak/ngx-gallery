@@ -47,3 +47,5 @@ Thumbs.db
 
 # ignore generated demo
 /docs
+
+*.swp

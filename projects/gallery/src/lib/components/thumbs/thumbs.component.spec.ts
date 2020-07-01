@@ -60,4 +60,24 @@ describe('ThumbnailsComponent', () => {
       expect(itemEls[2].classes['doe-thumbs-item--selected']).toBeFalsy();
     });
   });
+
+  describe('loading', () => {
+    beforeEach(() => {
+      const items = [
+        new GalleryImage('src1'),
+        new GalleryImage('src2'),
+        new GalleryImage('src3'),
+      ];
+      component.items = items;
+      component.ngOnChanges({ items: new SimpleChange(null, items, true) });
+    });
+
+    it(`shouldn't load main image`, () => {
+      fixture.detectChanges();
+
+      const emptyImages = de.queryAll(By.css('li img[src=""]'));
+
+      expect(emptyImages.length).toBe(3);
+    });
+  });
 });
