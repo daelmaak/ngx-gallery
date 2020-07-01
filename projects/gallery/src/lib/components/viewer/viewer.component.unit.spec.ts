@@ -16,8 +16,6 @@ describe('ViewerComponent Unit', () => {
     viewer.selectedIndex = 0;
   });
 
-  describe('src attribute', () => {});
-
   describe('scroll proximity in loop mode', () => {
     beforeEach(() => {
       viewer.touched = true;
@@ -56,7 +54,7 @@ describe('ViewerComponent Unit', () => {
       expect(viewer.isInScrollportProximity(3)).toBeFalsy();
     });
 
-    it(`should display number of items adjacent to the selected, the number being rounded amount of displayed items.
+    it(`should display number of items adjacent to the selected, the number being ceiled amount of displayed items.
        If 2.2 items are displayed, then 3 adjacent items are displayed next to the selected item`, () => {
       viewer.items.push(new GalleryImage('src5'));
       viewer.items.push(new GalleryImage('src6'));

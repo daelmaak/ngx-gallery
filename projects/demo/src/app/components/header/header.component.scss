@@ -32,15 +32,6 @@ header {
     color: #313131;
   }
 
-  a {
-    &,
-    &:visited,
-    &:active,
-    &:focus {
-      color: white;
-    }
-  }
-
   .links {
     margin: 0 auto;
     text-align: center;
