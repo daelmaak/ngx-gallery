@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+...
+
+## [1.0.0-beta.0] - 2020-07-01
+
 ### Added
 
 - Added `[doeMedia]` directive, which is to be used in custom item templates (`[itemTemplate]` @Input). It is not mandatory, but if used it makes the gallery aware of the custom provided media (<img> or <video>), them failing or successfully loading in particular. Without it, the user is responsible for providing some kind of a loading animation and, if needed, reflect on failure to load media, himself.
@@ -55,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed background flashes in Firefox when new images slide into doe-viewer's scrollport.
 
-[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-alpha.1...HEAD
+[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.0...HEAD
+[1.0.0-alpha.1]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-alpha.1...v1.0.0-beta.0
 [1.0.0-alpha.1]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-alpha.0...v1.0.0-alpha.1
 [1.0.0-alpha.0]: https://github.com/daelmaak/ngx-doe-gallery/compare/v0.1.0-alpha.6...v1.0.0-alpha.0
