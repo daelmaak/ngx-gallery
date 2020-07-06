@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - BrowserAnimationsModule removed as it was causing issues where BrowserModule was already imported.
 
+### Removed
+
+- Removed :leave animation from gallery item elements
+
 ## [1.0.0-beta.0] - 2020-07-01
 
 ### Added
