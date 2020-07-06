@@ -25,7 +25,7 @@
   >
     <ng-container *ngIf="!lazyLoading || isInScrollportProximity(i)">
       <ng-container *ngIf="!itemTemplate; else customTemplate">
-        <picture *ngIf="!isVideo(item)" @remove>
+        <picture *ngIf="!isVideo(item)">
           <source
             *ngFor="let source of item.pictureSources"
             [srcset]="source.srcset"
@@ -44,7 +44,6 @@
         </picture>
         <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
         <video
-          @remove
           *ngIf="!isYoutube(item) && isVideo(item)"
           [src]="item.src"
           [poster]="item.thumbSrc || ''"
@@ -57,7 +56,6 @@
         ></video>
 
         <iframe
-          @remove
           *ngIf="isYoutube(item)"
           [src]="item.src | safe"
           frameborder="0"

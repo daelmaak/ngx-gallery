@@ -1,4 +1,3 @@
-import { animate, transition, trigger, style } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -38,15 +37,6 @@ import { GalleryItemInternal, isVideo } from '../../core/gallery-item';
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('remove', [
-      transition(':leave', animate('0ms 100ms')),
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('400ms', style({ opacity: 1 })),
-      ]),
-    ]),
-  ],
 })
 export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() items: GalleryItemInternal[];

@@ -59,6 +59,7 @@ iframe {
   background-color: transparent;
   transition: opacity 0.3s ease-out;
   outline: 0;
+  animation: 400ms linear 1 appear;
 
   &[src=''] {
     opacity: 0;
@@ -66,6 +67,15 @@ iframe {
 
   &.doe-viewer-media-loading {
     opacity: 0.5;
+  }
+
+  @keyframes appear {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }
 

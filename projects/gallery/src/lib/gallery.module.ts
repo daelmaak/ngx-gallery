@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CounterComponent } from './components/counter/counter.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
@@ -20,7 +19,7 @@ import { MediaDirective } from './directives/media.directive';
     SafePipe,
     MediaDirective,
   ],
-  imports: [CommonModule, BrowserAnimationsModule],
+  imports: [CommonModule],
   exports: [GalleryComponent, MediaDirective],
 })
 export class GalleryModule {}

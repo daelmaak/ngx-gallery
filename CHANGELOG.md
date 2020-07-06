@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ...
 
+## [1.0.0-beta.1] - 2020-07-06
+
+### Fixed
+
+- BrowserAnimationsModule removed as it was causing issues where BrowserModule was already imported.
+
 ## [1.0.0-beta.0] - 2020-07-01
 
 ### Added
@@ -59,7 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed background flashes in Firefox when new images slide into doe-viewer's scrollport.
 
-[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.0...HEAD
+[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.1...HEAD
+[1.0.0-beta.1]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.0...v1.0.0-beta.1
 [1.0.0-beta.0]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-alpha.1...v1.0.0-beta.0
 [1.0.0-alpha.1]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-alpha.0...v1.0.0-alpha.1
 [1.0.0-alpha.0]: https://github.com/daelmaak/ngx-doe-gallery/compare/v0.1.0-alpha.6...v1.0.0-alpha.0
