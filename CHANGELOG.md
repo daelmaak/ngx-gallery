@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-...
+### Removed
+
+- Removed unused peer dependency on @angular/animations
 
 ## [1.0.0-beta.2] - 2020-07-06
 

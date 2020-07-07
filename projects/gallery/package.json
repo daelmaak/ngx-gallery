@@ -32,7 +32,6 @@
     "lint": "ng lint"
   },
   "peerDependencies": {
-    "@angular/animations": ">=8.0.0",
     "@angular/common": ">=8.0.0",
     "@angular/core": ">=8.0.0",
     "@angular/platform-browser": ">=8.0.0",
