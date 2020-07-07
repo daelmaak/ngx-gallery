@@ -54,7 +54,11 @@
       ></app-demo-multiple-items>
     </app-showcase>
 
-    <app-showcase id="demo-infinite-loop-multiple" heading="Infinite loop">
+    <app-showcase
+      id="demo-infinite-loop-multiple"
+      heading="Infinite loop"
+      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-infinite-loop"
+    >
       <doe-gallery
         [items]="images"
         [loop]="true"
@@ -67,6 +71,7 @@
       id="demo-thumbs-orientation"
       heading="Thumbnails orientation & autoscroll"
       subheading="w/ infinite scroll"
+      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-thumbs-orientation"
     >
       <app-demo-thumbs-orientation
         [items]="extendedImages"
@@ -74,7 +79,11 @@
       ></app-demo-thumbs-orientation>
     </app-showcase>
 
-    <app-showcase id="demo-descriptions" heading="Descriptions">
+    <app-showcase
+      id="demo-descriptions"
+      heading="Descriptions"
+      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-descriptions"
+    >
       <doe-gallery [items]="images" [descriptions]="true"></doe-gallery>
     </app-showcase>
 
