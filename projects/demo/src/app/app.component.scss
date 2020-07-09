@@ -85,3 +85,8 @@ footer {
   text-align: center;
   color: #b3b3b3;
 }
+
+.resizable {
+  resize: horizontal;
+  overflow-x: scroll;
+}

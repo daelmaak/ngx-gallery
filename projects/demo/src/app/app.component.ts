@@ -10,6 +10,40 @@ import { GalleryImage, GalleryVideo } from 'projects/gallery/src/lib/core';
 export class AppComponent {
   images = [
     new GalleryImage(
+      './assets/mountains-1-lg.jpg',
+      './assets/mountains-1-sm.jpg',
+      'Mountains',
+      'Mighty mountains'
+    ),
+    new GalleryImage(
+      './assets/house-1-lg.jpg',
+      './assets/house-1-sm.jpg',
+      'House',
+      `I just love mysterious houses`
+    ),
+    new GalleryImage(
+      './assets/church-1-lg.jpg',
+      './assets/church-1-sm.jpg',
+      'Church hallway',
+      'Feel the history in this beautiful church'
+    ),
+    new GalleryImage(
+      './assets/lens-1-lg.jpg',
+      './assets/lens-1-sm.jpg',
+      'Lens',
+      'Zoom the world'
+    ),
+    new GalleryImage(
+      './assets/tulip-1-lg.jpg',
+      './assets/tulip-1-sm.jpg',
+      'Tulip',
+      `You didn't forget to buy your better half flowers, did you?`
+    ),
+  ];
+
+  extendedImages = [
+    ...this.images,
+    new GalleryImage(
       './assets/forest-1-lg.jpg',
       './assets/forest-1-sm.jpg',
       'Forest',
@@ -45,35 +79,6 @@ export class AppComponent {
       'City',
       'City at night'
     ),
-  ];
-
-  extendedImages = [
-    new GalleryImage(
-      './assets/house-1-lg.jpg',
-      './assets/house-1-sm.jpg',
-      'House'
-    ),
-    new GalleryImage(
-      './assets/church-1-lg.jpg',
-      './assets/church-1-sm.jpg',
-      'Church hallway'
-    ),
-    new GalleryImage(
-      './assets/lens-1-lg.jpg',
-      './assets/lens-1-sm.jpg',
-      'Lens'
-    ),
-    new GalleryImage(
-      './assets/mountains-1-lg.jpg',
-      './assets/mountains-1-sm.jpg',
-      'Mountains'
-    ),
-    new GalleryImage(
-      './assets/tulip-1-lg.jpg',
-      './assets/tulip-1-sm.jpg',
-      'Tulip'
-    ),
-    ...this.images,
   ];
 
   erroredImages = [

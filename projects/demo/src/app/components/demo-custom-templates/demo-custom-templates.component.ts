@@ -10,10 +10,10 @@ import { GalleryImage, GalleryVideo } from 'projects/gallery/src/lib/core';
 export class DemoCustomTemplatesComponent {
   images = [
     new GalleryImage(
-      './assets/forest-1-lg.jpg',
-      './assets/forest-1-sm.jpg',
-      'Forest',
-      'Mysterious forest'
+      './assets/mountains-1-lg.jpg',
+      './assets/mountains-1-sm.jpg',
+      'Mountains',
+      'Mighty mountains'
     ),
     new GalleryVideo(
       './assets/beach-1.mp4',

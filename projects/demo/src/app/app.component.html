@@ -18,7 +18,6 @@
       >
     </li>
     <li><a href="#demo-full-config">Full configuration</a></li>
-    <li><a href="#">w/ preselected item</a></li>
   </ul>
 
   <div class="menu-heading">Misc</div>
@@ -38,9 +37,12 @@
     <app-showcase
       id="demo-responsive"
       heading="Responsive - resize me!"
+      subheading="drag the bottom right corner"
       stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-responsive"
     >
-      <doe-gallery [items]="images" loading="lazy"></doe-gallery>
+      <div class="resizable">
+        <doe-gallery [items]="images" loading="lazy"></doe-gallery>
+      </div>
     </app-showcase>
 
     <app-showcase
@@ -111,7 +113,14 @@
           href="https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API"
           target="_blank"
           >documentation</a
-        >!
+        >
+        and/or try it out in
+        <a
+          href="https://stackblitz.com/edit/ngx-doe-gallery-demo-custom-templates"
+          target="_blank"
+          >StackBlitz</a
+        >
+        !
       </div>
       <app-demo-custom-templates></app-demo-custom-templates>
     </app-showcase>
@@ -124,9 +133,16 @@
           href="https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API"
           target="_blank"
           >documentation</a
-        >!
+        >
+        and/or try them out in
+        <a
+          href="https://stackblitz.com/edit/ngx-doe-gallery-demo-custom-templates"
+          target="_blank"
+          >StackBlitz</a
+        >
+        !
       </div>
-      <app-demo-whole-config></app-demo-whole-config>
+      <app-demo-whole-config [images]="images"></app-demo-whole-config>
     </app-showcase>
   </div>
 </main>

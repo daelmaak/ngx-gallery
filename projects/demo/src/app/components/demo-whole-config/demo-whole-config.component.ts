@@ -4,6 +4,7 @@ import {
   OnInit,
   ViewChild,
   ChangeDetectionStrategy,
+  Input,
 } from '@angular/core';
 import { defer, Observable, of } from 'rxjs';
 import { delay, switchMap } from 'rxjs/operators';
@@ -23,7 +24,7 @@ import { GalleryItemInternal } from 'projects/gallery/src/lib/core/gallery-item'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DemoWholeConfig implements OnInit {
-  images: GalleryItem[];
+  @Input() images: GalleryItem[];
   items: Observable<GalleryItem[]>;
 
   displayGallery = true;
@@ -58,82 +59,6 @@ export class DemoWholeConfig implements OnInit {
   }
 
   ngOnInit() {
-    this.images = [
-      new GalleryImage(
-        './assets/forest-1-lg.jpg',
-        './assets/forest-1-sm.jpg',
-        'Forest',
-        'Mysterious forest',
-        [
-          {
-            media: '(max-width: 1024px)',
-            srcset: './assets/forest-1-md.jpg, ./assets/forest-1-lg.jpg 4x',
-          },
-        ]
-      ),
-      new GalleryImage(
-        './assets/sky-1-lg.jpg',
-        './assets/sky-1-sm.jpg',
-        'Sky',
-        'Mysterious sky',
-        [
-          {
-            media: '(max-width: 1024px)',
-            srcset: './assets/sky-1-md.jpg, ./assets/sky-1-lg.jpg 4x',
-          },
-        ]
-      ),
-      new GalleryImage(
-        './assets/cheers-1-lg.jpg',
-        './assets/cheers-1-sm.jpg',
-        'Cheers',
-        'Two guys drinking during sunset',
-        [
-          {
-            media: '(max-width: 1024px)',
-            srcset: './assets/cheers-1-md.jpg, ./assets/cheers-1-lg.jpg 4x',
-          },
-        ]
-      ),
-      new GalleryImage(
-        './assets/laptop-1-lg.jpg',
-        './assets/laptop-1-sm.jpg',
-        'Laptop',
-        'Ideal workplace for computer work',
-        [
-          {
-            media: '(max-width: 1024px)',
-            srcset: './assets/laptop-1-md.jpg, ./assets/laptop-1-lg.jpg 4x',
-          },
-        ]
-      ),
-      new GalleryImage(
-        './assets/snowflake-1-lg.jpg',
-        './assets/snowflake-1-sm.jpg',
-        'Snowflake',
-        'Snowflake detail',
-        [
-          {
-            media: '(max-width: 1024px)',
-            srcset:
-              './assets/snowflake-1-md.jpg, ./assets/snowflake-1-lg.jpg 4x',
-          },
-        ]
-      ),
-      new GalleryImage(
-        './assets/mesh-1-lg.jpg',
-        './assets/mesh-1-sm.jpg',
-        'City',
-        'City at night',
-        [
-          {
-            media: '(max-width: 1024px)',
-            srcset: './assets/mesh-1-md.jpg, ./assets/mesh-1-lg.jpg 4x',
-          },
-        ]
-      ),
-    ];
-
     this.items = of(this.images).pipe(
       switchMap(items =>
         defer(() => of(items).pipe(delay(this.imageLoadingLatency)))
