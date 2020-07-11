@@ -17,6 +17,27 @@ header {
     width: 800px;
     max-width: 100vw;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .logo {
+      width: 130px;
+      position: relative;
+      bottom: 5px;
+      right: 20px;
+    }
+
+    @media (max-width: 767px) {
+      display: block;
+
+      .logo {
+        width: 110px;
+        position: static;
+        display: block;
+        margin: 0 auto;
+      }
+    }
   }
 
   h1 {
