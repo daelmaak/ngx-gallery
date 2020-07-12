@@ -1,5 +1,6 @@
 <div align="center">
 <img src="https://daelmaak.github.io/ngx-doe-gallery/assets/icons/doe.png" width="90">
+</div>
 
 # Doe Gallery
 
@@ -11,8 +12,6 @@ Performant, responsive, easy to use Angular 8+ gallery
 [**Demos**](https://daelmaak.github.io/ngx-doe-gallery/) |
 [**Docs**](https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API) |
 [**Changelog**](https://github.com/daelmaak/ngx-doe-gallery/blob/master/CHANGELOG.md)
-
-</div>
 
 ## Why ngx-doe-gallery?
 
