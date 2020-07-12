@@ -22,9 +22,8 @@ header {
     justify-content: center;
 
     .logo {
-      width: 130px;
+      width: 110px;
       position: relative;
-      bottom: 5px;
       right: 20px;
     }
 
@@ -32,10 +31,10 @@ header {
       display: block;
 
       .logo {
-        width: 110px;
+        width: 100px;
         position: static;
         display: block;
-        margin: 0 auto;
+        margin: 0 auto 10px;
       }
     }
   }
