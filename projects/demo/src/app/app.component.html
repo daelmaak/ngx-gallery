@@ -48,7 +48,7 @@
       stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-multiple-items"
     >
       <app-demo-multiple-items
-        [items]="images"
+        [items]="smallerImages"
         [mobile]="mobile"
       ></app-demo-multiple-items>
     </app-showcase>
@@ -59,7 +59,7 @@
       stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-infinite-loop"
     >
       <doe-gallery
-        [items]="images"
+        [items]="smallerImages"
         [loop]="true"
         loading="lazy"
         [itemWidth]="mobile ? '75%' : '34%'"

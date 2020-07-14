@@ -16,8 +16,8 @@
   padding: 1em 0;
 
   .stackblitz-demo-link {
+    display: inline-block;
     margin-top: 10px;
-    display: flex;
     text-decoration: none;
 
     &:visited {
@@ -27,7 +27,8 @@
 
   img {
     height: 20px;
-    margin-right: 6px;
+    margin-right: 4px;
+    margin-bottom: -4px;
   }
 }
 
