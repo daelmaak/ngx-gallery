@@ -107,8 +107,8 @@ export class AppComponent {
   ];
 
   videos = [
-    new GalleryVideo('https://www.youtube.com/embed/80_39eAx3z8'),
     new GalleryVideo('./assets/images/beach-1.mp4'),
+    new GalleryVideo('https://www.youtube.com/embed/80_39eAx3z8'),
   ];
 
   mobile = matchMedia('(max-width: 767px)').matches;
