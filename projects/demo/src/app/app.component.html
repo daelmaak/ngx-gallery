@@ -86,11 +86,15 @@
       heading="Descriptions"
       stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-descriptions"
     >
-      <doe-gallery [items]="images" [descriptions]="true"></doe-gallery>
+      <doe-gallery
+        [items]="images"
+        [descriptions]="true"
+        loading="lazy"
+      ></doe-gallery>
     </app-showcase>
 
     <app-showcase id="demo-error-handling" heading="Error handling">
-      <doe-gallery [items]="erroredImages"></doe-gallery>
+      <doe-gallery [items]="erroredImages" loading="lazy"></doe-gallery>
     </app-showcase>
 
     <app-showcase
@@ -98,7 +102,7 @@
       heading="Videos"
       subheading="both YouTube and native videos"
     >
-      <doe-gallery [items]="videos"></doe-gallery>
+      <doe-gallery [items]="videos" loading="lazy"></doe-gallery>
     </app-showcase>
 
     <app-showcase
