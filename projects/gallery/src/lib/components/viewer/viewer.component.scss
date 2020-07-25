@@ -61,10 +61,6 @@ iframe {
   outline: 0;
   animation: 400ms linear 1 appear;
 
-  &[src=''] {
-    opacity: 0;
-  }
-
   &.doe-viewer-media-loading {
     opacity: 0.5;
   }

@@ -18,8 +18,8 @@
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'doe-viewer-aria-description-' + i"
     (click)="onImageClick(item, $event)"
-    (doe-media-load)="onItemLoaded(item, $event.detail)"
-    (doe-media-error)="onItemErrored(item, $event.detail)"
+    (doe-media-load)="onItemLoaded(item)"
+    (doe-media-error)="onItemErrored(item)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
   >
