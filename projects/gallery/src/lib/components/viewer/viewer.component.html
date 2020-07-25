@@ -18,8 +18,8 @@
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'doe-viewer-aria-description-' + i"
     (click)="onImageClick(item, $event)"
-    (doe-media-load)="onItemLoaded(item, $event.detail)"
-    (doe-media-error)="onItemErrored(item, $event.detail)"
+    (doe-media-load)="onItemLoaded(item)"
+    (doe-media-error)="onItemErrored(item)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
   >
@@ -38,8 +38,8 @@
             [alt]="item.alt"
             [class.doe-viewer-media-loading]="!item._loaded"
             [style.objectFit]="objectFit"
-            (load)="onItemLoaded(item, $event)"
-            (error)="onItemErrored(item, $event)"
+            (load)="onItemLoaded(item)"
+            (error)="onItemErrored(item)"
           />
         </picture>
         <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
@@ -51,8 +51,8 @@
           [style.objectFit]="objectFit"
           controls
           playsinline
-          (loadedmetadata)="onItemLoaded(item, $event)"
-          (error)="onItemErrored(item, $event)"
+          (loadedmetadata)="onItemLoaded(item)"
+          (error)="onItemErrored(item)"
         ></video>
 
         <iframe
@@ -61,7 +61,7 @@
           frameborder="0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
-          (load)="onItemLoaded(item, $event)"
+          (load)="onItemLoaded(item)"
         ></iframe>
       </ng-container>
 

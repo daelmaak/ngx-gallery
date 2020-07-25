@@ -364,24 +364,16 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
-  onItemLoaded(item: GalleryItemInternal, loadEvent: Event) {
-    const target = loadEvent.target as HTMLElement;
-
+  onItemLoaded(item: GalleryItemInternal) {
     // elements with empty src also get loaded event, therefore the check
-    if (target.getAttribute('src')) {
-      item._loaded = true;
-      item._failed = false;
-      this._cd.detectChanges();
-    }
+    item._loaded = true;
+    item._failed = false;
+    this._cd.detectChanges();
   }
 
-  onItemErrored(item: GalleryItemInternal, errEvent: Event) {
-    const target = errEvent.target as HTMLElement;
-
-    if (target.getAttribute('src')) {
-      item._failed = true;
-      this._cd.detectChanges();
-    }
+  onItemErrored(item: GalleryItemInternal) {
+    item._failed = true;
+    this._cd.detectChanges();
   }
 
   private center() {

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Removed unused peer dependency on @angular/animations
+- Removed img/video opacity while it is loading due to problems with occasional flashes during gallery's init phase. The class `doe-viewer-media-loading` on the img/video elements can still be used for style assignments though.
 
 ## [1.0.0-beta.2] - 2020-07-06
 
