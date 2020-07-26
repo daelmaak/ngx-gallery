@@ -66,8 +66,15 @@ main {
     margin: 0 auto;
   }
 
-  h2 {
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     margin: 0 0 0 30px;
+  }
+
+  h2 {
     padding: 0.83em 0 0.4em;
 
     @media (min-width: 768px) {
@@ -86,7 +93,13 @@ footer {
   color: #b3b3b3;
 }
 
-.resizable {
-  resize: horizontal;
-  overflow-x: scroll;
+.usage-code {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+pre {
+  display: flex;
+  margin: 0;
+  font-size: 1.2em;
 }

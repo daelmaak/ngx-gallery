@@ -8,6 +8,32 @@ import { GalleryImage, GalleryVideo } from 'projects/gallery/src/lib/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
+  installScript = `
+    npm i ngx-doe-gallery -S
+  `;
+
+  moduleCode = `
+    import { GalleryModule } from 'ngx-doe-gallery';
+
+    @NgModule({
+      imports: [ GalleryModule ]
+    })
+    export class AppModule { }
+  `;
+
+  componentCode = `
+    import { GalleryImage } from 'ngx-doe-gallery';
+
+    @Component({...})
+    export class AppComponent {
+      images = [ new GalleryImage('kitten1.jpg') ]
+    }
+  `;
+
+  componentTemplateCode = `
+    <doe-gallery [items]="images"></doe-gallery>
+  `;
+
   images = [
     new GalleryImage(
       './assets/images/mountains-1-lg.jpg',
