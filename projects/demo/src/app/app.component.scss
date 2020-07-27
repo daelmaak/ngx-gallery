@@ -96,13 +96,19 @@ footer {
   color: #b3b3b3;
 }
 
-.usage-code {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 pre {
   display: flex;
   margin: 0;
   font-size: 1.2em;
+}
+
+.usage {
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+.usage-code {
+  display: flex;
+  flex-wrap: wrap;
 }
