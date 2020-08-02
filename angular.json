@@ -64,7 +64,8 @@
             "assets": [
               "projects/demo/src/favicon.ico",
               "projects/demo/src/assets",
-              "projects/demo/src/google08efa3d99d13d01e.html"
+              "projects/demo/src/google08efa3d99d13d01e.html",
+              { "glob": "**/*", "input": ".circleci", "output": "/.circleci/" }
             ],
             "styles": [
               "projects/demo/src/styles.scss",
