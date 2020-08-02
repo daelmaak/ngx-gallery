@@ -40,7 +40,9 @@
   (imageClick)="imageClick.emit($event)"
   (descriptionClick)="descriptionClick.emit($event)"
   (selection)="_selectInternal($event); _thumbsRef?.select($event)"
-></doe-viewer>
+>
+  <ng-content></ng-content>
+</doe-viewer>
 
 <ng-template #defaultLoadingTemplate>
   <div class="doe-loading">
