@@ -76,8 +76,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed background flashes in Firefox when new images slide into doe-viewer's scrollport.
 
-[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.1...HEAD
-[1.0.0-beta.1]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.0...v1.0.0-beta.1
+[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.2...HEAD
+[1.0.0-beta.2]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.0...v1.0.0-beta.2
 [1.0.0-beta.0]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-alpha.1...v1.0.0-beta.0
 [1.0.0-alpha.1]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-alpha.0...v1.0.0-alpha.1
 [1.0.0-alpha.0]: https://github.com/daelmaak/ngx-doe-gallery/compare/v0.1.0-alpha.6...v1.0.0-alpha.0
