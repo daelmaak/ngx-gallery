@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added content slot to inject arbitrary content directly into the gallery viewer.
+- Added `[contentTemplate]` @Input with which an arbitrary content can be injected directly into the gallery viewer.
 
 ### Changed
 

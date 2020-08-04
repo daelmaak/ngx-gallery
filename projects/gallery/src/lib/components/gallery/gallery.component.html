@@ -32,6 +32,7 @@
   [itemTemplate]="itemTemplate"
   [loadingTemplate]="loadingTemplate || defaultLoadingTemplate"
   [errorTemplate]="errorTemplate"
+  [contentTemplate]="contentTemplate"
   [loop]="loop"
   [thumbsOrientation]="_thumbsOrientationFlag"
   [arrowTemplate]="arrowTemplate"
@@ -41,7 +42,6 @@
   (descriptionClick)="descriptionClick.emit($event)"
   (selection)="_selectInternal($event); _thumbsRef?.select($event)"
 >
-  <ng-content></ng-content>
 </doe-viewer>
 
 <ng-template #defaultLoadingTemplate>

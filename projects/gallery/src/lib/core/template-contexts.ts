@@ -12,3 +12,7 @@ export interface ThumbTemplateContext {
   selectedIndex: number;
   item: GalleryItem;
 }
+
+export interface ContentTemplateContext {
+  selectedIndex: number;
+}
