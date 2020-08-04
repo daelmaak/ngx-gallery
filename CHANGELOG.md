@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added content slot to inject arbitrary content directly into the gallery viewer.
 
+### Changed
+
+- Reinstated angular/animations for adding/removing media elements (img, video, iframe) to/from the DOM
+
 ### Removed
 
 - Removed unused peer dependency on @angular/animations
