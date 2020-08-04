@@ -25,7 +25,7 @@
   >
     <ng-container *ngIf="!lazyLoading || isInScrollportProximity(i)">
       <ng-container *ngIf="!itemTemplate; else customTemplate">
-        <picture *ngIf="!isVideo(item)">
+        <picture *ngIf="!isVideo(item)" @mediaAnimate>
           <source
             *ngFor="let source of item.pictureSources"
             [srcset]="source.srcset"
@@ -45,6 +45,7 @@
         <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
         <video
           *ngIf="!isYoutube(item) && isVideo(item)"
+          @mediaAnimate
           [src]="item.src"
           [poster]="item.thumbSrc || ''"
           [class.doe-viewer-media-loading]="!item._loaded"
@@ -57,6 +58,7 @@
 
         <iframe
           *ngIf="isYoutube(item)"
+          @mediaAnimate
           [src]="item.src | safe"
           frameborder="0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"

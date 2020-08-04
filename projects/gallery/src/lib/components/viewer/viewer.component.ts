@@ -16,6 +16,7 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
+import { trigger, transition, animate, style } from '@angular/animations';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -37,6 +38,15 @@ import { GalleryItemInternal, isVideo } from '../../core/gallery-item';
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('mediaAnimate', [
+      transition(':leave', animate('0ms 100ms')),
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('400ms', style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() items: GalleryItemInternal[];
