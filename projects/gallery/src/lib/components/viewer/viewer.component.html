@@ -126,7 +126,14 @@
   [orientation]="counterOrientation"
 ></doe-counter>
 
-<ng-content></ng-content>
+<ng-container
+  *ngTemplateOutlet="
+    contentTemplate;
+    context: {
+      selectedIndex: selectedIndex
+    }
+  "
+></ng-container>
 
 <div
   *ngIf="descriptions && items"

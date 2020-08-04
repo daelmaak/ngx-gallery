@@ -23,6 +23,7 @@ import {
   OrientationFlag,
   VerticalOrientation,
   ThumbTemplateContext,
+  ContentTemplateContext,
 } from '../../core';
 import { defaultAria } from '../../core/aria';
 import { ThumbsComponent } from '../thumbs/thumbs.component';
@@ -53,6 +54,7 @@ export class GalleryComponent {
   @Input() loadingTemplate: TemplateRef<void>;
   @Input() errorTemplate: TemplateRef<void>;
   @Input() arrowTemplate: TemplateRef<void>;
+  @Input() contentTemplate: TemplateRef<ContentTemplateContext>;
   @Input() thumbs = true;
   @Input() thumbsAutoScroll = true;
   @Input() thumbsOrientation: Orientation = 'bottom';

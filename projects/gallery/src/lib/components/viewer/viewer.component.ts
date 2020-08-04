@@ -29,6 +29,7 @@ import {
   OrientationFlag,
   UA,
   VerticalOrientation,
+  ContentTemplateContext,
 } from '../../core';
 import { GalleryItemInternal, isVideo } from '../../core/gallery-item';
 
@@ -54,6 +55,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @Input() loadingTemplate: TemplateRef<void>;
   @Input() errorTemplate: TemplateRef<void>;
   @Input() arrowTemplate: TemplateRef<void>;
+  @Input() contentTemplate: TemplateRef<ContentTemplateContext>;
   @Input() thumbsOrientation: OrientationFlag;
   @Input() aria: Aria;
   @Input()
@@ -147,7 +149,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     if (isBrowser && this.mouseGestures) {
       this._zone.runOutsideAngular(() => {
-        const imageList = this.itemListRef.nativeElement;
+        const hostEl = this._hostRef.nativeElement;
         let mousedown: MouseEvent;
         let maxDeltaX = 0;
         let maxDeltaY = 0;
@@ -187,20 +189,20 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
         const ondragstart = (e: DragEvent) => e.preventDefault();
 
-        imageList.addEventListener('mousedown', onmousedown, listenerOpts);
-        imageList.addEventListener('click', onclick, { capture: true });
-        imageList.addEventListener('dragstart', ondragstart);
+        hostEl.addEventListener('mousedown', onmousedown, listenerOpts);
+        hostEl.addEventListener('click', onclick, { capture: true });
+        hostEl.addEventListener('dragstart', ondragstart);
         this._destroy$.subscribe(() => {
-          imageList.removeEventListener('mousedown', onmousedown);
-          imageList.removeEventListener('click', onclick);
-          imageList.removeEventListener('dragstart', ondragstart);
+          hostEl.removeEventListener('mousedown', onmousedown);
+          hostEl.removeEventListener('click', onclick);
+          hostEl.removeEventListener('dragstart', ondragstart);
         });
       });
     }
 
     if (isBrowser && this.touchGestures) {
       this._zone.runOutsideAngular(() => {
-        const imageList = this.itemListRef.nativeElement;
+        const hostEl = this._hostRef.nativeElement;
         let horizontal = null;
         let touchstart: TouchEvent;
         let lastTouchmove: TouchEvent;
@@ -253,13 +255,13 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
           lastTouchmove = null;
         };
 
-        imageList.addEventListener('touchstart', ontouchstart, listenerOpts);
+        hostEl.addEventListener('touchstart', ontouchstart, listenerOpts);
         document.addEventListener('touchmove', ontouchmove, {
           passive: !UA.ios,
         });
         document.addEventListener('touchend', ontouchend, listenerOpts);
         this._destroy$.subscribe(() => {
-          imageList.removeEventListener('touchstart', ontouchstart);
+          hostEl.removeEventListener('touchstart', ontouchstart);
           document.removeEventListener('touchmove', ontouchmove);
           document.removeEventListener('touchend', ontouchend);
         });
