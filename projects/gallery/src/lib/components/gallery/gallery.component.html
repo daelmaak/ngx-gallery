@@ -1,3 +1,7 @@
+<span *ngIf="aria?.galleryLabel" class="doe-sr-only" tabindex="0">
+  {{ aria.galleryLabel }}
+</span>
+
 <doe-thumbs
   *ngIf="thumbs"
   [items]="items"
