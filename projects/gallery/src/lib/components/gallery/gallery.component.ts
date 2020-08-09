@@ -76,15 +76,8 @@ export class GalleryComponent {
   @ViewChild(ViewerComponent, { static: false, read: ElementRef })
   _viewerElRef: ElementRef<HTMLElement>;
 
-  @HostBinding('tabindex')
-  _tabindex = 0;
   _touched = false;
   INIT_INTERACTIONS = ['touchstart', 'mousedown', 'keydown'];
-
-  @HostBinding('attr.aria-label')
-  get ariaLabel() {
-    return this.aria && this.aria.galleryLabel;
-  }
 
   @HostBinding('class.doe-gallery--column')
   get _galleryColumn() {

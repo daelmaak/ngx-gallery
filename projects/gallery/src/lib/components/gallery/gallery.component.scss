@@ -22,6 +22,16 @@
     margin: 0;
     padding: 0;
   }
+
+  .doe-sr-only {
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
+    top: auto;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
 }
 
 .doe-loading {

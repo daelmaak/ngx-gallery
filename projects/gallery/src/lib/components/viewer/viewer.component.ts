@@ -92,8 +92,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   UA = UA;
 
   _displayedItems: GalleryItemInternal[];
+  _fringeCount: number;
   private _destroy$ = new Subject();
-  private _fringeCount: number;
   private _itemWidth: number;
   private _loop: boolean;
   private _viewerWidth: number;
@@ -368,6 +368,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   onTab(nextItemIndex: number) {
+    nextItemIndex = nextItemIndex - this._fringeCount;
     // allow focus to escape viewer
     if (nextItemIndex >= 0 && nextItemIndex < this.items.length) {
       this.select(nextItemIndex);
@@ -386,6 +387,11 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   onItemErrored(item: GalleryItemInternal) {
     item._failed = true;
     this._cd.detectChanges();
+  }
+
+  _itemTabbable(index: number) {
+    index = index - this._fringeCount;
+    return index >= 0 && index < this.items.length ? 0 : -1;
   }
 
   private center() {
