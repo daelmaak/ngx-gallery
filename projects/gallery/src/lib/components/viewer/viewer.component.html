@@ -14,7 +14,7 @@
     #itemsRef
     *ngFor="let item of _displayedItems; let i = index"
     [class.doe-viewer-item--selected]="i === selectedIndex"
-    tabindex="0"
+    [attr.tabindex]="_itemTabbable(i)"
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'doe-viewer-aria-description-' + i"
     (click)="onImageClick(item, $event)"
@@ -83,9 +83,8 @@
 
       <span
         [id]="'doe-viewer-aria-description-' + i"
-        class="doe-viewer-aria-description"
+        class="doe-sr-only"
         [innerHTML]="item.description"
-        aria-hidden="true"
       ></span>
     </ng-container>
 

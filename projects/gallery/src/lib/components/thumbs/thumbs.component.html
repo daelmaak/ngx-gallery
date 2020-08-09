@@ -8,12 +8,7 @@
   </div>
 </div>
 
-<ul
-  #thumbs
-  [style.scrollBehavior]="scrollBehavior"
-  tabindex="0"
-  [attr.aria-label]="aria?.thumbnailsLabel"
->
+<ul #thumbs [style.scrollBehavior]="scrollBehavior">
   <li *ngIf="!items || !items.length" class="doe-thumbs-initial-item"></li>
   <li
     #thumb

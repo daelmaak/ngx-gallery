@@ -1,10 +1,9 @@
 export interface Aria {
-  galleryLabel?: string;
+  galleryLabel: string;
   viewerLabel: string;
-  thumbnailsLabel: string;
 }
 
 export const defaultAria: Aria = {
-  viewerLabel: 'Displayed gallery image',
-  thumbnailsLabel: 'Gallery thumbnails',
+  galleryLabel: 'Image Gallery',
+  viewerLabel: 'Displayed gallery images.',
 };
