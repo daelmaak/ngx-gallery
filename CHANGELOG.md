@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+...
+
+## [1.0.0-beta.3] - 2020-08-15
+
 ### Added
 
 - Added `[contentTemplate]` @Input with which an arbitrary content can be injected directly into the gallery viewer.
