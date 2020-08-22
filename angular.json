@@ -19,6 +19,11 @@
           "options": {
             "tsConfig": "projects/gallery/tsconfig.lib.json",
             "project": "projects/gallery/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/gallery/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -36,7 +41,9 @@
               "projects/gallery/tsconfig.lib.json",
               "projects/gallery/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
@@ -60,12 +67,16 @@
             "main": "projects/demo/src/main.ts",
             "polyfills": "projects/demo/src/polyfills.ts",
             "tsConfig": "projects/demo/tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "projects/demo/src/favicon.ico",
               "projects/demo/src/assets",
               "projects/demo/src/google08efa3d99d13d01e.html",
-              { "glob": "**/*", "input": ".circleci", "output": "/.circleci/" }
+              {
+                "glob": "**/*",
+                "input": ".circleci",
+                "output": "/.circleci/"
+              }
             ],
             "styles": [
               "projects/demo/src/styles.scss",
@@ -86,7 +97,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -133,7 +143,9 @@
               "projects/demo/src/favicon.ico",
               "projects/demo/src/assets"
             ],
-            "styles": ["projects/demo/src/styles.scss"],
+            "styles": [
+              "projects/demo/src/styles.scss"
+            ],
             "scripts": []
           }
         },
@@ -145,7 +157,9 @@
               "projects/demo/tsconfig.spec.json",
               "projects/demo/e2e/tsconfig.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "e2e": {
@@ -163,5 +177,8 @@
       }
     }
   },
-  "defaultProject": "gallery"
+  "defaultProject": "gallery",
+  "cli": {
+    "analytics": false
+  }
 }

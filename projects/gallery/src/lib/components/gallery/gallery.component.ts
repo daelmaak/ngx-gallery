@@ -71,9 +71,9 @@ export class GalleryComponent {
   @Output() descriptionClick = new EventEmitter<Event>();
   @Output() selection = new EventEmitter<GalleryItem>();
 
-  @ViewChild(ViewerComponent, { static: false }) _viewerRef: ViewerComponent;
-  @ViewChild(ThumbsComponent, { static: false }) _thumbsRef: ThumbsComponent;
-  @ViewChild(ViewerComponent, { static: false, read: ElementRef })
+  @ViewChild(ViewerComponent) _viewerRef: ViewerComponent;
+  @ViewChild(ThumbsComponent) _thumbsRef: ThumbsComponent;
+  @ViewChild(ViewerComponent, { read: ElementRef })
   _viewerElRef: ElementRef<HTMLElement>;
 
   _touched = false;

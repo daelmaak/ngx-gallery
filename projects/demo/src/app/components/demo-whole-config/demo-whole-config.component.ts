@@ -52,7 +52,7 @@ export class DemoWholeConfig implements OnInit {
     thumbsScrollBehavior: 'smooth',
   };
 
-  @ViewChild(GalleryComponent, { static: false }) gallery: GalleryComponent;
+  @ViewChild(GalleryComponent) gallery: GalleryComponent;
 
   constructor(private cd: ChangeDetectorRef) {
     this.galleryConfig = this.getGalleryConfig() || this.galleryConfig;
