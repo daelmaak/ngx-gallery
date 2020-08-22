@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2020-08-22
 
+### Fixed
+
+- Added missing es6 export of MediaDirective.
+
 ## [1.0.0-beta.3] - 2020-08-15
 
 ### Added
