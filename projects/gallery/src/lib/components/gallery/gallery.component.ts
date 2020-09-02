@@ -6,10 +6,15 @@ import {
   HostBinding,
   HostListener,
   Input,
+  OnChanges,
   Output,
   TemplateRef,
   ViewChild,
   ChangeDetectorRef,
+  SimpleChanges,
+  ViewContainerRef,
+  Injector,
+  ComponentFactoryResolver,
 } from '@angular/core';
 
 import {
@@ -26,7 +31,6 @@ import {
   ContentTemplateContext,
 } from '../../core';
 import { defaultAria } from '../../core/aria';
-import { ThumbsComponent } from '../thumbs/thumbs.component';
 import { ViewerComponent } from '../viewer/viewer.component';
 
 @Component({
@@ -35,7 +39,7 @@ import { ViewerComponent } from '../viewer/viewer.component';
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GalleryComponent {
+export class GalleryComponent implements OnChanges {
   @Input() items: GalleryItem[];
   @Input() selectedIndex = 0;
   @Input() aria: Aria = defaultAria;
@@ -72,10 +76,12 @@ export class GalleryComponent {
   @Output() selection = new EventEmitter<GalleryItem>();
 
   @ViewChild(ViewerComponent) _viewerRef: ViewerComponent;
-  @ViewChild(ThumbsComponent) _thumbsRef: ThumbsComponent;
   @ViewChild(ViewerComponent, { read: ElementRef })
   _viewerElRef: ElementRef<HTMLElement>;
+  @ViewChild('thumbsContainer', { read: ViewContainerRef })
+  _thumbsContainer: ViewContainerRef;
 
+  _thumbs: any;
   _touched = false;
   INIT_INTERACTIONS = ['touchstart', 'mousedown', 'keydown'];
 
@@ -98,13 +104,29 @@ export class GalleryComponent {
 
   constructor(
     private cd: ChangeDetectorRef,
-    private hostRef: ElementRef<HTMLElement>
+    private hostRef: ElementRef<HTMLElement>,
+    private crf: ComponentFactoryResolver,
+    private injector: Injector
   ) {
     this.INIT_INTERACTIONS.forEach(ename =>
       hostRef.nativeElement.addEventListener(ename, this._onInitInteraction, {
         passive: true,
       })
     );
+  }
+
+  async ngOnChanges(changes: SimpleChanges) {
+    if (this.thumbs && !this._thumbs) {
+      const { ThumbsComponent } = await import('../thumbs/thumbs.component');
+      const thumbsFactory = this.crf.resolveComponentFactory(ThumbsComponent);
+      const { instance } = this._thumbsContainer.createComponent(
+        thumbsFactory,
+        null,
+        this.injector
+      );
+      this._thumbs = instance;
+      this._thumbs.items = this.items;
+    }
   }
 
   private _onInitInteraction = () => {
@@ -132,12 +154,12 @@ export class GalleryComponent {
 
   select(index: number) {
     this._viewerRef.select(index);
-    this._thumbsRef.select(index);
+    // this._thumbsRef.select(index);
     this._selectInternal(index);
   }
 
   slideThumbs(direction: number) {
-    this._thumbsRef.slide(direction);
+    // this._thumbsRef.slide(direction);
   }
 
   _onThumbClick(event: GalleryItemEvent) {

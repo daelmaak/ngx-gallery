@@ -3,9 +3,7 @@
   class="doe-thumbs-arrow doe-thumbs-arrow-prev"
   (click)="slide(-1)"
 >
-  <div *ngIf="!arrowTemplate; else arrowTemplate">
-    <doe-chevron-icon></doe-chevron-icon>
-  </div>
+  <div *ngIf="!arrowTemplate; else arrowTemplate"></div>
 </div>
 
 <ul #thumbs [style.scrollBehavior]="scrollBehavior">
@@ -55,7 +53,5 @@
   class="doe-thumbs-arrow doe-thumbs-arrow-next"
   (click)="slide(1)"
 >
-  <div *ngIf="!arrowTemplate; else arrowTemplate">
-    <doe-chevron-icon></doe-chevron-icon>
-  </div>
+  <div *ngIf="!arrowTemplate; else arrowTemplate"></div>
 </div>

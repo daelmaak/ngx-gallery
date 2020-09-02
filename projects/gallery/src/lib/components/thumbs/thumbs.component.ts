@@ -14,6 +14,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
+  NgModule,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 
@@ -29,6 +30,7 @@ import {
   GalleryItemEvent,
   isVideo,
 } from '../../core/gallery-item';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'doe-thumbs',
@@ -39,7 +41,6 @@ import {
 export class ThumbsComponent implements OnChanges, OnDestroy {
   @Input() items: GalleryItemInternal[] = [];
   @Input() selectedIndex: number;
-  @Input() aria: Aria;
   @Input() orientation: Orientation;
   @Input() arrows: boolean;
   @Input() arrowSlideByLength: number;
@@ -298,3 +299,9 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
     this._arrowObserver && this._arrowObserver.disconnect();
   }
 }
+
+@NgModule({
+  declarations: [ThumbsComponent],
+  imports: [CommonModule],
+})
+export class ThumbsModule {}

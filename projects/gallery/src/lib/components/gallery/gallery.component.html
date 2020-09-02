@@ -2,6 +2,7 @@
   {{ aria.galleryLabel }}
 </span>
 
+<!--
 <doe-thumbs
   *ngIf="thumbs"
   [items]="items"
@@ -14,10 +15,12 @@
   [thumbTemplate]="thumbTemplate"
   [arrowTemplate]="thumbsArrowTemplate"
   [errorTemplate]="thumbErrorTemplate"
-  [aria]="aria"
   (thumbClick)="_onThumbClick($event)"
   (thumbHover)="thumbHover.emit($event)"
 ></doe-thumbs>
+-->
+
+<ng-container #thumbsContainer></ng-container>
 
 <doe-viewer
   [items]="items"
@@ -43,7 +46,7 @@
   [touched]="_touched"
   (imageClick)="imageClick.emit($event)"
   (descriptionClick)="descriptionClick.emit($event)"
-  (selection)="_selectInternal($event); _thumbsRef?.select($event)"
+  (selection)="_selectInternal($event); "
 >
 </doe-viewer>
 
