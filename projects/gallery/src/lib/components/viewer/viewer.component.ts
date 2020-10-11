@@ -309,47 +309,23 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   select(index: number) {
-    const indexOutOfBounds = !this.items[index];
-    const looping = this.loop && indexOutOfBounds;
-
     if (this.selectedIndex === index) {
       return this.center();
     }
 
-    // if index is out of bounds but loop is off, then select the first or last item
+    const indexOutOfBounds = !this.items[index];
+    const looping = this.loop && indexOutOfBounds;
+
     if (!looping && indexOutOfBounds) {
       index = index < 0 ? 0 : this.items.length - 1;
     }
 
-    // if infinite looping
     if (looping) {
-      const origIndex = index;
-      index = origIndex - Math.sign(index) * this.items.length;
-
-      this._noAnimation = true;
-
-      setTimeout(() => {
-        const shift =
-          this._listX -
-          Math.sign(origIndex) * this.items.length * this._itemWidth;
-        this.shift(shift);
-
-        setTimeout(() => {
-          this._noAnimation = false;
-          this.center();
-        });
-      });
+      this.performLooping(index);
     }
 
-    // stop video when navigating away from it
-    if (this.isVideo(this.items[index])) {
-      const videoEl: HTMLMediaElement = this.itemsRef
-        .toArray()
-        [this.selectedIndex].nativeElement.querySelector('video');
-
-      if (videoEl) {
-        videoEl.pause();
-      }
+    if (this.isVideo(this.items[this.selectedIndex])) {
+      this.stopCurrentVideo();
     }
 
     this.selectedIndex = index;
@@ -378,7 +354,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   onItemLoaded(item: GalleryItemInternal) {
-    // elements with empty src also get loaded event, therefore the check
     item._loaded = true;
     item._failed = false;
     this._cd.detectChanges();
@@ -409,6 +384,25 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
           this.items.length
         )
       : 0;
+  }
+
+  private performLooping(desiredIndex: number) {
+    const origIndex = desiredIndex;
+    desiredIndex = origIndex - Math.sign(desiredIndex) * this.items.length;
+
+    this._noAnimation = true;
+
+    setTimeout(() => {
+      const shift =
+        this._listX -
+        Math.sign(origIndex) * this.items.length * this._itemWidth;
+      this.shift(shift);
+
+      setTimeout(() => {
+        this._noAnimation = false;
+        this.center();
+      });
+    });
   }
 
   private onResize = () => {
@@ -464,4 +458,14 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   private shiftByDelta = (delta: number) => {
     this.shift(this._listX - delta);
   };
+
+  private stopCurrentVideo() {
+    const videoEl: HTMLMediaElement = this.itemsRef
+      .toArray()
+      [this.selectedIndex].nativeElement.querySelector('video');
+
+    if (videoEl) {
+      videoEl.pause();
+    }
+  }
 }

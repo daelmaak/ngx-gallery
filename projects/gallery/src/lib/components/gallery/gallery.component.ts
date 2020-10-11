@@ -101,20 +101,15 @@ export class GalleryComponent {
     private hostRef: ElementRef<HTMLElement>
   ) {
     this.INIT_INTERACTIONS.forEach(ename =>
-      hostRef.nativeElement.addEventListener(ename, this._onInitInteraction, {
-        passive: true,
-      })
+      hostRef.nativeElement.addEventListener(
+        ename,
+        this._markAsInteractedWith,
+        {
+          passive: true,
+        }
+      )
     );
   }
-
-  private _onInitInteraction = () => {
-    const hostEl = this.hostRef.nativeElement;
-    this._touched = true;
-    this.cd.detectChanges();
-    this.INIT_INTERACTIONS.forEach(ename =>
-      hostEl.removeEventListener(ename, this._onInitInteraction)
-    );
-  };
 
   focus() {
     this._viewerElRef.nativeElement.focus();
@@ -150,4 +145,13 @@ export class GalleryComponent {
     this.selectedIndex = index;
     this.selection.emit(this.items[index]);
   }
+
+  private _markAsInteractedWith = () => {
+    const hostEl = this.hostRef.nativeElement;
+    this._touched = true;
+    this.cd.detectChanges();
+    this.INIT_INTERACTIONS.forEach(ename =>
+      hostEl.removeEventListener(ename, this._markAsInteractedWith)
+    );
+  };
 }

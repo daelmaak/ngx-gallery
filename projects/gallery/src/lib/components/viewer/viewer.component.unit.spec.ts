@@ -1,5 +1,5 @@
-import { ViewerComponent } from './viewer.component';
 import { GalleryImage } from '../../core';
+import { ViewerComponent } from './viewer.component';
 
 describe('ViewerComponent Unit', () => {
   let viewer: ViewerComponent;

@@ -17,8 +17,13 @@ import {
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { OrientationFlag } from '../../core';
 
-import { GalleryItemInternal, GalleryImage } from '../../core/gallery-item';
+import {
+  GalleryItemInternal,
+  GalleryImage,
+  GalleryVideo,
+} from '../../core/gallery-item';
 import { SafePipe } from '../../pipes/safe.pipe';
 import { CounterComponent } from '../counter/counter.component';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
@@ -327,8 +332,6 @@ describe('ViewerComponent', () => {
   });
 
   describe('selection', () => {
-    let changes: SimpleChanges;
-
     beforeEach(() => {
       component.touched = true;
       component.items = [
@@ -339,9 +342,6 @@ describe('ViewerComponent', () => {
       ];
       component.loading = 'lazy';
       component.selectedIndex = 2;
-      changes = {
-        items: new SimpleChange(null, component.items, true),
-      };
     });
 
     it('should select the first item if requested selection is < 0', fakeAsync(() => {
@@ -367,6 +367,36 @@ describe('ViewerComponent', () => {
 
       expect(component.selectedIndex).toBe(3);
     }));
+
+    describe('with video items', () => {
+      beforeEach(fakeAsync(() => {
+        component.items[2] = new GalleryVideo('video-src1');
+        component.loading = 'auto';
+        component.ngOnChanges({
+          thumbsOrientationt: new SimpleChange(
+            null,
+            OrientationFlag.BOTTOM,
+            true
+          ),
+          items: new SimpleChange(null, component.items, true),
+        });
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+      }));
+
+      it('should stop video if the last selected item was an video element', () => {
+        const videoEl = component.itemsRef
+          .toArray()[2]
+          .nativeElement.querySelector('video');
+
+        const videoPauseSpy = spyOn(videoEl, 'pause');
+
+        component.select(3);
+
+        expect(videoPauseSpy).toHaveBeenCalled();
+      });
+    });
 
     // TODO test shifts, especially in loop mode
   });

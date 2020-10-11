@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-...
+### Fixed
+
+- Fixed video pausing when navigating away from it and video is still playing
 
 ## [1.0.0] - 2020-08-22
 
