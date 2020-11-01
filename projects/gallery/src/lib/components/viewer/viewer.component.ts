@@ -316,7 +316,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     const looping = this.loop && indexOutOfBounds;
 
     if (looping) {
-      this.performLooping(index);
+      this.loopTo(index);
     }
 
     if (indexOutOfBounds) {
@@ -392,18 +392,14 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       : 0;
   }
 
-  private performLooping(desiredIndex: number) {
-    const origDesiredIndex = desiredIndex;
-    desiredIndex =
-      origDesiredIndex - Math.sign(desiredIndex) * this.items.length;
-
+  private loopTo(desiredIndex: number) {
     this._noAnimation = true;
 
     setTimeout(() => {
-      const shift =
-        this._listX -
-        Math.sign(origDesiredIndex) * this.items.length * this._itemWidth;
-      this.shift(shift);
+      const shiftDelta =
+        Math.sign(desiredIndex) * this.items.length * this._itemWidth;
+
+      this.shiftByDelta(shiftDelta);
 
       setTimeout(() => {
         this._noAnimation = false;
