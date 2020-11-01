@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -16,12 +17,11 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { trigger, transition, animate, style } from '@angular/animations';
 import { fromEvent, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import {
   Aria,
+  ContentTemplateContext,
   GalleryItemEvent,
   isBrowser,
   ItemTemplateContext,
@@ -30,7 +30,6 @@ import {
   OrientationFlag,
   UA,
   VerticalOrientation,
-  ContentTemplateContext,
 } from '../../core';
 import { GalleryItemInternal, isVideo } from '../../core/gallery-item';
 
@@ -316,12 +315,16 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     const indexOutOfBounds = !this.items[index];
     const looping = this.loop && indexOutOfBounds;
 
-    if (!looping && indexOutOfBounds) {
-      index = index < 0 ? 0 : this.items.length - 1;
-    }
-
     if (looping) {
       this.performLooping(index);
+    }
+
+    if (indexOutOfBounds) {
+      if (this.loop) {
+        index = index < 0 ? this.items.length - 1 : 0;
+      } else {
+        index = index < 0 ? 0 : this.items.length - 1;
+      }
     }
 
     if (this.isVideo(this.items[this.selectedIndex])) {
@@ -387,15 +390,16 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private performLooping(desiredIndex: number) {
-    const origIndex = desiredIndex;
-    desiredIndex = origIndex - Math.sign(desiredIndex) * this.items.length;
+    const origDesiredIndex = desiredIndex;
+    desiredIndex =
+      origDesiredIndex - Math.sign(desiredIndex) * this.items.length;
 
     this._noAnimation = true;
 
     setTimeout(() => {
       const shift =
         this._listX -
-        Math.sign(origIndex) * this.items.length * this._itemWidth;
+        Math.sign(origDesiredIndex) * this.items.length * this._itemWidth;
       this.shift(shift);
 
       setTimeout(() => {

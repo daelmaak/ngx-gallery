@@ -3,9 +3,9 @@ import {
   Component,
   DebugElement,
   SimpleChange,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
-  SimpleChanges,
 } from '@angular/core';
 import {
   async,
@@ -18,10 +18,9 @@ import {
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { OrientationFlag } from '../../core';
-
 import {
-  GalleryItemInternal,
   GalleryImage,
+  GalleryItemInternal,
   GalleryVideo,
 } from '../../core/gallery-item';
 import { SafePipe } from '../../pipes/safe.pipe';
@@ -252,6 +251,7 @@ describe('ViewerComponent', () => {
       );
       templateContainer = templateContainerFixture.componentInstance;
     });
+
     it('should not display custom error on items where the loading was successful', fakeAsync(() => {
       const items = [
         { src: 'src1', _failed: true },
@@ -344,29 +344,51 @@ describe('ViewerComponent', () => {
       component.selectedIndex = 2;
     });
 
-    it('should select the first item if requested selection is < 0', fakeAsync(() => {
-      spyOn(component, 'shift' as any);
-      spyOn(component, 'center' as any);
-      fixture.detectChanges();
+    describe('without looping', () => {
+      beforeEach(() => {
+        spyOn(component, 'shift' as any);
+        spyOn(component, 'center' as any);
+        fixture.detectChanges();
+      });
 
-      component.select(-2);
+      it('should select the first item if requested selection is < 0', fakeAsync(() => {
+        component.select(-2);
+        flush();
 
-      flush();
+        expect(component.selectedIndex).toBe(0);
+      }));
 
-      expect(component.selectedIndex).toBe(0);
-    }));
+      it('should select the last item if requested selection is >= items length', fakeAsync(() => {
+        component.select(10);
+        flush();
 
-    it('should select the last item if requested selection is >= items length', fakeAsync(() => {
-      spyOn(component, 'shift' as any);
-      spyOn(component, 'center' as any);
-      fixture.detectChanges();
+        expect(component.selectedIndex).toBe(3);
+      }));
+    });
 
-      component.select(10);
+    describe('with looping on', () => {
+      beforeEach(() => {
+        spyOn(component, 'shift' as any);
+        spyOn(component, 'center' as any);
+        component.loop = true;
+        fixture.detectChanges();
+      });
 
-      flush();
+      it(`should select the first item if requested selection is < 0
+        with looping on`, fakeAsync(() => {
+        component.select(-2);
+        flush();
 
-      expect(component.selectedIndex).toBe(3);
-    }));
+        expect(component.selectedIndex).toBe(3);
+      }));
+
+      it('should select the last item if requested selection is >= items length', fakeAsync(() => {
+        component.select(10);
+        flush();
+
+        expect(component.selectedIndex).toBe(0);
+      }));
+    });
 
     describe('with video items', () => {
       beforeEach(fakeAsync(() => {
@@ -397,8 +419,82 @@ describe('ViewerComponent', () => {
         expect(videoPauseSpy).toHaveBeenCalled();
       });
     });
+  });
 
-    // TODO test shifts, especially in loop mode
+  describe('slider shifts with 2 fringe items', () => {
+    const ITEM_WIDTH = 600;
+    let changes: SimpleChanges;
+
+    beforeEach(fakeAsync(() => {
+      component.itemWidth = ITEM_WIDTH + 'px';
+      component.touched = true;
+      component.loop = true;
+      component.items = [
+        new GalleryImage('src1'),
+        new GalleryImage('src2'),
+        new GalleryImage('src3'),
+      ];
+      component.mouseGestures = true;
+      component.selectedIndex = 0;
+      changes = {
+        items: new SimpleChange(null, component.items, true),
+      };
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      de.nativeElement.style.width = ITEM_WIDTH + 'px';
+
+      tick();
+      fixture.detectChanges();
+    }));
+
+    describe('before centering', () => {
+      beforeEach(() => {
+        spyOn<any>(component, 'center');
+      });
+
+      it(`should slide to one third of the leftmost fringe item
+        if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
+        const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
+
+        slideImages(usersShiftDistance);
+        tick();
+
+        const { transform } = component.itemListRef.nativeElement.style;
+        expect(getTranslateX(transform)).toBe((-ITEM_WIDTH / 3) * 2);
+      }));
+    });
+
+    describe('after centering', () => {
+      it(`should slide to the first genuine item
+        if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
+        const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
+
+        slideImages(usersShiftDistance);
+        tick();
+
+        const { transform } = component.itemListRef.nativeElement.style;
+        expect(getTranslateX(transform)).toBe(-ITEM_WIDTH);
+      }));
+    });
+
+    function getTranslateX(transform: string) {
+      return +transform.match(/3d\((.*?)px/)[1];
+    }
+
+    function slideImages(distance: number) {
+      const hostEl = de.nativeElement as HTMLElement;
+
+      hostEl.dispatchEvent(
+        new MouseEvent('mousedown', { clientX: 0, clientY: 0 })
+      );
+      document.dispatchEvent(
+        new MouseEvent('mousemove', {
+          movementX: distance,
+          clientX: distance,
+        })
+      );
+      document.dispatchEvent(new MouseEvent('mouseup', { clientX: distance }));
+    }
   });
 });
 

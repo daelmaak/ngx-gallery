@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed video pausing when navigating away from it and video is still playing
+- Fixed wrong looping selection, essentially preventing loop sliding from working
 
 ## [1.0.0] - 2020-08-22
 
