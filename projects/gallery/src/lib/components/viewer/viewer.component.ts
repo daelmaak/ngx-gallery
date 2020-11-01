@@ -320,11 +320,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     if (indexOutOfBounds) {
-      if (this.loop) {
-        index = index < 0 ? this.items.length - 1 : 0;
-      } else {
-        index = index < 0 ? 0 : this.items.length - 1;
-      }
+      index = this.correctIndexOutOfBounds(index);
     }
 
     if (this.isVideo(this.items[this.selectedIndex])) {
@@ -378,6 +374,13 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       (this.selectedIndex + this._fringeCount) * this._itemWidth -
         centeringOffset
     );
+  }
+
+  private correctIndexOutOfBounds(index: number) {
+    if (this.loop) {
+      return index < 0 ? this.items.length - 1 : 0;
+    }
+    return index < 0 ? 0 : this.items.length - 1;
   }
 
   private getFringeCount() {

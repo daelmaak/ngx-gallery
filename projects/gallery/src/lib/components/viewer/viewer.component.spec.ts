@@ -90,7 +90,6 @@ describe('ViewerComponent', () => {
       };
       component.ngOnChanges(changes);
       fixture.detectChanges();
-      // flush macrotasks like requestAnimationFrame
       flush();
 
       expect(
@@ -123,12 +122,7 @@ describe('ViewerComponent', () => {
 
     beforeEach(() => {
       component.touched = true;
-      component.items = [
-        new GalleryImage('src1'),
-        new GalleryImage('src2'),
-        new GalleryImage('src3'),
-        new GalleryImage('src4'),
-      ];
+      component.items = generateGalleryImages(4);
       component.loading = 'lazy';
       component.selectedIndex = 0;
       changes = {
@@ -334,12 +328,7 @@ describe('ViewerComponent', () => {
   describe('selection', () => {
     beforeEach(() => {
       component.touched = true;
-      component.items = [
-        new GalleryImage('src1'),
-        new GalleryImage('src2'),
-        new GalleryImage('src3'),
-        new GalleryImage('src4'),
-      ];
+      component.items = generateGalleryImages(4);
       component.loading = 'lazy';
       component.selectedIndex = 2;
     });
@@ -421,25 +410,18 @@ describe('ViewerComponent', () => {
     });
   });
 
-  describe('slider shifts with 2 fringe items', () => {
+  describe('slider looping with 2 fringe items', () => {
     const ITEM_WIDTH = 600;
-    let changes: SimpleChanges;
 
     beforeEach(fakeAsync(() => {
-      component.itemWidth = ITEM_WIDTH + 'px';
       component.touched = true;
       component.loop = true;
-      component.items = [
-        new GalleryImage('src1'),
-        new GalleryImage('src2'),
-        new GalleryImage('src3'),
-      ];
+      component.items = generateGalleryImages(3);
       component.mouseGestures = true;
       component.selectedIndex = 0;
-      changes = {
+      component.ngOnChanges({
         items: new SimpleChange(null, component.items, true),
-      };
-      component.ngOnChanges(changes);
+      });
       fixture.detectChanges();
       de.nativeElement.style.width = ITEM_WIDTH + 'px';
 
@@ -462,6 +444,17 @@ describe('ViewerComponent', () => {
         const { transform } = component.itemListRef.nativeElement.style;
         expect(getTranslateX(transform)).toBe((-ITEM_WIDTH / 3) * 2);
       }));
+
+      it(`should slide to the first genuine item
+        if user slid completely to the rightmost fringe item`, fakeAsync(() => {
+        const usersShiftDistance = -(ITEM_WIDTH * 3);
+
+        slideImages(usersShiftDistance);
+        tick();
+
+        const { transform } = component.itemListRef.nativeElement.style;
+        expect(getTranslateX(transform)).toBe(-ITEM_WIDTH);
+      }));
     });
 
     describe('after centering', () => {
@@ -475,27 +468,99 @@ describe('ViewerComponent', () => {
         const { transform } = component.itemListRef.nativeElement.style;
         expect(getTranslateX(transform)).toBe(-ITEM_WIDTH);
       }));
+
+      it(`should slide to the first genuine item
+        if user slid completely to the rightmost fringe item`, fakeAsync(() => {
+        const usersShiftDistance = -(ITEM_WIDTH * 3);
+
+        slideImages(usersShiftDistance);
+        tick();
+
+        const { transform } = component.itemListRef.nativeElement.style;
+        expect(getTranslateX(transform)).toBe(-ITEM_WIDTH);
+      }));
     });
-
-    function getTranslateX(transform: string) {
-      return +transform.match(/3d\((.*?)px/)[1];
-    }
-
-    function slideImages(distance: number) {
-      const hostEl = de.nativeElement as HTMLElement;
-
-      hostEl.dispatchEvent(
-        new MouseEvent('mousedown', { clientX: 0, clientY: 0 })
-      );
-      document.dispatchEvent(
-        new MouseEvent('mousemove', {
-          movementX: distance,
-          clientX: distance,
-        })
-      );
-      document.dispatchEvent(new MouseEvent('mouseup', { clientX: distance }));
-    }
   });
+
+  describe('slider shifting with looping off', () => {
+    const ITEM_WIDTH = 600;
+
+    beforeEach(fakeAsync(() => {
+      component.touched = true;
+      component.loop = false;
+      component.items = generateGalleryImages(3);
+      component.mouseGestures = true;
+      component.selectedIndex = 0;
+      component.ngOnChanges({
+        items: new SimpleChange(null, component.items, true),
+      });
+      fixture.detectChanges();
+      de.nativeElement.style.width = ITEM_WIDTH + 'px';
+
+      tick();
+      fixture.detectChanges();
+    }));
+
+    it(`should slide to the first item
+        if user slid left outside the gallery`, fakeAsync(() => {
+      const usersShiftDistance = ITEM_WIDTH / 3;
+
+      slideImages(usersShiftDistance);
+      tick();
+
+      const { transform } = component.itemListRef.nativeElement.style;
+      expect(getTranslateX(transform)).toBe(0);
+    }));
+
+    it(`should slide to the last item
+        if user slid right outside the gallery`, fakeAsync(() => {
+      const usersShiftDistance = -(ITEM_WIDTH * 2.5);
+
+      slideImages(usersShiftDistance);
+      tick();
+
+      const { transform } = component.itemListRef.nativeElement.style;
+      expect(getTranslateX(transform)).toBe(-(ITEM_WIDTH * 2));
+    }));
+
+    it(`should slide back to the selected item
+        if user shifted the slider just a little bit`, fakeAsync(() => {
+      const usersShiftDistance = -(ITEM_WIDTH / 40);
+
+      slideImages(usersShiftDistance);
+      tick();
+
+      const { transform } = component.itemListRef.nativeElement.style;
+      expect(getTranslateX(transform)).toBe(0);
+    }));
+  });
+
+  function generateGalleryImages(quantity: number) {
+    const items = [];
+    for (let i = 1; i <= quantity; i++) {
+      items.push(new GalleryImage(`src${i}`));
+    }
+    return items;
+  }
+
+  function getTranslateX(transform: string) {
+    return +transform.match(/3d\((.*?)px/)[1];
+  }
+
+  function slideImages(distance: number) {
+    const hostEl = de.nativeElement as HTMLElement;
+
+    hostEl.dispatchEvent(
+      new MouseEvent('mousedown', { clientX: 0, clientY: 0 })
+    );
+    document.dispatchEvent(
+      new MouseEvent('mousemove', {
+        movementX: distance,
+        clientX: distance,
+      })
+    );
+    document.dispatchEvent(new MouseEvent('mouseup', { clientX: distance }));
+  }
 });
 
 @Component({
