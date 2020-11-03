@@ -15,6 +15,7 @@
   [arrowTemplate]="thumbsArrowTemplate"
   [errorTemplate]="thumbErrorTemplate"
   [aria]="aria"
+  [isRtl]="isRtl"
   (thumbClick)="_onThumbClick($event)"
   (thumbHover)="thumbHover.emit($event)"
 ></doe-thumbs>
@@ -40,6 +41,7 @@
   [thumbsOrientation]="_thumbsOrientationFlag"
   [arrowTemplate]="arrowTemplate"
   [aria]="aria"
+  [isRtl]="isRtl"
   [touched]="_touched"
   (imageClick)="imageClick.emit($event)"
   (descriptionClick)="descriptionClick.emit($event)"

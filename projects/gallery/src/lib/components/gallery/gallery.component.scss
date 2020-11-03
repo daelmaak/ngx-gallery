@@ -8,6 +8,10 @@
   &.doe-gallery--column {
     flex-direction: column;
   }
+
+  &.rtl {
+    direction: rtl;
+  }
 }
 
 :host::ng-deep {

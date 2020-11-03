@@ -64,6 +64,7 @@ export class GalleryComponent {
   @Input() thumbTemplate: TemplateRef<ThumbTemplateContext>;
   @Input() thumbsArrowTemplate: TemplateRef<void>;
   @Input() thumbErrorTemplate: TemplateRef<void>;
+  @Input() isRtl: boolean;
 
   @Output() imageClick = new EventEmitter<GalleryItemEvent>();
   @Output() thumbClick = new EventEmitter<GalleryItemEvent>();
@@ -86,6 +87,12 @@ export class GalleryComponent {
     );
   }
 
+  @HostBinding('class.rtl')
+  get _isRtl() {
+    return(this.isRtl);
+  }
+
+
   get _thumbsOrientationFlag(): OrientationFlag {
     if (
       this.thumbsOrientation === 'top' ||
@@ -98,7 +105,7 @@ export class GalleryComponent {
 
   constructor(
     private cd: ChangeDetectorRef,
-    private hostRef: ElementRef<HTMLElement>
+    private hostRef: ElementRef<HTMLElement>,
   ) {
     this.INIT_INTERACTIONS.forEach(ename =>
       hostRef.nativeElement.addEventListener(
@@ -106,8 +113,8 @@ export class GalleryComponent {
         this._markAsInteractedWith,
         {
           passive: true,
-        }
-      )
+        },
+      ),
     );
   }
 
@@ -151,7 +158,7 @@ export class GalleryComponent {
     this._touched = true;
     this.cd.detectChanges();
     this.INIT_INTERACTIONS.forEach(ename =>
-      hostEl.removeEventListener(ename, this._markAsInteractedWith)
+      hostEl.removeEventListener(ename, this._markAsInteractedWith),
     );
   };
 }
