@@ -33,6 +33,10 @@ import {
 } from '../../core';
 import { GalleryItemInternal, isVideo } from '../../core/gallery-item';
 
+const passiveEventListenerOpts = {
+  passive: true,
+};
+
 @Component({
   selector: 'doe-viewer',
   templateUrl: './viewer.component.html',
@@ -131,7 +135,12 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnChanges({ thumbsOrientation, items }: SimpleChanges) {
     if (thumbsOrientation && !thumbsOrientation.firstChange) {
-      if (!(thumbsOrientation.currentValue & thumbsOrientation.previousValue)) {
+      const axis =
+        thumbsOrientation.currentValue | thumbsOrientation.previousValue;
+      if (
+        axis !== OrientationFlag.HORIZONTAL &&
+        axis !== OrientationFlag.VERTICAL
+      ) {
         setTimeout(() => {
           this.readDimensions();
           this.center();
@@ -146,135 +155,16 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const listenerOpts = {
-      passive: true,
-    };
-
     if (isBrowser) {
-      fromEvent(window, 'resize', listenerOpts)
-        .pipe(takeUntil(this._destroy$))
-        .subscribe(this.onResize);
-    }
+      this.handleResizes();
 
-    if (isBrowser && this.mouseGestures) {
-      this._zone.runOutsideAngular(() => {
-        const hostEl = this._hostRef.nativeElement;
-        let mousedown: MouseEvent;
-        let maxDeltaX = 0;
-        let maxDeltaY = 0;
+      if (this.mouseGestures) {
+        this.handleMouseSlides();
+      }
 
-        const onmousedown = (e: MouseEvent) => {
-          mousedown = e;
-          this._noAnimation = true;
-
-          document.addEventListener('mousemove', onmousemove, listenerOpts);
-          document.addEventListener('mouseup', onmouseup, listenerOpts);
-        };
-
-        const onmousemove = (e: MouseEvent) => {
-          maxDeltaX = Math.max(Math.abs(mousedown.x - e.x));
-          maxDeltaY = Math.max(Math.abs(mousedown.y - e.y));
-          this.shiftByDelta(e.movementX);
-        };
-
-        const onmouseup = (e: MouseEvent) => {
-          const distance = mousedown.x - e.x;
-
-          this._noAnimation = false;
-          this._zone.run(() => this.selectBySwipeStats(distance));
-
-          document.removeEventListener('mousemove', onmousemove);
-          document.removeEventListener('mouseup', onmouseup);
-        };
-
-        const onclick = (e: MouseEvent) => {
-          if (maxDeltaX > 10 || maxDeltaY > 10) {
-            e.stopPropagation();
-            // to prevent playing a video on swipe
-            e.preventDefault();
-          }
-          maxDeltaY = maxDeltaX = 0;
-        };
-
-        const ondragstart = (e: DragEvent) => e.preventDefault();
-
-        hostEl.addEventListener('mousedown', onmousedown, listenerOpts);
-        hostEl.addEventListener('click', onclick, { capture: true });
-        hostEl.addEventListener('dragstart', ondragstart);
-        this._destroy$.subscribe(() => {
-          hostEl.removeEventListener('mousedown', onmousedown);
-          hostEl.removeEventListener('click', onclick);
-          hostEl.removeEventListener('dragstart', ondragstart);
-        });
-      });
-    }
-
-    if (isBrowser && this.touchGestures) {
-      this._zone.runOutsideAngular(() => {
-        const hostEl = this._hostRef.nativeElement;
-        let horizontal = null;
-        let touchstart: TouchEvent;
-        let lastTouchmove: TouchEvent;
-
-        const ontouchstart = (e: TouchEvent) => {
-          touchstart = e;
-          this._noAnimation = true;
-        };
-
-        const ontouchmove = (e: TouchEvent) => {
-          if (!touchstart || e.touches.length !== 1) {
-            return;
-          }
-          const startTouch = touchstart.touches[0];
-          const moveTouch = e.touches[0];
-
-          if (horizontal == null) {
-            const deltaX = Math.abs(moveTouch.clientX - startTouch.clientX);
-            const deltaY = Math.abs(moveTouch.clientY - startTouch.clientY);
-
-            if (deltaX || deltaY) {
-              horizontal = deltaX * 1.2 >= deltaY;
-            }
-          }
-
-          if (horizontal) {
-            this.shiftByDelta(
-              moveTouch.clientX -
-                (lastTouchmove || touchstart).touches[0].clientX
-            );
-            lastTouchmove = e;
-            if (UA.ios) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-          }
-        };
-
-        const ontouchend = () => {
-          this._noAnimation = false;
-
-          if (lastTouchmove) {
-            const distance =
-              touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
-
-            this._zone.run(() => this.selectBySwipeStats(distance));
-          }
-          horizontal = null;
-          touchstart = null;
-          lastTouchmove = null;
-        };
-
-        hostEl.addEventListener('touchstart', ontouchstart, listenerOpts);
-        document.addEventListener('touchmove', ontouchmove, {
-          passive: !UA.ios,
-        });
-        document.addEventListener('touchend', ontouchend, listenerOpts);
-        this._destroy$.subscribe(() => {
-          hostEl.removeEventListener('touchstart', ontouchstart);
-          document.removeEventListener('touchmove', ontouchmove);
-          document.removeEventListener('touchend', ontouchend);
-        });
-      });
+      if (this.touchGestures) {
+        this.handleTouchSlides();
+      }
     }
   }
 
@@ -303,10 +193,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     return !!item.src.match(/youtube.*\/embed\//);
   }
 
-  selectByDelta(delta: number) {
-    this.select(this.selectedIndex + delta);
-  }
-
   select(index: number) {
     if (this.selectedIndex === index) {
       return this.center();
@@ -329,9 +215,14 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     this.selectedIndex = index;
     this.selection.emit(index);
+
     if (!looping) {
       this.center();
     }
+  }
+
+  selectByDelta(delta: number) {
+    this.select(this.selectedIndex + delta);
   }
 
   onImageClick(item: GalleryItemInternal, event: Event) {
@@ -390,6 +281,152 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
           this.items.length
         )
       : 0;
+  }
+
+  private handleMouseSlides() {
+    this._zone.runOutsideAngular(() => {
+      const hostEl = this._hostRef.nativeElement;
+      let mousedown: MouseEvent;
+      let maxDeltaX = 0;
+      let maxDeltaY = 0;
+
+      const onmousedown = (e: MouseEvent) => {
+        mousedown = e;
+        this._noAnimation = true;
+
+        document.addEventListener(
+          'mousemove',
+          onmousemove,
+          passiveEventListenerOpts
+        );
+        document.addEventListener(
+          'mouseup',
+          onmouseup,
+          passiveEventListenerOpts
+        );
+      };
+
+      const onmousemove = (e: MouseEvent) => {
+        maxDeltaX = Math.max(Math.abs(mousedown.x - e.x));
+        maxDeltaY = Math.max(Math.abs(mousedown.y - e.y));
+        this.shiftByDelta(e.movementX);
+      };
+
+      const onmouseup = (e: MouseEvent) => {
+        const distance = mousedown.x - e.x;
+
+        this._noAnimation = false;
+        this._zone.run(() => this.selectBySwipeStats(distance));
+
+        document.removeEventListener('mousemove', onmousemove);
+        document.removeEventListener('mouseup', onmouseup);
+      };
+
+      const onclick = (e: MouseEvent) => {
+        if (maxDeltaX > 10 || maxDeltaY > 10) {
+          e.stopPropagation();
+          // to prevent playing a video on swipe
+          e.preventDefault();
+        }
+        maxDeltaY = maxDeltaX = 0;
+      };
+
+      const ondragstart = (e: DragEvent) => e.preventDefault();
+
+      hostEl.addEventListener(
+        'mousedown',
+        onmousedown,
+        passiveEventListenerOpts
+      );
+      hostEl.addEventListener('click', onclick, { capture: true });
+      hostEl.addEventListener('dragstart', ondragstart);
+      this._destroy$.subscribe(() => {
+        hostEl.removeEventListener('mousedown', onmousedown);
+        hostEl.removeEventListener('click', onclick);
+        hostEl.removeEventListener('dragstart', ondragstart);
+      });
+    });
+  }
+
+  private handleTouchSlides() {
+    this._zone.runOutsideAngular(() => {
+      const hostEl = this._hostRef.nativeElement;
+      let horizontal = null;
+      let touchstart: TouchEvent;
+      let lastTouchmove: TouchEvent;
+
+      const ontouchstart = (e: TouchEvent) => {
+        touchstart = e;
+        this._noAnimation = true;
+      };
+
+      const ontouchmove = (e: TouchEvent) => {
+        if (!touchstart || e.touches.length !== 1) {
+          return;
+        }
+        const startTouch = touchstart.touches[0];
+        const moveTouch = e.touches[0];
+
+        if (horizontal == null) {
+          const deltaX = Math.abs(moveTouch.clientX - startTouch.clientX);
+          const deltaY = Math.abs(moveTouch.clientY - startTouch.clientY);
+
+          if (deltaX || deltaY) {
+            horizontal = deltaX * 1.2 >= deltaY;
+          }
+        }
+
+        if (horizontal) {
+          this.shiftByDelta(
+            moveTouch.clientX - (lastTouchmove || touchstart).touches[0].clientX
+          );
+          lastTouchmove = e;
+          if (UA.ios) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }
+      };
+
+      const ontouchend = () => {
+        this._noAnimation = false;
+
+        if (lastTouchmove) {
+          const distance =
+            touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
+
+          this._zone.run(() => this.selectBySwipeStats(distance));
+        }
+        horizontal = null;
+        touchstart = null;
+        lastTouchmove = null;
+      };
+
+      hostEl.addEventListener(
+        'touchstart',
+        ontouchstart,
+        passiveEventListenerOpts
+      );
+      document.addEventListener('touchmove', ontouchmove, {
+        passive: !UA.ios,
+      });
+      document.addEventListener(
+        'touchend',
+        ontouchend,
+        passiveEventListenerOpts
+      );
+      this._destroy$.subscribe(() => {
+        hostEl.removeEventListener('touchstart', ontouchstart);
+        document.removeEventListener('touchmove', ontouchmove);
+        document.removeEventListener('touchend', ontouchend);
+      });
+    });
+  }
+
+  private handleResizes() {
+    fromEvent(window, 'resize', passiveEventListenerOpts)
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(this.onResize);
   }
 
   private loopTo(desiredIndex: number) {

@@ -533,6 +533,84 @@ describe('ViewerComponent', () => {
       const { transform } = component.itemListRef.nativeElement.style;
       expect(getTranslateX(transform)).toBe(0);
     }));
+
+    it('should slide to next image if it was programatically selected', fakeAsync(() => {
+      component.select(1);
+      tick();
+
+      const { transform } = component.itemListRef.nativeElement.style;
+      expect(getTranslateX(transform)).toBe(-ITEM_WIDTH);
+    }));
+  });
+
+  describe('orientation changes', () => {
+    const ITEM_WIDTH = 600;
+
+    beforeEach(fakeAsync(() => {
+      component.touched = true;
+      component.loop = false;
+      component.items = generateGalleryImages(3);
+      component.mouseGestures = true;
+      component.selectedIndex = 0;
+      component.thumbsOrientation = OrientationFlag.BOTTOM;
+      component.ngOnChanges({
+        items: new SimpleChange(null, component.items, true),
+        thumbsOrientation: new SimpleChange(
+          null,
+          component.thumbsOrientation,
+          true
+        ),
+      });
+      fixture.detectChanges();
+      de.nativeElement.style.width = ITEM_WIDTH + 'px';
+
+      tick();
+      fixture.detectChanges();
+    }));
+
+    it(`should re-center selected image if the orientation axis changed`, fakeAsync(() => {
+      component.select(1);
+      tick();
+
+      component.thumbsOrientation = OrientationFlag.LEFT;
+      component.ngOnChanges({
+        thumbsOrientation: new SimpleChange(
+          OrientationFlag.BOTTOM,
+          component.thumbsOrientation,
+          false
+        ),
+      });
+      // simulate width change
+      const newViewerWidth = ITEM_WIDTH - 100;
+      de.nativeElement.style.width = newViewerWidth + 'px';
+
+      tick();
+
+      const { transform } = component.itemListRef.nativeElement.style;
+      expect(getTranslateX(transform)).toBe(-newViewerWidth);
+    }));
+
+    it(`should not re-center selected image if the orientation changed
+        but the orientation axis didn't change`, fakeAsync(() => {
+      component.select(1);
+      tick();
+
+      component.thumbsOrientation = OrientationFlag.TOP;
+      component.ngOnChanges({
+        thumbsOrientation: new SimpleChange(
+          OrientationFlag.BOTTOM,
+          component.thumbsOrientation,
+          false
+        ),
+      });
+      // change width just to test whether the component adapted to it
+      de.nativeElement.style.width = ITEM_WIDTH - 100 + 'px';
+
+      tick();
+
+      const { transform } = component.itemListRef.nativeElement.style;
+      expect(getTranslateX(transform)).toBe(-ITEM_WIDTH);
+    }));
   });
 
   function generateGalleryImages(quantity: number) {
