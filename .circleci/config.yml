@@ -27,7 +27,7 @@ jobs:
           name: test
           command: npm run test:ci
       - store_artifacts:
-          path: coverage/gallery
+          path: coverage/gallery/lcov.info
       - codecov/upload:
           file: coverage/gallery/lcov.info
 workflows:
