@@ -177,16 +177,12 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     if (this.loop) {
       index -= this._fringeCount;
     }
-    // the spread makes sure, that also 1 item outside of the visible scrollport in both directions is rendered
-    // so if 3 items are displayed (although 2 partially), 5 items will be "in scroll proximity"
-    const spread = this.touched
-      ? Math.ceil(this._viewerWidth / (this._itemWidth + 1)) || 1
-      : Math.floor(Math.ceil(this._viewerWidth / this._itemWidth) / 2);
+    const spread = this.getSelectedItemProximitySpread();
     const distance = Math.abs(this.selectedIndex - index);
-    return (
-      (this.loop && Math.abs(distance - this.items.length) <= spread) ||
-      distance <= spread
-    );
+    const isLeftFringeItemToLoad =
+      this.loop && Math.abs(distance - this.items.length) <= spread;
+
+    return isLeftFringeItemToLoad || distance <= spread;
   }
 
   isYoutube(item: GalleryItemInternal) {
@@ -281,6 +277,12 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
           this.items.length
         )
       : 0;
+  }
+
+  private getSelectedItemProximitySpread() {
+    return this.touched
+      ? Math.ceil(this._viewerWidth / (this._itemWidth + 1)) || 1
+      : Math.floor(Math.ceil(this._viewerWidth / this._itemWidth) / 2);
   }
 
   private handleMouseSlides() {

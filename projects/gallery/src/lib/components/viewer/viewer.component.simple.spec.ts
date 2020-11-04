@@ -105,6 +105,34 @@ describe('ViewerComponent', () => {
         expect(viewer.isInScrollportProximity(4)).toBeFalsy();
       });
     });
+
+    describe('untouched', () => {
+      beforeEach(() => {
+        viewer.loop = true;
+        viewer.touched = false;
+        viewer['_viewerWidth'] = 600;
+        viewer['_itemWidth'] = 600;
+        viewer['_fringeCount'] = 1;
+      });
+
+      it(`should load only 1 item
+          if only 1 item is visible`, () => {
+        expect(viewer.isInScrollportProximity(0)).toBeFalsy();
+        expect(viewer.isInScrollportProximity(1)).toBeTruthy();
+        expect(viewer.isInScrollportProximity(2)).toBeFalsy();
+      });
+
+      it(`should load only 3 items
+          if 3 items are visible, although partly`, () => {
+        viewer['_itemWidth'] = 600 / 1.5;
+        viewer['_fringeCount'] = 2;
+        expect(viewer.isInScrollportProximity(0)).toBeFalsy();
+        expect(viewer.isInScrollportProximity(1)).toBeTruthy();
+        expect(viewer.isInScrollportProximity(2)).toBeTruthy();
+        expect(viewer.isInScrollportProximity(3)).toBeTruthy();
+        expect(viewer.isInScrollportProximity(4)).toBeFalsy();
+      });
+    });
   });
 
   describe('fringe items count in loop mode', () => {
