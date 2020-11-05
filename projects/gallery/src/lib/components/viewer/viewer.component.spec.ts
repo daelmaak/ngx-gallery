@@ -533,6 +533,13 @@ describe('ViewerComponent', () => {
 
       expect(getSlidePx()).toBe(-ITEM_WIDTH);
     }));
+
+    it('should not shift the already selected item if it was selected again', fakeAsync(() => {
+      component.select(0);
+      tick();
+
+      expect(getSlidePx()).toBe(0);
+    }));
   });
 
   describe('orientation changes', () => {
