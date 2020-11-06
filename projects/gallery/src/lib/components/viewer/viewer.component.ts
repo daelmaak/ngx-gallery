@@ -250,7 +250,15 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this._cd.detectChanges();
   }
 
-  _itemTabbable(index: number) {
+  itemFailedToLoad(item: GalleryItemInternal) {
+    return item._failed;
+  }
+
+  itemLoaded(item: GalleryItemInternal) {
+    return item._loaded;
+  }
+
+  itemTabbable(index: number) {
     index = index - this._fringeCount;
     return index >= 0 && index < this.items.length ? 0 : -1;
   }

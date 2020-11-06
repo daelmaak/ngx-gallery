@@ -178,7 +178,7 @@ describe('ViewerComponent', () => {
     });
   });
 
-  describe('media asset loaded', () => {
+  describe('media asset loading', () => {
     let changeDetector: ChangeDetectorRef;
 
     beforeEach(() => {
@@ -187,37 +187,60 @@ describe('ViewerComponent', () => {
       ]);
       viewer = new ViewerComponent(null, changeDetector, null);
       viewer.items = [new GalleryImage('src1'), new GalleryImage('src2')];
-      viewer['_viewerWidth'] = 600;
     });
 
-    it('should mark item as loaded', () => {
-      const loadedItem = viewer.items[0] as GalleryItemInternal;
+    describe('succeeded', () => {
+      it('should mark item as loaded', () => {
+        const loadedItem = viewer.items[0] as GalleryItemInternal;
 
-      viewer.onItemLoaded(loadedItem);
-      expect(loadedItem._loaded).toBe(true);
+        viewer.onItemLoaded(loadedItem);
+
+        expect(viewer.itemLoaded(loadedItem)).toBe(true);
+      });
+
+      it('should mark item as not failed', () => {
+        const loadedItem = viewer.items[0] as GalleryItemInternal;
+
+        viewer.onItemLoaded(loadedItem);
+
+        expect(viewer.itemFailedToLoad(loadedItem)).toBe(false);
+      });
+
+      it('should mark item as loaded even if it was failing before', () => {
+        const failingItem = viewer.items[0] as GalleryItemInternal;
+
+        viewer.onItemErrored(failingItem);
+        viewer.onItemLoaded(failingItem);
+
+        expect(viewer.itemLoaded(failingItem)).toBe(true);
+      });
+
+      it('should mark item as not failed even if it was failing before', () => {
+        const failingItem = viewer.items[0] as GalleryItemInternal;
+
+        viewer.onItemErrored(failingItem);
+        viewer.onItemLoaded(failingItem);
+
+        expect(viewer.itemFailedToLoad(failingItem)).toBe(false);
+      });
+
+      it('should notify change detector of changes', () => {
+        const loadedItem = viewer.items[0] as GalleryItemInternal;
+
+        viewer.onItemLoaded(loadedItem);
+
+        expect(changeDetector.detectChanges).toHaveBeenCalled();
+      });
     });
 
-    it('should mark item as not failed', () => {
-      const loadedItem = viewer.items[0] as GalleryItemInternal;
+    describe('failed', () => {
+      it('should mark item as failed to load', () => {
+        const failingItem = viewer.items[0] as GalleryItemInternal;
 
-      viewer.onItemLoaded(loadedItem);
-      expect(loadedItem._failed).toBe(false);
-    });
+        viewer.onItemErrored(failingItem);
 
-    it('should mark item as not failed even if it was failed before', () => {
-      const loadedItem = viewer.items[0] as GalleryItemInternal;
-      loadedItem._failed = true;
-
-      viewer.onItemLoaded(loadedItem);
-      expect(loadedItem._failed).toBe(false);
-    });
-
-    it('should notify change detector of changes', () => {
-      const loadedItem = viewer.items[0] as GalleryItemInternal;
-      loadedItem._failed = true;
-
-      viewer.onItemLoaded(loadedItem);
-      expect(changeDetector.detectChanges).toHaveBeenCalled();
+        expect(viewer.itemFailedToLoad(failingItem)).toBe(true);
+      });
     });
   });
 

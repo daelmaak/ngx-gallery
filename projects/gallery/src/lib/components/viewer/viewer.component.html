@@ -14,7 +14,7 @@
     #itemsRef
     *ngFor="let item of _displayedItems; let i = index"
     [class.doe-viewer-item--selected]="i === selectedIndex"
-    [attr.tabindex]="_itemTabbable(i)"
+    [attr.tabindex]="itemTabbable(i)"
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'doe-viewer-aria-description-' + i"
     (click)="onImageClick(item, $event)"
@@ -36,7 +36,7 @@
           <img
             [src]="item.src"
             [alt]="item.alt"
-            [class.doe-viewer-media-loading]="!item._loaded"
+            [class.doe-viewer-media-loading]="!itemLoaded(item)"
             [style.objectFit]="objectFit"
             (load)="onItemLoaded(item)"
             (error)="onItemErrored(item)"
@@ -48,7 +48,7 @@
           @mediaAnimate
           [src]="item.src"
           [poster]="item.thumbSrc || ''"
-          [class.doe-viewer-media-loading]="!item._loaded"
+          [class.doe-viewer-media-loading]="!itemLoaded(item)"
           [style.objectFit]="objectFit"
           controls
           playsinline
@@ -67,11 +67,11 @@
         ></iframe>
       </ng-container>
 
-      <ng-container *ngIf="!item._loaded && !item._failed">
+      <ng-container *ngIf="!itemLoaded(item) && !itemFailedToLoad(item)">
         <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
       </ng-container>
 
-      <ng-container *ngIf="item._failed">
+      <ng-container *ngIf="itemFailedToLoad(item)">
         <div
           *ngIf="!errorTemplate; else errorTemplate"
           class="doe-viewer-error"
