@@ -1,4 +1,6 @@
+import { ChangeDetectorRef } from '@angular/core';
 import { GalleryImage } from '../../core';
+import { GalleryItemInternal } from '../../core/gallery-item';
 import { ViewerComponent } from './viewer.component';
 
 describe('ViewerComponent', () => {
@@ -173,6 +175,49 @@ describe('ViewerComponent', () => {
       const fringeCount = viewer['getFringeCount']();
 
       expect(fringeCount).toBe(3);
+    });
+  });
+
+  describe('media asset loaded', () => {
+    let changeDetector: ChangeDetectorRef;
+
+    beforeEach(() => {
+      changeDetector = jasmine.createSpyObj('changeDetectorRef', [
+        'detectChanges',
+      ]);
+      viewer = new ViewerComponent(null, changeDetector, null);
+      viewer.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+      viewer['_viewerWidth'] = 600;
+    });
+
+    it('should mark item as loaded', () => {
+      const loadedItem = viewer.items[0] as GalleryItemInternal;
+
+      viewer.onItemLoaded(loadedItem);
+      expect(loadedItem._loaded).toBe(true);
+    });
+
+    it('should mark item as not failed', () => {
+      const loadedItem = viewer.items[0] as GalleryItemInternal;
+
+      viewer.onItemLoaded(loadedItem);
+      expect(loadedItem._failed).toBe(false);
+    });
+
+    it('should mark item as not failed even if it was failed before', () => {
+      const loadedItem = viewer.items[0] as GalleryItemInternal;
+      loadedItem._failed = true;
+
+      viewer.onItemLoaded(loadedItem);
+      expect(loadedItem._failed).toBe(false);
+    });
+
+    it('should notify change detector of changes', () => {
+      const loadedItem = viewer.items[0] as GalleryItemInternal;
+      loadedItem._failed = true;
+
+      viewer.onItemLoaded(loadedItem);
+      expect(changeDetector.detectChanges).toHaveBeenCalled();
     });
   });
 
