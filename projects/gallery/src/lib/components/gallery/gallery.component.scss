@@ -8,6 +8,16 @@
   &.doe-gallery--column {
     flex-direction: column;
   }
+
+  &.rtl {
+    // maintains doe-thumbs orientation also when the whole document is in RTL mode
+    direction: ltr;
+
+    doe-viewer,
+    doe-thumbs {
+      direction: rtl;
+    }
+  }
 }
 
 :host::ng-deep {

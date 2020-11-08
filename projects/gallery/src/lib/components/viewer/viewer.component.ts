@@ -5,6 +5,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostBinding,
   Input,
   NgZone,
   OnChanges,
@@ -83,6 +84,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.itemListRef.nativeElement.style.setProperty('--item-width', val || '');
   }
   @Input() touched: boolean;
+
+  @HostBinding('class.rtl')
+  @Input()
+  isRtl: boolean;
 
   @Output() imageClick = new EventEmitter<GalleryItemEvent>();
   @Output() descriptionClick = new EventEmitter<Event>();
@@ -502,7 +507,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private shift(x: number) {
-    this.itemListRef.nativeElement.style.transform = `translate3d(${-(this._listX = x)}px, 0, 0)`;
+    const multiplier = this.isRtl ? 1 : -1;
+    this.itemListRef.nativeElement.style.transform = `translate3d(${
+      multiplier * (this._listX = x)
+    }px, 0, 0)`;
   }
 
   private shiftByDelta = (delta: number) => {

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for right-to-left UI composition and swiping, thanks to [@chemiu-mipo](https://github.com/chemiu-mipo)
+
 ### Fixed
 
 - Fixed video pausing when navigating away from it and video is still playing

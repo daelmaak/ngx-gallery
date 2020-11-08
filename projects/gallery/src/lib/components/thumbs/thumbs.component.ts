@@ -54,6 +54,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
   get scrollBehavior() {
     return this._smoothScrollAllowed ? this._scrollBehavior : 'auto';
   }
+  @Input() isRtl: boolean;
 
   @Output() thumbClick = new EventEmitter<GalleryItemEvent>();
   @Output() thumbHover = new EventEmitter<GalleryItemEvent>();

@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -9,11 +10,10 @@ import {
   Output,
   TemplateRef,
   ViewChild,
-  ChangeDetectorRef,
 } from '@angular/core';
-
 import {
   Aria,
+  ContentTemplateContext,
   GalleryItem,
   GalleryItemEvent,
   ItemTemplateContext,
@@ -21,9 +21,8 @@ import {
   ObjectFit,
   Orientation,
   OrientationFlag,
-  VerticalOrientation,
   ThumbTemplateContext,
-  ContentTemplateContext,
+  VerticalOrientation,
 } from '../../core';
 import { defaultAria } from '../../core/aria';
 import { ThumbsComponent } from '../thumbs/thumbs.component';
@@ -50,6 +49,9 @@ export class GalleryComponent {
   @Input() loading: Loading = 'auto';
   @Input() loop = false;
   @Input() objectFit: ObjectFit = 'cover';
+  @HostBinding('class.rtl')
+  @Input()
+  isRtl: boolean;
   @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
   @Input() loadingTemplate: TemplateRef<void>;
   @Input() errorTemplate: TemplateRef<void>;
