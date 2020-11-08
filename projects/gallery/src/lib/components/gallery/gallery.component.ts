@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -9,11 +10,10 @@ import {
   Output,
   TemplateRef,
   ViewChild,
-  ChangeDetectorRef,
 } from '@angular/core';
-
 import {
   Aria,
+  ContentTemplateContext,
   GalleryItem,
   GalleryItemEvent,
   ItemTemplateContext,
@@ -21,9 +21,8 @@ import {
   ObjectFit,
   Orientation,
   OrientationFlag,
-  VerticalOrientation,
   ThumbTemplateContext,
-  ContentTemplateContext,
+  VerticalOrientation,
 } from '../../core';
 import { defaultAria } from '../../core/aria';
 import { ThumbsComponent } from '../thumbs/thumbs.component';
@@ -50,7 +49,9 @@ export class GalleryComponent {
   @Input() loading: Loading = 'auto';
   @Input() loop = false;
   @Input() objectFit: ObjectFit = 'cover';
-  @Input() isRtl: boolean;
+  @HostBinding('class.rtl')
+  @Input()
+  isRtl: boolean;
   @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
   @Input() loadingTemplate: TemplateRef<void>;
   @Input() errorTemplate: TemplateRef<void>;
@@ -87,12 +88,6 @@ export class GalleryComponent {
     );
   }
 
-  @HostBinding('class.rtl')
-  get _isRtl() {
-    return(this.isRtl);
-  }
-
-
   get _thumbsOrientationFlag(): OrientationFlag {
     if (
       this.thumbsOrientation === 'top' ||
@@ -105,7 +100,7 @@ export class GalleryComponent {
 
   constructor(
     private cd: ChangeDetectorRef,
-    private hostRef: ElementRef<HTMLElement>,
+    private hostRef: ElementRef<HTMLElement>
   ) {
     this.INIT_INTERACTIONS.forEach(ename =>
       hostRef.nativeElement.addEventListener(
@@ -113,8 +108,8 @@ export class GalleryComponent {
         this._markAsInteractedWith,
         {
           passive: true,
-        },
-      ),
+        }
+      )
     );
   }
 
@@ -158,7 +153,7 @@ export class GalleryComponent {
     this._touched = true;
     this.cd.detectChanges();
     this.INIT_INTERACTIONS.forEach(ename =>
-      hostEl.removeEventListener(ename, this._markAsInteractedWith),
+      hostEl.removeEventListener(ename, this._markAsInteractedWith)
     );
   };
 }

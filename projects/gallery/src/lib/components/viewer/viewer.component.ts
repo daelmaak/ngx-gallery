@@ -84,7 +84,10 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this.itemListRef.nativeElement.style.setProperty('--item-width', val || '');
   }
   @Input() touched: boolean;
-  @Input() isRtl: boolean;
+
+  @HostBinding('class.rtl')
+  @Input()
+  isRtl: boolean;
 
   @Output() imageClick = new EventEmitter<GalleryItemEvent>();
   @Output() descriptionClick = new EventEmitter<Event>();
@@ -93,10 +96,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
   @ViewChildren('itemsRef') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
-  @HostBinding('class.rtl')
-  get _isRtl() {
-    return(this.isRtl);
-  }
   isVideo = isVideo;
   UA = UA;
 
@@ -509,7 +508,9 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private shift(x: number) {
     const multiplier = this.isRtl ? 1 : -1;
-    this.itemListRef.nativeElement.style.transform = `translate3d(${multiplier * (this._listX = x)}px, 0, 0)`;
+    this.itemListRef.nativeElement.style.transform = `translate3d(${
+      multiplier * (this._listX = x)
+    }px, 0, 0)`;
   }
 
   private shiftByDelta = (delta: number) => {

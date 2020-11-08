@@ -2,14 +2,13 @@ import { DebugElement } from '@angular/core';
 import {
   async,
   ComponentFixture,
-  TestBed,
   fakeAsync,
+  TestBed,
   tick,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockComponent, MockPipe } from 'ng-mocks';
-
 import { GalleryImage } from '../../core';
 import { SafePipe } from '../../pipes/safe.pipe';
 import { CounterComponent } from '../counter/counter.component';
@@ -98,6 +97,25 @@ describe('GalleryComponent', () => {
         index: 1,
         event: mockedMouseenter,
       });
+    });
+  });
+
+  describe('class attribute', () => {
+    beforeEach(fakeAsync(() => {
+      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+    }));
+
+    it('should have class denoting RTL mode if turned on', () => {
+      component.isRtl = true;
+      fixture.detectChanges();
+
+      expect(de.classes.rtl).toBeTruthy();
+    });
+
+    it('should have no class denoting RTL if turned off', () => {
+      fixture.detectChanges();
+
+      expect(de.classes.rtl).toBeFalsy();
     });
   });
 });

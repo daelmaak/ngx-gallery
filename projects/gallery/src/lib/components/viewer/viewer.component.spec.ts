@@ -117,6 +117,32 @@ describe('ViewerComponent', () => {
     }));
   });
 
+  describe('class attribute', () => {
+    beforeEach(fakeAsync(() => {
+      component.selectedIndex = 0;
+      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+      const changes = {
+        items: new SimpleChange(null, component.items, true),
+      };
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+    }));
+
+    it('should have class denoting RTL mode if turned on', () => {
+      component.isRtl = true;
+      fixture.detectChanges();
+
+      expect(de.classes.rtl).toBeTruthy();
+    });
+
+    it('should have no class denoting RTL if turned off', () => {
+      fixture.detectChanges();
+
+      expect(de.classes.rtl).toBeFalsy();
+    });
+  });
+
   describe('item loading', () => {
     let changes: SimpleChanges;
 
@@ -410,136 +436,168 @@ describe('ViewerComponent', () => {
     });
   });
 
-  describe('slider looping with 2 fringe items', () => {
+  describe('slider', () => {
     const ITEM_WIDTH = 600;
 
-    beforeEach(fakeAsync(() => {
+    beforeEach(() => {
       component.touched = true;
-      component.loop = true;
       component.items = generateGalleryImages(3);
       component.mouseGestures = true;
       component.selectedIndex = 0;
-      component.ngOnChanges({
-        items: new SimpleChange(null, component.items, true),
-      });
-      fixture.detectChanges();
-      de.nativeElement.style.width = ITEM_WIDTH + 'px';
-
-      tick();
-      fixture.detectChanges();
-    }));
-
-    describe('before centering', () => {
-      beforeEach(() => {
-        spyOn<any>(component, 'center');
-      });
-
-      it(`should slide to one third of the leftmost fringe item
-        if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
-        const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
-
-        slideImages(usersShiftDistance);
-        tick();
-
-        expect(getSlidePx()).toBe((-ITEM_WIDTH / 3) * 2);
-      }));
-
-      it(`should slide to the first genuine item
-        if user slid completely to the rightmost fringe item`, fakeAsync(() => {
-        const usersShiftDistance = -(ITEM_WIDTH * 3);
-
-        slideImages(usersShiftDistance);
-        tick();
-
-        expect(getSlidePx()).toBe(-ITEM_WIDTH);
-      }));
     });
 
-    describe('after centering', () => {
-      it(`should slide to the first genuine item
+    describe('in loop mode with 2 fringe items', () => {
+      beforeEach(fakeAsync(() => {
+        component.loop = true;
+        component.ngOnChanges({
+          items: new SimpleChange(null, component.items, true),
+        });
+        fixture.detectChanges();
+        de.nativeElement.style.width = ITEM_WIDTH + 'px';
+
+        tick();
+        fixture.detectChanges();
+      }));
+
+      describe('before centering', () => {
+        beforeEach(() => {
+          spyOn<any>(component, 'center');
+        });
+
+        it(`should slide to one third of the leftmost fringe item
         if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
-        const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
+          const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
 
-        slideImages(usersShiftDistance);
-        tick();
+          slideImages(usersShiftDistance);
+          tick();
 
-        expect(getSlidePx()).toBe(-ITEM_WIDTH);
-      }));
+          expect(getSlidePx()).toBe((-ITEM_WIDTH / 3) * 2);
+        }));
 
-      it(`should slide to the first genuine item
+        it(`should slide to the first genuine item
         if user slid completely to the rightmost fringe item`, fakeAsync(() => {
-        const usersShiftDistance = -(ITEM_WIDTH * 3);
+          const usersShiftDistance = -(ITEM_WIDTH * 3);
 
-        slideImages(usersShiftDistance);
-        tick();
+          slideImages(usersShiftDistance);
+          tick();
 
-        expect(getSlidePx()).toBe(-ITEM_WIDTH);
-      }));
-    });
-  });
-
-  describe('slider shifting with looping off', () => {
-    const ITEM_WIDTH = 600;
-
-    beforeEach(fakeAsync(() => {
-      component.touched = true;
-      component.loop = false;
-      component.items = generateGalleryImages(3);
-      component.mouseGestures = true;
-      component.selectedIndex = 0;
-      component.ngOnChanges({
-        items: new SimpleChange(null, component.items, true),
+          expect(getSlidePx()).toBe(-ITEM_WIDTH);
+        }));
       });
-      fixture.detectChanges();
-      de.nativeElement.style.width = ITEM_WIDTH + 'px';
 
-      tick();
-      fixture.detectChanges();
-    }));
+      describe('after centering', () => {
+        it(`should slide to the first genuine item
+        if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
+          const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
 
-    it(`should slide to the first item
+          slideImages(usersShiftDistance);
+          tick();
+
+          expect(getSlidePx()).toBe(-ITEM_WIDTH);
+        }));
+
+        it(`should slide to the first genuine item
+        if user slid completely to the rightmost fringe item`, fakeAsync(() => {
+          const usersShiftDistance = -(ITEM_WIDTH * 3);
+
+          slideImages(usersShiftDistance);
+          tick();
+
+          expect(getSlidePx()).toBe(-ITEM_WIDTH);
+        }));
+      });
+    });
+
+    describe('with looping off', () => {
+      beforeEach(fakeAsync(() => {
+        component.loop = false;
+        component.ngOnChanges({
+          items: new SimpleChange(null, component.items, true),
+        });
+        fixture.detectChanges();
+        de.nativeElement.style.width = ITEM_WIDTH + 'px';
+
+        tick();
+        fixture.detectChanges();
+      }));
+
+      it(`should slide to the first item
         if user slid left outside the gallery`, fakeAsync(() => {
-      const usersShiftDistance = ITEM_WIDTH / 3;
+        const usersShiftDistance = ITEM_WIDTH / 3;
 
-      slideImages(usersShiftDistance);
-      tick();
+        slideImages(usersShiftDistance);
+        tick();
 
-      expect(getSlidePx()).toBe(0);
-    }));
+        expect(getSlidePx()).toBe(0);
+      }));
 
-    it(`should slide to the last item
+      it(`should slide to the last item
         if user slid right outside the gallery`, fakeAsync(() => {
-      const usersShiftDistance = -(ITEM_WIDTH * 2.5);
+        const usersShiftDistance = -(ITEM_WIDTH * 2.5);
 
-      slideImages(usersShiftDistance);
-      tick();
+        slideImages(usersShiftDistance);
+        tick();
 
-      expect(getSlidePx()).toBe(-(ITEM_WIDTH * 2));
-    }));
+        expect(getSlidePx()).toBe(-(ITEM_WIDTH * 2));
+      }));
 
-    it(`should slide back to the selected item
+      it(`should slide back to the selected item
         if user shifted the slider just a little bit`, fakeAsync(() => {
-      const usersShiftDistance = -(ITEM_WIDTH / 40);
+        const usersShiftDistance = -(ITEM_WIDTH / 40);
 
-      slideImages(usersShiftDistance);
-      tick();
+        slideImages(usersShiftDistance);
+        tick();
 
-      expect(getSlidePx()).toBe(0);
-    }));
+        expect(getSlidePx()).toBe(0);
+      }));
 
-    it('should slide to next image if it was programatically selected', fakeAsync(() => {
-      component.select(1);
-      tick();
+      it('should slide to next image if it was programatically selected', fakeAsync(() => {
+        component.select(1);
+        tick();
 
-      expect(getSlidePx()).toBe(-ITEM_WIDTH);
-    }));
+        expect(getSlidePx()).toBe(-ITEM_WIDTH);
+      }));
 
-    it('should not shift the already selected item if it was selected again', fakeAsync(() => {
-      component.select(0);
-      tick();
+      it('should not shift the already selected item if it was selected again', fakeAsync(() => {
+        component.select(0);
+        tick();
 
-      expect(getSlidePx()).toBe(0);
-    }));
+        expect(getSlidePx()).toBe(0);
+      }));
+    });
+
+    describe('in right to left mode', () => {
+      beforeEach(fakeAsync(() => {
+        component.loop = false;
+        component.isRtl = true;
+        component.ngOnChanges({
+          items: new SimpleChange(null, component.items, true),
+        });
+        fixture.detectChanges();
+        de.nativeElement.style.width = ITEM_WIDTH + 'px';
+
+        tick();
+        fixture.detectChanges();
+      }));
+
+      it('should slide in direction opposite to swipe direction', fakeAsync(() => {
+        const usersShiftDistance = ITEM_WIDTH;
+
+        slideImages(-usersShiftDistance);
+        tick();
+
+        expect(getSlidePx()).toBe(ITEM_WIDTH);
+      }));
+
+      it('should select next item although user swipes counter to the slide direction', fakeAsync(() => {
+        const usersShiftDistance = (ITEM_WIDTH * 2) / 3;
+
+        slideImages(-usersShiftDistance);
+        tick();
+
+        expect(component.selectedIndex).toBe(1);
+      }));
+    });
   });
 
   describe('orientation changes', () => {
