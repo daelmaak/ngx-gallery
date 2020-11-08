@@ -10,7 +10,13 @@
   }
 
   &.rtl {
-    direction: rtl;
+    // maintains doe-thumbs orientation also when the whole document is in RTL mode
+    direction: ltr;
+
+    doe-viewer,
+    doe-thumbs {
+      direction: rtl;
+    }
   }
 }
 
