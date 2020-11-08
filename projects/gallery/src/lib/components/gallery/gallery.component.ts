@@ -50,6 +50,7 @@ export class GalleryComponent {
   @Input() loading: Loading = 'auto';
   @Input() loop = false;
   @Input() objectFit: ObjectFit = 'cover';
+  @Input() isRtl: boolean;
   @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
   @Input() loadingTemplate: TemplateRef<void>;
   @Input() errorTemplate: TemplateRef<void>;
@@ -64,7 +65,6 @@ export class GalleryComponent {
   @Input() thumbTemplate: TemplateRef<ThumbTemplateContext>;
   @Input() thumbsArrowTemplate: TemplateRef<void>;
   @Input() thumbErrorTemplate: TemplateRef<void>;
-  @Input() isRtl: boolean;
 
   @Output() imageClick = new EventEmitter<GalleryItemEvent>();
   @Output() thumbClick = new EventEmitter<GalleryItemEvent>();

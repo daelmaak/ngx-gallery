@@ -19,9 +19,17 @@ $arrow-btn-dimension: 30px;
       display: flex;
       overflow-x: scroll;
       overflow-y: hidden;
+
       &.rtl {
-        li:first-child {margin-left: 0; margin-right: auto;}
-        li:last-child {margin-right: 0; margin-left: auto;}
+        li:first-child {
+          margin-left: 0;
+          margin-right: auto;
+        }
+
+        li:last-child {
+          margin-right: 0;
+          margin-left: auto;
+        }
       }
     }
 

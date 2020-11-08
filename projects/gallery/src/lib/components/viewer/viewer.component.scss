@@ -13,11 +13,19 @@
   // Positive z-index prevent creation of this layer. It also causes a separate layer to be created, because it has "composited" descendants - ul element,
   // however, this layer holds much less memory.
   z-index: 1;
+
   &.rtl {
     .doe-viewer-arrow-next {
-      right: auto; left: 0; transform: translateY(-50%) rotate(180deg);
+      right: auto;
+      left: 0;
+      transform: translateY(-50%) rotate(180deg);
     }
-    .doe-viewer-arrow-prev {right: 0; left: auto; transform: translateY(-50%) rotate(0deg)}
+
+    .doe-viewer-arrow-prev {
+      right: 0;
+      left: auto;
+      transform: translateY(-50%) rotate(0deg)
+    }
   }
 }
 

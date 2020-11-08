@@ -79,7 +79,6 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
     return `doe-thumbs--${this.orientation}`;
   }
 
-
   private get _hostOffsetAxis(): number {
     return this._vertical
       ? this._elRef.nativeElement.offsetHeight

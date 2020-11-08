@@ -4,7 +4,8 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter, HostBinding,
+  EventEmitter,
+  HostBinding,
   Input,
   NgZone,
   OnChanges,
@@ -497,10 +498,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private shift(x: number) {
-    let multiplier = -1;
-    if (this.isRtl) {
-      multiplier = 1;
-    }
+    const multiplier = this.isRtl ? 1 : -1;
     this.itemListRef.nativeElement.style.transform = `translate3d(${multiplier * (this._listX = x)}px, 0, 0)`;
   }
 
