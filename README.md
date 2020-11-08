@@ -7,6 +7,7 @@
 Performant, responsive, easy to use Angular 8+ gallery
 
 [![CircleCI](https://circleci.com/gh/daelmaak/ngx-doe-gallery.svg?style=shield)](https://circleci.com/gh/daelmaak/ngx-doe-gallery)
+[![codecov](https://codecov.io/gh/daelmaak/ngx-doe-gallery/branch/master/graph/badge.svg?token=eQhl2BmseY)](https://codecov.io/gh/daelmaak/ngx-doe-gallery)
 [![npm](https://img.shields.io/npm/v/ngx-doe-gallery.svg)](https://www.npmjs.com/package/ngx-doe-gallery)
 
 [**Demos**](https://daelmaak.github.io/ngx-doe-gallery/) |

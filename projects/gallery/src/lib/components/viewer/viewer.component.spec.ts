@@ -441,8 +441,7 @@ describe('ViewerComponent', () => {
         slideImages(usersShiftDistance);
         tick();
 
-        const { transform } = component.itemListRef.nativeElement.style;
-        expect(getTranslateX(transform)).toBe((-ITEM_WIDTH / 3) * 2);
+        expect(getSlidePx()).toBe((-ITEM_WIDTH / 3) * 2);
       }));
 
       it(`should slide to the first genuine item
@@ -452,8 +451,7 @@ describe('ViewerComponent', () => {
         slideImages(usersShiftDistance);
         tick();
 
-        const { transform } = component.itemListRef.nativeElement.style;
-        expect(getTranslateX(transform)).toBe(-ITEM_WIDTH);
+        expect(getSlidePx()).toBe(-ITEM_WIDTH);
       }));
     });
 
@@ -465,8 +463,7 @@ describe('ViewerComponent', () => {
         slideImages(usersShiftDistance);
         tick();
 
-        const { transform } = component.itemListRef.nativeElement.style;
-        expect(getTranslateX(transform)).toBe(-ITEM_WIDTH);
+        expect(getSlidePx()).toBe(-ITEM_WIDTH);
       }));
 
       it(`should slide to the first genuine item
@@ -476,8 +473,7 @@ describe('ViewerComponent', () => {
         slideImages(usersShiftDistance);
         tick();
 
-        const { transform } = component.itemListRef.nativeElement.style;
-        expect(getTranslateX(transform)).toBe(-ITEM_WIDTH);
+        expect(getSlidePx()).toBe(-ITEM_WIDTH);
       }));
     });
   });
@@ -508,8 +504,7 @@ describe('ViewerComponent', () => {
       slideImages(usersShiftDistance);
       tick();
 
-      const { transform } = component.itemListRef.nativeElement.style;
-      expect(getTranslateX(transform)).toBe(0);
+      expect(getSlidePx()).toBe(0);
     }));
 
     it(`should slide to the last item
@@ -519,8 +514,7 @@ describe('ViewerComponent', () => {
       slideImages(usersShiftDistance);
       tick();
 
-      const { transform } = component.itemListRef.nativeElement.style;
-      expect(getTranslateX(transform)).toBe(-(ITEM_WIDTH * 2));
+      expect(getSlidePx()).toBe(-(ITEM_WIDTH * 2));
     }));
 
     it(`should slide back to the selected item
@@ -530,16 +524,21 @@ describe('ViewerComponent', () => {
       slideImages(usersShiftDistance);
       tick();
 
-      const { transform } = component.itemListRef.nativeElement.style;
-      expect(getTranslateX(transform)).toBe(0);
+      expect(getSlidePx()).toBe(0);
     }));
 
     it('should slide to next image if it was programatically selected', fakeAsync(() => {
       component.select(1);
       tick();
 
-      const { transform } = component.itemListRef.nativeElement.style;
-      expect(getTranslateX(transform)).toBe(-ITEM_WIDTH);
+      expect(getSlidePx()).toBe(-ITEM_WIDTH);
+    }));
+
+    it('should not shift the already selected item if it was selected again', fakeAsync(() => {
+      component.select(0);
+      tick();
+
+      expect(getSlidePx()).toBe(0);
     }));
   });
 
@@ -586,8 +585,7 @@ describe('ViewerComponent', () => {
 
       tick();
 
-      const { transform } = component.itemListRef.nativeElement.style;
-      expect(getTranslateX(transform)).toBe(-newViewerWidth);
+      expect(getSlidePx()).toBe(-newViewerWidth);
     }));
 
     it(`should not re-center selected image if the orientation changed
@@ -608,8 +606,7 @@ describe('ViewerComponent', () => {
 
       tick();
 
-      const { transform } = component.itemListRef.nativeElement.style;
-      expect(getTranslateX(transform)).toBe(-ITEM_WIDTH);
+      expect(getSlidePx()).toBe(-ITEM_WIDTH);
     }));
   });
 
@@ -621,7 +618,8 @@ describe('ViewerComponent', () => {
     return items;
   }
 
-  function getTranslateX(transform: string) {
+  function getSlidePx() {
+    const { transform } = component.itemListRef.nativeElement.style;
     return +transform.match(/3d\((.*?)px/)[1];
   }
 

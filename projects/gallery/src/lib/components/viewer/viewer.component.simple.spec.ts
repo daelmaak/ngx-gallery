@@ -1,4 +1,6 @@
+import { ChangeDetectorRef } from '@angular/core';
 import { GalleryImage } from '../../core';
+import { GalleryItemInternal } from '../../core/gallery-item';
 import { ViewerComponent } from './viewer.component';
 
 describe('ViewerComponent', () => {
@@ -105,6 +107,34 @@ describe('ViewerComponent', () => {
         expect(viewer.isInScrollportProximity(4)).toBeFalsy();
       });
     });
+
+    describe('untouched', () => {
+      beforeEach(() => {
+        viewer.loop = true;
+        viewer.touched = false;
+        viewer['_viewerWidth'] = 600;
+        viewer['_itemWidth'] = 600;
+        viewer['_fringeCount'] = 1;
+      });
+
+      it(`should load only 1 item
+          if only 1 item is visible`, () => {
+        expect(viewer.isInScrollportProximity(0)).toBeFalsy();
+        expect(viewer.isInScrollportProximity(1)).toBeTruthy();
+        expect(viewer.isInScrollportProximity(2)).toBeFalsy();
+      });
+
+      it(`should load only 3 items
+          if 3 items are visible, although partly`, () => {
+        viewer['_itemWidth'] = 600 / 1.5;
+        viewer['_fringeCount'] = 2;
+        expect(viewer.isInScrollportProximity(0)).toBeFalsy();
+        expect(viewer.isInScrollportProximity(1)).toBeTruthy();
+        expect(viewer.isInScrollportProximity(2)).toBeTruthy();
+        expect(viewer.isInScrollportProximity(3)).toBeTruthy();
+        expect(viewer.isInScrollportProximity(4)).toBeFalsy();
+      });
+    });
   });
 
   describe('fringe items count in loop mode', () => {
@@ -145,6 +175,72 @@ describe('ViewerComponent', () => {
       const fringeCount = viewer['getFringeCount']();
 
       expect(fringeCount).toBe(3);
+    });
+  });
+
+  describe('media asset loading', () => {
+    let changeDetector: ChangeDetectorRef;
+
+    beforeEach(() => {
+      changeDetector = jasmine.createSpyObj('changeDetectorRef', [
+        'detectChanges',
+      ]);
+      viewer = new ViewerComponent(null, changeDetector, null);
+      viewer.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+    });
+
+    describe('succeeded', () => {
+      it('should mark item as loaded', () => {
+        const loadedItem = viewer.items[0] as GalleryItemInternal;
+
+        viewer.onItemLoaded(loadedItem);
+
+        expect(viewer.itemLoaded(loadedItem)).toBe(true);
+      });
+
+      it('should mark item as not failed', () => {
+        const loadedItem = viewer.items[0] as GalleryItemInternal;
+
+        viewer.onItemLoaded(loadedItem);
+
+        expect(viewer.itemFailedToLoad(loadedItem)).toBe(false);
+      });
+
+      it('should mark item as loaded even if it was failing before', () => {
+        const failingItem = viewer.items[0] as GalleryItemInternal;
+
+        viewer.onItemErrored(failingItem);
+        viewer.onItemLoaded(failingItem);
+
+        expect(viewer.itemLoaded(failingItem)).toBe(true);
+      });
+
+      it('should mark item as not failed even if it was failing before', () => {
+        const failingItem = viewer.items[0] as GalleryItemInternal;
+
+        viewer.onItemErrored(failingItem);
+        viewer.onItemLoaded(failingItem);
+
+        expect(viewer.itemFailedToLoad(failingItem)).toBe(false);
+      });
+
+      it('should notify change detector of changes', () => {
+        const loadedItem = viewer.items[0] as GalleryItemInternal;
+
+        viewer.onItemLoaded(loadedItem);
+
+        expect(changeDetector.detectChanges).toHaveBeenCalled();
+      });
+    });
+
+    describe('failed', () => {
+      it('should mark item as failed to load', () => {
+        const failingItem = viewer.items[0] as GalleryItemInternal;
+
+        viewer.onItemErrored(failingItem);
+
+        expect(viewer.itemFailedToLoad(failingItem)).toBe(true);
+      });
     });
   });
 

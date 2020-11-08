@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed video pausing when navigating away from it and video is still playing
+- Not attempting re-centering of selected image when thumbnails orientation didn't change its axis (either stayed horizontal or stayed vertical)
 
 ## [1.0.0] - 2020-08-22
 
