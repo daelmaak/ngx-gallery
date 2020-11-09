@@ -16,7 +16,6 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { Subject } from 'rxjs';
-
 import {
   isBrowser,
   Orientation,
@@ -25,8 +24,8 @@ import {
 } from '../../core';
 import { Aria } from '../../core/aria';
 import {
-  GalleryItemInternal,
   GalleryItemEvent,
+  GalleryItemInternal,
   isVideo,
 } from '../../core/gallery-item';
 
@@ -66,13 +65,13 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
 
   _showStartArrow = false;
   _showEndArrow = false;
-  _vertical: boolean;
 
   private _destroy$ = new Subject();
   private _arrowObserver: IntersectionObserver;
   private _scrollBehavior: ScrollBehavior;
   private _scrollId: number;
   private _smoothScrollAllowed = false;
+  private _vertical: boolean;
 
   @HostBinding('class')
   get cssClass() {
@@ -100,7 +99,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       this._vertical = newOrientation === 'left' || newOrientation === 'right';
     }
     if (arrows) {
-      if (arrows.currentValue && this.items && this.items.length) {
+      if (arrows.currentValue && this.thumbsRef) {
         this.observeArrows();
       } else if (!arrows.currentValue) {
         this._showStartArrow = false;
@@ -118,7 +117,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       }
 
       if (this.arrows && currItems.length) {
-        this.observeArrows();
+        setTimeout(() => this.observeArrows());
       }
       if (!prevItems.length) {
         setTimeout(() => {
