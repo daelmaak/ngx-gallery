@@ -12,7 +12,7 @@ import {
   tick,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { GalleryImage } from '../../core';
+import { GalleryImage, GalleryItem } from '../../core';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
 import { ThumbsComponent } from './thumbs.component';
 
@@ -177,47 +177,79 @@ describe('ThumbnailsComponent', () => {
 
   describe('arrows', () => {
     const ITEM_WIDTH = 300;
+    let items: GalleryItem[];
 
-    beforeEach(fakeAsync(() => {
-      const items = [
+    beforeEach(() => {
+      items = [
         new GalleryImage('src1'),
         new GalleryImage('src2'),
         new GalleryImage('src3'),
       ];
       component.arrows = true;
       component.orientation = 'bottom';
-      component.items = items;
-      component.ngOnChanges({
-        items: new SimpleChange(null, items, true),
-        arrows: new SimpleChange(null, component.arrows, true),
-        orientation: new SimpleChange(null, component.orientation, true),
+    });
+
+    describe('with items already loaded', () => {
+      beforeEach(fakeAsync(() => {
+        component.items = items;
+        component.ngOnChanges({
+          items: new SimpleChange(null, items, true),
+          arrows: new SimpleChange(null, component.arrows, true),
+          orientation: new SimpleChange(null, component.orientation, true),
+        });
+        fixture.detectChanges();
+        setThumbsContainerWidth(2 * ITEM_WIDTH);
+        setThumbItemsWidth(ITEM_WIDTH);
+
+        flush();
+      }));
+
+      it('should disappear once they are turned off', done => {
+        waitForArrows(done, _ => {
+          toggleArrows(false);
+
+          const arrows = de.queryAll(By.css('doe-chevron-icon'));
+          expect(arrows.length).toBe(0);
+        });
       });
-      fixture.detectChanges();
-      setThumbsContainerWidth(2 * ITEM_WIDTH);
-      setThumbItemsWidth(ITEM_WIDTH);
 
-      flush();
-    }));
+      it('should re-appear once they are turned on again', done => {
+        component.thumbListRef.nativeElement.scrollLeft = ITEM_WIDTH / 2;
 
-    it('should disappear once they are turned off', done => {
-      waitForArrows(done, _ => {
         toggleArrows(false);
 
-        const arrows = de.queryAll(By.css('doe-chevron-icon'));
-        expect(arrows.length).toBe(0);
+        toggleArrows(true);
+
+        waitForArrows(done, _ => {
+          const arrows = de.queryAll(By.css('doe-chevron-icon'));
+          expect(arrows.length).toBe(2);
+        });
       });
     });
 
-    it('should re-appear once they are turned on again', done => {
-      component.thumbListRef.nativeElement.scrollLeft = ITEM_WIDTH / 2;
+    describe('with items coming later', () => {
+      beforeEach(fakeAsync(() => {
+        component.ngOnChanges({
+          arrows: new SimpleChange(null, component.arrows, true),
+          orientation: new SimpleChange(null, component.orientation, true),
+        });
+        fixture.detectChanges();
+        flush();
+        tick(1000);
+      }));
 
-      toggleArrows(false);
+      it('should appear although items were loaded later', async () => {
+        component.items = items;
+        component.ngOnChanges({
+          items: new SimpleChange(null, items, true),
+        });
+        fixture.detectChanges();
+        setThumbsContainerWidth(2 * ITEM_WIDTH);
+        setThumbItemsWidth(ITEM_WIDTH);
 
-      toggleArrows(true);
+        const arrows = await getArrows();
 
-      waitForArrows(done, _ => {
-        const arrows = de.queryAll(By.css('doe-chevron-icon'));
-        expect(arrows.length).toBe(2);
+        expect(arrows.length).toBe(1);
       });
     });
 
@@ -258,6 +290,21 @@ describe('ThumbnailsComponent', () => {
   function setThumbItemsWidth(width: number) {
     component.thumbsRef.toArray().forEach(thumbEl => {
       thumbEl.nativeElement.style.width = width + 'px';
+    });
+  }
+
+  function getArrows(): Promise<DebugElement[]> {
+    return new Promise(resolve => {
+      let arrows: DebugElement[];
+
+      const arrowWaiter = setInterval(i => {
+        arrows = de.queryAll(By.css('doe-chevron-icon'));
+
+        if (arrows.length) {
+          clearInterval(arrowWaiter);
+          resolve(arrows);
+        }
+      }, 10);
     });
   }
 
