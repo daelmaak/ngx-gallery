@@ -15,7 +15,6 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { Subject } from 'rxjs';
 import {
   isBrowser,
   Orientation,
@@ -46,13 +45,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
   @Input() thumbTemplate: TemplateRef<ThumbTemplateContext>;
   @Input() arrowTemplate: TemplateRef<void>;
   @Input() errorTemplate: TemplateRef<void>;
-  @Input()
-  set scrollBehavior(val: ScrollBehavior) {
-    this._scrollBehavior = val || 'smooth';
-  }
-  get scrollBehavior() {
-    return this._smoothScrollAllowed ? this._scrollBehavior : 'auto';
-  }
+  @Input() scrollBehavior: ScrollBehavior;
   @Input() isRtl: boolean;
 
   @Output() thumbClick = new EventEmitter<GalleryItemEvent>();
@@ -66,12 +59,8 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
   _showStartArrow = false;
   _showEndArrow = false;
 
-  private _destroy$ = new Subject();
   private _arrowObserver: IntersectionObserver;
-  private _scrollBehavior: ScrollBehavior;
   private _scrollId: number;
-  private _smoothScrollAllowed = false;
-  private _vertical: boolean;
 
   @HostBinding('class')
   get cssClass() {
@@ -88,50 +77,37 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
     return this._vertical ? 'scrollTop' : 'scrollLeft';
   }
 
+  private get _vertical(): boolean {
+    return this.orientation === 'left' || this.orientation === 'right';
+  }
+
   constructor(
     private _cd: ChangeDetectorRef,
     private _elRef: ElementRef<HTMLElement>
   ) {}
 
-  ngOnChanges({ arrows, items, orientation }: SimpleChanges) {
-    if (orientation && orientation.currentValue != null) {
-      const newOrientation: Orientation = orientation.currentValue;
-      this._vertical = newOrientation === 'left' || newOrientation === 'right';
-    }
+  ngOnChanges({ arrows, items }: SimpleChanges) {
     if (arrows) {
       if (arrows.currentValue && this.thumbsRef) {
         this.observeArrows();
       } else if (!arrows.currentValue) {
-        this._showStartArrow = false;
-        this._showEndArrow = false;
+        this._showStartArrow = this._showEndArrow = false;
         this.unobserveArrows();
       }
     }
 
-    if (items && items.currentValue) {
-      const currItems = (items.currentValue || []) as GalleryItemInternal[];
-      const prevItems = (items.previousValue || []) as GalleryItemInternal[];
-
-      if (currItems.length === prevItems.length) {
-        return;
-      }
-
-      if (this.arrows && currItems.length) {
-        setTimeout(() => this.observeArrows());
-      }
-      if (!prevItems.length) {
-        setTimeout(() => {
-          this.centerThumbIfNeeded(this.selectedIndex);
-          this._smoothScrollAllowed = true;
-        });
-      }
+    if (items && items.currentValue && items.currentValue.length) {
+      setTimeout(() => {
+        if (this.arrows) {
+          this.observeArrows();
+        }
+        this.centerThumbIfNeeded(this.selectedIndex);
+      });
     }
   }
 
   ngOnDestroy() {
-    this._destroy$.next(null);
-    this._destroy$.complete();
-    this._arrowObserver && this._arrowObserver.disconnect();
+    this.unobserveArrows();
   }
 
   slide(direction: number) {
@@ -286,7 +262,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
         threshold: 1.0,
       });
     } else {
-      this._arrowObserver.disconnect();
+      this.unobserveArrows();
     }
     setTimeout(() => {
       this._arrowObserver.observe(this.thumbsRef.first.nativeElement);

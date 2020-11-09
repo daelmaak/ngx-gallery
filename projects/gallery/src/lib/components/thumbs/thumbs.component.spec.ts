@@ -69,14 +69,16 @@ describe('ThumbnailsComponent', () => {
 
   describe('horizontal sliding', () => {
     const ITEM_WIDTH = 300;
+    let items: GalleryItem[];
 
     beforeEach(() => {
-      const items = [
+      items = [
         new GalleryImage('src1'),
         new GalleryImage('src2'),
         new GalleryImage('src3'),
       ];
       component.items = items;
+      component.scrollBehavior = 'auto';
       component.orientation = 'bottom';
 
       fixture.detectChanges();
@@ -128,7 +130,7 @@ describe('ThumbnailsComponent', () => {
         flush();
       }));
 
-      it(`should slide to the last item it it was selected
+      it(`should slide to the last item if it was selected
           although not visible in scrollport`, fakeAsync(() => {
         component.select(2);
         tick();
@@ -136,7 +138,7 @@ describe('ThumbnailsComponent', () => {
         expect(getSliderShift()).toBe(ITEM_WIDTH);
       }));
 
-      it(`should slide to the last item it it was selected
+      it(`should slide to the last item if it was selected
           although only partially visible in scrollport`, fakeAsync(() => {
         component.thumbListRef.nativeElement.scrollLeft = ITEM_WIDTH / 2;
         tick();
@@ -147,7 +149,7 @@ describe('ThumbnailsComponent', () => {
         expect(getSliderShift()).toBe(ITEM_WIDTH);
       }));
 
-      it(`should slide to the first item it it was selected
+      it(`should slide to the first item if it was selected
           although not visible in scrollport`, fakeAsync(() => {
         component.thumbListRef.nativeElement.scrollLeft = ITEM_WIDTH;
         tick();
@@ -158,12 +160,56 @@ describe('ThumbnailsComponent', () => {
         expect(getSliderShift()).toBe(0);
       }));
 
-      it(`should slide to the first item it it was selected
+      it(`should slide to the first item if it was selected
           although only partially visible in scrollport`, fakeAsync(() => {
         component.thumbListRef.nativeElement.scrollLeft = ITEM_WIDTH / 2;
         tick();
 
         component.select(0);
+        tick();
+
+        expect(getSliderShift()).toBe(0);
+      }));
+
+      it(`should slide to the first item
+          if the selected item is the first one
+          and items input changed
+          although user slid to the very last item before`, fakeAsync(() => {
+        component.thumbListRef.nativeElement.scrollLeft = ITEM_WIDTH;
+        tick();
+
+        component.selectedIndex = 0;
+        component.items = [...component.items, new GalleryImage('src4')];
+        component.ngOnChanges({
+          items: new SimpleChange(items, component.items, false),
+        });
+        tick();
+
+        expect(getSliderShift()).toBe(0);
+      }));
+    });
+
+    describe('without autoscroll', () => {
+      beforeEach(fakeAsync(() => {
+        component.ngOnChanges({
+          items: new SimpleChange(null, component.items, true),
+        });
+        flush();
+      }));
+
+      it(`should slide to the first item
+        if the selected items is the first one
+        and items input changed
+        if user slid to the very last item before
+        even though autoscroll is off`, fakeAsync(() => {
+        component.thumbListRef.nativeElement.scrollLeft = ITEM_WIDTH;
+        tick();
+
+        component.selectedIndex = 0;
+        component.items = [...component.items, new GalleryImage('src4')];
+        component.ngOnChanges({
+          items: new SimpleChange(items, component.items, false),
+        });
         tick();
 
         expect(getSliderShift()).toBe(0);
@@ -186,6 +232,7 @@ describe('ThumbnailsComponent', () => {
         new GalleryImage('src3'),
       ];
       component.arrows = true;
+      component.scrollBehavior = 'auto';
       component.orientation = 'bottom';
     });
 
@@ -224,6 +271,51 @@ describe('ThumbnailsComponent', () => {
           const arrows = de.queryAll(By.css('doe-chevron-icon'));
           expect(arrows.length).toBe(2);
         });
+      });
+
+      describe('when items changed', () => {
+        let observeArrowsSpy: jasmine.Spy;
+
+        beforeEach(() => {
+          observeArrowsSpy = spyOn<any>(component, 'observeArrows');
+        });
+
+        it(`should not be re-initialized
+            if items empty`, fakeAsync(() => {
+          component.items = [];
+          component.ngOnChanges({
+            items: new SimpleChange(items, component.items, false),
+          });
+          flush();
+
+          expect(observeArrowsSpy).not.toHaveBeenCalled();
+        }));
+
+        it(`should be re-initialized
+            if items' length changed`, fakeAsync(() => {
+          component.items = [...items, new GalleryImage('src4')];
+          component.ngOnChanges({
+            items: new SimpleChange(items, component.items, false),
+          });
+          flush();
+
+          expect(observeArrowsSpy).toHaveBeenCalled();
+        }));
+
+        it(`should be re-initialized
+            even if items' length hasn't changed`, fakeAsync(() => {
+          component.items = [
+            new GalleryImage('src4'),
+            new GalleryImage('src5'),
+            new GalleryImage('src6'),
+          ];
+          component.ngOnChanges({
+            items: new SimpleChange(items, component.items, false),
+          });
+          flush();
+
+          expect(observeArrowsSpy).toHaveBeenCalled();
+        }));
       });
     });
 
