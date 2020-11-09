@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for right-to-left UI composition and swiping, thanks to [@chemiu-mipo](https://github.com/chemiu-mipo)
 
+### Changed
+
+- During initialization of thumbs, if selected thumb needs to be scrolled to, it happens smoothly. Previously, there was no animation.
+- During initialization of thumbs, if the selected thumb is not visible in scroll port, it gets scrolled to regardless of autoScroll setting.
+
 ### Fixed
 
 - Fixed video pausing when navigating away from it and video is still playing
