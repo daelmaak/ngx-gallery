@@ -12,7 +12,7 @@ import {
   tick,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { GalleryImage, GalleryItem } from '../../core';
+import { GalleryImage, GalleryItem, SUPPORT } from '../../core';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
 import { ThumbsComponent } from './thumbs.component';
 
@@ -187,6 +187,47 @@ describe('ThumbnailsComponent', () => {
 
         expect(getSliderShift()).toBe(0);
       }));
+
+      describe('without browser support for smooth scroll', () => {
+        let sliderShiftSpy: jasmine.Spy;
+
+        beforeEach(() => {
+          sliderShiftSpy = spyOn<any>(
+            component,
+            'shiftByDelta'
+          ).and.callThrough();
+
+          component.scrollBehavior = 'smooth';
+          SUPPORT.scrollBehavior = false;
+        });
+
+        it(`should slide to the last item if it was selected
+          although not visible in scrollport`, fakeAsync(() => {
+          component.select(2);
+          flush();
+          tick(500);
+
+          expect(getTotalShiftDelta()).toBeGreaterThanOrEqual(ITEM_WIDTH);
+        }));
+
+        it(`should slide to the first item if it was selected
+          although not visible in scrollport`, fakeAsync(() => {
+          component.thumbListRef.nativeElement.scrollLeft = ITEM_WIDTH;
+          tick();
+
+          component.select(0);
+          flush();
+          tick(500);
+
+          expect(getTotalShiftDelta()).toBeLessThanOrEqual(0);
+        }));
+
+        function getTotalShiftDelta() {
+          return sliderShiftSpy.calls
+            .all()
+            .reduce((shiftDelta, c) => c.args[0] + shiftDelta, 0);
+        }
+      });
     });
 
     describe('without autoscroll', () => {

@@ -197,7 +197,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       return;
     }
     if (SUPPORT.scrollBehavior || this.scrollBehavior === 'auto') {
-      this.thumbListRef.nativeElement[this._scrollKey] += totalScrollDelta;
+      this.shiftByDelta(totalScrollDelta);
       return;
     }
     if (this._scrollId != null) {
@@ -228,7 +228,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       frameScroll *= Math.sign(totalScrollDelta);
       currentScroll = suggestedScroll;
 
-      this.thumbListRef.nativeElement[this._scrollKey] += frameScroll;
+      this.shiftByDelta(frameScroll);
 
       if (currentScroll <= totalDistance) {
         this._scrollId = requestAnimationFrame(animate);
@@ -236,6 +236,10 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
     };
 
     this._scrollId = requestAnimationFrame(animate);
+  }
+
+  private shiftByDelta(delta: number) {
+    this.thumbListRef.nativeElement[this._scrollKey] += delta;
   }
 
   private onArrowsObserved: IntersectionObserverCallback = entries => {
