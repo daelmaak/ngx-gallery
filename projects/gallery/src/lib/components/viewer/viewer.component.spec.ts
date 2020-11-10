@@ -443,6 +443,7 @@ describe('ViewerComponent', () => {
       component.touched = true;
       component.items = generateGalleryImages(3);
       component.mouseGestures = true;
+      component.touchGestures = true;
       component.selectedIndex = 0;
     });
 
@@ -464,47 +465,95 @@ describe('ViewerComponent', () => {
           spyOn<any>(component, 'center');
         });
 
-        it(`should slide to one third of the leftmost fringe item
-        if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
-          const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
+        describe('with mouse', () => {
+          it(`should slide to one third of the leftmost fringe item
+            if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
+            const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
 
-          slideImages(usersShiftDistance);
-          tick();
+            slideByMouse(usersShiftDistance);
+            tick();
 
-          expect(getSlidePx()).toBe((-ITEM_WIDTH / 3) * 2);
-        }));
+            expect(getSlidePx()).toBe((-ITEM_WIDTH / 3) * 2);
+          }));
 
-        it(`should slide to the first genuine item
-        if user slid completely to the rightmost fringe item`, fakeAsync(() => {
-          const usersShiftDistance = -(ITEM_WIDTH * 3);
+          it(`should slide to the first genuine item
+            if user slid completely to the rightmost fringe item`, fakeAsync(() => {
+            const usersShiftDistance = -(ITEM_WIDTH * 3);
 
-          slideImages(usersShiftDistance);
-          tick();
+            slideByMouse(usersShiftDistance);
+            tick();
 
-          expect(getSlidePx()).toBe(-ITEM_WIDTH);
-        }));
+            expect(getSlidePx()).toBe(-ITEM_WIDTH);
+          }));
+        });
+
+        describe('with touch', () => {
+          it(`should slide to one third of the leftmost fringe item
+            if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
+            const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
+
+            slideByTouch(usersShiftDistance);
+            tick();
+
+            expect(getSlidePx()).toBe((-ITEM_WIDTH / 3) * 2);
+          }));
+
+          it(`should slide to the first genuine item
+            if user slid completely to the rightmost fringe item`, fakeAsync(() => {
+            const usersShiftDistance = -(ITEM_WIDTH * 3);
+
+            slideByTouch(usersShiftDistance);
+            tick();
+
+            expect(getSlidePx()).toBe(-ITEM_WIDTH);
+          }));
+        });
       });
 
       describe('after centering', () => {
-        it(`should slide to the first genuine item
-        if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
-          const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
+        describe('with mouse', () => {
+          it(`should slide to the first genuine item
+              if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
+            const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
 
-          slideImages(usersShiftDistance);
-          tick();
+            slideByMouse(usersShiftDistance);
+            tick();
 
-          expect(getSlidePx()).toBe(-ITEM_WIDTH);
-        }));
+            expect(getSlidePx()).toBe(-ITEM_WIDTH);
+          }));
 
-        it(`should slide to the first genuine item
-        if user slid completely to the rightmost fringe item`, fakeAsync(() => {
-          const usersShiftDistance = -(ITEM_WIDTH * 3);
+          it(`should slide to the first genuine item
+              if user slid completely to the rightmost fringe item`, fakeAsync(() => {
+            const usersShiftDistance = -(ITEM_WIDTH * 3);
 
-          slideImages(usersShiftDistance);
-          tick();
+            slideByMouse(usersShiftDistance);
+            tick();
 
-          expect(getSlidePx()).toBe(-ITEM_WIDTH);
-        }));
+            expect(getSlidePx()).toBe(-ITEM_WIDTH);
+          }));
+        });
+
+        describe('with touch', () => {
+          it(`should slide to the first genuine item
+              if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
+            const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
+
+            slideByTouch(usersShiftDistance);
+            tick();
+
+            expect(getSlidePx()).toBe(-ITEM_WIDTH);
+          }));
+
+          it(`should slide to the first genuine item
+              if user slid completely to the rightmost fringe item`, fakeAsync(() => {
+            const usersShiftDistance = -(ITEM_WIDTH * 3);
+
+            slideByTouch(usersShiftDistance);
+            tick();
+
+            expect(getSlidePx()).toBe(-ITEM_WIDTH);
+          }));
+        });
       });
     });
 
@@ -521,49 +570,97 @@ describe('ViewerComponent', () => {
         fixture.detectChanges();
       }));
 
-      it(`should slide to the first item
-        if user slid left outside the gallery`, fakeAsync(() => {
-        const usersShiftDistance = ITEM_WIDTH / 3;
+      describe('with mouse', () => {
+        it(`should slide to the first item
+            if user slid left outside the gallery`, fakeAsync(() => {
+          const usersShiftDistance = ITEM_WIDTH / 3;
 
-        slideImages(usersShiftDistance);
-        tick();
+          slideByMouse(usersShiftDistance);
+          tick();
 
-        expect(getSlidePx()).toBe(0);
-      }));
+          expect(getSlidePx()).toBe(0);
+        }));
 
-      it(`should slide to the last item
-        if user slid right outside the gallery`, fakeAsync(() => {
-        const usersShiftDistance = -(ITEM_WIDTH * 2.5);
+        it(`should slide to the last item
+            if user slid right outside the gallery`, fakeAsync(() => {
+          const usersShiftDistance = -(ITEM_WIDTH * 2.5);
 
-        slideImages(usersShiftDistance);
-        tick();
+          slideByMouse(usersShiftDistance);
+          tick();
 
-        expect(getSlidePx()).toBe(-(ITEM_WIDTH * 2));
-      }));
+          expect(getSlidePx()).toBe(-(ITEM_WIDTH * 2));
+        }));
 
-      it(`should slide back to the selected item
-        if user shifted the slider just a little bit`, fakeAsync(() => {
-        const usersShiftDistance = -(ITEM_WIDTH / 40);
+        it(`should slide back to the selected item
+            if user shifted the slider just a little bit`, fakeAsync(() => {
+          const usersShiftDistance = -(ITEM_WIDTH / 40);
 
-        slideImages(usersShiftDistance);
-        tick();
+          slideByMouse(usersShiftDistance);
+          tick();
 
-        expect(getSlidePx()).toBe(0);
-      }));
+          expect(getSlidePx()).toBe(0);
+        }));
 
-      it('should slide to next image if it was programatically selected', fakeAsync(() => {
-        component.select(1);
-        tick();
+        it('should slide to next image if it was programatically selected', fakeAsync(() => {
+          component.select(1);
+          tick();
 
-        expect(getSlidePx()).toBe(-ITEM_WIDTH);
-      }));
+          expect(getSlidePx()).toBe(-ITEM_WIDTH);
+        }));
 
-      it('should not shift the already selected item if it was selected again', fakeAsync(() => {
-        component.select(0);
-        tick();
+        it('should not shift the already selected item if it was selected again', fakeAsync(() => {
+          component.select(0);
+          tick();
 
-        expect(getSlidePx()).toBe(0);
-      }));
+          expect(getSlidePx()).toBe(0);
+        }));
+      });
+
+      describe('with touch', () => {
+        it(`should slide to the first item
+            if user slid left outside the gallery`, fakeAsync(() => {
+          const usersShiftDistance = ITEM_WIDTH / 3;
+
+          slideByTouch(usersShiftDistance);
+          tick();
+
+          expect(getSlidePx()).toBe(0);
+        }));
+
+        it(`should slide to the last item
+            if user slid right outside the gallery`, fakeAsync(() => {
+          const usersShiftDistance = -(ITEM_WIDTH * 2.5);
+
+          slideByTouch(usersShiftDistance);
+          tick();
+
+          expect(getSlidePx()).toBe(-(ITEM_WIDTH * 2));
+        }));
+
+        it(`should slide back to the selected item
+            if user shifted the slider just a little bit`, fakeAsync(() => {
+          const usersShiftDistance = -(ITEM_WIDTH / 40);
+
+          slideByTouch(usersShiftDistance);
+          tick();
+
+          expect(getSlidePx()).toBe(0);
+        }));
+
+        it('should slide to next image if it was programatically selected', fakeAsync(() => {
+          component.select(1);
+          tick();
+
+          expect(getSlidePx()).toBe(-ITEM_WIDTH);
+        }));
+
+        it('should not shift the already selected item if it was selected again', fakeAsync(() => {
+          component.select(0);
+          tick();
+
+          expect(getSlidePx()).toBe(0);
+        }));
+      });
     });
 
     describe('in right to left mode', () => {
@@ -580,23 +677,45 @@ describe('ViewerComponent', () => {
         fixture.detectChanges();
       }));
 
-      it('should slide in direction opposite to swipe direction', fakeAsync(() => {
-        const usersShiftDistance = ITEM_WIDTH;
+      describe('with mouse', () => {
+        it('should slide in direction opposite to swipe direction', fakeAsync(() => {
+          const usersShiftDistance = ITEM_WIDTH;
 
-        slideImages(-usersShiftDistance);
-        tick();
+          slideByMouse(-usersShiftDistance);
+          tick();
 
-        expect(getSlidePx()).toBe(ITEM_WIDTH);
-      }));
+          expect(getSlidePx()).toBe(ITEM_WIDTH);
+        }));
 
-      it('should select next item although user swipes counter to the slide direction', fakeAsync(() => {
-        const usersShiftDistance = (ITEM_WIDTH * 2) / 3;
+        it('should select next item although user swipes counter to the slide direction', fakeAsync(() => {
+          const usersShiftDistance = (ITEM_WIDTH * 2) / 3;
 
-        slideImages(-usersShiftDistance);
-        tick();
+          slideByMouse(-usersShiftDistance);
+          tick();
 
-        expect(component.selectedIndex).toBe(1);
-      }));
+          expect(component.selectedIndex).toBe(1);
+        }));
+      });
+
+      describe('with touch', () => {
+        it('should slide in direction opposite to swipe direction', fakeAsync(() => {
+          const usersShiftDistance = ITEM_WIDTH;
+
+          slideByTouch(-usersShiftDistance);
+          tick();
+
+          expect(getSlidePx()).toBe(ITEM_WIDTH);
+        }));
+
+        it('should select next item although user swipes counter to the slide direction', fakeAsync(() => {
+          const usersShiftDistance = (ITEM_WIDTH * 2) / 3;
+
+          slideByTouch(-usersShiftDistance);
+          tick();
+
+          expect(component.selectedIndex).toBe(1);
+        }));
+      });
     });
   });
 
@@ -681,7 +800,7 @@ describe('ViewerComponent', () => {
     return +transform.match(/3d\((.*?)px/)[1];
   }
 
-  function slideImages(distance: number) {
+  function slideByMouse(distance: number) {
     const hostEl = de.nativeElement as HTMLElement;
 
     hostEl.dispatchEvent(
@@ -694,6 +813,38 @@ describe('ViewerComponent', () => {
       })
     );
     document.dispatchEvent(new MouseEvent('mouseup', { clientX: distance }));
+  }
+
+  function slideByTouch(distance: number) {
+    const hostEl = de.nativeElement as HTMLElement;
+
+    hostEl.dispatchEvent(
+      new TouchEvent('touchstart', {
+        touches: [
+          new Touch({
+            clientX: 0,
+            clientY: 0,
+            identifier: Math.random(),
+            target: component.itemListRef.nativeElement,
+          }),
+        ],
+      })
+    );
+
+    document.dispatchEvent(
+      new TouchEvent('touchmove', {
+        touches: [
+          new Touch({
+            clientX: distance,
+            clientY: 0,
+            identifier: Math.random(),
+            target: component.itemListRef.nativeElement,
+          }),
+        ],
+      })
+    );
+
+    document.dispatchEvent(new TouchEvent('touchend'));
   }
 });
 
