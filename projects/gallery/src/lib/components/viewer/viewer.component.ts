@@ -292,6 +292,16 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       : 0;
   }
 
+  private getItemsToBeDisplayed() {
+    return this.loop
+      ? [
+          ...this.items.slice(-this._fringeCount),
+          ...this.items,
+          ...this.items.slice(0, this._fringeCount),
+        ]
+      : this.items;
+  }
+
   private getSelectedItemProximitySpread() {
     return this.touched
       ? Math.ceil(this._viewerWidth / (this._itemWidth + 1)) || 1
@@ -464,22 +474,12 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     // the setTimeout is here to prevent layout trashing when inquiring layout properties like offsetWidth
     // using setTimeout increases chance the trashing will be avoided and cashed layout calculation will be used
     setTimeout(() => {
-      const { items } = this;
-
       this._noAnimation = true;
 
-      if (!items || !items.length) {
-        this.shift(0);
-      } else {
+      if (this.items && this.items.length) {
         this.readDimensions();
         this._fringeCount = this.getFringeCount();
-        this._displayedItems = this.loop
-          ? [
-              ...items.slice(-this._fringeCount),
-              ...items,
-              ...items.slice(0, this._fringeCount),
-            ]
-          : items;
+        this._displayedItems = this.getItemsToBeDisplayed();
         this._cd.detectChanges();
         this.center();
       }

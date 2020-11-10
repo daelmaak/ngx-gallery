@@ -115,6 +115,22 @@ describe('ViewerComponent', () => {
         /translate3d\(-\d+px, 0px, 0px\)/
       );
     }));
+
+    it(`should move slider to the start once items load
+        even if it was moved before`, fakeAsync(() => {
+      fixture.detectChanges();
+      slideByMouse(-345);
+
+      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+      const changes = {
+        items: new SimpleChange([], component.items, false),
+      };
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      flush();
+
+      expect(getSlidePx()).toBe(0);
+    }));
   });
 
   describe('class attribute', () => {
@@ -797,6 +813,11 @@ describe('ViewerComponent', () => {
 
   function getSlidePx() {
     const { transform } = component.itemListRef.nativeElement.style;
+
+    if (!transform) {
+      return 0;
+    }
+
     return +transform.match(/3d\((.*?)px/)[1];
   }
 
