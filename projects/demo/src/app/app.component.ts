@@ -60,8 +60,8 @@ export class AppComponent {
       'Zoom the world'
     ),
     new GalleryImage(
-      './assets/images/mountains-2-md.jpg',
-      './assets/images/mountains-2-sm.jpg',
+      './assets/images/terraces-1-lg.jpg',
+      './assets/images/terraces-1-sm.jpg',
       'Mountains',
       'Sun lit mountains'
     ),

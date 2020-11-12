@@ -10,6 +10,7 @@
     <li>
       <a href="#demo-thumbs-orientation">Thumbnails orientation & autoscroll</a>
     </li>
+    <li><a href="#demo-rtl">Right to left</a></li>
     <li><a href="#demo-descriptions">Descriptions</a></li>
     <li><a href="#demo-error-handling">Error handling</a></li>
     <li><a href="#demo-videos">Videos</a></li>
@@ -103,6 +104,10 @@
         [items]="extendedImages"
         [mobile]="mobile"
       ></app-demo-thumbs-orientation>
+    </app-showcase>
+
+    <app-showcase id="demo-rtl" heading="Right to left">
+      <doe-gallery [items]="images" loading="lazy" [isRtl]="true"></doe-gallery>
     </app-showcase>
 
     <app-showcase

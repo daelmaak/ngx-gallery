@@ -1,21 +1,19 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  Input,
   OnInit,
   ViewChild,
-  ChangeDetectionStrategy,
-  Input,
 } from '@angular/core';
-import { defer, Observable, of } from 'rxjs';
-import { delay, switchMap } from 'rxjs/operators';
-
+import { GalleryItemInternal } from 'projects/gallery/src/lib/core/gallery-item';
 import {
   GalleryComponent,
   GalleryItem,
   GalleryItemEvent,
-  GalleryImage,
 } from 'projects/gallery/src/public-api';
-import { GalleryItemInternal } from 'projects/gallery/src/lib/core/gallery-item';
+import { defer, Observable, of } from 'rxjs';
+import { delay, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-demo-whole-config',
@@ -44,6 +42,7 @@ export class DemoWholeConfig implements OnInit {
     objectFit: 'cover',
     loading: 'lazy',
     loop: false,
+    rtl: false,
     thumbs: true,
     thumbsAutoScroll: true,
     thumbsOrientation: 'bottom',
