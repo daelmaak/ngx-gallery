@@ -249,18 +249,15 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
   private onArrowsObserved: IntersectionObserverCallback = entries => {
     if (this.thumbsEmpty) return;
 
-    const entryEl1 = entries[0].target as HTMLElement;
-    const firstThumbEntry =
-      entryEl1 === this.thumbsRef.first.nativeElement ? entries[0] : entries[1];
-    const lastThumbEntry =
-      entryEl1 === this.thumbsRef.last.nativeElement ? entries[0] : entries[1];
+    const firstTarget = entries[0].target;
+    const { first, last } = this.thumbsRef;
 
-    if (firstThumbEntry) {
-      this.showStartArrow = firstThumbEntry.intersectionRatio < 1;
-    }
-    if (lastThumbEntry) {
-      this.showEndArrow = lastThumbEntry.intersectionRatio < 1;
-    }
+    const firstThumbEntry =
+      firstTarget === first.nativeElement ? entries[0] : entries[1];
+    const lastThumbEntry =
+      firstTarget === last.nativeElement ? entries[0] : entries[1];
+
+    this.setObservedArrows(firstThumbEntry, lastThumbEntry);
 
     this.cd.detectChanges();
   };
@@ -278,6 +275,21 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
     }
     this.arrowObserver.observe(this.thumbsRef.first.nativeElement);
     this.arrowObserver.observe(this.thumbsRef.last.nativeElement);
+  }
+
+  private setObservedArrows(
+    firstThumb: IntersectionObserverEntry,
+    lastThumb: IntersectionObserverEntry
+  ) {
+    const inverse = this.isRtl && !this.vertical;
+
+    if (inverse) {
+      if (lastThumb) this.showStartArrow = lastThumb.intersectionRatio < 1;
+      if (firstThumb) this.showEndArrow = firstThumb.intersectionRatio < 1;
+    } else {
+      if (firstThumb) this.showStartArrow = firstThumb.intersectionRatio < 1;
+      if (lastThumb) this.showEndArrow = lastThumb.intersectionRatio < 1;
+    }
   }
 
   private unobserveArrows() {
