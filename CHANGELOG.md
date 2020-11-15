@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+...
+
+## [1.1.0-RC1] - 2020-11-15
+
 ### Added
 
 - Support for right-to-left UI composition and swiping, thanks to [@chemiu-mipo](https://github.com/chemiu-mipo)
@@ -58,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `[doeMedia]` directive, which is to be used in custom item templates (`[itemTemplate]` @Input). It is not mandatory, but if used it makes the gallery aware of the custom provided media (<img> or <video>), them failing or successfully loading in particular. Without it, the user is responsible for providing some kind of a loading animation and, if needed, reflect on failure to load media, himself.
+- Added `[doeMedia]` directive, which is to be used in custom item templates (`[itemTemplate]` @Input). It is not mandatory, but if used it makes the gallery aware of the custom provided media (`<img>` or `<video>`), them failing or successfully loading in particular. Without it, the user is responsible for providing some kind of a loading animation and, if needed, reflect on failure to load media, himself.
 - Gallery now loads only those media, that are displayed in the scrollport of the gallery. Once there is an interaction though of any kind with the gallery, it starts preloading also item which are in immediate proximity of the scrollport, but not visible yet. This is done to improve first load performance.
 - Item enter animation in form of a fade-in.
 
@@ -104,7 +108,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed background flashes in Firefox when new images slide into doe-viewer's scrollport.
 
-[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.1.0-RC1...HEAD
+[1.1.0-rc1]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.1.0-RC1...v1.0.0
 [1.0.0]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.3...v1.0.0
 [1.0.0-beta.3]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.2...v1.0.0-beta.3
 [1.0.0-beta.2]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.0...v1.0.0-beta.2
