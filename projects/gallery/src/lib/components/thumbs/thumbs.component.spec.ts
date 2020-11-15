@@ -263,7 +263,7 @@ describe('ThumbnailsComponent', () => {
   });
 
   describe('arrows', () => {
-    const ITEM_WIDTH = 300;
+    const ITEM_WIDTH = 120;
     let items: GalleryItem[];
 
     beforeEach(() => {
@@ -315,36 +315,34 @@ describe('ThumbnailsComponent', () => {
       });
 
       describe('when items changed', () => {
-        let observeArrowsSpy: jasmine.Spy;
-
-        beforeEach(() => {
-          observeArrowsSpy = spyOn<any>(component, 'observeArrows');
-        });
-
-        it(`should not be re-initialized
+        it(`should not be shown
             if items empty`, fakeAsync(() => {
           component.items = [];
           component.ngOnChanges({
             items: new SimpleChange(items, component.items, false),
           });
+          fixture.detectChanges();
           flush();
 
-          expect(observeArrowsSpy).not.toHaveBeenCalled();
+          const arrows = de.queryAll(By.css('doe-chevron-icon'));
+          expect(arrows.length).toBe(0);
         }));
 
-        it(`should be re-initialized
-            if items' length changed`, fakeAsync(() => {
+        it(`should be still shown
+            if items' length changed`, done => {
           component.items = [...items, new GalleryImage('src4')];
           component.ngOnChanges({
             items: new SimpleChange(items, component.items, false),
           });
-          flush();
+          fixture.detectChanges();
 
-          expect(observeArrowsSpy).toHaveBeenCalled();
-        }));
+          waitForArrows(done, arrows => {
+            expect(arrows.length).not.toBe(0);
+          });
+        });
 
-        it(`should be re-initialized
-            even if items' length hasn't changed`, fakeAsync(() => {
+        it(`should be still shown
+            even if items' length hasn't changed`, done => {
           component.items = [
             new GalleryImage('src4'),
             new GalleryImage('src5'),
@@ -353,10 +351,12 @@ describe('ThumbnailsComponent', () => {
           component.ngOnChanges({
             items: new SimpleChange(items, component.items, false),
           });
-          flush();
+          fixture.detectChanges();
 
-          expect(observeArrowsSpy).toHaveBeenCalled();
-        }));
+          waitForArrows(done, arrows => {
+            expect(arrows.length).not.toBe(0);
+          });
+        });
       });
     });
 

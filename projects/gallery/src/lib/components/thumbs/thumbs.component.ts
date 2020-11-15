@@ -56,47 +56,51 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
 
   isVideo = isVideo;
 
-  _showStartArrow = false;
-  _showEndArrow = false;
+  showStartArrow = false;
+  showEndArrow = false;
 
-  private _arrowObserver: IntersectionObserver;
-  private _scrollId: number;
+  private arrowObserver: IntersectionObserver;
+  private scrollId: number;
 
   @HostBinding('class')
   get cssClass() {
     return `doe-thumbs--${this.orientation}`;
   }
 
-  private get _hostOffsetAxis(): number {
-    return this._vertical
-      ? this._elRef.nativeElement.offsetHeight
-      : this._elRef.nativeElement.offsetWidth;
+  private get hostOffsetAxis(): number {
+    return this.vertical
+      ? this.elRef.nativeElement.offsetHeight
+      : this.elRef.nativeElement.offsetWidth;
   }
 
-  private get _scrollKey(): string {
-    return this._vertical ? 'scrollTop' : 'scrollLeft';
+  private get scrollKey(): string {
+    return this.vertical ? 'scrollTop' : 'scrollLeft';
   }
 
-  private get _vertical(): boolean {
+  private get thumbsEmpty(): boolean {
+    return !this.thumbsRef || !this.thumbsRef.length;
+  }
+
+  private get vertical(): boolean {
     return this.orientation === 'left' || this.orientation === 'right';
   }
 
   constructor(
-    private _cd: ChangeDetectorRef,
-    private _elRef: ElementRef<HTMLElement>
+    private cd: ChangeDetectorRef,
+    private elRef: ElementRef<HTMLElement>
   ) {}
 
   ngOnChanges({ arrows, items }: SimpleChanges) {
     if (arrows) {
-      if (arrows.currentValue && this.thumbsRef) {
+      if (arrows.currentValue) {
         this.observeArrows();
       } else if (!arrows.currentValue) {
-        this._showStartArrow = this._showEndArrow = false;
+        this.showStartArrow = this.showEndArrow = false;
         this.unobserveArrows();
       }
     }
 
-    if (items && items.currentValue && items.currentValue.length) {
+    if (items) {
       setTimeout(() => {
         if (this.arrows) {
           this.observeArrows();
@@ -120,10 +124,10 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       // or by the overflow of the thumbs - to prevent unnecessary requestAnimationFrame calls while trying to scroll
       // outside of the min/max scroll of the thumbs
       const thumbList = this.thumbListRef.nativeElement as HTMLElement;
-      const thumbListScrollAxis = this._vertical
+      const thumbListScrollAxis = this.vertical
         ? thumbList.scrollHeight
         : thumbList.scrollWidth;
-      const thumbListOffsetAxis = this._vertical
+      const thumbListOffsetAxis = this.vertical
         ? thumbList.offsetHeight
         : thumbList.offsetWidth;
 
@@ -149,11 +153,11 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
     const nextItemEl = nextItemRef.nativeElement;
     const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = nextItemEl;
 
-    const itemOffset = this._vertical ? offsetTop : offsetLeft;
-    const itemOffsetAxis = this._vertical ? offsetHeight : offsetWidth;
+    const itemOffset = this.vertical ? offsetTop : offsetLeft;
+    const itemOffsetAxis = this.vertical ? offsetHeight : offsetWidth;
 
-    const hostScrollAxis = this._hostOffsetAxis;
-    const thumbListScroll = this.thumbListRef.nativeElement[this._scrollKey];
+    const hostScrollAxis = this.hostOffsetAxis;
+    const thumbListScroll = this.thumbListRef.nativeElement[this.scrollKey];
 
     const nextScrollDelta =
       itemOffset + itemOffsetAxis / 2 - hostScrollAxis / 2 - thumbListScroll;
@@ -168,14 +172,14 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
 
   select(index: number) {
     this.selectedIndex = index;
-    this._cd.detectChanges();
+    this.cd.detectChanges();
 
     if (this.autoScroll) {
       setTimeout(() => this.centerThumbIfNeeded(index));
     }
   }
 
-  _emitEvent(
+  emitEvent(
     index: number,
     item: GalleryItemInternal,
     event: Event,
@@ -188,7 +192,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
     });
   }
 
-  _onLoadChange(item: GalleryItemInternal, success: boolean) {
+  onLoadChange(item: GalleryItemInternal, success: boolean) {
     item._thumbFailed = !success;
   }
 
@@ -200,8 +204,8 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       this.shiftByDelta(totalScrollDelta);
       return;
     }
-    if (this._scrollId != null) {
-      cancelAnimationFrame(this._scrollId);
+    if (this.scrollId != null) {
+      cancelAnimationFrame(this.scrollId);
     }
 
     const totalDistance = Math.abs(totalScrollDelta);
@@ -231,18 +235,20 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       this.shiftByDelta(frameScroll);
 
       if (currentScroll <= totalDistance) {
-        this._scrollId = requestAnimationFrame(animate);
+        this.scrollId = requestAnimationFrame(animate);
       }
     };
 
-    this._scrollId = requestAnimationFrame(animate);
+    this.scrollId = requestAnimationFrame(animate);
   }
 
   private shiftByDelta(delta: number) {
-    this.thumbListRef.nativeElement[this._scrollKey] += delta;
+    this.thumbListRef.nativeElement[this.scrollKey] += delta;
   }
 
   private onArrowsObserved: IntersectionObserverCallback = entries => {
+    if (this.thumbsEmpty) return;
+
     const entryEl1 = entries[0].target as HTMLElement;
     const firstThumbEntry =
       entryEl1 === this.thumbsRef.first.nativeElement ? entries[0] : entries[1];
@@ -250,31 +256,31 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       entryEl1 === this.thumbsRef.last.nativeElement ? entries[0] : entries[1];
 
     if (firstThumbEntry) {
-      this._showStartArrow = firstThumbEntry.intersectionRatio < 1;
+      this.showStartArrow = firstThumbEntry.intersectionRatio < 1;
     }
     if (lastThumbEntry) {
-      this._showEndArrow = lastThumbEntry.intersectionRatio < 1;
+      this.showEndArrow = lastThumbEntry.intersectionRatio < 1;
     }
 
-    this._cd.detectChanges();
+    this.cd.detectChanges();
   };
 
   private observeArrows() {
-    if (!this._arrowObserver) {
-      this._arrowObserver = new IntersectionObserver(this.onArrowsObserved, {
+    if (this.thumbsEmpty) return;
+
+    if (!this.arrowObserver) {
+      this.arrowObserver = new IntersectionObserver(this.onArrowsObserved, {
         root: this.thumbListRef.nativeElement,
         threshold: 1.0,
       });
     } else {
       this.unobserveArrows();
     }
-    setTimeout(() => {
-      this._arrowObserver.observe(this.thumbsRef.first.nativeElement);
-      this._arrowObserver.observe(this.thumbsRef.last.nativeElement);
-    });
+    this.arrowObserver.observe(this.thumbsRef.first.nativeElement);
+    this.arrowObserver.observe(this.thumbsRef.last.nativeElement);
   }
 
   private unobserveArrows() {
-    this._arrowObserver && this._arrowObserver.disconnect();
+    this.arrowObserver && this.arrowObserver.disconnect();
   }
 }

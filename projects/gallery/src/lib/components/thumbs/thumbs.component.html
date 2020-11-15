@@ -1,5 +1,5 @@
 <div
-  *ngIf="_showStartArrow"
+  *ngIf="showStartArrow"
   class="doe-thumbs-arrow doe-thumbs-arrow-prev"
   (click)="slide(-1)"
 >
@@ -15,15 +15,15 @@
     *ngFor="let item of items; let i = index"
     [class.doe-thumbs-item--selected]="i === selectedIndex"
     aria-hidden="true"
-    (click)="_emitEvent(i, item, $event, thumbClick)"
-    (mouseenter)="_emitEvent(i, item, $event, thumbHover)"
+    (click)="emitEvent(i, item, $event, thumbClick)"
+    (mouseenter)="emitEvent(i, item, $event, thumbHover)"
   >
     <ng-container *ngIf="!thumbTemplate; else customThumbTemplate">
       <img
         [src]="item.thumbSrc || ''"
         [alt]="item.alt"
-        (load)="_onLoadChange(item, true)"
-        (error)="_onLoadChange(item, false)"
+        (load)="onLoadChange(item, true)"
+        (error)="onLoadChange(item, false)"
       />
 
       <ng-container *ngIf="item._thumbFailed">
@@ -51,7 +51,7 @@
 </ul>
 
 <div
-  *ngIf="_showEndArrow"
+  *ngIf="showEndArrow"
   class="doe-thumbs-arrow doe-thumbs-arrow-next"
   (click)="slide(1)"
 >
