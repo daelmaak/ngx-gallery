@@ -53,6 +53,15 @@
     </section>
 
     <section>
+      <mat-checkbox
+        name="rtl"
+        [(ngModel)]="galleryConfig.rtl"
+        (change)="reloadGallery()"
+        >Right to left</mat-checkbox
+      >
+    </section>
+
+    <section>
       <label>Counter orientation:</label>
       <mat-radio-group
         name="counterOrientation"
@@ -198,6 +207,7 @@
     [objectFit]="galleryConfig.objectFit"
     [loading]="galleryConfig.loading"
     [loop]="galleryConfig.loop"
+    [isRtl]="galleryConfig.rtl"
     [thumbs]="galleryConfig.thumbs"
     [thumbsAutoScroll]="galleryConfig.thumbsAutoScroll"
     [thumbsOrientation]="galleryConfig.thumbsOrientation"

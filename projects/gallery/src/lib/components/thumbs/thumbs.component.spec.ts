@@ -103,7 +103,7 @@ describe('ThumbnailsComponent', () => {
 
       it('should slide to next items if "next items arrow" clicked', done => {
         waitForArrows(done, arrows => {
-          arrows[0].nativeElement.click();
+          getChevron(arrows[0]).click();
 
           expect(getSliderShift()).not.toBe(0);
         });
@@ -113,11 +113,16 @@ describe('ThumbnailsComponent', () => {
         component.slide(1);
 
         waitForArrows(done, arrows => {
-          arrows[0].nativeElement.click();
+          getChevron(arrows[0]).click();
 
           expect(getSliderShift()).toBe(0);
         });
       });
+
+      function getChevron(chevronContainer: DebugElement) {
+        return chevronContainer.query(By.css('doe-chevron-icon'))
+          .nativeElement as HTMLElement;
+      }
     });
 
     describe('with autoscroll', () => {
@@ -263,7 +268,8 @@ describe('ThumbnailsComponent', () => {
   });
 
   describe('arrows', () => {
-    const ITEM_WIDTH = 300;
+    const ITEM_WIDTH = 120;
+    const ITEM_HEIGHT = 80;
     let items: GalleryItem[];
 
     beforeEach(() => {
@@ -283,11 +289,9 @@ describe('ThumbnailsComponent', () => {
         component.ngOnChanges({
           items: new SimpleChange(null, items, true),
           arrows: new SimpleChange(null, component.arrows, true),
-          orientation: new SimpleChange(null, component.orientation, true),
         });
         fixture.detectChanges();
         setThumbsContainerWidth(2 * ITEM_WIDTH);
-        setThumbItemsWidth(ITEM_WIDTH);
 
         flush();
       }));
@@ -308,43 +312,40 @@ describe('ThumbnailsComponent', () => {
 
         toggleArrows(true);
 
-        waitForArrows(done, _ => {
-          const arrows = de.queryAll(By.css('doe-chevron-icon'));
+        waitForArrows(done, arrows => {
           expect(arrows.length).toBe(2);
         });
       });
 
       describe('when items changed', () => {
-        let observeArrowsSpy: jasmine.Spy;
-
-        beforeEach(() => {
-          observeArrowsSpy = spyOn<any>(component, 'observeArrows');
-        });
-
-        it(`should not be re-initialized
+        it(`should not be shown
             if items empty`, fakeAsync(() => {
           component.items = [];
           component.ngOnChanges({
             items: new SimpleChange(items, component.items, false),
           });
+          fixture.detectChanges();
           flush();
 
-          expect(observeArrowsSpy).not.toHaveBeenCalled();
+          const arrows = de.queryAll(By.css('doe-chevron-icon'));
+          expect(arrows.length).toBe(0);
         }));
 
-        it(`should be re-initialized
-            if items' length changed`, fakeAsync(() => {
+        it(`should be still shown
+            if items' length changed`, done => {
           component.items = [...items, new GalleryImage('src4')];
           component.ngOnChanges({
             items: new SimpleChange(items, component.items, false),
           });
-          flush();
+          fixture.detectChanges();
 
-          expect(observeArrowsSpy).toHaveBeenCalled();
-        }));
+          waitForArrows(done, arrows => {
+            expect(arrows.length).not.toBe(0);
+          });
+        });
 
-        it(`should be re-initialized
-            even if items' length hasn't changed`, fakeAsync(() => {
+        it(`should be still shown
+            even if items' length hasn't changed`, done => {
           component.items = [
             new GalleryImage('src4'),
             new GalleryImage('src5'),
@@ -353,10 +354,12 @@ describe('ThumbnailsComponent', () => {
           component.ngOnChanges({
             items: new SimpleChange(items, component.items, false),
           });
-          flush();
+          fixture.detectChanges();
 
-          expect(observeArrowsSpy).toHaveBeenCalled();
-        }));
+          waitForArrows(done, arrows => {
+            expect(arrows.length).not.toBe(0);
+          });
+        });
       });
     });
 
@@ -364,7 +367,6 @@ describe('ThumbnailsComponent', () => {
       beforeEach(fakeAsync(() => {
         component.ngOnChanges({
           arrows: new SimpleChange(null, component.arrows, true),
-          orientation: new SimpleChange(null, component.orientation, true),
         });
         fixture.detectChanges();
         flush();
@@ -385,6 +387,120 @@ describe('ThumbnailsComponent', () => {
         expect(arrows.length).toBe(1);
       });
     });
+
+    describe('direction mode', () => {
+      beforeEach(() => {
+        component.items = items;
+        component.ngOnChanges({
+          items: new SimpleChange(null, items, true),
+          arrows: new SimpleChange(null, component.arrows, true),
+        });
+      });
+
+      describe('left to right with horizontal orientation', () => {
+        beforeEach(fakeAsync(() => {
+          fixture.detectChanges();
+          setThumbsContainerWidth(2 * ITEM_WIDTH);
+
+          flush();
+        }));
+
+        it('should display "show next" arrow if the first thumb selected', done => {
+          waitForArrows(done, arrows => {
+            expect(isNextArrow(arrows[0])).toBeTruthy();
+          });
+        });
+
+        it('should display "show prev" arrow if the last thumb selected', done => {
+          component.select(2);
+
+          waitForArrows(done, arrows => {
+            expect(isPrevArrow(arrows[0])).toBeTruthy();
+          });
+        });
+      });
+
+      describe('left to right with vertical orientation', () => {
+        beforeEach(fakeAsync(() => {
+          component.orientation = 'left';
+          fixture.detectChanges();
+          setThumbsContainerHeight(2 * ITEM_HEIGHT);
+
+          flush();
+        }));
+
+        it('should display "show next" arrow if the first thumb selected', done => {
+          waitForArrows(done, arrows => {
+            expect(isNextArrow(arrows[0])).toBeTruthy();
+          });
+        });
+
+        it('should display "show prev" arrow if the last thumb selected', done => {
+          component.select(2);
+
+          waitForArrows(done, arrows => {
+            expect(isPrevArrow(arrows[0])).toBeTruthy();
+          });
+        });
+      });
+
+      describe('right to left with horizontal orientation', () => {
+        beforeEach(fakeAsync(() => {
+          component.isRtl = true;
+          fixture.detectChanges();
+          setThumbsContainerWidth(2 * ITEM_WIDTH);
+
+          flush();
+        }));
+
+        it('should display "show prev" arrow if the first thumb selected', done => {
+          waitForArrows(done, arrows => {
+            expect(isPrevArrow(arrows[0])).toBeTruthy();
+          });
+        });
+
+        it('should display "show next" arrow if the last thumb selected', done => {
+          component.select(2);
+
+          waitForArrows(done, arrows => {
+            expect(isNextArrow(arrows[0])).toBeTruthy();
+          });
+        });
+      });
+
+      describe('right to left with vertical orientation', () => {
+        beforeEach(fakeAsync(() => {
+          component.isRtl = true;
+          component.orientation = 'left';
+          fixture.detectChanges();
+          setThumbsContainerHeight(2 * ITEM_HEIGHT);
+
+          flush();
+        }));
+
+        it('should display "show next" arrow if the first thumb selected', done => {
+          waitForArrows(done, arrows => {
+            expect(isNextArrow(arrows[0])).toBeTruthy();
+          });
+        });
+
+        it('should display "show prev" arrow if the last thumb selected', done => {
+          component.select(2);
+
+          waitForArrows(done, arrows => {
+            expect(isPrevArrow(arrows[0])).toBeTruthy();
+          });
+        });
+      });
+    });
+
+    function isPrevArrow(arrow: DebugElement) {
+      return arrow.attributes.class.includes('doe-thumbs-arrow-prev');
+    }
+
+    function isNextArrow(arrow: DebugElement) {
+      return arrow.attributes.class.includes('doe-thumbs-arrow-next');
+    }
 
     function toggleArrows(enabled: boolean) {
       component.arrows = enabled;
@@ -420,6 +536,11 @@ describe('ThumbnailsComponent', () => {
     thumbsEl.style.width = width + 'px';
   }
 
+  function setThumbsContainerHeight(height: number) {
+    const thumbsEl = de.nativeElement as HTMLElement;
+    thumbsEl.style.height = height + 'px';
+  }
+
   function setThumbItemsWidth(width: number) {
     component.thumbsRef.toArray().forEach(thumbEl => {
       thumbEl.nativeElement.style.width = width + 'px';
@@ -445,7 +566,7 @@ describe('ThumbnailsComponent', () => {
     let arrows: DebugElement[];
 
     const arrowWaiter = setInterval(() => {
-      arrows = de.queryAll(By.css('doe-chevron-icon'));
+      arrows = de.queryAll(By.css('.doe-thumbs-arrow'));
 
       if (arrows.length) {
         clearInterval(arrowWaiter);
