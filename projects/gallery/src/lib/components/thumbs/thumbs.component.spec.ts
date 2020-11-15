@@ -405,9 +405,17 @@ describe('ThumbnailsComponent', () => {
           flush();
         }));
 
-        it('should display "show next" arrow', done => {
+        it('should display "show next" arrow if the first thumb selected', done => {
           waitForArrows(done, arrows => {
             expect(isNextArrow(arrows[0])).toBeTruthy();
+          });
+        });
+
+        it('should display "show prev" arrow if the last thumb selected', done => {
+          component.select(2);
+
+          waitForArrows(done, arrows => {
+            expect(isPrevArrow(arrows[0])).toBeTruthy();
           });
         });
       });
@@ -421,9 +429,17 @@ describe('ThumbnailsComponent', () => {
           flush();
         }));
 
-        it('should display "show next" arrow', done => {
+        it('should display "show next" arrow if the first thumb selected', done => {
           waitForArrows(done, arrows => {
             expect(isNextArrow(arrows[0])).toBeTruthy();
+          });
+        });
+
+        it('should display "show prev" arrow if the last thumb selected', done => {
+          component.select(2);
+
+          waitForArrows(done, arrows => {
+            expect(isPrevArrow(arrows[0])).toBeTruthy();
           });
         });
       });
@@ -437,9 +453,17 @@ describe('ThumbnailsComponent', () => {
           flush();
         }));
 
-        it('should display "show prev" arrow', done => {
+        it('should display "show prev" arrow if the first thumb selected', done => {
           waitForArrows(done, arrows => {
             expect(isPrevArrow(arrows[0])).toBeTruthy();
+          });
+        });
+
+        it('should display "show next" arrow if the last thumb selected', done => {
+          component.select(2);
+
+          waitForArrows(done, arrows => {
+            expect(isNextArrow(arrows[0])).toBeTruthy();
           });
         });
       });
@@ -454,9 +478,17 @@ describe('ThumbnailsComponent', () => {
           flush();
         }));
 
-        it('should display "show next" arrow', done => {
+        it('should display "show next" arrow if the first thumb selected', done => {
           waitForArrows(done, arrows => {
             expect(isNextArrow(arrows[0])).toBeTruthy();
+          });
+        });
+
+        it('should display "show prev" arrow if the last thumb selected', done => {
+          component.select(2);
+
+          waitForArrows(done, arrows => {
+            expect(isPrevArrow(arrows[0])).toBeTruthy();
           });
         });
       });
