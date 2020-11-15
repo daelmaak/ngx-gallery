@@ -16,6 +16,7 @@
     "build": "ng build",
     "build:demo": "ng build --project=demo --prod --base-href /ngx-doe-gallery/",
     "test": "ng test --project=gallery",
+    "test:hdls": "ng test --browsers=ChromeHeadless",
     "test:demo": "ng test --project=demo",
     "test:ci": "npm test -- --watch=false --code-coverage",
     "lint": "ng lint",
