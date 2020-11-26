@@ -1,6 +1,6 @@
 {
   "name": "ngx-doe-gallery",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "Apache-2.0",
   "author": {
     "name": "Daniel Macak",
@@ -12,8 +12,17 @@
     "type": "git",
     "url": "https://github.com/daelmaak/ngx-doe-gallery.git"
   },
-  "keywords": ["gallery", "angular", "image", "picture"],
-  "browserslist": ["defaults", "not IE 11", "not IE_Mob 11"],
+  "keywords": [
+    "gallery",
+    "angular",
+    "image",
+    "picture"
+  ],
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "not IE_Mob 11"
+  ],
   "engines": {
     "node": ">=10.0.0"
   },

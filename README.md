@@ -25,7 +25,7 @@ Because it gives you the doe eyes! Seriously though, use it if you need:
 
 ## Installation
 
-`npm i -S ngx-doe-gallery@latest`
+`npm i -S ngx-doe-gallery`
 
 ## Usage
 
