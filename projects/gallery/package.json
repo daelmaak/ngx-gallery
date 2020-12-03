@@ -1,16 +1,16 @@
 {
-  "name": "@ngx-imagery/gallery",
-  "version": "0.1.0-alpha.7",
+  "name": "ngx-doe-gallery",
+  "version": "1.1.0",
   "license": "Apache-2.0",
   "author": {
     "name": "Daniel Macak",
     "email": "daniel.macak@email.cz",
     "url": "https://github.com/daelmaak"
   },
-  "homepage": "https://github.com/daelmaak/ngx-imagery",
+  "homepage": "https://daelmaak.github.io/ngx-doe-gallery/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/daelmaak/ngx-imagery.git"
+    "url": "https://github.com/daelmaak/ngx-doe-gallery.git"
   },
   "keywords": [
     "gallery",
@@ -18,18 +18,24 @@
     "image",
     "picture"
   ],
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "not IE_Mob 11"
+  ],
   "engines": {
     "node": ">=10.0.0"
   },
   "scripts": {
-    "build": "ng build --project=gallery",
-    "version:alpha": "npm version prerelease --preid=alpha",
-    "postversion": "npm run build && cd ../../ && npm run build:demo",
-    "test": "ng test --project=gallery"
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint"
   },
   "peerDependencies": {
+    "@angular/animations": ">=8.0.0",
     "@angular/common": ">=8.0.0",
     "@angular/core": ">=8.0.0",
+    "@angular/platform-browser": ">=8.0.0",
     "rxjs": ">=6.0.0"
   }
 }

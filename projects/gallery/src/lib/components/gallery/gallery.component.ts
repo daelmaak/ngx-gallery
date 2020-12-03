@@ -1,104 +1,94 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   HostBinding,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-  TemplateRef,
   HostListener,
-  ElementRef
+  Input,
+  Output,
+  TemplateRef,
+  ViewChild,
 } from '@angular/core';
-import { GalleryItem } from '../../core/gallery-item';
-import { Orientation, OrientationFlag } from '../../core/orientation';
-import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
-import { ImageFit } from '../../core/image-fit';
-import { OverscrollBehavior } from '../../core/overscroll-behavior';
+import {
+  Aria,
+  ContentTemplateContext,
+  GalleryItem,
+  GalleryItemEvent,
+  ItemTemplateContext,
+  Loading,
+  ObjectFit,
+  Orientation,
+  OrientationFlag,
+  ThumbTemplateContext,
+  VerticalOrientation,
+} from '../../core';
+import { defaultAria } from '../../core/aria';
+import { ThumbsComponent } from '../thumbs/thumbs.component';
+import { ViewerComponent } from '../viewer/viewer.component';
 
 @Component({
-  selector: 'ngx-gallery',
+  selector: 'doe-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GalleryComponent implements OnInit, OnDestroy {
+export class GalleryComponent {
+  @Input() items: GalleryItem[];
+  @Input() selectedIndex = 0;
+  @Input() aria: Aria = defaultAria;
+  @Input() arrows = true;
+  @Input() descriptions = false;
+  @Input() errorText: string;
+  @Input() mouseGestures = true;
+  @Input() touchGestures = true;
+  @Input() counter = true;
+  @Input() counterOrientation: VerticalOrientation = 'bottom';
+  @Input() itemWidth: string;
+  @Input() loading: Loading = 'auto';
+  @Input() loop = false;
+  @Input() objectFit: ObjectFit = 'cover';
+  @HostBinding('class.rtl')
   @Input()
-  items: GalleryItem[];
+  isRtl: boolean;
+  @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
+  @Input() loadingTemplate: TemplateRef<void>;
+  @Input() errorTemplate: TemplateRef<void>;
+  @Input() arrowTemplate: TemplateRef<void>;
+  @Input() contentTemplate: TemplateRef<ContentTemplateContext>;
+  @Input() thumbs = true;
+  @Input() thumbsAutoScroll = true;
+  @Input() thumbsOrientation: Orientation = 'bottom';
+  @Input() thumbsArrows = true;
+  @Input() thumbsArrowSlideByLength: number;
+  @Input() thumbsScrollBehavior: ScrollBehavior = 'smooth';
+  @Input() thumbTemplate: TemplateRef<ThumbTemplateContext>;
+  @Input() thumbsArrowTemplate: TemplateRef<void>;
+  @Input() thumbErrorTemplate: TemplateRef<void>;
 
-  @Input()
-  selectedItem = 0;
+  @Output() imageClick = new EventEmitter<GalleryItemEvent>();
+  @Output() thumbClick = new EventEmitter<GalleryItemEvent>();
+  @Output() thumbHover = new EventEmitter<GalleryItemEvent>();
+  @Output() descriptionClick = new EventEmitter<Event>();
+  @Output() selection = new EventEmitter<GalleryItem>();
 
-  @Input()
-  arrows: boolean;
+  @ViewChild(ViewerComponent, { static: false }) _viewerRef: ViewerComponent;
+  @ViewChild(ThumbsComponent, { static: false }) _thumbsRef: ThumbsComponent;
+  @ViewChild(ViewerComponent, { static: false, read: ElementRef })
+  _viewerElRef: ElementRef<HTMLElement>;
 
-  @Input()
-  imageCounter: boolean;
+  _touched = false;
+  INIT_INTERACTIONS = ['touchstart', 'mousedown', 'keydown'];
 
-  @Input()
-  imageFit: ImageFit;
-
-  @Input()
-  imageTemplate: TemplateRef<any>;
-
-  @Input()
-  loop: boolean;
-
-  @Input()
-  scrollBehavior: ScrollBehavior;
-
-  @Input()
-  thumbs: boolean;
-
-  @Input()
-  thumbsAutoScroll: boolean;
-
-  @Input()
-  thumbsOrientation: Orientation;
-
-  @Input()
-  thumbsArrows: boolean;
-
-  @Input()
-  thumbsArrowSlideByLength: number;
-
-  @Input()
-  thumbsScrollBehavior: ScrollBehavior;
-
-  @Input()
-  thumbsOverscrollBehavior: OverscrollBehavior;
-
-  @Input()
-  thumbsImageFit: ImageFit;
-
-  @Input()
-  thumbTemplate: TemplateRef<any>;
-
-  @Output()
-  imageClick = new EventEmitter<Event>();
-
-  @Output()
-  thumbClick = new EventEmitter<Event>();
-
-  @Output()
-  selection = new EventEmitter<GalleryItem>();
-
-  @ViewChild(ImageViewerComponent, { static: false })
-  imageViewer: ImageViewerComponent;
-
-  @ViewChild(ImageViewerComponent, { static: false, read: ElementRef })
-  imageViewerEl: ElementRef<HTMLElement>;
-
-  @HostBinding('class.column')
-  get galleryCollumn() {
+  @HostBinding('class.doe-gallery--column')
+  get _galleryColumn() {
     return (
       this.thumbsOrientation === 'top' || this.thumbsOrientation === 'bottom'
     );
   }
 
-  get galleryMainAxis(): OrientationFlag {
+  get _thumbsOrientationFlag(): OrientationFlag {
     if (
       this.thumbsOrientation === 'top' ||
       this.thumbsOrientation === 'bottom'
@@ -108,35 +98,62 @@ export class GalleryComponent implements OnInit, OnDestroy {
     return OrientationFlag.VERTICAL;
   }
 
-  constructor() {}
-
-  ngOnInit() {
-    this.thumbsArrows === undefined && (this.thumbsArrows = true);
-    this.thumbsOrientation === undefined && (this.thumbsOrientation = 'left');
-    this.arrows === undefined && (this.arrows = true);
-    this.loop === undefined && (this.loop = true);
-    this.thumbs === undefined && (this.thumbs = true);
+  constructor(
+    private cd: ChangeDetectorRef,
+    private hostRef: ElementRef<HTMLElement>
+  ) {
+    this.INIT_INTERACTIONS.forEach(ename =>
+      hostRef.nativeElement.addEventListener(
+        ename,
+        this._markAsInteractedWith,
+        {
+          passive: true,
+        }
+      )
+    );
   }
 
-  ngOnDestroy() {}
-
   focus() {
-    this.imageViewerEl.nativeElement.focus();
+    this._viewerElRef.nativeElement.focus();
   }
 
   @HostListener('keydown.arrowright')
   next() {
-    this.imageViewer.next();
+    this._viewerRef.selectByDelta(1);
   }
 
   @HostListener('keydown.arrowleft')
   prev() {
-    this.imageViewer.prev();
+    this._viewerRef.selectByDelta(-1);
   }
 
   select(index: number) {
-    this.imageViewer.select(index);
-    this.selectedItem = index;
+    this._viewerRef.select(index);
+    this._thumbsRef.select(index);
+    this._selectInternal(index);
+  }
+
+  slideThumbs(direction: number) {
+    this._thumbsRef.slide(direction);
+  }
+
+  _onThumbClick(event: GalleryItemEvent) {
+    this._viewerRef.select(event.index);
+    this.thumbClick.emit(event);
+    this._selectInternal(event.index);
+  }
+
+  _selectInternal(index: number) {
+    this.selectedIndex = index;
     this.selection.emit(this.items[index]);
   }
+
+  private _markAsInteractedWith = () => {
+    const hostEl = this.hostRef.nativeElement;
+    this._touched = true;
+    this.cd.detectChanges();
+    this.INIT_INTERACTIONS.forEach(ename =>
+      hostEl.removeEventListener(ename, this._markAsInteractedWith)
+    );
+  };
 }

@@ -1,16 +1,28 @@
 :host {
   display: flex;
-  height: 500px;
+  height: 600px;
   width: 500px;
-  background: #222;
-  outline: none;
+  outline: 0;
+  position: relative;
 
-  &.column {
+  &.doe-gallery--column {
     flex-direction: column;
+  }
+
+  &.rtl {
+    // maintains doe-thumbs orientation also when the whole document is in RTL mode
+    direction: ltr;
+
+    doe-viewer,
+    doe-thumbs {
+      direction: rtl;
+    }
   }
 }
 
 :host::ng-deep {
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+
   button {
     border: none;
   }
@@ -20,8 +32,54 @@
     margin: 0;
     padding: 0;
   }
+
+  .doe-sr-only {
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px);
+    top: auto;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
 }
 
-ngx-image-viewer {
-  z-index: 1;
+.doe-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: transparent;
+  z-index: 10;
+
+  > div {
+    height: 13px;
+    width: 13px;
+    background-color: #4a4a4a;
+    animation: bounce 2s infinite;
+    border-radius: 50%;
+    box-shadow: 0 0 0px 1px whitesmoke, 0 0 1px 1px whitesmoke;
+
+    + div {
+      margin-left: 10px;
+      animation-delay: 0.125s;
+
+      + div {
+        animation-delay: 0.3s;
+      }
+    }
+  }
+
+  @keyframes bounce {
+    20% {
+      transform: translateY(-20px);
+    }
+    50% {
+      transform: translateY(0);
+    }
+  }
 }

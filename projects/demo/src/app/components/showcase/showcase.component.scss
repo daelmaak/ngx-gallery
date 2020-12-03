@@ -1,0 +1,49 @@
+:host {
+  margin: 0 30px 50px;
+  display: block;
+
+  > {
+    margin: 0 auto;
+  }
+
+  ::ng-deep doe-gallery {
+    width: 100%;
+    background-color: #f3f3f3;
+  }
+}
+
+.heading-section {
+  padding: 1em 0;
+
+  .stackblitz-demo-link {
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+
+    &:visited {
+      color: blue;
+    }
+  }
+
+  img {
+    height: 20px;
+    margin-right: 4px;
+    margin-bottom: -4px;
+  }
+}
+
+h3 {
+  color: #444444;
+  margin: 0;
+  padding: 0;
+
+  @media (min-width: 768px) {
+    font-size: 1.6em;
+  }
+}
+
+.subheading {
+  color: #5b5b5b;
+  margin-left: 5px;
+  margin-top: 5px;
+}

@@ -1,31 +1,58 @@
-<ngx-thumbnails
+<span *ngIf="aria?.galleryLabel" class="doe-sr-only" tabindex="0">
+  {{ aria.galleryLabel }}
+</span>
+
+<doe-thumbs
   *ngIf="thumbs"
   [items]="items"
-  [selectedItem]="selectedItem"
+  [selectedIndex]="selectedIndex"
   [orientation]="thumbsOrientation"
   [arrows]="thumbsArrows"
   [arrowSlideByLength]="thumbsArrowSlideByLength"
   [autoScroll]="thumbsAutoScroll"
-  [imageFit]="thumbsImageFit"
   [scrollBehavior]="thumbsScrollBehavior"
-  [overscrollBehavior]="thumbsOverscrollBehavior"
   [thumbTemplate]="thumbTemplate"
-  (thumbClick)="thumbClick.emit($event)"
-  (selection)="select($event)"
-></ngx-thumbnails>
+  [arrowTemplate]="thumbsArrowTemplate"
+  [errorTemplate]="thumbErrorTemplate"
+  [aria]="aria"
+  [isRtl]="isRtl"
+  (thumbClick)="_onThumbClick($event)"
+  (thumbHover)="thumbHover.emit($event)"
+></doe-thumbs>
 
-<ngx-image-viewer
-  tabindex="0"
-  ngxNoMoveClick
+<doe-viewer
   [items]="items"
-  [selectedItem]="selectedItem"
+  [selectedIndex]="selectedIndex"
   [arrows]="arrows"
-  [imageCounter]="imageCounter"
-  [imageFit]="imageFit"
-  [imageTemplate]="imageTemplate"
+  [descriptions]="descriptions"
+  [errorText]="errorText"
+  [mouseGestures]="mouseGestures"
+  [touchGestures]="touchGestures"
+  [counter]="counter"
+  [counterOrientation]="counterOrientation"
+  [itemWidth]="itemWidth"
+  [objectFit]="objectFit"
+  [loading]="loading"
+  [itemTemplate]="itemTemplate"
+  [loadingTemplate]="loadingTemplate || defaultLoadingTemplate"
+  [errorTemplate]="errorTemplate"
+  [contentTemplate]="contentTemplate"
   [loop]="loop"
-  [galleryMainAxis]="galleryMainAxis"
-  [scrollBehavior]="scrollBehavior"
+  [thumbsOrientation]="_thumbsOrientationFlag"
+  [arrowTemplate]="arrowTemplate"
+  [aria]="aria"
+  [isRtl]="isRtl"
+  [touched]="_touched"
   (imageClick)="imageClick.emit($event)"
-  (selection)="select($event)"
-></ngx-image-viewer>
+  (descriptionClick)="descriptionClick.emit($event)"
+  (selection)="_selectInternal($event); _thumbsRef?.select($event)"
+>
+</doe-viewer>
+
+<ng-template #defaultLoadingTemplate>
+  <div class="doe-loading">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</ng-template>

@@ -4,6 +4,7 @@
   "rules": {
     "array-type": false,
     "arrow-parens": false,
+    "curly": false,
     "deprecation": {
       "severity": "warning"
     },

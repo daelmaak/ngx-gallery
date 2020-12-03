@@ -1,180 +1,183 @@
-<header class="mat-elevation-z2">
-  <mat-toolbar>
-    <h2>ngx-imagery</h2>
-    <a href="https://github.com/daelmaak/ngx-imagery" class="github-link">
-      <img src="./assets/GitHub-Mark-64px.png" alt="github link" />
-    </a>
-  </mat-toolbar>
-</header>
+<app-header></app-header>
 
-<main>
-  <form>
-    <section>
-      <mat-checkbox name="arrows" [(ngModel)]="arrows">Arrows</mat-checkbox>
-    </section>
-
-    <section>
-      <mat-checkbox name="imageCounter" [(ngModel)]="imageCounter"
-        >Image counter</mat-checkbox
+<aside>
+  <div class="menu-heading"><a href="#usage">Usage</a></div>
+  <div class="menu-heading"><a href="#demos">Demos</a></div>
+  <ul>
+    <li><a href="#demo-responsive">Responsive</a></li>
+    <li><a href="#demo-multiple">Multiple items</a></li>
+    <li><a href="#demo-infinite-loop-multiple">Infinite loop</a></li>
+    <li>
+      <a href="#demo-thumbs-orientation">Thumbnails orientation & autoscroll</a>
+    </li>
+    <li><a href="#demo-rtl">Right to left</a></li>
+    <li><a href="#demo-descriptions">Descriptions</a></li>
+    <li><a href="#demo-error-handling">Error handling</a></li>
+    <li><a href="#demo-videos">Videos</a></li>
+    <li>
+      <a href="#demo-custom"
+        >Custom items, arrows, loading and error handling</a
       >
-    </section>
+    </li>
+    <li><a href="#demo-full-config">Full configuration</a></li>
+  </ul>
 
-    <section>
-      <label>Image fit:</label>
-      <mat-radio-group name="imageFit" [(ngModel)]="imageFit">
-        <mat-radio-button value="contain">contain</mat-radio-button>
-        <mat-radio-button value="cover">cover</mat-radio-button>
-      </mat-radio-group>
-    </section>
-
-    <section>
-      <mat-checkbox name="loop" [(ngModel)]="loop">Loop</mat-checkbox>
-    </section>
-
-    <section>
-      <label>Scroll behavior:</label>
-      <mat-radio-group name="scrollBehavior" [(ngModel)]="scrollBehavior">
-        <mat-radio-button value="smooth">smooth</mat-radio-button>
-        <mat-radio-button value="auto">auto</mat-radio-button>
-      </mat-radio-group>
-    </section>
-
-    <section>
-      <mat-checkbox name="thumbs" [(ngModel)]="thumbs">Thumbnails</mat-checkbox>
-    </section>
-
-    <section>
-      <mat-checkbox name="thumbsAutoScroll" [(ngModel)]="thumbsAutoScroll"
-        >Thumbs autoscroll</mat-checkbox
+  <div class="menu-heading">Misc</div>
+  <ul>
+    <li>
+      <a href="https://github.com/daelmaak/ngx-doe-gallery/wiki" target="_blank"
+        >Documentation</a
       >
-    </section>
+    </li>
+  </ul>
+</aside>
 
-    <section>
-      <label>Thumbnails orientation:</label>
-      <mat-radio-group name="thumbsOrientation" [(ngModel)]="thumbsOrientation">
-        <mat-radio-button value="top">top</mat-radio-button>
-        <mat-radio-button value="bottom">bottom</mat-radio-button>
-        <mat-radio-button value="left">left</mat-radio-button>
-        <mat-radio-button value="right">right</mat-radio-button>
-      </mat-radio-group>
-    </section>
+<main role="main">
+  <div class="main-content">
+    <div id="usage" class="usage">
+      <h2>Usage</h2>
 
-    <section>
-      <mat-checkbox name="thumbsArrows" [(ngModel)]="thumbsArrows"
-        >Thumbnail arrows</mat-checkbox
-      >
-      <mat-form-field>
-        <label>Slide thumbnails by length</label>
-        <input
-          name="thumbsArrowsSlideByLength"
-          matInput
-          [(ngModel)]="thumbsArrowSlideByLength"
-        />
-      </mat-form-field>
-    </section>
+      <div>
+        <h4>Install</h4>
+        <pre><code>{{ installScript }}</code></pre>
+      </div>
 
-    <section>
-      <label>Thumbnails scroll behavior:</label>
-      <mat-radio-group
-        name="thumbsScrollBehavior"
-        [(ngModel)]="thumbsScrollBehavior"
-      >
-        <mat-radio-button value="smooth">smooth</mat-radio-button>
-        <mat-radio-button value="auto">auto</mat-radio-button>
-      </mat-radio-group>
-    </section>
+      <div class="usage-code">
+        <div>
+          <h4>Module</h4>
+          <pre><code>{{moduleCode}}</code></pre>
+        </div>
 
-    <section>
-      <label>Thumbnails overscroll behavior:</label>
-      <mat-radio-group
-        name="thumbsOverscrollBehavior"
-        [(ngModel)]="thumbsOverscrollBehavior"
-      >
-        <mat-radio-button value="contain">contain</mat-radio-button>
-        <mat-radio-button value="auto">auto</mat-radio-button>
-      </mat-radio-group>
-    </section>
+        <div>
+          <h4>Component</h4>
+          <pre><code>{{componentCode}}</code></pre>
+        </div>
 
-    <section>
-      <label>Thumbnail image fit:</label>
-      <mat-radio-group name="thumbsImageFit" [(ngModel)]="thumbsImageFit">
-        <mat-radio-button value="contain">contain</mat-radio-button>
-        <mat-radio-button value="cover">cover</mat-radio-button>
-      </mat-radio-group>
-    </section>
+        <div>
+          <h4>Component template</h4>
+          <pre><code>{{componentTemplateCode}}</code></pre>
+        </div>
+      </div>
+    </div>
 
-    <hr />
+    <h2 id="demos">Demos</h2>
 
-    <section class="image-loading-latency">
-      <mat-form-field>
-        <label>Image loading latency</label>
-        <input
-          name="imageLoadingLatency"
-          matInput
-          [(ngModel)]="imageLoadingLatency"
-        />
-      </mat-form-field>
-      <button mat-raised-button (click)="confirmImageLoadingLatency()">
-        Confirm latency
-      </button>
-    </section>
-  </form>
+    <app-showcase
+      id="demo-responsive"
+      heading="Responsive - resize me!"
+      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-responsive?file=src%2Fapp%2Fapp.component.html"
+    >
+      <doe-gallery [items]="images" loading="lazy"></doe-gallery>
+    </app-showcase>
 
-  <ngx-gallery
-    #gallery1
-    class="first"
-    *ngIf="displayGallery"
-    [items]="images | async"
-    [arrows]="arrows"
-    [imageCounter]="imageCounter"
-    [imageFit]="imageFit"
-    [loop]="loop"
-    [scrollBehavior]="scrollBehavior"
-    [thumbs]="thumbs"
-    [thumbsAutoScroll]="thumbsAutoScroll"
-    [thumbsOrientation]="thumbsOrientation"
-    [thumbsArrows]="thumbsArrows"
-    [thumbsArrowSlideByLength]="thumbsArrowSlideByLength"
-    [thumbsScrollBehavior]="thumbsScrollBehavior"
-    [thumbsOverscrollBehavior]="thumbsOverscrollBehavior"
-    [thumbsImageFit]="thumbsImageFit"
-    (imageClick)="openFirst(gallery1.selectedItem)"
-  ></ngx-gallery>
+    <app-showcase
+      id="demo-multiple"
+      heading="Multiple items"
+      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-multiple-items?file=src%2Fapp%2Fapp.component.html"
+    >
+      <app-demo-multiple-items
+        [items]="smallerImages"
+        [mobile]="mobile"
+      ></app-demo-multiple-items>
+    </app-showcase>
+
+    <app-showcase
+      id="demo-infinite-loop-multiple"
+      heading="Infinite loop"
+      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-infinite-loop?file=src%2Fapp%2Fapp.component.html"
+    >
+      <doe-gallery
+        [items]="smallerImages"
+        [loop]="true"
+        loading="lazy"
+        [itemWidth]="mobile ? '75%' : '34%'"
+      ></doe-gallery>
+    </app-showcase>
+
+    <app-showcase
+      id="demo-thumbs-orientation"
+      heading="Thumbnails orientation & autoscroll"
+      subheading="w/ infinite scroll"
+      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-thumbs-orientation?file=src%2Fapp%2Fapp.component.html"
+    >
+      <app-demo-thumbs-orientation
+        [items]="extendedImages"
+        [mobile]="mobile"
+      ></app-demo-thumbs-orientation>
+    </app-showcase>
+
+    <app-showcase id="demo-rtl" heading="Right to left">
+      <doe-gallery [items]="images" loading="lazy" [isRtl]="true"></doe-gallery>
+    </app-showcase>
+
+    <app-showcase
+      id="demo-descriptions"
+      heading="Descriptions"
+      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-descriptions?file=src%2Fapp%2Fapp.component.html"
+    >
+      <doe-gallery
+        [items]="images"
+        [descriptions]="true"
+        loading="lazy"
+      ></doe-gallery>
+    </app-showcase>
+
+    <app-showcase id="demo-error-handling" heading="Error handling">
+      <doe-gallery [items]="erroredImages" loading="lazy"></doe-gallery>
+    </app-showcase>
+
+    <app-showcase
+      id="demo-videos"
+      heading="Videos"
+      subheading="both YouTube and native videos"
+    >
+      <doe-gallery [items]="videos" loading="lazy"></doe-gallery>
+    </app-showcase>
+
+    <app-showcase
+      id="demo-custom"
+      heading="Custom items, arrows and error handling"
+      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-custom-templates?file=src%2Fapp%2Fapp.component.html"
+    >
+      <div subheading>
+        You can also have custom loading screen, thumbnails, thumbnail errors
+        and thumbnail navigation arrows. Find out how in the
+        <a
+          href="https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API"
+          target="_blank"
+          >documentation</a
+        >
+        and/or try it out in
+        <a
+          href="https://stackblitz.com/edit/ngx-doe-gallery-demo-custom-templates"
+          target="_blank"
+          >StackBlitz</a
+        >
+        !
+      </div>
+      <app-demo-custom-templates></app-demo-custom-templates>
+    </app-showcase>
+
+    <app-showcase id="demo-full-config" heading="Full configuration">
+      <div subheading>
+        Some properties like custom templates are missing. Checkout them out in
+        the
+        <a
+          href="https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API"
+          target="_blank"
+          >documentation</a
+        >
+        and/or try them out in
+        <a
+          href="https://stackblitz.com/edit/ngx-doe-gallery-demo-custom-templates"
+          target="_blank"
+          >StackBlitz</a
+        >
+        !
+      </div>
+      <app-demo-whole-config [images]="images"></app-demo-whole-config>
+    </app-showcase>
+  </div>
 </main>
 
-<ng-template
-  #itemTemplate2
-  let-index="index"
-  let-selectedIndex="selectedIndex"
-  let-item="item"
->
-  <img
-    class="image-2"
-    [src]="item.src"
-    draggable="false"
-    ondragstart="return false"
-  />
-</ng-template>
-
-<ng-template
-  #thumbTemplate2
-  let-index="index"
-  let-selectedIndex="selectedIndex"
-  let-item="item"
->
-  <img
-    class="thumb-2"
-    [src]="item.thumbSrc || item.src"
-    draggable="false"
-    ondragstart="return false"
-  />
-</ng-template>
-
-<ng-template #detailImageTemplate2 let-item="item">
-  <img
-    class="image-2"
-    [src]="item.src"
-    draggable="false"
-    ondragstart="return false"
-  />
-</ng-template>
+<footer>With care from daelmaak</footer>

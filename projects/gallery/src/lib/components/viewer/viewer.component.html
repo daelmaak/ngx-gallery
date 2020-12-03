@@ -1,0 +1,153 @@
+<div
+  *ngIf="showPrevArrow"
+  class="doe-viewer-arrow doe-viewer-arrow-prev"
+  (click)="selectByDelta(-1)"
+>
+  <doe-chevron-icon
+    *ngIf="!arrowTemplate; else arrowTemplate"
+  ></doe-chevron-icon>
+</div>
+
+<ul #itemList [attr.aria-label]="aria?.viewerLabel">
+  <li *ngIf="!_displayedItems?.length" class="doe-viewer-initial-item"></li>
+  <li
+    #itemsRef
+    *ngFor="let item of _displayedItems; let i = index"
+    [class.doe-viewer-item--selected]="i === selectedIndex"
+    [attr.tabindex]="itemTabbable(i)"
+    [attr.aria-label]="item.alt"
+    [attr.aria-describedby]="'doe-viewer-aria-description-' + i"
+    (click)="onImageClick(item, $event)"
+    (doe-media-load)="onItemLoaded(item)"
+    (doe-media-error)="onItemErrored(item)"
+    (keydown.Tab)="onTab(i + 1)"
+    (keydown.shift.Tab)="onTab(i - 1)"
+  >
+    <ng-container *ngIf="!lazyLoading || isInScrollportProximity(i)">
+      <ng-container *ngIf="!itemTemplate; else customTemplate">
+        <picture *ngIf="!isVideo(item)" @mediaAnimate>
+          <source
+            *ngFor="let source of item.pictureSources"
+            [srcset]="source.srcset"
+            [attr.media]="source.media"
+            [attr.sizes]="source.sizes"
+            [attr.type]="source.type"
+          />
+          <img
+            [src]="item.src"
+            [alt]="item.alt"
+            [class.doe-viewer-media-loading]="!itemLoaded(item)"
+            [style.objectFit]="objectFit"
+            (load)="onItemLoaded(item)"
+            (error)="onItemErrored(item)"
+          />
+        </picture>
+        <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
+        <video
+          *ngIf="!isYoutube(item) && isVideo(item)"
+          @mediaAnimate
+          [src]="item.src"
+          [poster]="item.thumbSrc || ''"
+          [class.doe-viewer-media-loading]="!itemLoaded(item)"
+          [style.objectFit]="objectFit"
+          controls
+          playsinline
+          (loadedmetadata)="onItemLoaded(item)"
+          (error)="onItemErrored(item)"
+        ></video>
+
+        <iframe
+          *ngIf="isYoutube(item)"
+          @mediaAnimate
+          [src]="item.src | safe"
+          frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          (load)="onItemLoaded(item)"
+        ></iframe>
+      </ng-container>
+
+      <ng-container *ngIf="!itemLoaded(item) && !itemFailedToLoad(item)">
+        <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="itemFailedToLoad(item)">
+        <div
+          *ngIf="!errorTemplate; else errorTemplate"
+          class="doe-viewer-error"
+        >
+          <div class="doe-viewer-error-icon">⚠</div>
+          <p class="doe-viewer-error-text">
+            {{ errorText || 'Loading of this media failed' }}
+          </p>
+        </div>
+      </ng-container>
+
+      <span
+        [id]="'doe-viewer-aria-description-' + i"
+        class="doe-sr-only"
+        [innerHTML]="item.description"
+      ></span>
+    </ng-container>
+
+    <ng-template #customTemplate>
+      <ng-container
+        *ngTemplateOutlet="
+          itemTemplate;
+          context: {
+            index: items?.indexOf(item),
+            selectedIndex: selectedIndex,
+            item: item,
+            video: isVideo(item)
+          }
+        "
+      ></ng-container>
+    </ng-template>
+  </li>
+</ul>
+
+<ng-container *ngIf="items?.length <= 0">
+  <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+</ng-container>
+
+<div
+  *ngIf="showNextArrow"
+  class="doe-viewer-arrow doe-viewer-arrow-next"
+  (click)="selectByDelta(1)"
+>
+  <doe-chevron-icon
+    *ngIf="!arrowTemplate; else arrowTemplate"
+  ></doe-chevron-icon>
+</div>
+
+<doe-counter
+  *ngIf="counter && items?.length"
+  [itemQuantity]="items?.length"
+  [selectedIndex]="selectedIndex"
+  [orientation]="counterOrientation"
+></doe-counter>
+
+<ng-container
+  *ngTemplateOutlet="
+    contentTemplate;
+    context: {
+      selectedIndex: selectedIndex
+    }
+  "
+></ng-container>
+
+<div
+  *ngIf="descriptions && items"
+  class="doe-viewer-description"
+  [class.doe-viewer-description--above-counter]="
+    counter && counterOrientation === 'bottom'
+  "
+  aria-hidden="true"
+>
+  <div
+    *ngIf="items[selectedIndex]?.description as description"
+    class="doe-viewer-description-inner"
+    [innerHTML]="description"
+    (click)="descriptionClick.emit($event)"
+  ></div>
+</div>

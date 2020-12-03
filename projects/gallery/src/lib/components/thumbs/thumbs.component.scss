@@ -1,0 +1,252 @@
+@import '../../core/mixins.scss';
+
+$arrow-btn-dimension: 30px;
+
+:host {
+  flex: 1 0 auto;
+  position: relative;
+  background-color: #f3f3f3;
+}
+
+
+:host.doe-thumbs {
+  &--top,
+  &--bottom {
+    width: 100%;
+
+    ul {
+      width: 100%;
+      display: flex;
+      overflow-x: scroll;
+      overflow-y: hidden;
+
+      &.rtl {
+        li:first-child {
+          margin-left: 0;
+          margin-right: auto;
+        }
+
+        li:last-child {
+          margin-right: 0;
+          margin-left: auto;
+        }
+      }
+    }
+
+    li {
+      flex: none;
+
+      &:not(:first-child) {
+        border-left: 0;
+      }
+
+      &:first-child {
+        margin-left: auto;
+      }
+
+      &:last-child {
+        margin-right: auto;
+      }
+    }
+
+    .doe-thumbs-arrow {
+      top: 0;
+      height: 100%;
+
+      > div {
+        width: $arrow-btn-dimension;
+        height: 100%;
+      }
+
+      &-prev {
+        left: 0;
+      }
+
+      &-next {
+        right: 0;
+      }
+    }
+
+    .doe-thumbs-error {
+      border-right: 1px solid #cecece;
+    }
+  }
+
+  &--left,
+  &--right {
+    height: 100%;
+
+    ul {
+      height: 100%;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+
+    li {
+      border-top: 0;
+    }
+
+    .doe-thumbs-arrow {
+      width: 100%;
+
+      > div {
+        width: 100%;
+        height: $arrow-btn-dimension;
+      }
+
+      doe-chevron-icon {
+        transform: rotate(90deg);
+      }
+
+      &-prev {
+        top: 0;
+      }
+
+      &-next {
+        bottom: 0;
+      }
+    }
+
+    .doe-thumbs-error {
+      border-bottom: 1px solid #cecece;
+    }
+  }
+
+  &--bottom,
+  &--right {
+    order: 1;
+  }
+}
+
+ul {
+  outline: 0;
+  // hide scrollbar
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+
+  -webkit-overflow-scrolling: touch;
+
+  // Promotes thumb list to a separate layer, which allows for compositing when scrolling, which prevents repaints.
+  // It also reduces the amount of memory held by its parent layer dramatically.
+  transform: translate3d(0, 0, 0);
+
+  &::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+  }
+}
+
+li {
+  box-sizing: border-box;
+  width: 120px;
+  height: 80px;
+  position: relative;
+  cursor: pointer;
+
+  &.doe-thumbs-initial-item {
+    visibility: hidden;
+  }
+
+  &.doe-thumbs-item--selected {
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      border: 10px solid #ffffffcf;
+      box-sizing: border-box;
+    }
+  }
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  object-fit: cover;
+  color: transparent;
+}
+
+.doe-thumbs-error {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  background: #e8e8e8;
+  box-sizing: border-box;
+
+  &-icon {
+    $icon-color: #a5a5a5;
+
+    &:not(&--video) {
+      position: relative;
+      border-left: 16px solid transparent;
+      border-right: 16px solid transparent;
+      border-bottom: 28px solid $icon-color;
+      margin-left: -8px;
+
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+      }
+
+      &::before {
+        height: 10px;
+        width: 10px;
+        background-color: $icon-color;
+        border-radius: 100%;
+        left: 14px;
+      }
+
+      &::after {
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+        border-bottom: 17px solid $icon-color;
+        top: 11px;
+      }
+    }
+
+    &--video {
+      border-top: 16px solid transparent;
+      border-bottom: 16px solid transparent;
+      border-left: 28px solid $icon-color;
+      margin-left: 9px;
+    }
+  }
+}
+
+.doe-thumbs-arrow {
+  position: absolute;
+  cursor: pointer;
+  z-index: 10;
+
+  &-prev {
+    transform: rotate(180deg);
+  }
+
+  > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0;
+    opacity: 0.7;
+
+    @include supports-hover {
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}

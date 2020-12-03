@@ -1,0 +1,28 @@
+<doe-gallery
+  [items]="images"
+  [itemTemplate]="customItem"
+  [arrowTemplate]="customArrow"
+  [errorTemplate]="customError"
+  loading="lazy"
+></doe-gallery>
+
+<ng-template #customItem let-item="item" let-video="video">
+  <div class="custom-item">
+    <div class="image-container">
+      <img *ngIf="!video" [src]="item.src" doeMedia />
+      <video *ngIf="video" [src]="item.src" controls doeMedia></video>
+    </div>
+    <p class="description">{{ item.description }}</p>
+  </div>
+</ng-template>
+
+<ng-template #customArrow>
+  <mat-icon class="custom-arrow">arrow_forward_ios</mat-icon>
+</ng-template>
+
+<ng-template #customError>
+  <div class="custom-error">
+    <mat-icon>sentiment_very_dissatisfied</mat-icon>
+    <p>I am a custom error screen</p>
+  </div>
+</ng-template>
