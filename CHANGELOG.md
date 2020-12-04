@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-...
+### Fixed
+
+- Fixed IE11 and older Safari freezes caused by polyfill for IntersectionObserver
 
 ## [1.1.0] - 2020-11-21
 
