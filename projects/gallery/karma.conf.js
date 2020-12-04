@@ -37,7 +37,7 @@ module.exports = function (config) {
       TouchyFirefox: {
         base: 'Firefox',
         prefs: {
-          'dom.w3c_touch_events.enabled': 2,
+          'dom.w3c_touch_events.enabled': 1,
         },
       },
     },
