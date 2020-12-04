@@ -19,7 +19,7 @@ Performant, responsive, easy to use Angular 8+ gallery
 Because it gives you the doe eyes! Seriously though, use it if you need:
 
 - Great performance and feel both on mobile and desktop
-- Very small size - gallery itself has just 8kB gzipped! It also packs no dependencies
+- Very small size - gallery itself has just 9kB gzipped! It also packs no dependencies
 - Easy usage and lots of customizations
 - It just works!
 

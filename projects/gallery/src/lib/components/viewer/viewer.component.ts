@@ -146,12 +146,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         axis !== OrientationFlag.HORIZONTAL &&
         axis !== OrientationFlag.VERTICAL
       ) {
-        setTimeout(() => {
-          this.readDimensions();
-          this.center();
-          // accounts for multiple items visible in viewport, which need calculated dimensions
-          this._cd.detectChanges();
-        });
+        setTimeout(() => this.centerWithUpdatedDimensions());
       }
     }
     if (items && items.currentValue && items.currentValue.length) {
@@ -274,6 +269,14 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       (this.selectedIndex + this._fringeCount) * this._itemWidth -
         centeringOffset
     );
+  }
+
+  private centerWithUpdatedDimensions() {
+    if (this.items && this.items.length) {
+      this.readDimensions();
+      this.center();
+      this._cd.detectChanges();
+    }
   }
 
   private correctIndexOutOfBounds(index: number) {
@@ -475,15 +478,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     // using setTimeout increases chance the trashing will be avoided and cashed layout calculation will be used
     setTimeout(() => {
       this._noAnimation = true;
-
-      if (this.items && this.items.length) {
-        this.readDimensions();
-        this._fringeCount = this.getFringeCount();
-        this._displayedItems = this.getItemsToBeDisplayed();
-        this._cd.detectChanges();
-        this.center();
-      }
-
+      this.centerWithUpdatedDimensions();
       // the setTimeout makes sure that the animation is allowed AFTER the list was shifted
       setTimeout(() => (this._noAnimation = false));
     });
@@ -494,6 +489,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     this._itemWidth = this._hostRef.nativeElement.querySelector(
       'li'
     ).offsetWidth;
+    this._fringeCount = this.getFringeCount();
+    this._displayedItems = this.getItemsToBeDisplayed();
   }
 
   private selectBySwipeStats(distance: number) {
