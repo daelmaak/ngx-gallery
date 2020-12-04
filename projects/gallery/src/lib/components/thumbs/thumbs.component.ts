@@ -270,6 +270,8 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
         root: this.thumbListRef.nativeElement,
         threshold: 1.0,
       });
+      // fix IE11 polyfill freeze https://stackoverflow.com/questions/58087332/intersection-obserser-freezes-ie11-in-angular-7-application
+      this.arrowObserver['USE_MUTATION_OBSERVER'] = false;
     } else {
       this.unobserveArrows();
     }
