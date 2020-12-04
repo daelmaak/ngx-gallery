@@ -24,7 +24,7 @@
     .doe-viewer-arrow-prev {
       right: 0;
       left: auto;
-      transform: translateY(-50%) rotate(0deg)
+      transform: translateY(-50%) rotate(0deg);
     }
   }
 }
@@ -63,6 +63,11 @@ li {
 picture {
   width: 100%;
   height: 100%;
+
+  /* Fix to hide duplicate pictures in IE11 */
+  &:not(:first-child) {
+    display: none;
+  }
 }
 
 img,
