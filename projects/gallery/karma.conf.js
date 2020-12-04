@@ -28,10 +28,18 @@ module.exports = function (config) {
     autoWatch: true,
     usePolling: true,
     browsers: [
-      'Firefox',
+      'TouchyFirefox',
       // 'Chrome',
     ],
     singleRun: false,
     restartOnFileChange: true,
+    customLaunchers: {
+      TouchyFirefox: {
+        base: 'Firefox',
+        prefs: {
+          'dom.w3c_touch_events.enabled': 2,
+        },
+      },
+    },
   });
 };
