@@ -57,6 +57,10 @@ In your component template
 <doe-gallery [items]="images"></doe-gallery>
 ```
 
+### Usage with IE11
+
+Support for IE11 is only rudimentary and requires you to use IntersectionObserver polyfill https://github.com/w3c/IntersectionObserver/tree/master/polyfill
+
 ## Development
 
 ### Install dependencies
