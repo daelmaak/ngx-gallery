@@ -144,7 +144,7 @@ img {
 
   &-prev {
     left: 0;
-    transform: rotate(180deg) translateY(50%);
+    transform: scale(-1) translateY(50%);
   }
 
   &-next {
