@@ -8,7 +8,6 @@ $arrow-btn-dimension: 30px;
   background-color: #f3f3f3;
 }
 
-
 :host.doe-thumbs {
   &--top,
   &--bottom {
@@ -232,7 +231,7 @@ img {
   z-index: 10;
 
   &-prev {
-    transform: rotate(180deg);
+    transform: scale(-1);
   }
 
   > div {
