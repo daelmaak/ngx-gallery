@@ -146,7 +146,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         axis !== OrientationFlag.HORIZONTAL &&
         axis !== OrientationFlag.VERTICAL
       ) {
-        setTimeout(() => this.centerWithUpdatedDimensions());
+        this.onResize();
       }
     }
     if (items && items.currentValue && items.currentValue.length) {
@@ -269,14 +269,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       (this.selectedIndex + this._fringeCount) * this._itemWidth -
         centeringOffset
     );
-  }
-
-  private centerWithUpdatedDimensions() {
-    if (this.items && this.items.length) {
-      this.readDimensions();
-      this.center();
-      this._cd.detectChanges();
-    }
   }
 
   private correctIndexOutOfBounds(index: number) {
@@ -478,7 +470,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
     // using setTimeout increases chance the trashing will be avoided and cashed layout calculation will be used
     setTimeout(() => {
       this._noAnimation = true;
-      this.centerWithUpdatedDimensions();
+      this.updateDimensionsAndCenter();
       // the setTimeout makes sure that the animation is allowed AFTER the list was shifted
       setTimeout(() => (this._noAnimation = false));
     });
@@ -521,6 +513,14 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
     if (videoEl) {
       videoEl.pause();
+    }
+  }
+
+  private updateDimensionsAndCenter() {
+    if (this.items && this.items.length) {
+      this.readDimensions();
+      this.center();
+      this._cd.detectChanges();
     }
   }
 }

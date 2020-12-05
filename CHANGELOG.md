@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed IE11 and older Safari freezes caused by polyfill for IntersectionObserver
+- Fixed gallery's appearance on IE11 (except for multiple items in scrollport are not currently working, only 1 item at a time is being displayed in the viewer)
 
 ## [1.1.0] - 2020-11-21
 
