@@ -9,13 +9,11 @@ export class MediaDirective {
   @HostListener('load', ['$event'])
   @HostListener('loadedmetadata', ['$event'])
   @HostListener('error', ['$event'])
-  onLoad(e: Event) {
-    const evName = e.type === 'error' ? 'doe-media-error' : 'doe-media-load';
-    this.hostRef.nativeElement.dispatchEvent(
-      new CustomEvent(evName, {
-        bubbles: true,
-        detail: e,
-      })
-    );
+  onLoad(ev: Event) {
+    const evName = ev.type === 'error' ? 'doe-media-error' : 'doe-media-load';
+    const dispatchEv = document.createEvent('CustomEvent');
+    dispatchEv.initCustomEvent(evName, true, true, ev);
+
+    this.hostRef.nativeElement.dispatchEvent(dispatchEv);
   }
 }
