@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+...
+
+## [1.1.1] - 2020-12-5
+
 ### Fixed
 
 - Fixed IE11 and older Safari freezes caused by polyfill for IntersectionObserver
@@ -114,7 +118,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed background flashes in Firefox when new images slide into doe-viewer's scrollport.
 
-[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.1.0...HEAD
+[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.1.1...v1.1.0
 [1.1.0]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.1.0...v1.1.0-RC1
 [1.1.0-rc1]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.1.0-RC1...v1.0.0
 [1.0.0]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.0.0-beta.3...v1.0.0
