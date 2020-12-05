@@ -20,13 +20,13 @@ $default-item-width: calc(100% - 0.01px);
     .doe-viewer-arrow-next {
       right: auto;
       left: 0;
-      transform: translateY(-50%) rotate(180deg);
+      transform: translateY(-50%) scale(-1);
     }
 
     .doe-viewer-arrow-prev {
       right: 0;
       left: auto;
-      transform: translateY(-50%) rotate(0deg);
+      transform: translateY(-50%);
     }
   }
 }
