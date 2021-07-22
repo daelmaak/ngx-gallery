@@ -6,5 +6,5 @@ export const SUPPORT = {
 
 export const UA = {
   ios: isBrowser && !!window.navigator.userAgent.match(/iP(ad|hone|od)/),
-  ie11: !!window['MSInputMethodContext'] && !!document['documentMode'],
+  ie11: isBrowser && !!window['MSInputMethodContext'] && !!document['documentMode'],
 };
