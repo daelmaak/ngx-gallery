@@ -1,0 +1,26 @@
+name: build and deploy production
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+#      - name: Build
+#        run: |
+#          npm ci
+#          npm run build
+#
+#      - name: Test
+#        run: npm test
+
+      - name: Release
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}"
