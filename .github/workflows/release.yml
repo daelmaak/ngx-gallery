@@ -5,40 +5,57 @@ on:
     types: [published]
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
+#  release:
+#    runs-on: ubuntu-latest
+#
+#    env:
+#      NPM_PUBLISH_KEY: ${{ secrets.NPM_PUBLISH_KEY }}
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Set release version
+#        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+#
+#      - name: Install
+#        run: npm ci
+#
+#      - name: Setup test browser
+#        uses: browser-actions/setup-chrome@latest
+#
+#      - name: Test
+#        run: npm run test:ci
+#
+#      - name: Update package version
+#        run: |
+#          cd projects/gallery
+#          npm version --no-git-tag-version ${RELEASE_VERSION}
+#
+#      - name: Build & Package
+#        run: |
+#          npm run build
+#          cat README.md > dist/gallery/README.md
+#
+#      - name: Release
+#        run: |
+#          npm set //registry.npmjs.org/:_authToken $NPM_PUBLISH_KEY
+#          cd dist/gallery
+#          npm publish
 
-    env:
-      NPM_PUBLISH_KEY: ${{ secrets.NPM_PUBLISH_KEY }}
+  deploy-gh-page:
+#    needs: release
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set release version
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-
-      - name: Install
-        run: npm ci
-
-      - name: Setup test browser
-        uses: browser-actions/setup-chrome@latest
-
-      - name: Test
-        run: npm run test:ci
-
-      - name: Update package version
+      - name: Install and Build
         run: |
-          cd projects/gallery
-          npm version --no-git-tag-version ${RELEASE_VERSION}
+          npm ci
+          npm run build:demo
 
-      - name: Build & Package
-        run: |
-          npm run build
-          cat README.md > dist/gallery/README.md
-
-      - name: Release
-        run: |
-          npm set //registry.npmjs.org/:_authToken $NPM_PUBLISH_KEY
-          cd dist/gallery
-          npm publish
-
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.7
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: docs # The folder the action should deploy.
