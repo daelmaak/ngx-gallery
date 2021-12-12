@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ...
 
+## [1.2.0] - 2021-12-12
+
+### Changed
+
+- Upgraded to ng-packagr@10, which removes esm5 and fesm5 package formats. This leads to smaller package size.
+
 ## [1.1.2] - 2021-22-7
 
 ### Fixed
@@ -124,7 +130,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed background flashes in Firefox when new images slide into doe-viewer's scrollport.
 
-[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.1.2...HEAD
+[unreleased]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.2.0...v1.1.2
 [1.1.2]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.1.2...v1.1.1
 [1.1.1]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.1.1...v1.1.0
 [1.1.0]: https://github.com/daelmaak/ngx-doe-gallery/compare/v1.1.0...v1.1.0-RC1
