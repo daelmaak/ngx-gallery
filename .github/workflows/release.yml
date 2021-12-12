@@ -18,7 +18,7 @@ jobs:
         run: npm ci
 
       - name: Setup test browser
-        uses: browser-actions/setup-firefox@latest
+        uses: browser-actions/setup-chrome@latest
 
       - name: Test
         run: npm run test:ci
