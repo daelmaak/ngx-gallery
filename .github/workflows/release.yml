@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      NPM_PUBLISH_EMAIL: ${{ secrets.NPM_PUBLISH_EMAIL }}
       NPM_PUBLISH_KEY: ${{ secrets.NPM_PUBLISH_KEY }}
 
     steps:
