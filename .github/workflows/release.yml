@@ -36,6 +36,5 @@ jobs:
       - name: Release
         run: |
           cd dist/gallery
-          echo "publishing ${RELEASE_VERSION}"
-#          npm publish
+          npm publish
 
