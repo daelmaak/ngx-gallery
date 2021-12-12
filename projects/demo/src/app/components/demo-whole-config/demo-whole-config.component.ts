@@ -1,19 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { GalleryItemInternal } from 'projects/gallery/src/lib/core/gallery-item';
-import {
-  GalleryComponent,
-  GalleryItem,
-  GalleryItemEvent,
-} from 'projects/gallery/src/public-api';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { defer, Observable, of } from 'rxjs';
 import { delay, switchMap } from 'rxjs/operators';
+import { GalleryComponent, GalleryItem, GalleryItemEvent } from 'ngx-doe-gallery';
+import { GalleryItemInternal } from 'ngx-doe-gallery/lib/core/gallery-item';
 
 @Component({
   selector: 'app-demo-whole-config',
@@ -21,7 +10,7 @@ import { delay, switchMap } from 'rxjs/operators';
   styleUrls: ['./demo-whole-config.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DemoWholeConfig implements OnInit {
+export class DemoWholeConfigComponent implements OnInit {
   @Input() images: GalleryItem[];
   items: Observable<GalleryItem[]>;
 
