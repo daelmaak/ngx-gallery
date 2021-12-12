@@ -14,26 +14,19 @@ jobs:
       - name: Set release version
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}"
 
-#      - name: Install
-#        run: npm ci
-#
-#      - name: Setup test browser
-#        uses: browser-actions/setup-chrome@latest
-#
-#      - name: Test
-#        run: npm run test:ci
+      - name: Install
+        run: npm ci
+
+      - name: Setup test browser
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Test
+        run: npm run test:ci
 
       - name: Update package version
         run: |
           cd projects/gallery
           npm version ${RELEASE_VERSION}
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add package.json
-          git commit -m "Update version (automatic)"
-          git push
-          git tag -f -a ${RELEASE_VERSION}
-          git push -f --tags
 
       - name: Build & Package
         run: |
@@ -43,6 +36,6 @@ jobs:
       - name: Release
         run: |
           cd dist/gallery
-          echo "publishing"
+          echo "publishing ${RELEASE_VERSION}"
 #          npm publish
 
