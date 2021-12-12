@@ -12,13 +12,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatRadioModule } from '@angular/material/radio';
 
 import { AppComponent } from './app.component';
-import { GalleryModule } from 'projects/gallery/src/public-api';
-import { DemoWholeConfig } from './components/demo-whole-config/demo-whole-config.component';
+import { DemoWholeConfigComponent } from './components/demo-whole-config/demo-whole-config.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ShowcaseComponent } from './components/showcase/showcase.component';
 import { DemoThumbsOrientationComponent } from './components/demo-thumbs-orientation/demo-thumbs-orientation.component';
 import { DemoMultipleItemsComponent } from './components/demo-multiple-items/demo-multiple-items.component';
 import { DemoCustomTemplatesComponent } from './components/demo-custom-templates/demo-custom-templates.component';
+import { GalleryModule } from 'ngx-doe-gallery';
 
 const materialModules = [
   MatButtonModule,
@@ -33,7 +33,7 @@ const materialModules = [
 @NgModule({
   declarations: [
     AppComponent,
-    DemoWholeConfig,
+    DemoWholeConfigComponent,
     HeaderComponent,
     ShowcaseComponent,
     DemoThumbsOrientationComponent,

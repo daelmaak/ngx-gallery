@@ -7,12 +7,12 @@ import { MatRadioModule } from '@angular/material/radio';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 
-import { GalleryModule } from 'projects/gallery/src/public-api';
-import { HomeComponent } from './demo-whole-config.component';
+import { DemoWholeConfigComponent } from './demo-whole-config.component';
+import { GalleryModule } from 'ngx-doe-gallery';
 
-describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
+describe('DemoWholeConfigComponent', () => {
+  let component: DemoWholeConfigComponent;
+  let fixture: ComponentFixture<DemoWholeConfigComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -27,12 +27,12 @@ describe('HomeComponent', () => {
         MatRadioModule,
         GalleryModule,
       ],
-      declarations: [HomeComponent],
+      declarations: [DemoWholeConfigComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HomeComponent);
+    fixture = TestBed.createComponent(DemoWholeConfigComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
