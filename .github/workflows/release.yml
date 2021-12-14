@@ -1,4 +1,4 @@
-name: Release
+name: Release test
 
 on:
   release:
@@ -43,8 +43,8 @@ jobs:
           npm publish
 
   deploy-gh-page:
-    needs: release
     runs-on: ubuntu-latest
+    needs: release
 
     steps:
       - uses: actions/checkout@v2
