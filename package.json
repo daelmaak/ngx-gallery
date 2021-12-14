@@ -1,6 +1,6 @@
 {
   "name": "ngx-doe-gallery-demo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "Apache-2.0",
   "author": {
     "name": "Daniel Macak",
@@ -20,7 +20,8 @@
     "test:demo": "ng test --project=demo",
     "test:ci": "npm test -- --watch=false --code-coverage",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "changelog-release": "standard-version"
   },
   "private": true,
   "dependencies": {
@@ -49,6 +50,8 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.12.17",
     "codelyzer": "^5.0.0",
+    "conventional-changelog-angular": "^5.0.13",
+    "conventional-changelog-cli": "^2.1.1",
     "http-server": "^0.12.1",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
@@ -62,6 +65,7 @@
     "ng-packagr": "^10.1.1",
     "prettier": "^2.0.5",
     "protractor": "~5.4.0",
+    "standard-version": "^9.3.2",
     "ts-node": "~7.0.0",
     "tsickle": "^0.37.0",
     "tslint": "~5.15.0",
