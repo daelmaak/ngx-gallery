@@ -11,8 +11,7 @@
         { "type": "perf", "section": "Performance Improvements" },
         { "type": "revert", "section": "Reverts" },
         { "type": "docs", "section": "Documentation" },
-        { "type": "style", "section": "Styles" },
-        { "type": "ci", "section": "Continuous Integration" }
+        { "type": "style", "section": "Styles" }
       ]
     }
   }
