@@ -20,7 +20,8 @@
     "test:demo": "ng test --project=demo",
     "test:ci": "npm test -- --watch=false --code-coverage",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "release": "cd projects/gallery && standard-version -i ../../CHANGELOG.md && git push --follow-tags"
   },
   "private": true,
   "dependencies": {
@@ -62,6 +63,7 @@
     "ng-packagr": "^10.1.1",
     "prettier": "^2.0.5",
     "protractor": "~5.4.0",
+    "standard-version": "^9.3.2",
     "ts-node": "~7.0.0",
     "tsickle": "^0.37.0",
     "tslint": "~5.15.0",

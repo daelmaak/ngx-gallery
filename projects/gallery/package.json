@@ -29,8 +29,7 @@
   "scripts": {
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
-    "changelog-release": "standard-version"
+    "lint": "ng lint"
   },
   "peerDependencies": {
     "@angular/animations": ">=8.0.0",
