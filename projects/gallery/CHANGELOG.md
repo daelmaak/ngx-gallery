@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Upgraded to ng-packagr@10, which removes esm5 and fesm5 package formats. This leads to smaller package size.
 
-## [1.1.2] - 2021-22-7
+## [1.1.2] - 2021-07-22
 
 ### Fixed
 
