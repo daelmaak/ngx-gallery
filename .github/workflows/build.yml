@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push:
+    branches-ignore: [gh-pages]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup test browser
+        uses: browser-actions/setup-chrome@latest
+
+      - uses: actions/checkout@v2
+
+      # TODO cache
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # TODO Run as separate job? Only when Install is cached
+      - name: Test
+        run: npm run test:ci
+
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v2
