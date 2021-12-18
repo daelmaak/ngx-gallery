@@ -29,7 +29,7 @@ import {
 } from '../../core/gallery-item';
 
 @Component({
-  selector: 'doe-thumbs',
+  selector: 'thumbs',
   templateUrl: './thumbs.component.html',
   styleUrls: ['./thumbs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -64,7 +64,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
 
   @HostBinding('class')
   get cssClass() {
-    return `doe-thumbs--${this.orientation}`;
+    return `thumbs--${this.orientation}`;
   }
 
   private get hostOffsetAxis(): number {

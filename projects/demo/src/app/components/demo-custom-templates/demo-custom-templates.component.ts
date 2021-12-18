@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GalleryImage, GalleryVideo } from 'ngx-doe-gallery';
+import { GalleryImage, GalleryVideo } from '@daelmaak/ngx-gallery';
 
 @Component({
   selector: 'app-demo-custom-templates',

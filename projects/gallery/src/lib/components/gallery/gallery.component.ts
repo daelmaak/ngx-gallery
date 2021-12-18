@@ -29,7 +29,7 @@ import { ThumbsComponent } from '../thumbs/thumbs.component';
 import { ViewerComponent } from '../viewer/viewer.component';
 
 @Component({
-  selector: 'doe-gallery',
+  selector: 'gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -81,7 +81,7 @@ export class GalleryComponent {
   _touched = false;
   INIT_INTERACTIONS = ['touchstart', 'mousedown', 'keydown'];
 
-  @HostBinding('class.doe-gallery--column')
+  @HostBinding('class.gallery--column')
   get _galleryColumn() {
     return (
       this.thumbsOrientation === 'top' || this.thumbsOrientation === 'bottom'

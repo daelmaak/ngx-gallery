@@ -18,7 +18,7 @@ import { ShowcaseComponent } from './components/showcase/showcase.component';
 import { DemoThumbsOrientationComponent } from './components/demo-thumbs-orientation/demo-thumbs-orientation.component';
 import { DemoMultipleItemsComponent } from './components/demo-multiple-items/demo-multiple-items.component';
 import { DemoCustomTemplatesComponent } from './components/demo-custom-templates/demo-custom-templates.component';
-import { GalleryModule } from 'ngx-doe-gallery';
+import { GalleryModule } from '@daelmaak/ngx-gallery';
 
 const materialModules = [
   MatButtonModule,

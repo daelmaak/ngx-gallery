@@ -5,16 +5,16 @@
   outline: 0;
   position: relative;
 
-  &.doe-gallery--column {
+  &.gallery--column {
     flex-direction: column;
   }
 
   &.rtl {
-    // maintains doe-thumbs orientation also when the whole document is in RTL mode
+    // maintains thumbs orientation also when the whole document is in RTL mode
     direction: ltr;
 
-    doe-viewer,
-    doe-thumbs {
+    viewer,
+    thumbs {
       direction: rtl;
     }
   }
@@ -33,7 +33,7 @@
     padding: 0;
   }
 
-  .doe-sr-only {
+  .sr-only {
     position: absolute !important;
     clip: rect(1px, 1px, 1px, 1px);
     top: auto;
@@ -44,7 +44,7 @@
   }
 }
 
-.doe-loading {
+.loading {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,7 +62,7 @@
     background-color: #4a4a4a;
     animation: bounce 2s infinite;
     border-radius: 50%;
-    box-shadow: 0 0 0px 1px whitesmoke, 0 0 1px 1px whitesmoke;
+    box-shadow: 0 0 0 1px whitesmoke, 0 0 1px 1px whitesmoke;
 
     + div {
       margin-left: 10px;

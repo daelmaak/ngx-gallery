@@ -8,10 +8,10 @@ import {
 import { VerticalOrientation } from '../../core';
 
 @Component({
-  selector: 'doe-counter',
+  selector: 'counter',
   template: `
     <span aria-hidden="true">
-      {{ selectedIndex + 1 }}<span class="doe-counter-delimiter">/</span
+      {{ selectedIndex + 1 }}<span class="counter-delimiter">/</span
       >{{ itemQuantity || 0 }}
     </span>
   `,

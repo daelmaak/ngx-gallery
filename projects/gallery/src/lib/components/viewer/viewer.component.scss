@@ -17,13 +17,13 @@ $default-item-width: calc(100% - 0.01px);
   z-index: 1;
 
   &.rtl {
-    .doe-viewer-arrow-next {
+    .viewer-arrow-next {
       right: auto;
       left: 0;
       transform: translateY(-50%) scale(-1);
     }
 
-    .doe-viewer-arrow-prev {
+    .viewer-arrow-prev {
       right: 0;
       left: auto;
       transform: translateY(-50%);
@@ -86,7 +86,7 @@ img {
   user-select: none;
 }
 
-.doe-viewer-description {
+.viewer-description {
   position: absolute;
   bottom: 5px;
   width: 100%;
@@ -109,7 +109,7 @@ img {
   }
 }
 
-.doe-viewer-error {
+.viewer-error {
   position: absolute;
   left: 0;
   top: 0;
@@ -132,7 +132,7 @@ img {
   }
 }
 
-.doe-viewer-arrow {
+.viewer-arrow {
   display: flex;
   position: absolute;
   top: 50%;
@@ -149,7 +149,7 @@ img {
     right: 0;
   }
 
-  doe-chevron-icon {
+  chevron-icon {
     $icon-dimension: 32px;
 
     margin: 15px 6px;

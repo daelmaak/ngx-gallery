@@ -12,7 +12,7 @@
       },
       "root": "projects/gallery",
       "sourceRoot": "projects/gallery/src",
-      "prefix": "doe",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",

@@ -71,7 +71,7 @@ describe('ViewerComponent', () => {
 
       expect(component).toBeTruthy();
 
-      expect(de.query(By.css('.doe-viewer-initial-item'))).toBeTruthy();
+      expect(de.query(By.css('.viewer-initial-item'))).toBeTruthy();
     });
 
     it('should display items even though they have been set later', fakeAsync(() => {
@@ -93,7 +93,7 @@ describe('ViewerComponent', () => {
       flush();
 
       expect(
-        de.queryAll(By.css('li:not(.doe-viewer-initial-item)')).length
+        de.queryAll(By.css('li:not(.viewer-initial-item)')).length
       ).toBe(2);
     }));
 
@@ -109,7 +109,7 @@ describe('ViewerComponent', () => {
       tick();
 
       expect(
-        de.queryAll(By.css('li'))[1].classes['doe-viewer-item--selected']
+        de.queryAll(By.css('li'))[1].classes['viewer-item--selected']
       ).toBeTruthy();
       expect(de.query(By.css('ul')).nativeElement.style.transform).toMatch(
         /translate3d\(-\d+px, 0px, 0px\)/
@@ -360,9 +360,9 @@ describe('ViewerComponent', () => {
       component.ngOnChanges(changes);
       fixture.detectChanges();
 
-      const descContainer = de.query(By.css('.doe-viewer-description'));
+      const descContainer = de.query(By.css('.viewer-description'));
       expect(
-        descContainer.classes['doe-viewer-description--above-counter']
+        descContainer.classes['viewer-description--above-counter']
       ).toBeFalsy();
     });
   });

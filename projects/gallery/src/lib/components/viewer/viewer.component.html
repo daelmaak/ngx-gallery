@@ -1,25 +1,25 @@
 <div
   *ngIf="showPrevArrow"
-  class="doe-viewer-arrow doe-viewer-arrow-prev"
+  class="viewer-arrow viewer-arrow-prev"
   (click)="selectByDelta(-1)"
 >
-  <doe-chevron-icon
+  <chevron-icon
     *ngIf="!arrowTemplate; else arrowTemplate"
-  ></doe-chevron-icon>
+  ></chevron-icon>
 </div>
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
-  <li *ngIf="!_displayedItems?.length" class="doe-viewer-initial-item"></li>
+  <li *ngIf="!_displayedItems?.length" class="viewer-initial-item"></li>
   <li
     #itemsRef
     *ngFor="let item of _displayedItems; let i = index"
-    [class.doe-viewer-item--selected]="i === selectedIndex"
+    [class.viewer-item--selected]="i === selectedIndex"
     [attr.tabindex]="itemTabbable(i)"
     [attr.aria-label]="item.alt"
-    [attr.aria-describedby]="'doe-viewer-aria-description-' + i"
+    [attr.aria-describedby]="'viewer-aria-description-' + i"
     (click)="onImageClick(item, $event)"
-    (doe-media-load)="onItemLoaded(item)"
-    (doe-media-error)="onItemErrored(item)"
+    (media-load)="onItemLoaded(item)"
+    (media-error)="onItemErrored(item)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
   >
@@ -36,7 +36,7 @@
           <img
             [src]="item.src"
             [alt]="item.alt"
-            [class.doe-viewer-media-loading]="!itemLoaded(item)"
+            [class.viewer-media-loading]="!itemLoaded(item)"
             [style.objectFit]="objectFit"
             (load)="onItemLoaded(item)"
             (error)="onItemErrored(item)"
@@ -48,7 +48,7 @@
           @mediaAnimate
           [src]="item.src"
           [poster]="item.thumbSrc || ''"
-          [class.doe-viewer-media-loading]="!itemLoaded(item)"
+          [class.viewer-media-loading]="!itemLoaded(item)"
           [style.objectFit]="objectFit"
           controls
           playsinline
@@ -74,18 +74,18 @@
       <ng-container *ngIf="itemFailedToLoad(item)">
         <div
           *ngIf="!errorTemplate; else errorTemplate"
-          class="doe-viewer-error"
+          class="viewer-error"
         >
-          <div class="doe-viewer-error-icon">⚠</div>
-          <p class="doe-viewer-error-text">
+          <div class="viewer-error-icon">⚠</div>
+          <p class="viewer-error-text">
             {{ errorText || 'Loading of this media failed' }}
           </p>
         </div>
       </ng-container>
 
       <span
-        [id]="'doe-viewer-aria-description-' + i"
-        class="doe-sr-only"
+        [id]="'viewer-aria-description-' + i"
+        class="sr-only"
         [innerHTML]="item.description"
       ></span>
     </ng-container>
@@ -112,20 +112,20 @@
 
 <div
   *ngIf="showNextArrow"
-  class="doe-viewer-arrow doe-viewer-arrow-next"
+  class="viewer-arrow viewer-arrow-next"
   (click)="selectByDelta(1)"
 >
-  <doe-chevron-icon
+  <chevron-icon
     *ngIf="!arrowTemplate; else arrowTemplate"
-  ></doe-chevron-icon>
+  ></chevron-icon>
 </div>
 
-<doe-counter
+<counter
   *ngIf="counter && items?.length"
   [itemQuantity]="items?.length"
   [selectedIndex]="selectedIndex"
   [orientation]="counterOrientation"
-></doe-counter>
+></counter>
 
 <ng-container
   *ngTemplateOutlet="
@@ -138,15 +138,15 @@
 
 <div
   *ngIf="descriptions && items"
-  class="doe-viewer-description"
-  [class.doe-viewer-description--above-counter]="
+  class="viewer-description"
+  [class.viewer-description--above-counter]="
     counter && counterOrientation === 'bottom'
   "
   aria-hidden="true"
 >
   <div
     *ngIf="items[selectedIndex]?.description as description"
-    class="doe-viewer-description-inner"
+    class="viewer-description-inner"
     [innerHTML]="description"
     (click)="descriptionClick.emit($event)"
   ></div>

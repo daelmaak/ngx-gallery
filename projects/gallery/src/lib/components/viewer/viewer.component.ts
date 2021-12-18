@@ -39,7 +39,7 @@ const passiveEventListenerOpts = {
 };
 
 @Component({
-  selector: 'doe-viewer',
+  selector: 'viewer',
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
