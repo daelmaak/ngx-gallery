@@ -3,7 +3,7 @@
 Performant, responsive, easy to use Angular **8+** gallery
 
 [![codecov](https://codecov.io/gh/daelmaak/ngx-gallery/branch/master/graph/badge.svg?token=eQhl2BmseY)](https://codecov.io/gh/daelmaak/ngx-gallery)
-[![npm](https://img.shields.io/npm/v/ngx-gallery.svg)](https://www.npmjs.com/package/ngx-gallery)
+[![npm](https://img.shields.io/npm/v/daelmaak/ngx-gallery.svg)](https://www.npmjs.com/package/daelmaak/ngx-gallery)
 
 [**Demos**](https://daelmaak.github.io/ngx-gallery/) |
 [**Docs**](https://github.com/daelmaak/ngx-gallery/wiki/Gallery-API/cc4f9ed153dd3362aef704cea5bc3eb4c3f34397) |
