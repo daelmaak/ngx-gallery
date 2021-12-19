@@ -29,17 +29,23 @@ module.exports = function (config) {
     usePolling: true,
     browsers: [
       // 'TouchyFirefox',
+      'Chrome',
       'ChromeHeadless',
+      'ChromeHeadlessLocal',
     ],
     singleRun: false,
     restartOnFileChange: true,
-    // customLaunchers: {
-    //   TouchyFirefox: {
-    //     base: 'Firefox',
-    //     prefs: {
-    //       'dom.w3c_touch_events.enabled': 1,
-    //     },
-    //   },
-    // },
+    customLaunchers: {
+      TouchyFirefox: {
+        base: 'Firefox',
+        prefs: {
+          'dom.w3c_touch_events.enabled': 1,
+        },
+      },
+      ChromeHeadlessLocal: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
+    },
   });
 };
