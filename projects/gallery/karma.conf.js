@@ -28,7 +28,7 @@ module.exports = function (config) {
     autoWatch: true,
     usePolling: true,
     browsers: [
-      // 'TouchyFirefox',
+      'TouchyFirefox',
       'Chrome',
       'ChromeHeadless',
       'ChromeHeadlessLocal',
