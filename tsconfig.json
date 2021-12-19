@@ -15,9 +15,7 @@
     "lib": ["es2018", "dom"],
     "paths": {
       "ngx-doe-gallery": ["projects/gallery/src/public-api.ts"],
-      "ngx-doe-gallery/*": ["projects/gallery/src/*"],
-//      "ngx-doe-gallery": ["dist/gallery"],
-//      "ngx-doe-gallery/*": ["dist/gallery/*"]
+      "ngx-doe-gallery/*": ["projects/gallery/src/*"]
     }
   },
   "angularCompilerOptions": {
