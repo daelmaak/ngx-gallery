@@ -58,7 +58,7 @@ describe('GalleryComponent', () => {
       const imageClickSpy = spyOn(component.imageClick, 'emit');
       const secondItem = de.queryAll(By.css('doe-viewer ul li'))[1];
 
-      const mockedClick = { name: 'mocked-event' };
+      const mockedClick = { name: 'mocked-event' } as any;
       secondItem.triggerEventHandler('click', mockedClick);
 
       expect(imageClickSpy).toHaveBeenCalled();
@@ -73,7 +73,7 @@ describe('GalleryComponent', () => {
       const thumbClickSpy = spyOn(component.thumbClick, 'emit');
       const secondThumb = de.queryAll(By.css('doe-thumbs ul li'))[1];
 
-      const mockedClick = { name: 'mocked-event' };
+      const mockedClick = { name: 'mocked-event' } as any;
       secondThumb.triggerEventHandler('click', mockedClick);
 
       expect(thumbClickSpy).toHaveBeenCalled();
@@ -88,7 +88,7 @@ describe('GalleryComponent', () => {
       const thumbHoverSpy = spyOn(component.thumbHover, 'emit');
       const secondThumb = de.queryAll(By.css('doe-thumbs ul li'))[1];
 
-      const mockedMouseenter = { name: 'mocked-event' };
+      const mockedMouseenter = { name: 'mocked-event' } as any;
       secondThumb.triggerEventHandler('mouseenter', mockedMouseenter);
 
       expect(thumbHoverSpy).toHaveBeenCalled();
