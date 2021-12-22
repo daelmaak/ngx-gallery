@@ -59,7 +59,7 @@
     "karma-firefox-launcher": "^2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "ng-mocks": "^10.5.4",
+    "ng-mocks": "^12.5.1",
     "ng-packagr": "^12.2.6",
     "prettier": "^2.0.5",
     "protractor": "~7.0.0",
