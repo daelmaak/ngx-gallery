@@ -57,8 +57,6 @@ li {
   align-items: center;
   flex: none;
   position: relative;
-  // default for IE11
-  width: $default-item-width;
   width: var(--item-width);
   user-select: none;
   outline: 0;
