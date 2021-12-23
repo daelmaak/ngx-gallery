@@ -10,15 +10,15 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       // require('karma-firefox-launcher'),
       require('karma-jasmine-html-reporter'),
-      require('karma-coverage-istanbul-reporter'),
+      require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma'),
     ],
     client: {
       clearContext: false, // leave Jasmine Spec Runner output visible in browser
     },
-    coverageIstanbulReporter: {
+    coverageReporter: {
       dir: require('path').join(__dirname, '../../coverage/gallery'),
-      reports: ['html', 'lcovonly', 'text-summary'],
+      reporters: ['html', 'lcovonly', 'text-summary'],
       fixWebpackSourcePaths: true,
     },
     reporters: ['dots', 'kjhtml'],
@@ -28,7 +28,7 @@ module.exports = function (config) {
     autoWatch: true,
     usePolling: true,
     browsers: [
-      // 'TouchyFirefox',
+      'TouchyFirefox',
       'Chrome',
       'ChromeHeadless',
       'ChromeHeadlessLocal',

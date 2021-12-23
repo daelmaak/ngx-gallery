@@ -11,9 +11,11 @@ export class MediaDirective {
   @HostListener('error', ['$event'])
   onLoad(ev: Event) {
     const evName = ev.type === 'error' ? 'doe-media-error' : 'doe-media-load';
-    const dispatchEv = document.createEvent('CustomEvent');
-    dispatchEv.initCustomEvent(evName, true, true, ev);
 
-    this.hostRef.nativeElement.dispatchEvent(dispatchEv);
+    this.hostRef.nativeElement.dispatchEvent(new CustomEvent(evName, {
+      bubbles: true,
+      cancelable: true,
+      detail: ev
+    }));
   }
 }

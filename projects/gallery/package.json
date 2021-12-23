@@ -31,6 +31,9 @@
     "test": "ng test",
     "lint": "ng lint"
   },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  },
   "peerDependencies": {
     "@angular/animations": ">=8.0.0",
     "@angular/common": ">=8.0.0",

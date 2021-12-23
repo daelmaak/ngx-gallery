@@ -52,3 +52,5 @@ Thumbs.db
 /docs
 
 *.swp
+
+.angular/cache
