@@ -61,9 +61,9 @@ describe('ThumbnailsComponent', () => {
 
       const itemEls = de.queryAll(By.css('li'));
 
-      expect(itemEls[0].classes['doe-thumbs-item--selected']).toBeFalsy();
-      expect(itemEls[1].classes['doe-thumbs-item--selected']).toBeTruthy();
-      expect(itemEls[2].classes['doe-thumbs-item--selected']).toBeFalsy();
+      expect(itemEls[0].classes['thumbs-item--selected']).toBeFalsy();
+      expect(itemEls[1].classes['thumbs-item--selected']).toBeTruthy();
+      expect(itemEls[2].classes['thumbs-item--selected']).toBeFalsy();
     });
   });
 
@@ -120,7 +120,7 @@ describe('ThumbnailsComponent', () => {
       });
 
       function getChevron(chevronContainer: DebugElement) {
-        return chevronContainer.query(By.css('doe-chevron-icon'))
+        return chevronContainer.query(By.css('chevron-icon'))
           .nativeElement as HTMLElement;
       }
     });
@@ -300,7 +300,7 @@ describe('ThumbnailsComponent', () => {
         waitForArrows(done, _ => {
           toggleArrows(false);
 
-          const arrows = de.queryAll(By.css('doe-chevron-icon'));
+          const arrows = de.queryAll(By.css('chevron-icon'));
           expect(arrows.length).toBe(0);
         });
       });
@@ -327,7 +327,7 @@ describe('ThumbnailsComponent', () => {
           fixture.detectChanges();
           flush();
 
-          const arrows = de.queryAll(By.css('doe-chevron-icon'));
+          const arrows = de.queryAll(By.css('chevron-icon'));
           expect(arrows.length).toBe(0);
         }));
 
@@ -495,11 +495,11 @@ describe('ThumbnailsComponent', () => {
     });
 
     function isPrevArrow(arrow: DebugElement) {
-      return arrow.attributes.class.includes('doe-thumbs-arrow-prev');
+      return arrow.attributes.class.includes('thumbs-arrow-prev');
     }
 
     function isNextArrow(arrow: DebugElement) {
-      return arrow.attributes.class.includes('doe-thumbs-arrow-next');
+      return arrow.attributes.class.includes('thumbs-arrow-next');
     }
 
     function toggleArrows(enabled: boolean) {
@@ -552,7 +552,7 @@ describe('ThumbnailsComponent', () => {
       let arrows: DebugElement[];
 
       const arrowWaiter = setInterval(i => {
-        arrows = de.queryAll(By.css('doe-chevron-icon'));
+        arrows = de.queryAll(By.css('chevron-icon'));
 
         if (arrows.length) {
           clearInterval(arrowWaiter);
@@ -566,7 +566,7 @@ describe('ThumbnailsComponent', () => {
     let arrows: DebugElement[];
 
     const arrowWaiter = setInterval(() => {
-      arrows = de.queryAll(By.css('.doe-thumbs-arrow'));
+      arrows = de.queryAll(By.css('.thumbs-arrow'));
 
       if (arrows.length) {
         clearInterval(arrowWaiter);

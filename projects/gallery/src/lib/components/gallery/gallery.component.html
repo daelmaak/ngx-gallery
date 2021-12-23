@@ -1,8 +1,8 @@
-<span *ngIf="aria?.galleryLabel" class="doe-sr-only" tabindex="0">
+<span *ngIf="aria?.galleryLabel" class="sr-only" tabindex="0">
   {{ aria.galleryLabel }}
 </span>
 
-<doe-thumbs
+<thumbs
   *ngIf="thumbs"
   [items]="items"
   [selectedIndex]="selectedIndex"
@@ -18,9 +18,9 @@
   [isRtl]="isRtl"
   (thumbClick)="_onThumbClick($event)"
   (thumbHover)="thumbHover.emit($event)"
-></doe-thumbs>
+></thumbs>
 
-<doe-viewer
+<viewer
   [items]="items"
   [selectedIndex]="selectedIndex"
   [arrows]="arrows"
@@ -47,10 +47,10 @@
   (descriptionClick)="descriptionClick.emit($event)"
   (selection)="_selectInternal($event); _thumbsRef?.select($event)"
 >
-</doe-viewer>
+</viewer>
 
 <ng-template #defaultLoadingTemplate>
-  <div class="doe-loading">
+  <div class="loading">
     <div></div>
     <div></div>
     <div></div>

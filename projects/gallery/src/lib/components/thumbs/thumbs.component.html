@@ -1,19 +1,19 @@
 <div
   *ngIf="showStartArrow"
-  class="doe-thumbs-arrow doe-thumbs-arrow-prev"
+  class="thumbs-arrow thumbs-arrow-prev"
   (click)="slide(-1)"
 >
   <div *ngIf="!arrowTemplate; else arrowTemplate">
-    <doe-chevron-icon></doe-chevron-icon>
+    <chevron-icon></chevron-icon>
   </div>
 </div>
 
 <ul #thumbs [style.scrollBehavior]="scrollBehavior" [class.rtl]="isRtl">
-  <li *ngIf="!items || !items.length" class="doe-thumbs-initial-item"></li>
+  <li *ngIf="!items || !items.length" class="thumbs-initial-item"></li>
   <li
     #thumb
     *ngFor="let item of items; let i = index"
-    [class.doe-thumbs-item--selected]="i === selectedIndex"
+    [class.thumbs-item--selected]="i === selectedIndex"
     aria-hidden="true"
     (click)="emitEvent(i, item, $event, thumbClick)"
     (mouseenter)="emitEvent(i, item, $event, thumbHover)"
@@ -29,11 +29,11 @@
       <ng-container *ngIf="item._thumbFailed">
         <div
           *ngIf="!errorTemplate; else errorTemplate"
-          class="doe-thumbs-error"
+          class="thumbs-error"
         >
           <div
-            class="doe-thumbs-error-icon"
-            [class.doe-thumbs-error-icon--video]="isVideo(item)"
+            class="thumbs-error-icon"
+            [class.thumbs-error-icon--video]="isVideo(item)"
           ></div>
         </div>
       </ng-container>
@@ -52,10 +52,10 @@
 
 <div
   *ngIf="showEndArrow"
-  class="doe-thumbs-arrow doe-thumbs-arrow-next"
+  class="thumbs-arrow thumbs-arrow-next"
   (click)="slide(1)"
 >
   <div *ngIf="!arrowTemplate; else arrowTemplate">
-    <doe-chevron-icon></doe-chevron-icon>
+    <chevron-icon></chevron-icon>
   </div>
 </div>

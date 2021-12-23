@@ -5,7 +5,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { GalleryItem, Orientation } from 'ngx-doe-gallery';
+import { GalleryItem, Orientation } from '@daelmaak/ngx-gallery';
 
 @Component({
   selector: 'app-demo-thumbs-orientation',

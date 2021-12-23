@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GalleryImage, GalleryVideo } from 'ngx-doe-gallery';
+import { GalleryImage, GalleryVideo } from '@daelmaak/ngx-gallery';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +9,11 @@ import { GalleryImage, GalleryVideo } from 'ngx-doe-gallery';
 })
 export class AppComponent {
   installScript = `
-    npm i ngx-doe-gallery -S
+    npm i @daelmaak/ngx-gallery -S
   `;
 
   moduleCode = `
-    import { GalleryModule } from 'ngx-doe-gallery';
+    import { GalleryModule } from '@daelmaak/ngx-gallery';
 
     @NgModule({
       imports: [ GalleryModule ]
@@ -22,7 +22,7 @@ export class AppComponent {
   `;
 
   componentCode = `
-    import { GalleryImage } from 'ngx-doe-gallery';
+    import { GalleryImage } from '@daelmaak/ngx-gallery';
 
     @Component({...})
     export class AppComponent {
@@ -31,7 +31,7 @@ export class AppComponent {
   `;
 
   componentTemplateCode = `
-    <doe-gallery [items]="images"></doe-gallery>
+    <gallery [items]="images"></gallery>
   `;
 
   images = [

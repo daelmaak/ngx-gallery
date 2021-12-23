@@ -6,7 +6,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { GalleryItem } from 'ngx-doe-gallery';
+import { GalleryItem } from '@daelmaak/ngx-gallery';
 
 @Component({
   selector: 'app-demo-multiple-items',

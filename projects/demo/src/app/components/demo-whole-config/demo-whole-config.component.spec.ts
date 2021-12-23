@@ -8,7 +8,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 
 import { DemoWholeConfigComponent } from './demo-whole-config.component';
-import { GalleryModule } from 'ngx-doe-gallery';
+import { GalleryModule } from '@daelmaak/ngx-gallery';
 
 describe('DemoWholeConfigComponent', () => {
   let component: DemoWholeConfigComponent;

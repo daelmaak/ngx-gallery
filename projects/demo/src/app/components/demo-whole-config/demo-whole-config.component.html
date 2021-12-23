@@ -193,7 +193,7 @@
 </form>
 
 <div class="gallery-container">
-  <doe-gallery
+  <gallery
     *ngIf="displayGallery"
     [items]="items | async"
     [selectedIndex]="+galleryConfig.selectedIndex"
@@ -216,7 +216,7 @@
     [thumbsScrollBehavior]="galleryConfig.thumbsScrollBehavior"
     (imageClick)="onImageClick($event)"
     (descriptionClick)="galleryConfig.descriptions = false"
-  ></doe-gallery>
+  ></gallery>
 </div>
 
 <ng-template #loadingTemplate>

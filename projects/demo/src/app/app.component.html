@@ -25,7 +25,7 @@
   <div class="menu-heading">Misc</div>
   <ul>
     <li>
-      <a href="https://github.com/daelmaak/ngx-doe-gallery/wiki" target="_blank"
+      <a href="https://github.com/daelmaak/ngx-gallery/wiki" target="_blank"
         >Documentation</a
       >
     </li>
@@ -65,15 +65,15 @@
     <app-showcase
       id="demo-responsive"
       heading="Responsive - resize me!"
-      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-responsive?file=src%2Fapp%2Fapp.component.html"
+      stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-responsive?file=src%2Fapp%2Fapp.component.html"
     >
-      <doe-gallery [items]="images" loading="lazy"></doe-gallery>
+      <gallery [items]="images" loading="lazy"></gallery>
     </app-showcase>
 
     <app-showcase
       id="demo-multiple"
       heading="Multiple items"
-      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-multiple-items?file=src%2Fapp%2Fapp.component.html"
+      stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-multiple-items?file=src%2Fapp%2Fapp.component.html"
     >
       <app-demo-multiple-items
         [items]="smallerImages"
@@ -84,21 +84,21 @@
     <app-showcase
       id="demo-infinite-loop-multiple"
       heading="Infinite loop"
-      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-infinite-loop?file=src%2Fapp%2Fapp.component.html"
+      stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-infinite-loop?file=src%2Fapp%2Fapp.component.html"
     >
-      <doe-gallery
+      <gallery
         [items]="smallerImages"
         [loop]="true"
         loading="lazy"
         [itemWidth]="mobile ? '75%' : '34%'"
-      ></doe-gallery>
+      ></gallery>
     </app-showcase>
 
     <app-showcase
       id="demo-thumbs-orientation"
       heading="Thumbnails orientation & autoscroll"
       subheading="w/ infinite scroll"
-      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-thumbs-orientation?file=src%2Fapp%2Fapp.component.html"
+      stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-thumbs-orientation?file=src%2Fapp%2Fapp.component.html"
     >
       <app-demo-thumbs-orientation
         [items]="extendedImages"
@@ -107,23 +107,23 @@
     </app-showcase>
 
     <app-showcase id="demo-rtl" heading="Right to left">
-      <doe-gallery [items]="images" loading="lazy" [isRtl]="true"></doe-gallery>
+      <gallery [items]="images" loading="lazy" [isRtl]="true"></gallery>
     </app-showcase>
 
     <app-showcase
       id="demo-descriptions"
       heading="Descriptions"
-      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-descriptions?file=src%2Fapp%2Fapp.component.html"
+      stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-descriptions?file=src%2Fapp%2Fapp.component.html"
     >
-      <doe-gallery
+      <gallery
         [items]="images"
         [descriptions]="true"
         loading="lazy"
-      ></doe-gallery>
+      ></gallery>
     </app-showcase>
 
     <app-showcase id="demo-error-handling" heading="Error handling">
-      <doe-gallery [items]="erroredImages" loading="lazy"></doe-gallery>
+      <gallery [items]="erroredImages" loading="lazy"></gallery>
     </app-showcase>
 
     <app-showcase
@@ -131,25 +131,25 @@
       heading="Videos"
       subheading="both YouTube and native videos"
     >
-      <doe-gallery [items]="videos" loading="lazy"></doe-gallery>
+      <gallery [items]="videos" loading="lazy"></gallery>
     </app-showcase>
 
     <app-showcase
       id="demo-custom"
       heading="Custom items, arrows and error handling"
-      stackblitz="https://stackblitz.com/edit/ngx-doe-gallery-demo-custom-templates?file=src%2Fapp%2Fapp.component.html"
+      stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-custom-templates?file=src%2Fapp%2Fapp.component.html"
     >
       <div subheading>
         You can also have custom loading screen, thumbnails, thumbnail errors
         and thumbnail navigation arrows. Find out how in the
         <a
-          href="https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API"
+          href="https://github.com/daelmaak/ngx-gallery/wiki/Gallery-API"
           target="_blank"
           >documentation</a
         >
         and/or try it out in
         <a
-          href="https://stackblitz.com/edit/ngx-doe-gallery-demo-custom-templates"
+          href="https://stackblitz.com/edit/ngx-gallery-demo-custom-templates"
           target="_blank"
           >StackBlitz</a
         >
@@ -163,13 +163,13 @@
         Some properties like custom templates are missing. Checkout them out in
         the
         <a
-          href="https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API"
+          href="https://github.com/daelmaak/ngx-gallery/wiki/Gallery-API"
           target="_blank"
           >documentation</a
         >
         and/or try them out in
         <a
-          href="https://stackblitz.com/edit/ngx-doe-gallery-demo-custom-templates"
+          href="https://stackblitz.com/edit/ngx-gallery-demo-custom-templates"
           target="_blank"
           >StackBlitz</a
         >

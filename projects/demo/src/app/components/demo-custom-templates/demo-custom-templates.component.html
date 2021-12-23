@@ -1,16 +1,16 @@
-<doe-gallery
+<gallery
   [items]="images"
   [itemTemplate]="customItem"
   [arrowTemplate]="customArrow"
   [errorTemplate]="customError"
   loading="lazy"
-></doe-gallery>
+></gallery>
 
 <ng-template #customItem let-item="item" let-video="video">
   <div class="custom-item">
     <div class="image-container">
-      <img *ngIf="!video" [src]="item.src" doeMedia />
-      <video *ngIf="video" [src]="item.src" controls doeMedia></video>
+      <img *ngIf="!video" [src]="item.src" media />
+      <video *ngIf="video" [src]="item.src" controls media></video>
     </div>
     <p class="description">{{ item.description }}</p>
   </div>

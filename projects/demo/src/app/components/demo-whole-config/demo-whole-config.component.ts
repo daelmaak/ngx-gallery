@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { defer, Observable, of } from 'rxjs';
 import { delay, switchMap } from 'rxjs/operators';
-import { GalleryComponent, GalleryItem, GalleryItemEvent } from 'ngx-doe-gallery';
-import { GalleryItemInternal } from 'ngx-doe-gallery/lib/core/gallery-item';
+import { GalleryComponent, GalleryItem, GalleryItemEvent } from '@daelmaak/ngx-gallery';
+import { GalleryItemInternal } from '@daelmaak/ngx-gallery/lib/core/gallery-item';
 
 @Component({
   selector: 'app-demo-whole-config',

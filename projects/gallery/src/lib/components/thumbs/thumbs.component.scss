@@ -8,7 +8,7 @@ $arrow-btn-dimension: 30px;
   background-color: #f3f3f3;
 }
 
-:host.doe-thumbs {
+:host.thumbs {
   &--top,
   &--bottom {
     width: 100%;
@@ -48,7 +48,7 @@ $arrow-btn-dimension: 30px;
       }
     }
 
-    .doe-thumbs-arrow {
+    .thumbs-arrow {
       top: 0;
       height: 100%;
 
@@ -66,7 +66,7 @@ $arrow-btn-dimension: 30px;
       }
     }
 
-    .doe-thumbs-error {
+    .thumbs-error {
       border-right: 1px solid #cecece;
     }
   }
@@ -85,7 +85,7 @@ $arrow-btn-dimension: 30px;
       border-top: 0;
     }
 
-    .doe-thumbs-arrow {
+    .thumbs-arrow {
       width: 100%;
 
       > div {
@@ -93,7 +93,7 @@ $arrow-btn-dimension: 30px;
         height: $arrow-btn-dimension;
       }
 
-      doe-chevron-icon {
+      chevron-icon {
         transform: rotate(90deg);
       }
 
@@ -106,7 +106,7 @@ $arrow-btn-dimension: 30px;
       }
     }
 
-    .doe-thumbs-error {
+    .thumbs-error {
       border-bottom: 1px solid #cecece;
     }
   }
@@ -143,11 +143,11 @@ li {
   position: relative;
   cursor: pointer;
 
-  &.doe-thumbs-initial-item {
+  &.thumbs-initial-item {
     visibility: hidden;
   }
 
-  &.doe-thumbs-item--selected {
+  &.thumbs-item--selected {
     &::after {
       content: '';
       display: block;
@@ -171,7 +171,7 @@ img {
   color: transparent;
 }
 
-.doe-thumbs-error {
+.thumbs-error {
   position: absolute;
   left: 0;
   top: 0;
@@ -225,7 +225,7 @@ img {
   }
 }
 
-.doe-thumbs-arrow {
+.thumbs-arrow {
   position: absolute;
   cursor: pointer;
   z-index: 10;
