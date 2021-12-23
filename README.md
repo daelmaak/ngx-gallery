@@ -10,7 +10,7 @@ Performant, responsive, easy to use Angular 8+ gallery
 [![npm](https://img.shields.io/npm/v/ngx-doe-gallery.svg)](https://www.npmjs.com/package/ngx-doe-gallery)
 
 [**Demos**](https://daelmaak.github.io/ngx-doe-gallery/) |
-[**Docs**](https://github.com/daelmaak/ngx-doe-gallery/wiki/Gallery-API) |
+[**Docs**](https://github.com/daelmaak/ngx-gallery/wiki/Gallery-API/cc4f9ed153dd3362aef704cea5bc3eb4c3f34397) |
 [**Changelog**](https://github.com/daelmaak/ngx-doe-gallery/blob/master/CHANGELOG.md)
 
 ## Why ngx-doe-gallery?
