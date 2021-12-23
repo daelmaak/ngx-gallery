@@ -7,7 +7,7 @@
     "email": "daniel.macak@email.cz"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "ng": "ng",
@@ -47,9 +47,9 @@
     "@angular/compiler-cli": "~13.1.1",
     "@angular/language-service": "~13.1.1",
     "@types/estree": "^0.0.50",
-    "@types/jasmine": "~3.6.0",
+    "@types/jasmine": "~3.10.2",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "^12.11.1",
+    "@types/node": "^16.11.17",
     "codelyzer": "^6.0.0",
     "http-server": "^0.12.1",
     "jasmine-core": "~3.10.1",
