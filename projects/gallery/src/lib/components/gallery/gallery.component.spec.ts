@@ -8,7 +8,6 @@ import {
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MockComponent, MockPipe } from 'ng-mocks';
 import { GalleryImage } from '../../core';
 import { SafePipe } from '../../pipes/safe.pipe';
 import { CounterComponent } from '../counter/counter.component';
@@ -29,9 +28,9 @@ describe('GalleryComponent', () => {
         GalleryComponent,
         ViewerComponent,
         ThumbsComponent,
-        MockComponent(ChevronIconComponent),
-        MockComponent(CounterComponent),
-        MockPipe(SafePipe),
+        ChevronIconComponent,
+        CounterComponent,
+        SafePipe,
       ],
     }).compileComponents();
   }));
