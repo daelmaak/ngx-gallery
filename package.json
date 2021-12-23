@@ -21,7 +21,9 @@
     "test:ci": "npm test -- --watch=false --code-coverage --browsers=ChromeHeadless",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "release": "cd projects/gallery && standard-version -i ../../CHANGELOG.md && git push --follow-tags"
+    "release-changelog": "cd projects/gallery && standard-version -i ../../CHANGELOG.md",
+    "release": "npm run release-changelog && git push --follow-tags",
+    "release:rc": "npm run release-changelog -- --prerelease RC && git push --follow-tags"
   },
   "private": true,
   "dependencies": {
