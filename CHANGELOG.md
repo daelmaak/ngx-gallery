@@ -1,13 +1,14 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [2.0.0-RC.0](https://github.com/daelmaak/ngx-gallery/compare/v1.1.3...v2.0.0-RC.0) (2021-12-23)
 
-## [Unreleased]
+### ⚠ BREAKING CHANGES
 
-...
+* Upgrades angular from 8 to 13
+* Drops support for IE
+* Drops support for ViewEngine. Only projects using Ivy are supported. This shouldn't be a problem going forward, since Ivy is opt-in since ng9, and default since ng12 with ViewEngine support completely removed in ng13.
 
 ## [1.1.3] - 2021-12-12
 

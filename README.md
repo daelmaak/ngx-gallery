@@ -111,4 +111,4 @@ npm start
 npm test
 ```
 
-[ngx-doe-gallery]: (https://github.com/daelmaak/ngx-gallery/tree/v1-legacy-latest)
+[ngx-doe-gallery]: https://github.com/daelmaak/ngx-gallery/tree/v1-legacy-latest
