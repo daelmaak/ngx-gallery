@@ -34,7 +34,7 @@ jobs:
         run: |
           npm set //registry.npmjs.org/:_authToken $NPM_PUBLISH_KEY
           cd dist/gallery
-          npm publish
+          npm publish --access public
 
   deploy-gh-page:
     needs: release
