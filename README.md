@@ -6,7 +6,7 @@ Performant, responsive, easy to use Angular **8+** gallery
 [![npm](https://img.shields.io/npm/v/daelmaak/ngx-gallery.svg)](https://www.npmjs.com/package/daelmaak/ngx-gallery)
 
 [**Demos**](https://daelmaak.github.io/ngx-gallery/) |
-[**Docs**](https://github.com/daelmaak/ngx-gallery/wiki/Gallery-API/cc4f9ed153dd3362aef704cea5bc3eb4c3f34397) |
+[**Docs**](https://github.com/daelmaak/ngx-gallery/wiki) |
 [**Changelog**](https://github.com/daelmaak/ngx-gallery/blob/master/CHANGELOG.md)
 
 
