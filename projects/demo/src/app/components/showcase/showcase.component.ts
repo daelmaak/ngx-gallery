@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-  Input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-showcase',
@@ -11,12 +6,8 @@ import {
   styleUrls: ['./showcase.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShowcaseComponent implements OnInit {
+export class ShowcaseComponent {
   @Input() heading: string;
   @Input() subheading: string;
   @Input() stackblitz: string;
-
-  constructor() {}
-
-  ngOnInit() {}
 }
