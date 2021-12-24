@@ -252,7 +252,7 @@ AppComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_8__["�
         _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelementStart"](103, "app-showcase", 36);
         _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelementStart"](104, "div", 33);
-        _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵtext"](105, " Some properties like custom templates are missing. Checkout them out in the ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵtext"](105, " Some properties like custom templates are missing. Check them out in the ");
         _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelementStart"](106, "a", 34);
         _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵtext"](107, "documentation");
         _angular_core__WEBPACK_IMPORTED_MODULE_8__["ɵɵelementEnd"]();
