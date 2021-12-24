@@ -3,7 +3,7 @@
 Performant, responsive, easy to use Angular **8+** gallery
 
 [![codecov](https://codecov.io/gh/daelmaak/ngx-gallery/branch/master/graph/badge.svg?token=eQhl2BmseY)](https://codecov.io/gh/daelmaak/ngx-gallery)
-[![npm](https://img.shields.io/npm/v/daelmaak/ngx-gallery.svg)](https://www.npmjs.com/package/daelmaak/ngx-gallery)
+[![npm version](https://badge.fury.io/js/%40daelmaak%2Fngx-gallery.svg)](https://badge.fury.io/js/%40daelmaak%2Fngx-gallery)
 
 [**Demos**](https://daelmaak.github.io/ngx-gallery/) |
 [**Docs**](https://github.com/daelmaak/ngx-gallery/wiki) |
@@ -33,7 +33,7 @@ otherwise, please use [ngx-doe-gallery].
 
 The project was renamed from ngx-doe-gallery to just **ngx-gallery** to improve 
 searchability. Together with the new name comes upgrade to state-of-the-art technologies, 
-like the newest version of Angular among others.
+like Angular 13 among others.
 
 If you wish to upgrade to the hottest stuff, just remove the old gallery
 ```
