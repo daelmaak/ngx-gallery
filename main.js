@@ -1048,12 +1048,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ 3184);
 
 class HeaderComponent {
-    constructor() { }
-    ngOnInit() {
-    }
 }
 HeaderComponent.ɵfac = function HeaderComponent_Factory(t) { return new (t || HeaderComponent)(); };
-HeaderComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: HeaderComponent, selectors: [["app-header"]], decls: 12, vars: 0, consts: [[1, "header-inner-container"], [1, "subtitle"], [1, "links"], ["href", "https://github.com/daelmaak/ngx-gallery", 1, "github-link", "link"], ["src", "./assets/icons/GitHub-Mark-64px.png", "alt", "github link"], ["href", "https://www.npmjs.com/package/ngx-gallery", "rel", "noreferrer", 1, "npm-link", "link"], ["src", "./assets/icons/npm-logo.svg", "alt", "npm link"]], template: function HeaderComponent_Template(rf, ctx) { if (rf & 1) {
+HeaderComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: HeaderComponent, selectors: [["app-header"]], decls: 12, vars: 0, consts: [[1, "header-inner-container"], [1, "subtitle"], [1, "links"], ["href", "https://github.com/daelmaak/ngx-gallery", 1, "github-link", "link"], ["src", "./assets/icons/GitHub-Mark-64px.png", "alt", "github link"], ["href", "https://www.npmjs.com/package/@daelmaak/ngx-gallery", "rel", "noreferrer", 1, "npm-link", "link"], ["src", "./assets/icons/npm-logo.svg", "alt", "npm link"]], template: function HeaderComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "header");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "div");
@@ -1105,8 +1102,6 @@ function ShowcaseComponent_a_6_Template(rf, ctx) { if (rf & 1) {
 const _c0 = [[["", "subheading", ""]], "*"];
 const _c1 = ["[subheading]", "*"];
 class ShowcaseComponent {
-    constructor() { }
-    ngOnInit() { }
 }
 ShowcaseComponent.ɵfac = function ShowcaseComponent_Factory(t) { return new (t || ShowcaseComponent)(); };
 ShowcaseComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: ShowcaseComponent, selectors: [["app-showcase"]], inputs: { heading: "heading", subheading: "subheading", stackblitz: "stackblitz" }, ngContentSelectors: _c1, decls: 8, vars: 3, consts: [[1, "heading-section"], [1, "subheading"], ["class", "stackblitz-demo-link", "target", "_blank", 3, "href", 4, "ngIf"], ["target", "_blank", 1, "stackblitz-demo-link", 3, "href"], ["src", "./assets/icons/stackblitz-logo-link.svg"]], template: function ShowcaseComponent_Template(rf, ctx) { if (rf & 1) {
