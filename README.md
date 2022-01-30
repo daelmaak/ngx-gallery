@@ -9,7 +9,6 @@ Performant, responsive, easy to use Angular **8+** gallery
 [**Docs**](https://github.com/daelmaak/ngx-gallery/wiki) |
 [**Changelog**](https://github.com/daelmaak/ngx-gallery/blob/master/CHANGELOG.md)
 
-
 ## Why ngx-gallery?
 
 Use it if you need:
@@ -23,7 +22,7 @@ Use it if you need:
 
 If you are using Ivy and Angular 13+, use
 
-```
+```sh
 npm i -S @daelmaak/ngx-gallery
 ```
 
@@ -31,39 +30,41 @@ otherwise, please use [ngx-doe-gallery].
 
 ### Migration from [ngx-doe-gallery]
 
-The project was renamed from ngx-doe-gallery to just **ngx-gallery** to improve 
-searchability. Together with the new name comes upgrade to state-of-the-art technologies, 
+The project was renamed from ngx-doe-gallery to just **ngx-gallery** to improve
+searchability. Together with the new name comes upgrade to state-of-the-art technologies,
 like Angular 13 among others.
 
 If you wish to upgrade to the hottest stuff, just remove the old gallery
-```
+
+```sh
 npm remove ngx-doe-gallery
 ```
+
 and install the new one
-```
+
+```sh
 npm i -S @daelmaak/ngx-gallery
 ```
 
-and change the used occurrences of 
+and change the used occurrences of
 
-```
+```html
 <doe-gallery [items]="items"></doe-gallery>
 ```
 
-to 
+to
 
-```
+```html
 <gallery [items]="items"></gallery>
 ```
 
 that's it!
 
-
 ## Usage
 
 In your ng module
 
-```
+```js
 import { GalleryModule } from '@daelmaak/ngx-gallery';
 
 @NgModule({
@@ -74,7 +75,7 @@ import { GalleryModule } from '@daelmaak/ngx-gallery';
 
 In your component
 
-```
+```js
 import { GalleryImage } from '@daelmaak/ngx-gallery';
 
 @Component({...})
@@ -85,7 +86,7 @@ export class AppComponent {
 
 In your component template
 
-```
+```html
 <gallery [items]="images"></gallery>
 ```
 
@@ -95,19 +96,19 @@ In your component template
 
 In the root of the project, run
 
-```
+```sh
 npm ci
 ```
 
 ### Serve
 
-```
+```sh
 npm start
 ```
 
 ### Test
 
-```
+```sh
 npm test
 ```
 
