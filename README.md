@@ -28,41 +28,9 @@ npm i -S @daelmaak/ngx-gallery
 
 otherwise, please use [ngx-doe-gallery].
 
-### Migration from [ngx-doe-gallery]
-
-The project was renamed from ngx-doe-gallery to just **ngx-gallery** to improve
-searchability. Together with the new name comes upgrade to state-of-the-art technologies,
-like Angular 13 among others.
-
-If you wish to upgrade to the hottest stuff, just remove the old gallery
-
-```sh
-npm remove ngx-doe-gallery
-```
-
-and install the new one
-
-```sh
-npm i -S @daelmaak/ngx-gallery
-```
-
-and change the used occurrences of
-
-```html
-<doe-gallery [items]="items"></doe-gallery>
-```
-
-to
-
-```html
-<gallery [items]="items"></gallery>
-```
-
-that's it!
-
 ## Usage
 
-In your ng module
+### 1. Import gallery into your ng module
 
 ```js
 import { GalleryModule } from '@daelmaak/ngx-gallery';
@@ -73,7 +41,20 @@ import { GalleryModule } from '@daelmaak/ngx-gallery';
 ...
 ```
 
-In your component
+or into your component if you use standalone
+
+```ts
+import { GalleryModule } from '@daelmaak/ngx-gallery';
+
+@Component({
+  standalone: true,
+  imports: [ GalleryModule ],
+  ...
+})
+export class AppComponent {}
+```
+
+### 2. Create an image
 
 ```js
 import { GalleryImage } from '@daelmaak/ngx-gallery';
@@ -84,7 +65,7 @@ export class AppComponent {
 }
 ```
 
-In your component template
+### 3. Render the gallery
 
 ```html
 <gallery [items]="images"></gallery>
