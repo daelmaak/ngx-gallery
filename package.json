@@ -19,7 +19,6 @@
     "test:demo": "ng test --project=demo",
     "test:ci": "ng test --project=gallery --watch=false --code-coverage --browsers=ChromeHeadless",
     "lint": "ng lint",
-    "e2e": "ng e2e",
     "release-changelog": "cd projects/gallery && standard-version -i ../../CHANGELOG.md",
     "release": "npm run release-changelog && git push --follow-tags",
     "release:rc": "npm run release-changelog -- --prerelease RC && git push --follow-tags"
@@ -69,7 +68,6 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "ng-packagr": "^14.2.2",
     "prettier": "^2.0.5",
-    "protractor": "~7.0.0",
     "standard-version": "^9.3.2",
     "ts-node": "~7.0.0",
     "typescript": "~4.8.4"
