@@ -6,7 +6,7 @@
     "target": "es2020",
     "declaration": true,
     "inlineSources": true,
-    "lib": ["dom", "es2018"]
+    "lib": ["dom"]
   },
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,
