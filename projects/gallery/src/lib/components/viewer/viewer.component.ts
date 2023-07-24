@@ -478,9 +478,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   private readDimensions() {
     this._viewerWidth = this._hostRef.nativeElement.offsetWidth;
-    this._itemWidth = this._hostRef.nativeElement.querySelector(
-      'li'
-    ).offsetWidth;
+    this._itemWidth =
+      this._hostRef.nativeElement.querySelector('li').offsetWidth;
     this._fringeCount = this.getFringeCount();
     this._displayedItems = this.getItemsToBeDisplayed();
   }
