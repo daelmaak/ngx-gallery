@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.0](https://github.com/daelmaak/ngx-gallery/compare/v2.0.0...v3.0.0-RC.0) (2023-07-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove tslib
+* upgrade angular to v14
+
+### Documentation
+
+* update readme ([9018a81](https://github.com/daelmaak/ngx-gallery/commit/9018a81192014b882da39266491e099c5082998f))
+
+
+* remove tslib ([493ab8e](https://github.com/daelmaak/ngx-gallery/commit/493ab8e06b0110a9b51667cd06dfa6b12d2ef2b7))
+* upgrade angular to v14 ([c6d0f3d](https://github.com/daelmaak/ngx-gallery/commit/c6d0f3dc3788af4000d15bb7ccdaaced37223b67))
+
 ## [2.0.0](https://github.com/daelmaak/ngx-gallery/compare/v2.0.0-RC.0...v2.0.0) (2022-01-03)
 
 ## [2.0.0-RC.0](https://github.com/daelmaak/ngx-gallery/compare/v1.1.3...v2.0.0-RC.0) (2021-12-23)
