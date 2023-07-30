@@ -10,4 +10,3 @@ export * from './loading';
 export * from './orientation';
 export * from './template-contexts';
 export { Aria } from './aria';
-export { MediaDirective } from '../directives/media.directive';

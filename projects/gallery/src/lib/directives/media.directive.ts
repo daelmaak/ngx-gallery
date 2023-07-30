@@ -1,21 +1,42 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 
 @Directive({
   selector: '[media]',
 })
-export class MediaDirective {
-  constructor(private hostRef: ElementRef<HTMLElement>) {}
+export class MediaDirective implements OnInit, OnDestroy {
+  @Output()
+  mediaLoad = new EventEmitter();
 
-  @HostListener('load', ['$event'])
-  @HostListener('loadedmetadata', ['$event'])
-  @HostListener('error', ['$event'])
-  onLoad(ev: Event) {
-    const evName = ev.type === 'error' ? 'media-error' : 'media-load';
+  @Output()
+  mediaLoadError = new EventEmitter();
 
-    this.hostRef.nativeElement.dispatchEvent(new CustomEvent(evName, {
-      bubbles: true,
-      cancelable: true,
-      detail: ev
-    }));
+  private nativeEl: HTMLElement;
+
+  constructor(hostRef: ElementRef<HTMLElement>) {
+    this.nativeEl = hostRef.nativeElement;
   }
+
+  ngOnInit() {
+    this.nativeEl.addEventListener('load', this.onLoad, true);
+    this.nativeEl.addEventListener('loadedmetadata', this.onLoad, true);
+    this.nativeEl.addEventListener('error', this.onLoad, true);
+  }
+
+  ngOnDestroy() {
+    this.nativeEl.removeEventListener('load', this.onLoad, true);
+    this.nativeEl.removeEventListener('loadedmetadata', this.onLoad, true);
+    this.nativeEl.removeEventListener('error', this.onLoad, true);
+  }
+
+  onLoad = (ev: Event) => {
+    const errored = ev.type === 'error';
+    errored ? this.mediaLoadError.emit() : this.mediaLoad.emit();
+  };
 }

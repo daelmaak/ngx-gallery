@@ -20,6 +20,6 @@ import { MediaDirective } from './directives/media.directive';
     MediaDirective,
   ],
   imports: [CommonModule],
-  exports: [GalleryComponent, MediaDirective],
+  exports: [GalleryComponent],
 })
 export class GalleryModule {}

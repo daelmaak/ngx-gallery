@@ -9,8 +9,8 @@
 <ng-template #customItem let-item="item" let-video="video">
   <div class="custom-item">
     <div class="image-container">
-      <img *ngIf="!video" [src]="item.src" media />
-      <video *ngIf="video" [src]="item.src" controls media></video>
+      <img *ngIf="!video" [src]="item.src" />
+      <video *ngIf="video" [src]="item.src" controls></video>
     </div>
     <p class="description">{{ item.description }}</p>
   </div>

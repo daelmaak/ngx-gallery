@@ -11,13 +11,14 @@
   <li
     #itemsRef
     *ngFor="let item of _displayedItems; let i = index"
+    media
     [class.viewer-item--selected]="i === selectedIndex"
     [attr.tabindex]="itemTabbable(i)"
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'viewer-aria-description-' + i"
     (click)="onImageClick(item, $event)"
-    (media-load)="onItemLoaded(item)"
-    (media-error)="onItemErrored(item)"
+    (mediaLoad)="onItemLoaded(item)"
+    (mediaLoadError)="onItemErrored(item)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
   >
@@ -36,8 +37,6 @@
             [alt]="item.alt"
             [class.viewer-media-loading]="!itemLoaded(item)"
             [style.objectFit]="objectFit"
-            (load)="onItemLoaded(item)"
-            (error)="onItemErrored(item)"
           />
         </picture>
         <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
@@ -50,8 +49,6 @@
           [style.objectFit]="objectFit"
           controls
           playsinline
-          (loadedmetadata)="onItemLoaded(item)"
-          (error)="onItemErrored(item)"
         ></video>
 
         <iframe
@@ -60,7 +57,6 @@
           [src]="item.src | safe"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
-          (load)="onItemLoaded(item)"
         ></iframe>
       </ng-container>
 
