@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.2](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.1...v3.0.0-RC.2) (2023-07-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrade to ng16
+
+### Features
+
+* add aria labels and make arrows into buttons ([397ad99](https://github.com/daelmaak/ngx-gallery/commit/397ad99195ee2fe3f8725fe6db3338002729bd36))
+* do not require media directive for custom views ([c0015aa](https://github.com/daelmaak/ngx-gallery/commit/c0015aa44df5698eeb04e38004ba2b75a430a7fa))
+* upgrade to ng16 ([1850435](https://github.com/daelmaak/ngx-gallery/commit/18504353d6d928595cb4db1ef1e7ef9c962fb5e1))
+
 ## [3.0.0-RC.1](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.0...v3.0.0-RC.1) (2023-07-30)
 
 
