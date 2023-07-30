@@ -1,23 +1,25 @@
 :host {
+  $border-radius: 0.375rem;
+
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  background: black;
-  padding: 4px 7px 3px;
-  color: white;
-  opacity: 0.7;
-  font-size: 14px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  color: rgb(241 245 249); // TODO: Extract to variable
+  letter-spacing: 3px;
   user-select: none;
 
   &.top {
     top: 0;
+    border-bottom-left-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
   }
 
   &.bottom {
     bottom: 0;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
   }
-}
-
-.counter-delimiter {
-  padding: 0 2px;
 }

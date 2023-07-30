@@ -11,8 +11,7 @@ import { VerticalOrientation } from '../../core';
   selector: 'counter',
   template: `
     <span aria-hidden="true">
-      {{ selectedIndex + 1 }}<span class="counter-delimiter">/</span
-      >{{ itemQuantity || 0 }}
+      {{ selectedIndex + 1 }}/{{ itemQuantity || 0 }}
     </span>
   `,
   styleUrls: ['./counter.component.scss'],
