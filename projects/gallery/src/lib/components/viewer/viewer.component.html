@@ -3,9 +3,7 @@
   class="viewer-arrow viewer-arrow-prev"
   (click)="selectByDelta(-1)"
 >
-  <chevron-icon
-    *ngIf="!arrowTemplate; else arrowTemplate"
-  ></chevron-icon>
+  <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>
 </div>
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
@@ -60,7 +58,6 @@
           *ngIf="isYoutube(item)"
           @mediaAnimate
           [src]="item.src | safe"
-          frameborder="0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
           (load)="onItemLoaded(item)"
@@ -72,10 +69,7 @@
       </ng-container>
 
       <ng-container *ngIf="itemFailedToLoad(item)">
-        <div
-          *ngIf="!errorTemplate; else errorTemplate"
-          class="viewer-error"
-        >
+        <div *ngIf="!errorTemplate; else errorTemplate" class="viewer-error">
           <div class="viewer-error-icon">⚠</div>
           <p class="viewer-error-text">
             {{ errorText || 'Loading of this media failed' }}
@@ -115,9 +109,7 @@
   class="viewer-arrow viewer-arrow-next"
   (click)="selectByDelta(1)"
 >
-  <chevron-icon
-    *ngIf="!arrowTemplate; else arrowTemplate"
-  ></chevron-icon>
+  <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>
 </div>
 
 <counter
