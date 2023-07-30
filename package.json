@@ -16,7 +16,6 @@
     "build:demo": "ng build --configuration production --project=demo --base-href /ngx-gallery/",
     "build:demo:local": "ng build --project=demo --base-href /",
     "test": "ng test --project=gallery --browsers=ChromeHeadlessLocal",
-    "test:demo": "ng test --project=demo",
     "test:ci": "ng test --project=gallery --watch=false --code-coverage --browsers=ChromeHeadless",
     "lint": "ng lint",
     "release-changelog": "cd projects/gallery && standard-version -i ../../CHANGELOG.md",
