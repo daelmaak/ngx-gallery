@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.1](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.0...v3.0.0-RC.1) (2023-07-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrade ng to v15
+
+### Features
+
+* upgrade ng to v15 ([28a1b69](https://github.com/daelmaak/ngx-gallery/commit/28a1b69ed4878a50e7360590796d04f057553758))
+
+
+### Documentation
+
+* update browserslist ([37f46d3](https://github.com/daelmaak/ngx-gallery/commit/37f46d3ba796ea2336a3a792297ed1877a7084c6))
+
 ## [3.0.0-RC.0](https://github.com/daelmaak/ngx-gallery/compare/v2.0.0...v3.0.0-RC.0) (2023-07-24)
 
 
