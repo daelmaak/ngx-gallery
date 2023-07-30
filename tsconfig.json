@@ -8,13 +8,14 @@
     "experimentalDecorators": true,
     "module": "es2020",
     "moduleResolution": "node",
-    "target": "es2020",
+    "target": "ES2022",
     "typeRoots": ["node_modules/@types"],
     "lib": ["dom"],
     "paths": {
       "@daelmaak/ngx-gallery": ["projects/gallery/src/public-api.ts"],
       "@daelmaak/ngx-gallery/*": ["projects/gallery/src/*"]
-    }
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
