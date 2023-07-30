@@ -21,7 +21,11 @@
 }
 
 :host::ng-deep {
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-family:
+    Helvetica Neue,
+    Helvetica,
+    Arial,
+    sans-serif;
 
   button {
     border: none;
@@ -62,7 +66,9 @@
     background-color: #4a4a4a;
     animation: bounce 2s infinite;
     border-radius: 50%;
-    box-shadow: 0 0 0 1px whitesmoke, 0 0 1px 1px whitesmoke;
+    box-shadow:
+      0 0 0 1px whitesmoke,
+      0 0 1px 1px whitesmoke;
 
     + div {
       margin-left: 10px;

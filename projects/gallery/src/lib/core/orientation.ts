@@ -8,12 +8,12 @@ export const enum OrientationFlag {
   TOP = 8,
   BOTTOM = 16,
   HORIZONTAL = 6,
-  VERTICAL = 24
+  VERTICAL = 24,
 }
 
 export const orientations = {
   left: OrientationFlag.LEFT,
   right: OrientationFlag.RIGHT,
   top: OrientationFlag.TOP,
-  bottom: OrientationFlag.BOTTOM
+  bottom: OrientationFlag.BOTTOM,
 };

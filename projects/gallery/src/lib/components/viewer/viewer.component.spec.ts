@@ -92,9 +92,9 @@ describe('ViewerComponent', () => {
       fixture.detectChanges();
       flush();
 
-      expect(
-        de.queryAll(By.css('li:not(.viewer-initial-item)')).length
-      ).toBe(2);
+      expect(de.queryAll(By.css('li:not(.viewer-initial-item)')).length).toBe(
+        2
+      );
     }));
 
     it('should preselect item based on gived index', fakeAsync(() => {

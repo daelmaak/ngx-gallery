@@ -44,8 +44,8 @@ module.exports = function (config) {
       },
       ChromeHeadlessLocal: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox']
-      }
+        flags: ['--no-sandbox'],
+      },
     },
   });
 };
