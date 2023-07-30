@@ -3,9 +3,7 @@
   class="viewer-arrow viewer-arrow-prev"
   (click)="selectByDelta(-1)"
 >
-  <chevron-icon
-    *ngIf="!arrowTemplate; else arrowTemplate"
-  ></chevron-icon>
+  <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>
 </div>
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
@@ -13,13 +11,14 @@
   <li
     #itemsRef
     *ngFor="let item of _displayedItems; let i = index"
+    media
     [class.viewer-item--selected]="i === selectedIndex"
     [attr.tabindex]="itemTabbable(i)"
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'viewer-aria-description-' + i"
     (click)="onImageClick(item, $event)"
-    (media-load)="onItemLoaded(item)"
-    (media-error)="onItemErrored(item)"
+    (mediaLoad)="onItemLoaded(item)"
+    (mediaLoadError)="onItemErrored(item)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
   >
@@ -38,8 +37,6 @@
             [alt]="item.alt"
             [class.viewer-media-loading]="!itemLoaded(item)"
             [style.objectFit]="objectFit"
-            (load)="onItemLoaded(item)"
-            (error)="onItemErrored(item)"
           />
         </picture>
         <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
@@ -52,8 +49,6 @@
           [style.objectFit]="objectFit"
           controls
           playsinline
-          (loadedmetadata)="onItemLoaded(item)"
-          (error)="onItemErrored(item)"
         ></video>
 
         <iframe
@@ -63,7 +58,6 @@
           frameborder="0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
-          (load)="onItemLoaded(item)"
         ></iframe>
       </ng-container>
 
@@ -72,10 +66,7 @@
       </ng-container>
 
       <ng-container *ngIf="itemFailedToLoad(item)">
-        <div
-          *ngIf="!errorTemplate; else errorTemplate"
-          class="viewer-error"
-        >
+        <div *ngIf="!errorTemplate; else errorTemplate" class="viewer-error">
           <div class="viewer-error-icon">⚠</div>
           <p class="viewer-error-text">
             {{ errorText || 'Loading of this media failed' }}
@@ -115,9 +106,7 @@
   class="viewer-arrow viewer-arrow-next"
   (click)="selectByDelta(1)"
 >
-  <chevron-icon
-    *ngIf="!arrowTemplate; else arrowTemplate"
-  ></chevron-icon>
+  <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>
 </div>
 
 <counter
