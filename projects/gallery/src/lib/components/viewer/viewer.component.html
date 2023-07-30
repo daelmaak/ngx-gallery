@@ -1,10 +1,11 @@
-<div
+<button
   *ngIf="showPrevArrow"
+  aria-label="Previous image"
   class="viewer-arrow viewer-arrow-prev"
   (click)="selectByDelta(-1)"
 >
   <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>
-</div>
+</button>
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
   <li *ngIf="!_displayedItems?.length" class="viewer-initial-item"></li>
@@ -100,13 +101,14 @@
   <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
 </ng-container>
 
-<div
+<button
   *ngIf="showNextArrow"
+  aria-label="Next image"
   class="viewer-arrow viewer-arrow-next"
   (click)="selectByDelta(1)"
 >
   <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>
-</div>
+</button>
 
 <counter
   *ngIf="counter && items?.length"

@@ -1,12 +1,13 @@
-<div
+<button
   *ngIf="showStartArrow"
+  aria-label="Previous thumbnails"
   class="thumbs-arrow thumbs-arrow-prev"
   (click)="slide(-1)"
 >
   <div *ngIf="!arrowTemplate; else arrowTemplate">
     <chevron-icon></chevron-icon>
   </div>
-</div>
+</button>
 
 <ul #thumbs [style.scrollBehavior]="scrollBehavior" [class.rtl]="isRtl">
   <li *ngIf="!items || !items.length" class="thumbs-initial-item"></li>
@@ -27,10 +28,7 @@
       />
 
       <ng-container *ngIf="item._thumbFailed">
-        <div
-          *ngIf="!errorTemplate; else errorTemplate"
-          class="thumbs-error"
-        >
+        <div *ngIf="!errorTemplate; else errorTemplate" class="thumbs-error">
           <div
             class="thumbs-error-icon"
             [class.thumbs-error-icon--video]="isVideo(item)"
@@ -50,12 +48,13 @@
   </li>
 </ul>
 
-<div
+<button
   *ngIf="showEndArrow"
+  aria-label="Next thumbnails"
   class="thumbs-arrow thumbs-arrow-next"
   (click)="slide(1)"
 >
   <div *ngIf="!arrowTemplate; else arrowTemplate">
     <chevron-icon></chevron-icon>
   </div>
-</div>
+</button>
