@@ -5,11 +5,7 @@
   <div class="menu-heading"><a href="#demos">Demos</a></div>
   <ul>
     <li><a href="#demo-responsive">Responsive</a></li>
-    <li><a href="#demo-multiple">Multiple items</a></li>
     <li><a href="#demo-infinite-loop-multiple">Infinite loop</a></li>
-    <li>
-      <a href="#demo-thumbs-orientation">Thumbnails orientation & autoscroll</a>
-    </li>
     <li><a href="#demo-rtl">Right to left</a></li>
     <li><a href="#demo-descriptions">Descriptions</a></li>
     <li><a href="#demo-error-handling">Error handling</a></li>
@@ -71,17 +67,6 @@
     </app-showcase>
 
     <app-showcase
-      id="demo-multiple"
-      heading="Multiple items"
-      stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-multiple-items?file=src%2Fapp%2Fapp.component.html"
-    >
-      <app-demo-multiple-items
-        [items]="smallerImages"
-        [mobile]="mobile"
-      ></app-demo-multiple-items>
-    </app-showcase>
-
-    <app-showcase
       id="demo-infinite-loop-multiple"
       heading="Infinite loop"
       stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-infinite-loop?file=src%2Fapp%2Fapp.component.html"
@@ -94,18 +79,6 @@
       ></gallery>
     </app-showcase>
 
-    <app-showcase
-      id="demo-thumbs-orientation"
-      heading="Thumbnails orientation & autoscroll"
-      subheading="w/ infinite scroll"
-      stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-thumbs-orientation?file=src%2Fapp%2Fapp.component.html"
-    >
-      <app-demo-thumbs-orientation
-        [items]="extendedImages"
-        [mobile]="mobile"
-      ></app-demo-thumbs-orientation>
-    </app-showcase>
-
     <app-showcase id="demo-rtl" heading="Right to left">
       <gallery [items]="images" loading="lazy" [isRtl]="true"></gallery>
     </app-showcase>
@@ -115,7 +88,12 @@
       heading="Descriptions"
       stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-descriptions?file=src%2Fapp%2Fapp.component.html"
     >
-      <gallery [items]="images" [descriptions]="true" loading="lazy"></gallery>
+      <gallery
+        counterOrientation="top"
+        [items]="images"
+        [descriptions]="true"
+        loading="lazy"
+      ></gallery>
     </app-showcase>
 
     <app-showcase id="demo-error-handling" heading="Error handling">
