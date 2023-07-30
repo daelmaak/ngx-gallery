@@ -5,5 +5,5 @@ export const SUPPORT = {
 };
 
 export const UA = {
-  ios: isBrowser && !!window.navigator.userAgent.match(/iP(ad|hone|od)/)
+  ios: isBrowser && !!window.navigator.userAgent.match(/iP(ad|hone|od)/),
 };
