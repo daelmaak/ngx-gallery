@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/daelmaak/ngx-gallery/compare/v2.0.0...v2.1.0) (2023-07-30)
+
+
+### Features
+
+* do not require media directive for custom views ([2e1dc75](https://github.com/daelmaak/ngx-gallery/commit/2e1dc759f1269143da77dd8c7f29ecfe9cb8f69c))
+
 ## [2.0.0](https://github.com/daelmaak/ngx-gallery/compare/v2.0.0-RC.0...v2.0.0) (2022-01-03)
 
 ## [2.0.0-RC.0](https://github.com/daelmaak/ngx-gallery/compare/v1.1.3...v2.0.0-RC.0) (2021-12-23)
