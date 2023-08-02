@@ -1,6 +1,6 @@
 # Ngx Gallery
 
-Performant, responsive, easy to use Angular **8+** gallery
+Small, performant, responsive, dependency free, easy to use Angular **8+** gallery.
 
 [![codecov](https://codecov.io/gh/daelmaak/ngx-gallery/branch/master/graph/badge.svg?token=eQhl2BmseY)](https://codecov.io/gh/daelmaak/ngx-gallery)
 [![npm version](https://badge.fury.io/js/%40daelmaak%2Fngx-gallery.svg)](https://badge.fury.io/js/%40daelmaak%2Fngx-gallery)
@@ -8,15 +8,6 @@ Performant, responsive, easy to use Angular **8+** gallery
 [**Demos**](https://daelmaak.github.io/ngx-gallery/) |
 [**Docs**](https://github.com/daelmaak/ngx-gallery/wiki) |
 [**Changelog**](https://github.com/daelmaak/ngx-gallery/blob/master/CHANGELOG.md)
-
-## Why ngx-gallery?
-
-Use it if you need:
-
-- Great performance and feel both on mobile and desktop
-- Very small size - gallery itself has just 9kB gzipped! It also packs no dependencies
-- Easy usage and lots of customizations
-- It just works!
 
 ## Installation
 
