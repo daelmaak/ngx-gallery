@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GalleryImage, GalleryVideo } from '@daelmaak/ngx-gallery';
+import { GalleryItem } from '@daelmaak/ngx-gallery';
 
 @Component({
   selector: 'app-root',
@@ -22,11 +22,11 @@ export class AppComponent {
   `;
 
   componentCode = `
-    import { GalleryImage } from '@daelmaak/ngx-gallery';
+    import { GalleryItem } from '@daelmaak/ngx-gallery';
 
     @Component({...})
     export class AppComponent {
-      images = [ new GalleryImage('kitten1.jpg') ]
+      images: GalleryItem[] = [{ src: 'kitten1.jpg' }]
     }
   `;
 
@@ -34,43 +34,43 @@ export class AppComponent {
     <gallery [items]="images"></gallery>
   `;
 
-  images = [
-    new GalleryImage(
-      './assets/images/mountains-1-lg.jpg',
-      './assets/images/mountains-1-sm.jpg',
-      'Mountains',
-      'Mighty mountains'
-    ),
-    new GalleryImage(
-      './assets/images/house-1-lg.jpg',
-      './assets/images/house-1-sm.jpg',
-      'House',
-      `I just love mysterious houses`
-    ),
-    new GalleryImage(
-      './assets/images/church-1-lg.jpg',
-      './assets/images/church-1-sm.jpg',
-      'Church hallway',
-      'Feel the history in this beautiful church'
-    ),
-    new GalleryImage(
-      './assets/images/lens-1-lg.jpg',
-      './assets/images/lens-1-sm.jpg',
-      'Lens',
-      'Zoom the world'
-    ),
-    new GalleryImage(
-      './assets/images/terraces-1-lg.jpg',
-      './assets/images/terraces-1-sm.jpg',
-      'Mountains',
-      'Sun lit mountains'
-    ),
-    new GalleryImage(
-      './assets/images/tulip-1-lg.jpg',
-      './assets/images/tulip-1-sm.jpg',
-      'Tulip',
-      `You didn't forget to buy your better half flowers, did you?`
-    ),
+  images: GalleryItem[] = [
+    {
+      src: './assets/images/mountains-1-lg.jpg',
+      thumbSrc: './assets/images/mountains-1-sm.jpg',
+      alt: 'Mountains',
+      description: 'Mighty mountains',
+    },
+    {
+      src: './assets/images/house-1-lg.jpg',
+      thumbSrc: './assets/images/house-1-sm.jpg',
+      alt: 'House',
+      description: `I just love mysterious houses`,
+    },
+    {
+      src: './assets/images/church-1-lg.jpg',
+      thumbSrc: './assets/images/church-1-sm.jpg',
+      alt: 'Church hallway',
+      description: 'Feel the history in this beautiful church',
+    },
+    {
+      src: './assets/images/lens-1-lg.jpg',
+      thumbSrc: './assets/images/lens-1-sm.jpg',
+      alt: 'Lens',
+      description: 'Zoom the world',
+    },
+    {
+      src: './assets/images/terraces-1-lg.jpg',
+      thumbSrc: './assets/images/terraces-1-sm.jpg',
+      alt: 'Mountains',
+      description: 'Sun lit mountains',
+    },
+    {
+      src: './assets/images/tulip-1-lg.jpg',
+      thumbSrc: './assets/images/tulip-1-sm.jpg',
+      alt: 'Tulip',
+      description: `You didn't forget to buy your better half flowers, did you?`,
+    },
   ];
 
   smallerImages = this.images.map(i => ({
@@ -78,63 +78,62 @@ export class AppComponent {
     src: i.src.replace('-lg', '-md'),
   }));
 
-  extendedImages = [
+  extendedImages: GalleryItem[] = [
     ...this.images,
-    new GalleryImage(
-      './assets/images/forest-1-lg.jpg',
-      './assets/images/forest-1-sm.jpg',
-      'Forest',
-      'Mysterious forest'
-    ),
-    new GalleryImage(
-      './assets/images/sky-1-lg.jpg',
-      './assets/images/sky-1-sm.jpg',
-      'Sky',
-      'Mysterious sky'
-    ),
-    new GalleryImage(
-      './assets/images/cheers-1-lg.jpg',
-      './assets/images/cheers-1-sm.jpg',
-      'Cheers',
-      'Two guys drinking during sunset'
-    ),
-    new GalleryImage(
-      './assets/images/laptop-1-lg.jpg',
-      './assets/images/laptop-1-sm.jpg',
-      'Laptop',
-      'Ideal workplace for computer work'
-    ),
-    new GalleryImage(
-      './assets/images/snowflake-1-lg.jpg',
-      './assets/images/snowflake-1-sm.jpg',
-      'Snowflake',
-      'Snowflake detail'
-    ),
-    new GalleryImage(
-      './assets/images/mesh-1-lg.jpg',
-      './assets/images/mesh-1-sm.jpg',
-      'City',
-      'City at night'
-    ),
+    {
+      src: './assets/images/forest-1-lg.jpg',
+      thumbSrc: './assets/images/forest-1-sm.jpg',
+      alt: 'Forest',
+      description: 'Mysterious forest',
+    },
+    {
+      src: './assets/images/sky-1-lg.jpg',
+      thumbSrc: './assets/images/sky-1-sm.jpg',
+      alt: 'Sky',
+      description: 'Mysterious sky',
+    },
+    {
+      src: './assets/images/cheers-1-lg.jpg',
+      thumbSrc: './assets/images/cheers-1-sm.jpg',
+      alt: 'Cheers',
+      description: 'Two guys drinking during sunset',
+    },
+    {
+      src: './assets/images/laptop-1-lg.jpg',
+      thumbSrc: './assets/images/laptop-1-sm.jpg',
+      alt: 'Laptop',
+      description: 'Ideal workplace for computer work',
+    },
+    {
+      src: './assets/images/snowflake-1-lg.jpg',
+      thumbSrc: './assets/images/snowflake-1-sm.jpg',
+      alt: 'Snowflake',
+      description: 'Snowflake detail',
+    },
+    {
+      src: './assets/images/mesh-1-lg.jpg',
+      thumbSrc: './assets/images/mesh-1-sm.jpg',
+      alt: 'City',
+      description: 'City at night',
+    },
   ];
 
-  erroredImages = [
-    new GalleryImage(
-      './assets/images/non-existing-picture.jpg',
-      null,
-      'Non-existing picture'
-    ),
-    new GalleryVideo(
-      './assets/images/non-existing-video.jpg',
-      null,
-      'Non-existing video'
-    ),
+  erroredImages: GalleryItem[] = [
+    {
+      src: './assets/images/non-existing-picture.jpg',
+      alt: 'Non-existing picture',
+    },
+    {
+      src: './assets/images/non-existing-video.jpg',
+      alt: 'Non-existing video',
+      video: true,
+    },
     ...this.extendedImages.slice(2, 4),
   ];
 
-  videos = [
-    new GalleryVideo('./assets/images/beach-1.mp4'),
-    new GalleryVideo('https://www.youtube.com/embed/80_39eAx3z8'),
+  videos: GalleryItem[] = [
+    { src: './assets/images/beach-1.mp4', video: true },
+    { src: 'https://www.youtube.com/embed/80_39eAx3z8', video: true },
   ];
 
   mobile = matchMedia('(max-width: 767px)').matches;

@@ -25,7 +25,6 @@ import { Aria } from '../../core/aria';
 import {
   GalleryItemEvent,
   GalleryItemInternal,
-  isVideo,
 } from '../../core/gallery-item';
 
 @Component({
@@ -53,8 +52,6 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
 
   @ViewChild('thumbs', { static: true }) thumbListRef: ElementRef<HTMLElement>;
   @ViewChildren('thumb') thumbsRef: QueryList<ElementRef<HTMLElement>>;
-
-  isVideo = isVideo;
 
   showStartArrow = false;
   showEndArrow = false;

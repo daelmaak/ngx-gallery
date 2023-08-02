@@ -31,7 +31,7 @@
         <div *ngIf="!errorTemplate; else errorTemplate" class="thumbs-error">
           <div
             class="thumbs-error-icon"
-            [class.thumbs-error-icon--video]="isVideo(item)"
+            [class.thumbs-error-icon--video]="item.video"
           ></div>
         </div>
       </ng-container>

@@ -8,7 +8,6 @@ import {
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { GalleryImage } from '../../core';
 import { SafePipe } from '../../pipes/safe.pipe';
 import { CounterComponent } from '../counter/counter.component';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
@@ -48,7 +47,7 @@ describe('GalleryComponent', () => {
 
   describe('emitters', () => {
     beforeEach(fakeAsync(() => {
-      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+      component.items = [{ src: 'src1' }, { src: 'src2' }];
       fixture.detectChanges();
       tick();
     }));
@@ -101,7 +100,7 @@ describe('GalleryComponent', () => {
 
   describe('class attribute', () => {
     beforeEach(fakeAsync(() => {
-      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+      component.items = [{ src: 'src1' }, { src: 'src2' }];
     }));
 
     it('should have class denoting RTL mode if turned on', () => {

@@ -1,5 +1,4 @@
 import { ChangeDetectorRef } from '@angular/core';
-import { GalleryImage } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 import { ViewerComponent } from './viewer.component';
 
@@ -9,10 +8,10 @@ describe('ViewerComponent', () => {
   beforeEach(() => {
     viewer = new ViewerComponent(null, null, null);
     viewer.items = [
-      new GalleryImage('src1'),
-      new GalleryImage('src2'),
-      new GalleryImage('src3'),
-      new GalleryImage('src4'),
+      { src: 'src1' },
+      { src: 'src2' },
+      { src: 'src3' },
+      { src: 'src4' },
     ];
     viewer.loading = 'lazy';
     viewer.selectedIndex = 0;
@@ -59,11 +58,11 @@ describe('ViewerComponent', () => {
 
       it(`should display number of items adjacent to the selected, the number being ceiled amount of displayed items.
        If 2.2 items are displayed, then 3 adjacent items are displayed next to the selected item`, () => {
-        viewer.items.push(new GalleryImage('src5'));
-        viewer.items.push(new GalleryImage('src6'));
-        viewer.items.push(new GalleryImage('src7'));
-        viewer.items.push(new GalleryImage('src8'));
-        viewer.items.push(new GalleryImage('src9'));
+        viewer.items.push({ src: 'src5' });
+        viewer.items.push({ src: 'src6' });
+        viewer.items.push({ src: 'src7' });
+        viewer.items.push({ src: 'src8' });
+        viewer.items.push({ src: 'src9' });
         viewer['_itemWidth'] = 600 / 2.5;
         viewer['_fringeCount'] = 3;
 
@@ -102,8 +101,8 @@ describe('ViewerComponent', () => {
 
       it('should not display last items like in loop mode when first item selected', () => {
         viewer['_itemWidth'] = 600 / 2.5;
-        viewer.items.push(new GalleryImage('src5'));
-        viewer.items.push(new GalleryImage('src6'));
+        viewer.items.push({ src: 'src5' });
+        viewer.items.push({ src: 'src6' });
         expect(viewer.isInScrollportProximity(4)).toBeFalsy();
       });
     });
@@ -141,10 +140,10 @@ describe('ViewerComponent', () => {
     beforeEach(() => {
       viewer.loop = true;
       viewer.items = [
-        new GalleryImage('src1'),
-        new GalleryImage('src2'),
-        new GalleryImage('src3'),
-        new GalleryImage('src4'),
+        { src: 'src1' },
+        { src: 'src2' },
+        { src: 'src3' },
+        { src: 'src4' },
       ];
       viewer['_viewerWidth'] = 600;
     });
@@ -186,7 +185,7 @@ describe('ViewerComponent', () => {
         'detectChanges',
       ]);
       viewer = new ViewerComponent(null, changeDetector, null);
-      viewer.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+      viewer.items = [{ src: 'src1' }, { src: 'src2' }];
     });
 
     describe('succeeded', () => {
@@ -247,7 +246,7 @@ describe('ViewerComponent', () => {
   describe('looping', () => {
     beforeEach(() => {
       viewer.loop = true;
-      viewer.items = [new GalleryImage('src1')];
+      viewer.items = [{ src: 'src1' }];
     });
 
     it('should disabled looping if there is just 1 item', () => {

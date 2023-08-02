@@ -1,30 +1,30 @@
-export abstract class GalleryItem {
-  constructor(
-    /**
-     * Media url
-     */
-    public src: string,
+export interface GalleryItem {
+  /**
+   * Media url
+   */
+  src: string;
 
-    /**
-     * Url of media thumbnail
-     */
-    public thumbSrc: string,
+  /**
+   * Url of media thumbnail
+   */
+  thumbSrc?: string;
 
-    /**
-     * Alt text for not yet loaded image
-     */
-    public alt: string,
+  /**
+   * Alt text for not yet loaded image
+   */
+  alt?: string;
 
-    /**
-     * Description that is to be shown on the currently displayed gallery item
-     */
-    public description: string,
+  /**
+   * Description that is to be shown on the currently displayed gallery item
+   */
+  description?: string;
 
-    /**
-     * Custom data where you can put whatever you want
-     */
-    public data: any
-  ) {}
+  /**
+   * Is asset a video?
+   */
+  video?: boolean;
+
+  pictureSources?: PictureSource[];
 }
 
 /**
@@ -52,30 +52,6 @@ export interface PictureSource {
   type?: string;
 }
 
-export class GalleryImage extends GalleryItem {
-  constructor(
-    src,
-    thumbSrc?,
-    alt?,
-    description?,
-
-    /**
-     * Sources for <picture>
-     */
-    public pictureSources?: PictureSource[],
-
-    data?
-  ) {
-    super(src, thumbSrc, alt, description, data);
-  }
-}
-
-export class GalleryVideo extends GalleryItem {
-  constructor(src, thumbSrc?, alt?, description?, data?) {
-    super(src, thumbSrc, alt, description, data);
-  }
-}
-
 export interface GalleryItemEvent {
   /**
    * Index of the item
@@ -90,7 +66,7 @@ export interface GalleryItemEvent {
   event: Event;
 }
 
-export interface GalleryItemInternal extends GalleryImage, GalleryVideo {
+export interface GalleryItemInternal extends GalleryItem {
   /**
    * Marks item as loaded once its media gets loaded
    */
@@ -106,5 +82,3 @@ export interface GalleryItemInternal extends GalleryImage, GalleryVideo {
    */
   _thumbFailed?: boolean;
 }
-
-export const isVideo = (item: GalleryItem) => item instanceof GalleryVideo;

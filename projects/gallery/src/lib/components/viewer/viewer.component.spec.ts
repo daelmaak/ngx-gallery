@@ -8,21 +8,17 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  async,
   ComponentFixture,
+  TestBed,
+  async,
   fakeAsync,
   flush,
-  TestBed,
   tick,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { OrientationFlag } from '../../core';
-import {
-  GalleryImage,
-  GalleryItemInternal,
-  GalleryVideo,
-} from '../../core/gallery-item';
+import { GalleryItemInternal } from '../../core/gallery-item';
 import { SafePipe } from '../../pipes/safe.pipe';
 import { CounterComponent } from '../counter/counter.component';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
@@ -84,7 +80,7 @@ describe('ViewerComponent', () => {
 
       tick(1000);
 
-      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+      component.items = [{ src: 'src1' }, { src: 'src2' }];
       changes = {
         items: new SimpleChange([], component.items, false),
       };
@@ -99,7 +95,7 @@ describe('ViewerComponent', () => {
 
     it('should preselect item based on gived index', fakeAsync(() => {
       component.selectedIndex = 1;
-      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+      component.items = [{ src: 'src1' }, { src: 'src2' }];
       const changes = {
         items: new SimpleChange(null, component.items, true),
       };
@@ -121,7 +117,7 @@ describe('ViewerComponent', () => {
       fixture.detectChanges();
       slideByMouse(-345);
 
-      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+      component.items = [{ src: 'src1' }, { src: 'src2' }];
       const changes = {
         items: new SimpleChange([], component.items, false),
       };
@@ -136,7 +132,7 @@ describe('ViewerComponent', () => {
   describe('class attribute', () => {
     beforeEach(fakeAsync(() => {
       component.selectedIndex = 0;
-      component.items = [new GalleryImage('src1'), new GalleryImage('src2')];
+      component.items = [{ src: 'src1' }, { src: 'src2' }];
       const changes = {
         items: new SimpleChange(null, component.items, true),
       };
@@ -221,7 +217,7 @@ describe('ViewerComponent', () => {
     }));
 
     it('should load 5 items if 3 are visible', fakeAsync(() => {
-      component.items.push(new GalleryImage('src5'), new GalleryImage('src6'));
+      component.items.push({ src: 'src5' }, { src: 'src6' });
       component.selectedIndex = 3;
       component.ngOnChanges(changes);
       fixture.detectChanges();
@@ -353,7 +349,7 @@ describe('ViewerComponent', () => {
     it(`shouldn't give description class above-counter when counter position set, but counter is disabled`, () => {
       component.counterOrientation = 'bottom';
       component.counter = false;
-      component.items = [new GalleryImage('src1', null, null, 'description1')];
+      component.items = [{ src: 'src1', description: 'description1' }];
       const changes = {
         items: new SimpleChange(null, component.items, true),
       };
@@ -423,7 +419,7 @@ describe('ViewerComponent', () => {
 
     describe('with video items', () => {
       beforeEach(fakeAsync(() => {
-        component.items[2] = new GalleryVideo('video-src1');
+        component.items[2] = { src: 'video-src1', video: true };
         component.loading = 'auto';
         component.ngOnChanges({
           thumbsOrientationt: new SimpleChange(
@@ -806,7 +802,7 @@ describe('ViewerComponent', () => {
   function generateGalleryImages(quantity: number) {
     const items = [];
     for (let i = 1; i <= quantity; i++) {
-      items.push(new GalleryImage(`src${i}`));
+      items.push({ src: `src${i}` });
     }
     return items;
   }

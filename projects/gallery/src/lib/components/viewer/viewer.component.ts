@@ -32,7 +32,7 @@ import {
   UA,
   VerticalOrientation,
 } from '../../core';
-import { GalleryItemInternal, isVideo } from '../../core/gallery-item';
+import { GalleryItemInternal } from '../../core/gallery-item';
 
 const passiveEventListenerOpts = {
   passive: true,
@@ -96,7 +96,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
   @ViewChildren('itemsRef') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
-  isVideo = isVideo;
   UA = UA;
 
   _displayedItems: GalleryItemInternal[];
@@ -205,7 +204,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       index = this.correctIndexOutOfBounds(index);
     }
 
-    if (this.isVideo(this.items[this.selectedIndex])) {
+    if (this.items[this.selectedIndex].video) {
       this.stopCurrentVideo();
     }
 

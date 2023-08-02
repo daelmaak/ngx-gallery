@@ -4,15 +4,15 @@ import {
   SimpleChange,
 } from '@angular/core';
 import {
-  async,
   ComponentFixture,
+  TestBed,
+  async,
   fakeAsync,
   flush,
-  TestBed,
   tick,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { GalleryImage, GalleryItem, SUPPORT } from '../../core';
+import { GalleryItem, SUPPORT } from '../../core';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
 import { ThumbsComponent } from './thumbs.component';
 
@@ -44,11 +44,7 @@ describe('ThumbnailsComponent', () => {
 
   describe('selecting', () => {
     beforeEach(() => {
-      const items = [
-        new GalleryImage('src1'),
-        new GalleryImage('src2'),
-        new GalleryImage('src3'),
-      ];
+      const items = [{ src: 'src1' }, { src: 'src2' }, { src: 'src3' }];
       component.items = items;
       component.ngOnChanges({ items: new SimpleChange(null, items, true) });
     });
@@ -72,11 +68,7 @@ describe('ThumbnailsComponent', () => {
     let items: GalleryItem[];
 
     beforeEach(() => {
-      items = [
-        new GalleryImage('src1'),
-        new GalleryImage('src2'),
-        new GalleryImage('src3'),
-      ];
+      items = [{ src: 'src1' }, { src: 'src2' }, { src: 'src3' }];
       component.items = items;
       component.scrollBehavior = 'auto';
       component.orientation = 'bottom';
@@ -184,7 +176,7 @@ describe('ThumbnailsComponent', () => {
         tick();
 
         component.selectedIndex = 0;
-        component.items = [...component.items, new GalleryImage('src4')];
+        component.items = [...component.items, { src: 'src4' }];
         component.ngOnChanges({
           items: new SimpleChange(items, component.items, false),
         });
@@ -252,7 +244,7 @@ describe('ThumbnailsComponent', () => {
         tick();
 
         component.selectedIndex = 0;
-        component.items = [...component.items, new GalleryImage('src4')];
+        component.items = [...component.items, { src: 'src4' }];
         component.ngOnChanges({
           items: new SimpleChange(items, component.items, false),
         });
@@ -273,11 +265,7 @@ describe('ThumbnailsComponent', () => {
     let items: GalleryItem[];
 
     beforeEach(() => {
-      items = [
-        new GalleryImage('src1'),
-        new GalleryImage('src2'),
-        new GalleryImage('src3'),
-      ];
+      items = [{ src: 'src1' }, { src: 'src2' }, { src: 'src3' }];
       component.arrows = true;
       component.scrollBehavior = 'auto';
       component.orientation = 'bottom';
@@ -333,7 +321,7 @@ describe('ThumbnailsComponent', () => {
 
         it(`should be still shown
             if items' length changed`, done => {
-          component.items = [...items, new GalleryImage('src4')];
+          component.items = [...items, { src: 'src4' }];
           component.ngOnChanges({
             items: new SimpleChange(items, component.items, false),
           });
@@ -346,11 +334,7 @@ describe('ThumbnailsComponent', () => {
 
         it(`should be still shown
             even if items' length hasn't changed`, done => {
-          component.items = [
-            new GalleryImage('src4'),
-            new GalleryImage('src5'),
-            new GalleryImage('src6'),
-          ];
+          component.items = [{ src: 'src4' }, { src: 'src5' }, { src: 'src6' }];
           component.ngOnChanges({
             items: new SimpleChange(items, component.items, false),
           });
@@ -513,11 +497,7 @@ describe('ThumbnailsComponent', () => {
 
   describe('loading', () => {
     beforeEach(() => {
-      const items = [
-        new GalleryImage('src1'),
-        new GalleryImage('src2'),
-        new GalleryImage('src3'),
-      ];
+      const items = [{ src: 'src1' }, { src: 'src2' }, { src: 'src3' }];
       component.items = items;
       component.ngOnChanges({ items: new SimpleChange(null, items, true) });
     });

@@ -57,11 +57,11 @@ export class AppComponent {}
 ### 2. Create an image
 
 ```js
-import { GalleryImage } from '@daelmaak/ngx-gallery';
+import { GalleryItem } from '@daelmaak/ngx-gallery';
 
 @Component({...})
 export class AppComponent {
-  images = [ new GalleryImage('kitten1.jpg') ]
+  images: GalleryItem[] = [{ src: 'kitten1.jpg' }]
 }
 ```
 
