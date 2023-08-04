@@ -12,8 +12,33 @@ import {
   GalleryComponent,
   GalleryItem,
   GalleryItemEvent,
+  Loading,
+  ObjectFit,
+  Orientation,
+  VerticalOrientation,
 } from '@daelmaak/ngx-gallery';
 import { GalleryItemInternal } from '@daelmaak/ngx-gallery/lib/core/gallery-item';
+
+interface GalleryConfig {
+  arrows: boolean;
+  descriptions: boolean;
+  mouseGestures: boolean;
+  touchGestures: boolean;
+  counter: boolean;
+  counterOrientation: VerticalOrientation;
+  itemWidth: string;
+  objectFit: ObjectFit;
+  loading: Loading;
+  loop: boolean;
+  rtl: boolean;
+  selectedIndex: number | null;
+  thumbs: boolean;
+  thumbsAutoScroll: boolean;
+  thumbsOrientation: Orientation;
+  thumbsArrows: boolean;
+  thumbsArrowSlideByLength: number;
+  thumbsScrollBehavior: ScrollBehavior;
+}
 
 @Component({
   selector: 'app-demo-whole-config',
@@ -30,8 +55,7 @@ export class DemoWholeConfigComponent implements OnInit {
 
   mobile = matchMedia('(max-width: 767px)').matches;
 
-  galleryConfig = {
-    selectedIndex: 0,
+  galleryConfig: GalleryConfig = {
     arrows: !this.mobile,
     descriptions: false,
     mouseGestures: true,
@@ -43,6 +67,7 @@ export class DemoWholeConfigComponent implements OnInit {
     loading: 'lazy',
     loop: false,
     rtl: false,
+    selectedIndex: 0,
     thumbs: true,
     thumbsAutoScroll: true,
     thumbsOrientation: 'bottom',
@@ -71,6 +96,17 @@ export class DemoWholeConfigComponent implements OnInit {
 
   onImageLoad() {}
 
+  onConfigChange(
+    prop: keyof GalleryConfig,
+    value: GalleryConfig[keyof GalleryConfig]
+  ) {
+    if (value === '') {
+      return;
+    }
+    this.galleryConfig[prop as any] = +value ?? value;
+    this.reloadGallery();
+  }
+
   reloadGallery() {
     this.displayGallery = false;
     this.cd.detectChanges();
@@ -79,6 +115,10 @@ export class DemoWholeConfigComponent implements OnInit {
     });
     this.displayGallery = true;
     this.cd.detectChanges();
+  }
+
+  protected getInputValue(event: Event): string | number | null {
+    return (event.target as HTMLInputElement).value;
   }
 
   private getGalleryConfig() {

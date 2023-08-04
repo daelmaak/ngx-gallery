@@ -54,8 +54,8 @@ export class GalleryComponent {
   isRtl: boolean;
   @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
   @Input() loadingTemplate: TemplateRef<void>;
-  @Input() errorTemplate: TemplateRef<void>;
-  @Input() arrowTemplate: TemplateRef<void>;
+  @Input() errorTemplate: TemplateRef<any>;
+  @Input() arrowTemplate: TemplateRef<any>;
   @Input() contentTemplate: TemplateRef<ContentTemplateContext>;
   @Input() thumbs = true;
   @Input() thumbsAutoScroll = true;
@@ -64,8 +64,8 @@ export class GalleryComponent {
   @Input() thumbsArrowSlideByLength: number;
   @Input() thumbsScrollBehavior: ScrollBehavior = 'smooth';
   @Input() thumbTemplate: TemplateRef<ThumbTemplateContext>;
-  @Input() thumbsArrowTemplate: TemplateRef<void>;
-  @Input() thumbErrorTemplate: TemplateRef<void>;
+  @Input() thumbsArrowTemplate: TemplateRef<never>;
+  @Input() thumbErrorTemplate: TemplateRef<never>;
 
   @Output() imageClick = new EventEmitter<GalleryItemEvent>();
   @Output() thumbClick = new EventEmitter<GalleryItemEvent>();

@@ -22,10 +22,7 @@ import {
   ThumbTemplateContext,
 } from '../../core';
 import { Aria } from '../../core/aria';
-import {
-  GalleryItemEvent,
-  GalleryItemInternal,
-} from '../../core/gallery-item';
+import { GalleryItemEvent, GalleryItemInternal } from '../../core/gallery-item';
 
 @Component({
   selector: 'thumbs',
@@ -42,8 +39,8 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
   @Input() arrowSlideByLength: number;
   @Input() autoScroll: boolean;
   @Input() thumbTemplate: TemplateRef<ThumbTemplateContext>;
-  @Input() arrowTemplate: TemplateRef<void>;
-  @Input() errorTemplate: TemplateRef<void>;
+  @Input() arrowTemplate: TemplateRef<never>;
+  @Input() errorTemplate: TemplateRef<never>;
   @Input() scrollBehavior: ScrollBehavior;
   @Input() isRtl: boolean;
 

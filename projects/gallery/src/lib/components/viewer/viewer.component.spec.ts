@@ -876,6 +876,7 @@ describe('ViewerComponent', () => {
   `,
 })
 export class TestCustomTemplatesComponent {
-  @ViewChild('errorTemplate', { static: true }) errorTemplate: TemplateRef<any>;
-  @ViewChild('itemTemplate', { static: true }) itemTemplate: TemplateRef<any>;
+  @ViewChild('errorTemplate', { static: true })
+  errorTemplate: TemplateRef<never>;
+  @ViewChild('itemTemplate', { static: true }) itemTemplate: TemplateRef<never>;
 }
