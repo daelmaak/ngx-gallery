@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.3](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.2...v3.0.0-RC.3) (2023-08-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* use standalone components everywhere
+* reshape gallery items
+
+### Features
+
+* unify counter and description ([a240ccc](https://github.com/daelmaak/ngx-gallery/commit/a240ccc2c5e106d9822a02f91ce789239b8145e8))
+
+
+### change
+
+* reshape gallery items ([e14ed88](https://github.com/daelmaak/ngx-gallery/commit/e14ed88d1fc41aca9ce60ac0f30a89ed43a9121a))
+* use standalone components everywhere ([392ed51](https://github.com/daelmaak/ngx-gallery/commit/392ed5184ee3b5114eb05b5300b273bc618c0c33))
+
+
+### Documentation
+
+* add versioning to readme ([d0a98a8](https://github.com/daelmaak/ngx-gallery/commit/d0a98a8875753b9dee494515511ebf7b897b384c))
+* simplify USP in readme ([0579dd1](https://github.com/daelmaak/ngx-gallery/commit/0579dd1a646f3411104de4488ed314d7d198daac))
+
 ## [3.0.0-RC.2](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.1...v3.0.0-RC.2) (2023-07-30)
 
 
