@@ -12,12 +12,6 @@ Small, performant, responsive, dependency free, easy to use Angular **8+** galle
 ## Installation
 
 ```sh
-npm i -S @daelmaak/ngx-gallery
-```
-
-or with Yarn
-
-```sh
 yarn add @daelmaak/ngx-gallery
 ```
 
@@ -71,24 +65,10 @@ export class AppComponent {
 <gallery [items]="images"></gallery>
 ```
 
-## Development
-
-### Install dependencies
-
-In the root of the project, run
+## Local development
 
 ```sh
-npm ci
-```
-
-### Serve
-
-```sh
-npm start
-```
-
-### Test
-
-```sh
-npm test
+yarn
+yarn start # start demo app
+yarn test
 ```

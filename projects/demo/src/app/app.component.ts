@@ -9,22 +9,17 @@ import { GalleryItem } from '@daelmaak/ngx-gallery';
 })
 export class AppComponent {
   installScript = `
-    npm i @daelmaak/ngx-gallery -S
-  `;
-
-  moduleCode = `
-    import { GalleryModule } from '@daelmaak/ngx-gallery';
-
-    @NgModule({
-      imports: [ GalleryModule ]
-    })
-    export class AppModule { }
+    yarn add @daelmaak/ngx-gallery
   `;
 
   componentCode = `
+    import { GalleryComponent } from '@daelmaak/ngx-gallery';
     import { GalleryItem } from '@daelmaak/ngx-gallery';
 
-    @Component({...})
+    @Component({
+      standalone: true,
+      imports: [GalleryComponent]
+    })
     export class AppComponent {
       images: GalleryItem[] = [{ src: 'kitten1.jpg' }]
     }
