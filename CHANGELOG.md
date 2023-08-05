@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.4](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.3...v3.0.0-RC.4) (2023-08-05)
+
+
+### Features
+
+* get rid of direct rxjs dependency ([8f50899](https://github.com/daelmaak/ngx-gallery/commit/8f50899b8ec6794deb1ac7046640d62e31ec49a3))
+
+
 ## [3.0.0-RC.3](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.2...v3.0.0-RC.3) (2023-08-05)
 
 
