@@ -16,17 +16,17 @@ jobs:
 
       # TODO cache
       - name: Install
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       - name: Build
-        run: npm run build
+        run: yarn build
 
       - name: Lint
-        run: npm run lint
+        run: yarn lint
 
       # TODO Run as separate job? Only when Install is cached
       - name: Test
-        run: npm run test:ci
+        run: yarn test:ci
 
       - name: Upload Coverage
         uses: codecov/codecov-action@v2
