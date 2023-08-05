@@ -11,38 +11,47 @@ Small, performant, responsive, dependency free, easy to use Angular **8+** galle
 
 ## Installation
 
-If you are using Ivy and Angular 13+, use
-
 ```sh
 npm i -S @daelmaak/ngx-gallery
 ```
 
-otherwise, please use [ngx-doe-gallery].
+or with Yarn
+
+```sh
+yarn add @daelmaak/ngx-gallery
+```
+
+## Versioning
+
+| Gallery   | Angular   | Readme                                                       |
+| --------- | --------- | ------------------------------------------------------------ |
+| `3.x.x`   | `>=16`    | here                                                         |
+| `2.x.x`   | `>=13`    | [2.1.0](https://github.com/daelmaak/ngx-gallery/tree/v2.1.0) |
+| `<=1.x.x` | `>=8 <13` | [1.3.0](https://github.com/daelmaak/ngx-gallery/tree/v1.3.0) |
 
 ## Usage
 
-### 1. Import gallery into your ng module
-
-```js
-import { GalleryModule } from '@daelmaak/ngx-gallery';
-
-@NgModule({
-  imports: [ GalleryModule ]
-})
-...
-```
-
-or into your component if you use standalone
+### 1. Import gallery into your component
 
 ```ts
-import { GalleryModule } from '@daelmaak/ngx-gallery';
+import { GalleryComponent } from '@daelmaak/ngx-gallery';
 
 @Component({
   standalone: true,
-  imports: [ GalleryModule ],
-  ...
+  imports: [GalleryComponent],
 })
 export class AppComponent {}
+```
+
+or into your module if you don't use standalone
+
+```js
+import { GalleryComponent } from '@daelmaak/ngx-gallery';
+
+@NgModule({
+  imports: [GalleryComponent],
+})
+export class AppModule {}
 ```
 
 ### 2. Create an image
@@ -83,5 +92,3 @@ npm start
 ```sh
 npm test
 ```
-
-[ngx-doe-gallery]: https://github.com/daelmaak/ngx-gallery/tree/v1-legacy-latest
