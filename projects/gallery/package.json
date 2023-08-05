@@ -33,7 +33,6 @@
     "@angular/animations": ">=16.0.0",
     "@angular/common": ">=16.0.0",
     "@angular/core": ">=16.0.0",
-    "@angular/platform-browser": ">=16.0.0",
-    "rxjs": ">=6.6.0"
+    "@angular/platform-browser": ">=16.0.0"
   }
 }

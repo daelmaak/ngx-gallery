@@ -1,15 +1,16 @@
 import { animate, style, transition, trigger } from '@angular/animations';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   ElementRef,
   EventEmitter,
   HostBinding,
   Input,
   NgZone,
   OnChanges,
-  OnDestroy,
   OnInit,
   Output,
   QueryList,
@@ -18,26 +19,23 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { fromEvent, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import {
   Aria,
   ContentTemplateContext,
   GalleryItemEvent,
-  isBrowser,
   ItemTemplateContext,
   Loading,
   ObjectFit,
   OrientationFlag,
   UA,
   VerticalOrientation,
+  isBrowser,
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
+import { MediaDirective } from '../../directives/media.directive';
+import { SafePipe } from '../../pipes/safe.pipe';
 import { CounterComponent } from '../counter/counter.component';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
-import { SafePipe } from '../../pipes/safe.pipe';
-import { CommonModule } from '@angular/common';
-import { MediaDirective } from '../../directives/media.directive';
 
 const passiveEventListenerOpts = {
   passive: true,
@@ -66,7 +64,7 @@ const passiveEventListenerOpts = {
     SafePipe,
   ],
 })
-export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
+export class ViewerComponent implements OnChanges, OnInit {
   @Input() items: GalleryItemInternal[];
   @Input() arrows: boolean;
   @Input() selectedIndex: number;
@@ -113,7 +111,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
 
   _displayedItems: GalleryItemInternal[];
   _fringeCount: number;
-  private _destroy$ = new Subject();
   private _itemWidth: number;
   private _loop: boolean;
   private _viewerWidth: number;
@@ -147,6 +144,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   constructor(
     private _hostRef: ElementRef<HTMLElement>,
     private _cd: ChangeDetectorRef,
+    private _destroyRef: DestroyRef,
     private _zone: NgZone
   ) {}
 
@@ -178,11 +176,6 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         this.handleTouchSlides();
       }
     }
-  }
-
-  ngOnDestroy() {
-    this._destroy$.next(null);
-    this._destroy$.complete();
   }
 
   isInScrollportProximity(index: number) {
@@ -372,7 +365,8 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
       );
       hostEl.addEventListener('click', onclick, { capture: true });
       hostEl.addEventListener('dragstart', ondragstart);
-      this._destroy$.subscribe(() => {
+
+      this._destroyRef.onDestroy(() => {
         hostEl.removeEventListener('mousedown', onmousedown);
         hostEl.removeEventListener('click', onclick);
         hostEl.removeEventListener('dragstart', ondragstart);
@@ -447,7 +441,7 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
         ontouchend,
         passiveEventListenerOpts
       );
-      this._destroy$.subscribe(() => {
+      this._destroyRef.onDestroy(() => {
         hostEl.removeEventListener('touchstart', ontouchstart);
         document.removeEventListener('touchmove', ontouchmove);
         document.removeEventListener('touchend', ontouchend);
@@ -456,9 +450,11 @@ export class ViewerComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   private handleResizes() {
-    fromEvent(window, 'resize', passiveEventListenerOpts)
-      .pipe(takeUntil(this._destroy$))
-      .subscribe(this.onResize);
+    window.addEventListener('resize', this.onResize, passiveEventListenerOpts);
+
+    this._destroyRef.onDestroy(() => {
+      window.removeEventListener('resize', this.onResize);
+    });
   }
 
   private loopTo(desiredIndex: number) {

@@ -6,7 +6,7 @@ describe('ViewerComponent', () => {
   let viewer: ViewerComponent;
 
   beforeEach(() => {
-    viewer = new ViewerComponent(null, null, null);
+    viewer = new ViewerComponent(null, null, null, null);
     viewer.items = [
       { src: 'src1' },
       { src: 'src2' },
@@ -184,7 +184,7 @@ describe('ViewerComponent', () => {
       changeDetector = jasmine.createSpyObj('changeDetectorRef', [
         'detectChanges',
       ]);
-      viewer = new ViewerComponent(null, changeDetector, null);
+      viewer = new ViewerComponent(null, changeDetector, null, null);
       viewer.items = [{ src: 'src1' }, { src: 'src2' }];
     });
 
