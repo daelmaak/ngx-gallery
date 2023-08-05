@@ -13,8 +13,7 @@ export class AppComponent {
   `;
 
   componentCode = `
-    import { GalleryComponent } from '@daelmaak/ngx-gallery';
-    import { GalleryItem } from '@daelmaak/ngx-gallery';
+    import { GalleryComponent, GalleryItem } from '@daelmaak/ngx-gallery';
 
     @Component({
       standalone: true,
