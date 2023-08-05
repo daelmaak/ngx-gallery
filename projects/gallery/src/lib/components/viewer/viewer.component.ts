@@ -33,6 +33,11 @@ import {
   VerticalOrientation,
 } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
+import { CounterComponent } from '../counter/counter.component';
+import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
+import { SafePipe } from '../../pipes/safe.pipe';
+import { CommonModule } from '@angular/common';
+import { MediaDirective } from '../../directives/media.directive';
 
 const passiveEventListenerOpts = {
   passive: true,
@@ -51,6 +56,14 @@ const passiveEventListenerOpts = {
         animate('400ms', style({ opacity: 1 })),
       ]),
     ]),
+  ],
+  standalone: true,
+  imports: [
+    CommonModule,
+    CounterComponent,
+    ChevronIconComponent,
+    MediaDirective,
+    SafePipe,
   ],
 })
 export class ViewerComponent implements OnChanges, OnInit, OnDestroy {

@@ -23,12 +23,16 @@ import {
 } from '../../core';
 import { Aria } from '../../core/aria';
 import { GalleryItemEvent, GalleryItemInternal } from '../../core/gallery-item';
+import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'thumbs',
   templateUrl: './thumbs.component.html',
   styleUrls: ['./thumbs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [CommonModule, ChevronIconComponent],
 })
 export class ThumbsComponent implements OnChanges, OnDestroy {
   @Input() items: GalleryItemInternal[] = [];

@@ -19,9 +19,6 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { OrientationFlag } from '../../core';
 import { GalleryItemInternal } from '../../core/gallery-item';
-import { SafePipe } from '../../pipes/safe.pipe';
-import { CounterComponent } from '../counter/counter.component';
-import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
 import { ViewerComponent } from './viewer.component';
 
 describe('ViewerComponent', () => {
@@ -32,13 +29,6 @@ describe('ViewerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule],
-      declarations: [
-        ViewerComponent,
-        ChevronIconComponent,
-        CounterComponent,
-        SafePipe,
-        TestCustomTemplatesComponent,
-      ],
     })
       .overrideComponent(ViewerComponent, {
         set: { changeDetection: ChangeDetectionStrategy.Default },

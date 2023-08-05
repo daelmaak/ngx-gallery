@@ -6,14 +6,12 @@ import {
 import {
   ComponentFixture,
   TestBed,
-  async,
   fakeAsync,
   flush,
   tick,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { GalleryItem, SUPPORT } from '../../core';
-import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
 import { ThumbsComponent } from './thumbs.component';
 
 describe('ThumbnailsComponent', () => {
@@ -21,15 +19,13 @@ describe('ThumbnailsComponent', () => {
   let fixture: ComponentFixture<ThumbsComponent>;
   let de: DebugElement;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ThumbsComponent, ChevronIconComponent],
-    })
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({})
       .overrideComponent(ThumbsComponent, {
         set: { changeDetection: ChangeDetectionStrategy.Default },
       })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ThumbsComponent);

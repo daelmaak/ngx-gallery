@@ -1,6 +1,5 @@
 import { DebugElement } from '@angular/core';
 import {
-  async,
   ComponentFixture,
   fakeAsync,
   TestBed,
@@ -8,11 +7,6 @@ import {
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { SafePipe } from '../../pipes/safe.pipe';
-import { CounterComponent } from '../counter/counter.component';
-import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
-import { ThumbsComponent } from '../thumbs/thumbs.component';
-import { ViewerComponent } from '../viewer/viewer.component';
 import { GalleryComponent } from './gallery.component';
 
 describe('GalleryComponent', () => {
@@ -20,19 +14,11 @@ describe('GalleryComponent', () => {
   let fixture: ComponentFixture<GalleryComponent>;
   let de: DebugElement;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [NoopAnimationsModule],
-      declarations: [
-        GalleryComponent,
-        ViewerComponent,
-        ThumbsComponent,
-        ChevronIconComponent,
-        CounterComponent,
-        SafePipe,
-      ],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GalleryComponent);
