@@ -23,63 +23,64 @@
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
   >
-    <ng-container *ngIf="!lazyLoading || isInScrollportProximity(i)">
-      <ng-container *ngIf="!itemTemplate; else customTemplate">
-        <picture *ngIf="!item.video" @mediaAnimate>
-          <source
-            *ngFor="let source of item.pictureSources"
-            [srcset]="source.srcset"
-            [attr.media]="source.media"
-            [attr.sizes]="source.sizes"
-            [attr.type]="source.type"
-          />
-          <img
-            [src]="item.src"
-            [alt]="item.alt"
-            [class.viewer-media-loading]="!itemLoaded(item)"
-            [style.objectFit]="objectFit"
-          />
-        </picture>
-        <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
-        <video
-          *ngIf="!isYoutube(item) && item.video"
-          @mediaAnimate
+    <ng-container *ngIf="!itemTemplate; else customTemplate">
+      <picture *ngIf="!item.video" @mediaAnimate>
+        <source
+          *ngFor="let source of item.pictureSources"
+          [srcset]="source.srcset"
+          [attr.media]="source.media"
+          [attr.sizes]="source.sizes"
+          [attr.type]="source.type"
+        />
+        <img
           [src]="item.src"
-          [poster]="item.thumbSrc || ''"
+          [alt]="item.alt"
+          [attr.loading]="loading"
           [class.viewer-media-loading]="!itemLoaded(item)"
           [style.objectFit]="objectFit"
-          controls
-          playsinline
-        ></video>
+        />
+      </picture>
+      <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
+      <video
+        *ngIf="!isYoutube(item) && item.video"
+        @mediaAnimate
+        [src]="item.src"
+        [poster]="item.thumbSrc || ''"
+        [attr.preload]="loading === 'lazy' ? 'metadata' : 'auto'"
+        [class.viewer-media-loading]="!itemLoaded(item)"
+        [style.objectFit]="objectFit"
+        controls
+        playsinline
+      ></video>
 
-        <iframe
-          *ngIf="isYoutube(item)"
-          @mediaAnimate
-          [src]="item.src | safe"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      </ng-container>
-
-      <ng-container *ngIf="!itemLoaded(item) && !itemFailedToLoad(item)">
-        <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
-      </ng-container>
-
-      <ng-container *ngIf="itemFailedToLoad(item)">
-        <div *ngIf="!errorTemplate; else errorTemplate" class="viewer-error">
-          <div class="viewer-error-icon">⚠</div>
-          <p class="viewer-error-text">
-            {{ errorText || 'Loading of this media failed' }}
-          </p>
-        </div>
-      </ng-container>
-
-      <span
-        [id]="'viewer-aria-description-' + i"
-        class="sr-only"
-        [innerHTML]="item.description"
-      ></span>
+      <iframe
+        *ngIf="isYoutube(item)"
+        @mediaAnimate
+        [attr.loading]="loading"
+        [src]="item.src | safe"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
     </ng-container>
+
+    <ng-container *ngIf="!itemLoaded(item) && !itemFailedToLoad(item)">
+      <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="itemFailedToLoad(item)">
+      <div *ngIf="!errorTemplate; else errorTemplate" class="viewer-error">
+        <div class="viewer-error-icon">⚠</div>
+        <p class="viewer-error-text">
+          {{ errorText || 'Loading of this media failed' }}
+        </p>
+      </div>
+    </ng-container>
+
+    <span
+      [id]="'viewer-aria-description-' + i"
+      class="sr-only"
+      [innerHTML]="item.description"
+    ></span>
 
     <ng-template #customTemplate>
       <ng-container
