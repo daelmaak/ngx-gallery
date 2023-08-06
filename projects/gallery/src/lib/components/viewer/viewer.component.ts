@@ -149,17 +149,7 @@ export class ViewerComponent implements OnChanges, OnInit {
     private _zone: NgZone
   ) {}
 
-  ngOnChanges({ thumbsOrientation, items }: SimpleChanges) {
-    if (thumbsOrientation && !thumbsOrientation.firstChange) {
-      const axis =
-        thumbsOrientation.currentValue | thumbsOrientation.previousValue;
-      if (
-        axis !== OrientationFlag.HORIZONTAL &&
-        axis !== OrientationFlag.VERTICAL
-      ) {
-        this.onResize();
-      }
-    }
+  ngOnChanges({ items }: SimpleChanges) {
     if (items?.currentValue?.length) {
       this.onResize();
     }
