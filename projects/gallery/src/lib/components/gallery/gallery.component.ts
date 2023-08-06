@@ -49,7 +49,7 @@ export class GalleryComponent {
   @Input() counter = true;
   @Input() counterOrientation: VerticalOrientation = 'bottom';
   @Input() itemWidth: string;
-  @Input() loading: Loading = 'auto';
+  @Input() loading: Loading = 'lazy';
   @Input() loop = false;
   @Input() objectFit: ObjectFit = 'cover';
   @HostBinding('class.rtl')
