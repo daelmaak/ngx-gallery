@@ -10,7 +10,6 @@ import {
 import {
   ComponentFixture,
   TestBed,
-  async,
   fakeAsync,
   flush,
   tick,
@@ -24,22 +23,22 @@ import { ViewerComponent } from './viewer.component';
 describe('ViewerComponent', () => {
   let component: ViewerComponent;
   let fixture: ComponentFixture<ViewerComponent>;
-  let de: DebugElement;
+  let viewerDe: DebugElement;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [NoopAnimationsModule],
     })
       .overrideComponent(ViewerComponent, {
         set: { changeDetection: ChangeDetectionStrategy.Default },
       })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewerComponent);
     component = fixture.componentInstance;
-    de = fixture.debugElement;
+    viewerDe = fixture.debugElement;
   });
 
   describe('initialization', () => {
@@ -57,7 +56,7 @@ describe('ViewerComponent', () => {
 
       expect(component).toBeTruthy();
 
-      expect(de.query(By.css('.viewer-initial-item'))).toBeTruthy();
+      expect(viewerDe.query(By.css('.viewer-initial-item'))).toBeTruthy();
     });
 
     it('should display items even though they have been set later', fakeAsync(() => {
@@ -78,12 +77,12 @@ describe('ViewerComponent', () => {
       fixture.detectChanges();
       flush();
 
-      expect(de.queryAll(By.css('li:not(.viewer-initial-item)')).length).toBe(
-        2
-      );
+      expect(
+        viewerDe.queryAll(By.css('li:not(.viewer-initial-item)')).length
+      ).toBe(2);
     }));
 
-    it('should preselect item based on gived index', fakeAsync(() => {
+    it('should preselect item based on given index', fakeAsync(() => {
       component.selectedIndex = 1;
       component.items = [{ src: 'src1' }, { src: 'src2' }];
       const changes = {
@@ -94,28 +93,7 @@ describe('ViewerComponent', () => {
 
       tick();
 
-      expect(
-        de.queryAll(By.css('li'))[1].classes['viewer-item--selected']
-      ).toBeTruthy();
-      expect(de.query(By.css('ul')).nativeElement.style.transform).toMatch(
-        /translate3d\(-\d+px, 0px, 0px\)/
-      );
-    }));
-
-    it(`should move slider to the start once items load
-        even if it was moved before`, fakeAsync(() => {
-      fixture.detectChanges();
-      slideByMouse(-345);
-
-      component.items = [{ src: 'src1' }, { src: 'src2' }];
-      const changes = {
-        items: new SimpleChange([], component.items, false),
-      };
-      component.ngOnChanges(changes);
-      fixture.detectChanges();
-      flush();
-
-      expect(getSlidePx()).toBe(0);
+      expect(getSlidePx().index).toBe(-1);
     }));
   });
 
@@ -135,13 +113,13 @@ describe('ViewerComponent', () => {
       component.isRtl = true;
       fixture.detectChanges();
 
-      expect(de.classes.rtl).toBeTruthy();
+      expect(viewerDe.classes.rtl).toBeTruthy();
     });
 
     it('should have no class denoting RTL if turned off', () => {
       fixture.detectChanges();
 
-      expect(de.classes.rtl).toBeFalsy();
+      expect(viewerDe.classes.rtl).toBeFalsy();
     });
   });
 
@@ -164,7 +142,7 @@ describe('ViewerComponent', () => {
       fixture.detectChanges();
       tick();
 
-      const items = de.queryAll(By.css('li picture'));
+      const items = viewerDe.queryAll(By.css('li picture'));
 
       expect(items.length).toBe(4);
     }));
@@ -174,7 +152,7 @@ describe('ViewerComponent', () => {
       fixture.detectChanges();
       tick();
 
-      const items = de.queryAll(By.css('li picture'));
+      const items = viewerDe.queryAll(By.css('li picture'));
 
       expect(items.length).toBe(2);
     }));
@@ -184,7 +162,7 @@ describe('ViewerComponent', () => {
       fixture.detectChanges();
       tick();
 
-      const itemList = de.query(By.css('ul'));
+      const itemList = viewerDe.query(By.css('ul'));
 
       expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
       expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
@@ -198,7 +176,7 @@ describe('ViewerComponent', () => {
       fixture.detectChanges();
       tick();
 
-      const itemList = de.query(By.css('ul'));
+      const itemList = viewerDe.query(By.css('ul'));
 
       expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
       expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
@@ -216,7 +194,7 @@ describe('ViewerComponent', () => {
       component['_itemWidth'] = 400;
       fixture.detectChanges();
 
-      const itemList = de.query(By.css('ul'));
+      const itemList = viewerDe.query(By.css('ul'));
 
       expect(itemList.query(By.css('img[src=src1]'))).toBeFalsy();
       expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
@@ -239,7 +217,7 @@ describe('ViewerComponent', () => {
         component['_itemWidth'] = 400;
         fixture.detectChanges();
 
-        const itemList = de.query(By.css('ul'));
+        const itemList = viewerDe.query(By.css('ul'));
 
         expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
         expect(itemList.query(By.css('img[src=src2]'))).toBeTruthy();
@@ -254,7 +232,7 @@ describe('ViewerComponent', () => {
         component['_itemWidth'] = 600;
         fixture.detectChanges();
 
-        const itemList = de.query(By.css('ul'));
+        const itemList = viewerDe.query(By.css('ul'));
 
         expect(itemList.query(By.css('img[src=src1]'))).toBeTruthy();
         expect(itemList.query(By.css('img[src=src2]'))).toBeFalsy();
@@ -289,8 +267,8 @@ describe('ViewerComponent', () => {
       fixture.detectChanges();
       tick();
 
-      const itemEls = de.queryAll(By.css('li'));
-      const customErrors = de.queryAll(By.css('li .custom-error'));
+      const itemEls = viewerDe.queryAll(By.css('li'));
+      const customErrors = viewerDe.queryAll(By.css('li .custom-error'));
 
       expect(customErrors.length).toBe(1);
       expect(itemEls[0].query(By.css('.custom-error'))).toBeTruthy();
@@ -323,7 +301,7 @@ describe('ViewerComponent', () => {
         fixture.detectChanges();
         tick();
 
-        const itemEls = de.queryAll(By.css('li'));
+        const itemEls = viewerDe.queryAll(By.css('li'));
 
         expect(itemEls.length).toBe(1);
         expect(itemEls[0].query(By.css('.custom-item'))).toBeTruthy();
@@ -346,7 +324,7 @@ describe('ViewerComponent', () => {
       component.ngOnChanges(changes);
       fixture.detectChanges();
 
-      const descContainer = de.query(By.css('.viewer-description'));
+      const descContainer = viewerDe.query(By.css('.viewer-description'));
       expect(
         descContainer.classes['viewer-description--above-counter']
       ).toBeFalsy();
@@ -391,19 +369,25 @@ describe('ViewerComponent', () => {
         fixture.detectChanges();
       });
 
-      it(`should select the first item if requested selection is < 0
-        with looping on`, fakeAsync(() => {
-        component.select(-2);
+      it(`should select the first item if requested selection is < 0`, fakeAsync(() => {
+        component.select(-1);
         flush();
 
         expect(component.selectedIndex).toBe(3);
       }));
 
-      it('should select the last item if requested selection is >= items length', fakeAsync(() => {
-        component.select(10);
+      it(`should select the second item if requested selection goes 2 items beyond the first one`, fakeAsync(() => {
+        component.select(-2);
         flush();
 
-        expect(component.selectedIndex).toBe(0);
+        expect(component.selectedIndex).toBe(2);
+      }));
+
+      it('should select the second item if requested selection goes 2 items beyond the last one', fakeAsync(() => {
+        component.select(component.items.length + 1);
+        flush();
+
+        expect(component.selectedIndex).toBe(1);
       }));
     });
 
@@ -449,113 +433,99 @@ describe('ViewerComponent', () => {
       component.selectedIndex = 0;
     });
 
-    describe('in loop mode with 2 fringe items', () => {
+    describe('in loop mode with 2 (1 on each side) fringe items', () => {
       beforeEach(fakeAsync(() => {
         component.loop = true;
         component.ngOnChanges({
           items: new SimpleChange(null, component.items, true),
         });
         fixture.detectChanges();
-        de.nativeElement.style.width = ITEM_WIDTH + 'px';
+        viewerDe.nativeElement.style.width = ITEM_WIDTH + 'px';
 
         tick();
         fixture.detectChanges();
       }));
 
-      describe('before centering', () => {
-        beforeEach(() => {
-          spyOn<any>(component, 'center');
-        });
+      describe('with mouse', () => {
+        it(`should slide to one third of the rightmost fringe item
+            if user slid to 1/3 of the rightmost fringe item (1st item mirror),
+            and then center on the genuine 1st item`, fakeAsync(() => {
+          const usersShiftDistance = -(ITEM_WIDTH * 2 + ITEM_WIDTH / 3);
 
-        describe('with mouse', () => {
-          it(`should slide to one third of the leftmost fringe item
-            if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
-            const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
+          slideByMouse(usersShiftDistance);
 
-            slideByMouse(usersShiftDistance);
-            tick();
+          let { index, tweak } = getSlidePx();
+          expect(index).toBe(-1);
+          expect(tweak).toBe((ITEM_WIDTH / 3) * 2);
 
-            expect(getSlidePx()).toBe((-ITEM_WIDTH / 3) * 2);
-          }));
+          flush(); // give time for centering to happen
+          ({ index, tweak } = getSlidePx());
+          expect(index).toBe(-1);
+          expect(tweak).toBe(0);
+        }));
 
-          it(`should slide to the first genuine item
-            if user slid completely to the rightmost fringe item`, fakeAsync(() => {
-            const usersShiftDistance = -(ITEM_WIDTH * 3);
+        it(`should slide to the 2nd genuine item
+            if user slid beyond the rightmost fringe item`, fakeAsync(() => {
+          const usersShiftDistance = -(ITEM_WIDTH * 3 + ITEM_WIDTH / 3);
 
-            slideByMouse(usersShiftDistance);
-            tick();
+          slideByMouse(usersShiftDistance);
 
-            expect(getSlidePx()).toBe(-ITEM_WIDTH);
-          }));
-        });
+          let { index, tweak } = getSlidePx();
+          expect(index).toBe(-2);
+          expect(tweak).toBe((ITEM_WIDTH / 3) * 2);
 
-        describe('with touch', () => {
-          it(`should slide to one third of the leftmost fringe item
-            if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
-            const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
-
-            slideByTouch(usersShiftDistance);
-            tick();
-
-            expect(getSlidePx()).toBe((-ITEM_WIDTH / 3) * 2);
-          }));
-
-          it(`should slide to the first genuine item
-            if user slid completely to the rightmost fringe item`, fakeAsync(() => {
-            const usersShiftDistance = -(ITEM_WIDTH * 3);
-
-            slideByTouch(usersShiftDistance);
-            tick();
-
-            expect(getSlidePx()).toBe(-ITEM_WIDTH);
-          }));
-        });
+          flush(); // give time for centering to happen
+          ({ index, tweak } = getSlidePx());
+          expect(index).toBe(-2);
+          expect(tweak).toBe(0);
+        }));
       });
 
-      describe('after centering', () => {
-        describe('with mouse', () => {
-          it(`should slide to the first genuine item
-              if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
-            const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
+      describe('with touch', () => {
+        it(`should slide to one third of the rightmost fringe item
+            if user slid to 1/3 of the rightmost fringe item (1st item mirror),
+            and then center on the genuine 1st item`, fakeAsync(() => {
+          const usersShiftDistance = -(ITEM_WIDTH * 2 + ITEM_WIDTH / 3);
 
-            slideByMouse(usersShiftDistance);
-            tick();
+          slideByMouse(usersShiftDistance);
 
-            expect(getSlidePx()).toBe(-ITEM_WIDTH);
-          }));
+          let { index, tweak } = getSlidePx();
+          expect(index).toBe(-1);
+          expect(tweak).toBe((ITEM_WIDTH / 3) * 2);
 
-          it(`should slide to the first genuine item
-              if user slid completely to the rightmost fringe item`, fakeAsync(() => {
-            const usersShiftDistance = -(ITEM_WIDTH * 3);
+          flush(); // give time for centering to happen
+          ({ index, tweak } = getSlidePx());
+          expect(index).toBe(-1);
+          expect(tweak).toBe(0);
+        }));
 
-            slideByMouse(usersShiftDistance);
-            tick();
+        it(`should slide to the first genuine item
+            if user slid completely to the rightmost fringe item`, fakeAsync(() => {
+          const usersShiftDistance = -(ITEM_WIDTH * 3);
 
-            expect(getSlidePx()).toBe(-ITEM_WIDTH);
-          }));
-        });
+          slideByTouch(usersShiftDistance);
+          flush();
 
-        describe('with touch', () => {
-          it(`should slide to the first genuine item
-              if user slid to 2 thirds of the rightmost fringe item`, fakeAsync(() => {
-            const usersShiftDistance = -(ITEM_WIDTH * 3 - ITEM_WIDTH / 3);
+          const { index, tweak } = getSlidePx();
+          expect(index).toBe(-1);
+          expect(tweak).toBe(0);
+        }));
 
-            slideByTouch(usersShiftDistance);
-            tick();
+        it(`should slide to the 2nd genuine item
+            if user slid beyond the rightmost fringe item`, fakeAsync(() => {
+          const usersShiftDistance = -(ITEM_WIDTH * 3 + ITEM_WIDTH / 3);
 
-            expect(getSlidePx()).toBe(-ITEM_WIDTH);
-          }));
+          slideByTouch(usersShiftDistance);
 
-          it(`should slide to the first genuine item
-              if user slid completely to the rightmost fringe item`, fakeAsync(() => {
-            const usersShiftDistance = -(ITEM_WIDTH * 3);
+          let { index, tweak } = getSlidePx();
+          expect(index).toBe(-2);
+          expect(tweak).toBe((ITEM_WIDTH / 3) * 2);
 
-            slideByTouch(usersShiftDistance);
-            tick();
-
-            expect(getSlidePx()).toBe(-ITEM_WIDTH);
-          }));
-        });
+          flush(); // give time for centering to happen
+          ({ index, tweak } = getSlidePx());
+          expect(index).toBe(-2);
+          expect(tweak).toBe(0);
+        }));
       });
     });
 
@@ -566,7 +536,7 @@ describe('ViewerComponent', () => {
           items: new SimpleChange(null, component.items, true),
         });
         fixture.detectChanges();
-        de.nativeElement.style.width = ITEM_WIDTH + 'px';
+        viewerDe.nativeElement.style.width = ITEM_WIDTH + 'px';
 
         tick();
         fixture.detectChanges();
@@ -580,7 +550,7 @@ describe('ViewerComponent', () => {
           slideByMouse(usersShiftDistance);
           tick();
 
-          expect(getSlidePx()).toBe(0);
+          expect(getSlidePx().index).toBe(0);
         }));
 
         it(`should slide to the last item
@@ -590,7 +560,7 @@ describe('ViewerComponent', () => {
           slideByMouse(usersShiftDistance);
           tick();
 
-          expect(getSlidePx()).toBe(-(ITEM_WIDTH * 2));
+          expect(getSlidePx().index).toBe(-(component.items.length - 1));
         }));
 
         it(`should slide back to the selected item
@@ -600,21 +570,27 @@ describe('ViewerComponent', () => {
           slideByMouse(usersShiftDistance);
           tick();
 
-          expect(getSlidePx()).toBe(0);
+          const { index, tweak } = getSlidePx();
+
+          expect(index).toBe(0);
+          expect(tweak).toBe(0);
         }));
 
         it('should slide to next image if it was programatically selected', fakeAsync(() => {
           component.select(1);
           tick();
 
-          expect(getSlidePx()).toBe(-ITEM_WIDTH);
+          expect(getSlidePx().index).toBe(-1);
         }));
 
         it('should not shift the already selected item if it was selected again', fakeAsync(() => {
           component.select(0);
           tick();
 
-          expect(getSlidePx()).toBe(0);
+          const { index, tweak } = getSlidePx();
+
+          expect(index).toBe(0);
+          expect(tweak).toBe(0);
         }));
       });
 
@@ -626,7 +602,7 @@ describe('ViewerComponent', () => {
           slideByTouch(usersShiftDistance);
           tick();
 
-          expect(getSlidePx()).toBe(0);
+          expect(getSlidePx().index).toBe(0);
         }));
 
         it(`should slide to the last item
@@ -636,7 +612,7 @@ describe('ViewerComponent', () => {
           slideByTouch(usersShiftDistance);
           tick();
 
-          expect(getSlidePx()).toBe(-(ITEM_WIDTH * 2));
+          expect(getSlidePx().index).toBe(-(component.items.length - 1));
         }));
 
         it(`should slide back to the selected item
@@ -646,21 +622,27 @@ describe('ViewerComponent', () => {
           slideByTouch(usersShiftDistance);
           tick();
 
-          expect(getSlidePx()).toBe(0);
+          const { index, tweak } = getSlidePx();
+
+          expect(index).toBe(0);
+          expect(tweak).toBe(0);
         }));
 
         it('should slide to next image if it was programatically selected', fakeAsync(() => {
           component.select(1);
           tick();
 
-          expect(getSlidePx()).toBe(-ITEM_WIDTH);
+          expect(getSlidePx().index).toBe(-1);
         }));
 
         it('should not shift the already selected item if it was selected again', fakeAsync(() => {
           component.select(0);
           tick();
 
-          expect(getSlidePx()).toBe(0);
+          const { index, tweak } = getSlidePx();
+
+          expect(index).toBe(0);
+          expect(tweak).toBe(0);
         }));
       });
     });
@@ -673,7 +655,7 @@ describe('ViewerComponent', () => {
           items: new SimpleChange(null, component.items, true),
         });
         fixture.detectChanges();
-        de.nativeElement.style.width = ITEM_WIDTH + 'px';
+        viewerDe.nativeElement.style.width = ITEM_WIDTH + 'px';
 
         tick();
         fixture.detectChanges();
@@ -686,107 +668,21 @@ describe('ViewerComponent', () => {
           slideByMouse(-usersShiftDistance);
           tick();
 
-          expect(getSlidePx()).toBe(ITEM_WIDTH);
-        }));
-
-        it('should select next item although user swipes counter to the slide direction', fakeAsync(() => {
-          const usersShiftDistance = (ITEM_WIDTH * 2) / 3;
-
-          slideByMouse(-usersShiftDistance);
-          tick();
-
+          expect(getSlidePx().index).toBe(1);
           expect(component.selectedIndex).toBe(1);
         }));
       });
 
       describe('with touch', () => {
         it('should slide in direction opposite to swipe direction', fakeAsync(() => {
-          const usersShiftDistance = ITEM_WIDTH;
-
-          slideByTouch(-usersShiftDistance);
+          slideByTouch(-ITEM_WIDTH);
           tick();
 
-          expect(getSlidePx()).toBe(ITEM_WIDTH);
-        }));
-
-        it('should select next item although user swipes counter to the slide direction', fakeAsync(() => {
-          const usersShiftDistance = (ITEM_WIDTH * 2) / 3;
-
-          slideByTouch(-usersShiftDistance);
-          tick();
-
+          expect(getSlidePx().index).toBe(1);
           expect(component.selectedIndex).toBe(1);
         }));
       });
     });
-  });
-
-  describe('orientation changes', () => {
-    const ITEM_WIDTH = 600;
-
-    beforeEach(fakeAsync(() => {
-      component.touched = true;
-      component.loop = false;
-      component.items = generateGalleryImages(3);
-      component.mouseGestures = true;
-      component.selectedIndex = 0;
-      component.thumbsOrientation = OrientationFlag.BOTTOM;
-      component.ngOnChanges({
-        items: new SimpleChange(null, component.items, true),
-        thumbsOrientation: new SimpleChange(
-          null,
-          component.thumbsOrientation,
-          true
-        ),
-      });
-      fixture.detectChanges();
-      de.nativeElement.style.width = ITEM_WIDTH + 'px';
-
-      tick();
-      fixture.detectChanges();
-    }));
-
-    it(`should re-center selected image if the orientation axis changed`, fakeAsync(() => {
-      component.select(1);
-      tick();
-
-      component.thumbsOrientation = OrientationFlag.LEFT;
-      component.ngOnChanges({
-        thumbsOrientation: new SimpleChange(
-          OrientationFlag.BOTTOM,
-          component.thumbsOrientation,
-          false
-        ),
-      });
-      // simulate width change
-      const newViewerWidth = ITEM_WIDTH - 100;
-      de.nativeElement.style.width = newViewerWidth + 'px';
-
-      tick();
-
-      expect(getSlidePx()).toBe(-newViewerWidth);
-    }));
-
-    it(`should not re-center selected image if the orientation changed
-        but the orientation axis didn't change`, fakeAsync(() => {
-      component.select(1);
-      tick();
-
-      component.thumbsOrientation = OrientationFlag.TOP;
-      component.ngOnChanges({
-        thumbsOrientation: new SimpleChange(
-          OrientationFlag.BOTTOM,
-          component.thumbsOrientation,
-          false
-        ),
-      });
-      // change width just to test whether the component adapted to it
-      de.nativeElement.style.width = ITEM_WIDTH - 100 + 'px';
-
-      tick();
-
-      expect(getSlidePx()).toBe(-ITEM_WIDTH);
-    }));
   });
 
   function generateGalleryImages(quantity: number) {
@@ -800,15 +696,27 @@ describe('ViewerComponent', () => {
   function getSlidePx() {
     const { transform } = component.itemListRef.nativeElement.style;
 
+    // console.log(transform);
+
     if (!transform) {
-      return 0;
+      return {
+        index: 0,
+        tweak: 0,
+      };
     }
 
-    return +transform.match(/3d\((.*?)px/)[1];
+    const [_, index, tweak] = transform.match(
+      /3d\(calc\((\-?\d+).*\s(\d+)px\)/
+    );
+
+    return {
+      index: +index,
+      tweak: +tweak,
+    };
   }
 
   function slideByMouse(distance: number) {
-    const hostEl = de.nativeElement as HTMLElement;
+    const hostEl = viewerDe.nativeElement as HTMLElement;
 
     hostEl.dispatchEvent(
       new MouseEvent('mousedown', { clientX: 0, clientY: 0 })
@@ -823,7 +731,7 @@ describe('ViewerComponent', () => {
   }
 
   function slideByTouch(distance: number) {
-    const hostEl = de.nativeElement as HTMLElement;
+    const hostEl = viewerDe.nativeElement as HTMLElement;
 
     hostEl.dispatchEvent(
       new TouchEvent('touchstart', {

@@ -41,6 +41,8 @@ const passiveEventListenerOpts = {
   passive: true,
 };
 
+export const NEXT_THRESHOLD_PX = 25;
+
 @Component({
   selector: 'viewer',
   templateUrl: './viewer.component.html',
@@ -91,8 +93,11 @@ export class ViewerComponent implements OnChanges, OnInit {
     return this.items && this.items.length > 1 && this._loop;
   }
 
-  @Input() set itemWidth(val: string) {
-    this.itemListRef.nativeElement.style.setProperty('--item-width', val || '');
+  @Input() set itemWidth(width: string) {
+    this.itemListRef.nativeElement.style.setProperty(
+      '--item-width',
+      width ?? '100%'
+    );
   }
   @Input() touched: boolean;
 
@@ -114,7 +119,7 @@ export class ViewerComponent implements OnChanges, OnInit {
   private _itemWidth: number;
   private _loop: boolean;
   private _viewerWidth: number;
-  private _listX = 0;
+  private pointerDeltaX = 0;
 
   set _noAnimation(value: boolean) {
     this.itemListRef.nativeElement.style.transitionDuration = value
@@ -159,7 +164,7 @@ export class ViewerComponent implements OnChanges, OnInit {
         this.onResize();
       }
     }
-    if (items && items.currentValue && items.currentValue.length) {
+    if (items?.currentValue?.length) {
       this.onResize();
     }
   }
@@ -199,27 +204,22 @@ export class ViewerComponent implements OnChanges, OnInit {
       return this.center();
     }
 
+    if (this.items[this.selectedIndex].video) {
+      this.stopCurrentVideo();
+    }
+
     const indexOutOfBounds = !this.items[index];
     const looping = this.loop && indexOutOfBounds;
 
     if (looping) {
       this.loopTo(index);
+    } else {
+      this.selectedIndex = indexOutOfBounds
+        ? this.correctIndexOutOfBounds(index)
+        : index;
+      this.center(); // we center only for this branch since looping does a delayed centering
     }
-
-    if (indexOutOfBounds) {
-      index = this.correctIndexOutOfBounds(index);
-    }
-
-    if (this.items[this.selectedIndex].video) {
-      this.stopCurrentVideo();
-    }
-
-    this.selectedIndex = index;
-    this.selection.emit(index);
-
-    if (!looping) {
-      this.center();
-    }
+    this.selection.emit(this.selectedIndex);
   }
 
   selectByDelta(delta: number) {
@@ -269,17 +269,10 @@ export class ViewerComponent implements OnChanges, OnInit {
   }
 
   private center() {
-    const centeringOffset = (this._viewerWidth - this._itemWidth) / 2;
-    this.shift(
-      (this.selectedIndex + this._fringeCount) * this._itemWidth -
-        centeringOffset
-    );
+    this.shift();
   }
 
   private correctIndexOutOfBounds(index: number) {
-    if (this.loop) {
-      return index < 0 ? this.items.length - 1 : 0;
-    }
     return index < 0 ? 0 : this.items.length - 1;
   }
 
@@ -342,6 +335,7 @@ export class ViewerComponent implements OnChanges, OnInit {
 
         this._noAnimation = false;
         this._zone.run(() => this.selectBySwipeStats(distance));
+        this.pointerDeltaX = 0;
 
         document.removeEventListener('mousemove', onmousemove);
         document.removeEventListener('mouseup', onmouseup);
@@ -404,7 +398,7 @@ export class ViewerComponent implements OnChanges, OnInit {
 
         if (horizontal) {
           this.shiftByDelta(
-            moveTouch.clientX - (lastTouchmove || touchstart).touches[0].clientX
+            moveTouch.clientX - (lastTouchmove ?? touchstart).touches[0].clientX
           );
           lastTouchmove = e;
           if (UA.ios) {
@@ -426,6 +420,7 @@ export class ViewerComponent implements OnChanges, OnInit {
         horizontal = null;
         touchstart = null;
         lastTouchmove = null;
+        this.pointerDeltaX = 0;
       };
 
       hostEl.addEventListener(
@@ -458,18 +453,20 @@ export class ViewerComponent implements OnChanges, OnInit {
   }
 
   private loopTo(desiredIndex: number) {
+    const deltaX = this.pointerDeltaX % this._itemWidth;
     this._noAnimation = true;
 
+    this.selectedIndex =
+      desiredIndex < 0
+        ? desiredIndex + this.items.length
+        : desiredIndex - this.items.length;
+    this.shift(
+      desiredIndex < 0 ? deltaX - this._itemWidth : this._itemWidth + deltaX
+    );
+
     setTimeout(() => {
-      const shiftDelta =
-        Math.sign(desiredIndex) * this.items.length * this._itemWidth;
-
-      this.shiftByDelta(shiftDelta);
-
-      setTimeout(() => {
-        this._noAnimation = false;
-        this.center();
-      });
+      this._noAnimation = false;
+      this.center();
     });
   }
 
@@ -477,10 +474,8 @@ export class ViewerComponent implements OnChanges, OnInit {
     // the setTimeout is here to prevent layout trashing when inquiring layout properties like offsetWidth
     // using setTimeout increases chance the trashing will be avoided and cashed layout calculation will be used
     setTimeout(() => {
-      this._noAnimation = true;
-      this.updateDimensionsAndCenter();
-      // the setTimeout makes sure that the animation is allowed AFTER the list was shifted
-      setTimeout(() => (this._noAnimation = false));
+      this.updateDimensions();
+      this.center();
     });
   };
 
@@ -493,24 +488,24 @@ export class ViewerComponent implements OnChanges, OnInit {
   }
 
   private selectBySwipeStats(distance: number) {
-    const indexDelta = Math.ceil((Math.abs(distance) - 25) / this._itemWidth);
-
-    if (indexDelta) {
-      this.selectByDelta(indexDelta * Math.sign(distance));
-    } else {
-      this.center();
-    }
+    const indexDelta = Math.ceil(
+      (Math.abs(distance) - NEXT_THRESHOLD_PX) / this._itemWidth
+    );
+    this.selectByDelta(indexDelta * Math.sign(distance));
   }
 
-  private shift(x: number) {
+  private shift(delta = 0) {
     const multiplier = this.isRtl ? 1 : -1;
-    this.itemListRef.nativeElement.style.transform = `translate3d(${
-      multiplier * (this._listX = x)
-    }px, 0, 0)`;
+    const index = (this.selectedIndex + this._fringeCount) * multiplier;
+    delta *= -multiplier;
+    const shift = `calc(${index} * var(--item-width) + ${delta}px)`;
+
+    this.itemListRef.nativeElement.style.transform = `translate3d(${shift}, 0, 0)`;
   }
 
   private shiftByDelta = (delta: number) => {
-    this.shift(this._listX - delta);
+    this.pointerDeltaX += delta;
+    this.shift(this.pointerDeltaX);
   };
 
   private stopCurrentVideo() {
@@ -523,10 +518,9 @@ export class ViewerComponent implements OnChanges, OnInit {
     }
   }
 
-  private updateDimensionsAndCenter() {
+  private updateDimensions() {
     if (this.items && this.items.length) {
       this.readDimensions();
-      this.center();
       this._cd.detectChanges();
     }
   }
