@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.5](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.4...v3.0.0-RC.5) (2023-08-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* make lazy loading default
+
+### Features
+
+* make lazy loading default ([c01fdc1](https://github.com/daelmaak/ngx-gallery/commit/c01fdc187d148b620d6c664843bb8604fc9c4d2b))
+* use native lazy loading instead of custom one ([c26e75a](https://github.com/daelmaak/ngx-gallery/commit/c26e75a3b9821a805f6f3fdce1f8fa41b72d52b0))
+
 ## [3.0.0-RC.4](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.3...v3.0.0-RC.4) (2023-08-05)
 
 
