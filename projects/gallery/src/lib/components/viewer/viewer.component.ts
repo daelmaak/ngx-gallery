@@ -127,10 +127,6 @@ export class ViewerComponent implements OnChanges, OnInit {
       : '';
   }
 
-  get lazyLoading() {
-    return this.loading === 'lazy';
-  }
-
   get showArrow() {
     return this.arrows && this.items && this.items.length > 1;
   }
@@ -181,18 +177,6 @@ export class ViewerComponent implements OnChanges, OnInit {
         this.handleTouchSlides();
       }
     }
-  }
-
-  isInScrollportProximity(index: number) {
-    if (this.loop) {
-      index -= this._fringeCount;
-    }
-    const spread = this.getSelectedItemProximitySpread();
-    const distance = Math.abs(this.selectedIndex - index);
-    const isLeftFringeItemToLoad =
-      this.loop && Math.abs(distance - this.items.length) <= spread;
-
-    return isLeftFringeItemToLoad || distance <= spread;
   }
 
   isYoutube(item: GalleryItemInternal) {
@@ -293,12 +277,6 @@ export class ViewerComponent implements OnChanges, OnInit {
           ...this.items.slice(0, this._fringeCount),
         ]
       : this.items;
-  }
-
-  private getSelectedItemProximitySpread() {
-    return this.touched
-      ? Math.ceil(this._viewerWidth / (this._itemWidth + 1)) || 1
-      : Math.floor(Math.ceil(this._viewerWidth / this._itemWidth) / 2);
   }
 
   private handleMouseSlides() {
