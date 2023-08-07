@@ -6,7 +6,7 @@
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "test", "test:ci", "lint"],
+        "cacheableOperations": ["build", "test", "test:ci", "lint", "component-test"],
         "accessToken": "Zjg2NjM5OWYtOWNjYi00ZGJhLWFmNDUtYWIwZTdjYjE0NDZmfHJlYWQtd3JpdGU="
       }
     }
@@ -19,7 +19,10 @@
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/**/*.spec.[jt]s",
       "!{projectRoot}/karma.conf.js",
-      "!{projectRoot}/.eslintrc.json"
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/cypress/**/*",
+      "!{projectRoot}/**/*.cy.[jt]s?(x)",
+      "!{projectRoot}/cypress.config.[jt]s"
     ]
   },
   "targetDefaults": {
@@ -32,6 +35,9 @@
     },
     "lint": {
       "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
+    },
+    "component-test": {
+      "inputs": ["default", "^production"]
     }
   }
 }
