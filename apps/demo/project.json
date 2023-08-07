@@ -1,0 +1,108 @@
+{
+  "name": "demo",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "sourceRoot": "apps/demo/src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "options": {
+        "outputPath": "dist/apps/demo",
+        "index": "apps/demo/src/index.html",
+        "main": "apps/demo/src/main.ts",
+        "polyfills": "apps/demo/src/polyfills.ts",
+        "tsConfig": "apps/demo/tsconfig.app.json",
+        "assets": [
+          "apps/demo/src/favicon.ico",
+          "apps/demo/src/assets",
+          "apps/demo/src/google08efa3d99d13d01e.html",
+          {
+            "glob": "**/*",
+            "input": ".circleci",
+            "output": "/.circleci/"
+          }
+        ],
+        "styles": ["apps/demo/src/styles.scss", "apps/demo/src/fonts.scss"],
+        "scripts": [],
+        "vendorChunk": true,
+        "extractLicenses": false,
+        "buildOptimizer": false,
+        "sourceMap": true,
+        "optimization": false,
+        "namedChunks": true
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/demo/src/environments/environment.ts",
+              "with": "apps/demo/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": true,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "buildOptimizer": true,
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "2mb",
+              "maximumError": "5mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "6kb",
+              "maximumError": "10kb"
+            }
+          ]
+        }
+      },
+      "defaultConfiguration": ""
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "browserTarget": "demo:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "browserTarget": "demo:build:production"
+        }
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "demo:build"
+      }
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "apps/demo/src/test.ts",
+        "polyfills": "apps/demo/src/polyfills.ts",
+        "tsConfig": "apps/demo/tsconfig.spec.json",
+        "karmaConfig": "apps/demo/karma.conf.js",
+        "assets": ["apps/demo/src/favicon.ico", "apps/demo/src/assets"],
+        "styles": ["apps/demo/src/styles.scss"],
+        "scripts": []
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/demo/**/*.ts", "apps/demo/**/*.html"]
+      }
+    }
+  }
+}
