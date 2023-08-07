@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -12,14 +12,16 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["dom"],
     "paths": {
-      "@daelmaak/ngx-gallery": ["projects/gallery/src/public-api.ts"],
-      "@daelmaak/ngx-gallery/*": ["projects/gallery/src/*"]
+      "@daelmaak/ngx-gallery": ["libs/gallery/src/public-api.ts"],
+      "@daelmaak/ngx-gallery/*": ["libs/gallery/src/*"]
     },
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "rootDir": "."
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
     "strictTemplates": true
-  }
+  },
+  "exclude": ["node_modules", "tmp"]
 }

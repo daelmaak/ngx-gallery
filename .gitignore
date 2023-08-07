@@ -48,9 +48,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# ignore generated demo
-/docs
-
 *.swp
 
 .angular/cache

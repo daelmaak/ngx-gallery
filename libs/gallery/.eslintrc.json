@@ -5,10 +5,7 @@
     {
       "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "projects/demo/tsconfig.app.json",
-          "projects/demo/tsconfig.spec.json"
-        ],
+        "project": ["libs/gallery/tsconfig.*?.json"],
         "createDefaultProgram": true
       },
       "rules": {
@@ -16,7 +13,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "app",
+            "prefix": "",
             "style": "camelCase"
           }
         ],
@@ -24,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "app",
+            "prefix": "",
             "style": "kebab-case"
           }
         ]

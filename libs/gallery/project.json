@@ -1,0 +1,40 @@
+{
+  "name": "gallery",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "sourceRoot": "libs/gallery/src",
+  "prefix": "",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "options": {
+        "tsConfig": "libs/gallery/tsconfig.lib.json",
+        "project": "libs/gallery/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/gallery/tsconfig.lib.prod.json"
+        }
+      }
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "main": "libs/gallery/src/test.ts",
+        "tsConfig": "libs/gallery/tsconfig.spec.json",
+        "karmaConfig": "libs/gallery/karma.conf.js"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/gallery/**/*.ts", "libs/gallery/**/*.html"]
+      }
+    }
+  }
+}
