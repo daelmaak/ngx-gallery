@@ -15,13 +15,27 @@ describe('Gallery', () => {
     },
   ];
 
-  it('mounts', () => {
+  it('slides to next image', () => {
     // see: https://on.cypress.io/mounting-angular
     cy.mount(GalleryComponent, {
       componentProperties: {
         items,
       },
       imports: [BrowserAnimationsModule],
+    });
+
+    cy.get('viewer li img').then(imgs => {
+      cy.wrap(imgs[0]).should('be.visible');
+      cy.wrap(imgs[1]).should('not.be.visible');
+      cy.wrap(imgs[2]).should('not.be.visible');
+    });
+
+    cy.slideByMouse({ x: 250, y: 250 }, { x: 0, y: 250 });
+
+    cy.get('viewer li img').then(imgs => {
+      cy.wrap(imgs[0]).should('not.be.visible');
+      cy.wrap(imgs[1]).should('be.visible');
+      cy.wrap(imgs[2]).should('not.be.visible');
     });
   });
 });

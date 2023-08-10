@@ -12,14 +12,37 @@
 
 declare namespace Cypress {
   interface Chainable<Subject> {
-    // login(email: string, password: string): void;
+    slideByMouse(...cords: { x: number; y: number }[]): void;
   }
 }
 
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => {
-//   console.log('Custom command example: Login', email, password);
-// });
+const GALLERY_MARGIN = 50;
+
+Cypress.Commands.add('slideByMouse', (...cords) => {
+  if (cords.length < 2) {
+    throw new Error('Too few slide coordinates');
+  }
+
+  const initialCord = cords[0];
+
+  const viewer = cy.get('viewer');
+  const body = cy.get('html');
+
+  viewer.trigger('mousedown', initialCord.x, initialCord.y);
+
+  let prevCord = initialCord;
+  for (const cord of cords.slice(1)) {
+    const x = cord.x + GALLERY_MARGIN;
+    const y = cord.y + GALLERY_MARGIN;
+
+    body.trigger('mousemove', x, y, {
+      movementX: x - prevCord.x,
+    });
+    prevCord = { x, y };
+  }
+
+  body.trigger('mouseup', prevCord.x, prevCord.y);
+});
 //
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })

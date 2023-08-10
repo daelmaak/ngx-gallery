@@ -16,7 +16,7 @@
     "bundle-stats": "nx build --project=demo --stats-json && webpack-bundle-analyzer docs/stats.json",
     "test": "nx test --project=gallery --browsers=ChromeHeadlessLocal",
     "test:ci": "nx test --project=gallery --watch=false --code-coverage --browsers=ChromeHeadless",
-    "test:cy": "nx component-test gallery --watch",
+    "test:cy": "DEBUG=cypress:* nx component-test gallery --watch",
     "test:cy:ci": "nx component-test gallery",
     "lint": "nx lint --project=gallery",
     "release-changelog": "cd libs/gallery && standard-version -i ../../CHANGELOG.md",
