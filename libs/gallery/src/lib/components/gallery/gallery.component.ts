@@ -48,7 +48,7 @@ export class GalleryComponent {
   @Input() touchGestures = true;
   @Input() counter = true;
   @Input() counterOrientation: VerticalOrientation = 'bottom';
-  @Input() itemWidth: string;
+  @Input() visibleItems = 1;
   @Input() loading: Loading = 'lazy';
   @Input() loop = false;
   @Input() objectFit: ObjectFit = 'cover';

@@ -3,7 +3,6 @@ import {
   Component,
   DebugElement,
   SimpleChange,
-  SimpleChanges,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
@@ -83,10 +82,12 @@ describe('ViewerComponent', () => {
     }));
 
     it('should preselect item based on given index', fakeAsync(() => {
+      component.visibleItems = 1;
       component.selectedIndex = 1;
       component.items = [{ src: 'src1' }, { src: 'src2' }];
       const changes = {
-        items: new SimpleChange(null, component.items, true),
+        visibleItems: new SimpleChange(undefined, component.visibleItems, true),
+        items: new SimpleChange(undefined, component.items, true),
       };
       component.ngOnChanges(changes);
       fixture.detectChanges();
@@ -94,6 +95,21 @@ describe('ViewerComponent', () => {
       tick();
 
       expect(getSlidePx().index).toBe(-1);
+    }));
+
+    it('looping should be disabled if there is just 1 item', fakeAsync(() => {
+      component.loop = true;
+      component.items = [{ src: 'src1' }];
+      component.visibleItems = 1;
+      const changes = {
+        items: new SimpleChange(null, component.items, true),
+      };
+      component.ngOnChanges(changes);
+      fixture.detectChanges();
+      tick();
+
+      expect(component.loop).toBe(false);
+      expect(component.displayedItems.length).toBe(1);
     }));
   });
 
@@ -245,8 +261,6 @@ describe('ViewerComponent', () => {
 
     describe('with looping on', () => {
       beforeEach(() => {
-        spyOn(component, 'shift' as any);
-        spyOn(component, 'center' as any);
         component.loop = true;
         fixture.detectChanges();
       });
@@ -313,12 +327,18 @@ describe('ViewerComponent', () => {
       component.mouseGestures = true;
       component.touchGestures = true;
       component.selectedIndex = 0;
+      component.visibleItems = 1;
     });
 
     describe('in loop mode with 2 (1 on each side) fringe items', () => {
       beforeEach(fakeAsync(() => {
         component.loop = true;
         component.ngOnChanges({
+          visibleItems: new SimpleChange(
+            undefined,
+            component.visibleItems,
+            true
+          ),
           items: new SimpleChange(null, component.items, true),
         });
         fixture.detectChanges();
@@ -413,9 +433,15 @@ describe('ViewerComponent', () => {
 
     describe('with looping off', () => {
       beforeEach(fakeAsync(() => {
+        component.visibleItems = 1;
         component.loop = false;
         component.ngOnChanges({
-          items: new SimpleChange(null, component.items, true),
+          visibleItems: new SimpleChange(
+            undefined,
+            component.visibleItems,
+            true
+          ),
+          items: new SimpleChange(undefined, component.items, true),
         });
         fixture.detectChanges();
         viewerDe.nativeElement.style.width = ITEM_WIDTH + 'px';
@@ -531,9 +557,15 @@ describe('ViewerComponent', () => {
 
     describe('in right to left mode', () => {
       beforeEach(fakeAsync(() => {
+        component.visibleItems = 1;
         component.loop = false;
         component.isRtl = true;
         component.ngOnChanges({
+          visibleItems: new SimpleChange(
+            undefined,
+            component.visibleItems,
+            true
+          ),
           items: new SimpleChange(null, component.items, true),
         });
         fixture.detectChanges();
@@ -587,9 +619,7 @@ describe('ViewerComponent', () => {
       };
     }
 
-    const [_, index, tweak] = transform.match(
-      /3d\(calc\((\-?\d+).*\s(\d+)px\)/
-    );
+    const [, index, tweak] = transform.match(/3d\(calc\((-?\d+).*\s(\d+)px\)/);
 
     return {
       index: +index,

@@ -8,10 +8,10 @@
 </button>
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
-  <li *ngIf="!_displayedItems?.length" class="viewer-initial-item"></li>
+  <li *ngIf="!displayedItems?.length" class="viewer-initial-item"></li>
   <li
     #itemsRef
-    *ngFor="let item of _displayedItems; let i = index"
+    *ngFor="let item of displayedItems; let i = index"
     media
     [class.viewer-item--selected]="i === selectedIndex"
     [attr.tabindex]="itemTabbable(i)"

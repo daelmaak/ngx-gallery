@@ -67,10 +67,10 @@
       stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-infinite-loop?file=src%2Fapp%2Fapp.component.html"
     >
       <gallery
-        [items]="smallerImages"
+        [items]="images"
         [loop]="true"
         loading="lazy"
-        [itemWidth]="mobile ? '75%' : '34%'"
+        [visibleItems]="mobile ? 1.5 : 3"
       ></gallery>
     </app-showcase>
 

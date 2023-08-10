@@ -11,7 +11,6 @@ import { delay, switchMap } from 'rxjs/operators';
 import {
   GalleryComponent,
   GalleryItem,
-  GalleryItemEvent,
   Loading,
   ObjectFit,
   Orientation,
@@ -26,7 +25,7 @@ interface GalleryConfig {
   touchGestures: boolean;
   counter: boolean;
   counterOrientation: VerticalOrientation;
-  itemWidth: string;
+  visibleItems: number;
   objectFit: ObjectFit;
   loading: Loading;
   loop: boolean;
@@ -62,7 +61,7 @@ export class DemoWholeConfigComponent implements OnInit {
     touchGestures: true,
     counter: true,
     counterOrientation: 'bottom',
-    itemWidth: '',
+    visibleItems: 1,
     objectFit: 'cover',
     loading: 'lazy',
     loop: false,
@@ -92,14 +91,7 @@ export class DemoWholeConfigComponent implements OnInit {
     window.addEventListener('pagehide', this.storeGalleryConfig);
   }
 
-  async onImageClick(event: GalleryItemEvent) {}
-
-  onImageLoad() {}
-
-  onConfigChange(
-    prop: keyof GalleryConfig,
-    value: GalleryConfig[keyof GalleryConfig]
-  ) {
+  onConfigChange(prop: keyof GalleryConfig, value: unknown) {
     if (value === '') {
       return;
     }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, SimpleChange } from '@angular/core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 import { ViewerComponent } from './viewer.component';
 
@@ -26,32 +26,24 @@ describe('ViewerComponent', () => {
         { src: 'src3' },
         { src: 'src4' },
       ];
-      viewer['_viewerWidth'] = 600;
     });
 
     it('should be 1 when just 1 item visible in the viewport', () => {
-      viewer['_itemWidth'] = 600;
-      const fringeCount = viewer['getFringeCount']();
-
-      expect(fringeCount).toBe(1);
-    });
-
-    it('should be 1 when 1 item is visible but is by a fraction of a pixel slimmer than the scrollport', () => {
-      viewer['_itemWidth'] = 599.5;
+      viewer.visibleItems = 1;
       const fringeCount = viewer['getFringeCount']();
 
       expect(fringeCount).toBe(1);
     });
 
     it('should be 2 when gallery item is a little slimmer than scrollport', () => {
-      viewer['_itemWidth'] = 550;
+      viewer.visibleItems = 1.2;
       const fringeCount = viewer['getFringeCount']();
 
       expect(fringeCount).toBe(2);
     });
 
     it('should be 3 when 3 items visible', () => {
-      viewer['_itemWidth'] = 200;
+      viewer.visibleItems = 3;
       const fringeCount = viewer['getFringeCount']();
 
       expect(fringeCount).toBe(3);
@@ -121,17 +113,6 @@ describe('ViewerComponent', () => {
 
         expect(viewer.itemFailedToLoad(failingItem)).toBe(true);
       });
-    });
-  });
-
-  describe('looping', () => {
-    beforeEach(() => {
-      viewer.loop = true;
-      viewer.items = [{ src: 'src1' }];
-    });
-
-    it('should disabled looping if there is just 1 item', () => {
-      expect(viewer.loop).toBe(false);
     });
   });
 });

@@ -67,7 +67,7 @@ export const NEXT_THRESHOLD_PX = 25;
   ],
 })
 export class ViewerComponent implements OnChanges, OnInit {
-  @Input() items: GalleryItemInternal[];
+  @Input() items?: GalleryItemInternal[];
   @Input() arrows: boolean;
   @Input() selectedIndex: number;
   @Input() descriptions: boolean;
@@ -85,20 +85,9 @@ export class ViewerComponent implements OnChanges, OnInit {
   @Input() contentTemplate: TemplateRef<ContentTemplateContext>;
   @Input() thumbsOrientation: OrientationFlag;
   @Input() aria: Aria;
-  @Input()
-  set loop(val: boolean) {
-    this._loop = val;
-  }
-  get loop() {
-    return this.items && this.items.length > 1 && this._loop;
-  }
+  @Input() loop: boolean;
 
-  @Input() set itemWidth(width: string) {
-    this.itemListRef.nativeElement.style.setProperty(
-      '--item-width',
-      width ?? '100%'
-    );
-  }
+  @Input() visibleItems: number;
   @Input() touched: boolean;
 
   @HostBinding('class.rtl')
@@ -112,13 +101,9 @@ export class ViewerComponent implements OnChanges, OnInit {
   @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
   @ViewChildren('itemsRef') itemsRef: QueryList<ElementRef<HTMLElement>>;
 
-  UA = UA;
-
-  _displayedItems: GalleryItemInternal[];
-  _fringeCount: number;
+  displayedItems: GalleryItemInternal[];
+  fringeCount: number;
   private _itemWidth: number;
-  private _loop: boolean;
-  private _viewerWidth: number;
   private pointerDeltaX = 0;
 
   set _noAnimation(value: boolean) {
@@ -149,8 +134,17 @@ export class ViewerComponent implements OnChanges, OnInit {
     private _zone: NgZone
   ) {}
 
-  ngOnChanges({ items }: SimpleChanges) {
-    if (items?.currentValue?.length) {
+  ngOnChanges({ visibleItems, items, loop }: SimpleChanges) {
+    if (loop || items) {
+      this.loop = this.items?.length > 1 ? this.loop : false;
+      this.fringeCount = this.getFringeCount();
+      this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
+    }
+    if (visibleItems) {
+      this.itemListRef.nativeElement.style.setProperty(
+        '--item-width',
+        `calc(100% / ${this.visibleItems})`
+      );
       this.onResize();
     }
   }
@@ -209,7 +203,7 @@ export class ViewerComponent implements OnChanges, OnInit {
   }
 
   onTab(nextItemIndex: number) {
-    nextItemIndex = nextItemIndex - this._fringeCount;
+    nextItemIndex = nextItemIndex - this.fringeCount;
     // allow focus to escape viewer
     if (nextItemIndex >= 0 && nextItemIndex < this.items.length) {
       this.select(nextItemIndex);
@@ -238,7 +232,7 @@ export class ViewerComponent implements OnChanges, OnInit {
   }
 
   itemTabbable(index: number) {
-    index = index - this._fringeCount;
+    index = index - this.fringeCount;
     return index >= 0 && index < this.items.length ? 0 : -1;
   }
 
@@ -252,19 +246,16 @@ export class ViewerComponent implements OnChanges, OnInit {
 
   private getFringeCount() {
     return this.loop
-      ? Math.min(
-          Math.ceil(this._viewerWidth / (this._itemWidth + 1)),
-          this.items.length
-        )
+      ? Math.min(Math.ceil(this.visibleItems), this.items.length)
       : 0;
   }
 
-  private getItemsToBeDisplayed() {
+  private getItemsToBeDisplayed(fringeCount: number) {
     return this.loop
       ? [
-          ...this.items.slice(-this._fringeCount),
+          ...this.items.slice(-fringeCount),
           ...this.items,
-          ...this.items.slice(0, this._fringeCount),
+          ...this.items.slice(0, fringeCount),
         ]
       : this.items;
   }
@@ -448,11 +439,8 @@ export class ViewerComponent implements OnChanges, OnInit {
   };
 
   private readDimensions() {
-    this._viewerWidth = this._hostRef.nativeElement.offsetWidth;
     this._itemWidth =
       this._hostRef.nativeElement.querySelector('li').offsetWidth;
-    this._fringeCount = this.getFringeCount();
-    this._displayedItems = this.getItemsToBeDisplayed();
   }
 
   private selectBySwipeStats(distance: number) {
@@ -464,7 +452,7 @@ export class ViewerComponent implements OnChanges, OnInit {
 
   private shift(delta = 0) {
     const multiplier = this.isRtl ? 1 : -1;
-    const index = (this.selectedIndex + this._fringeCount) * multiplier;
+    const index = (this.selectedIndex + this.fringeCount) * multiplier;
     delta *= -multiplier;
     const shift = `calc(${index} * var(--item-width) + ${delta}px)`;
 
@@ -487,9 +475,8 @@ export class ViewerComponent implements OnChanges, OnInit {
   }
 
   private updateDimensions() {
-    if (this.items && this.items.length) {
+    if (this.items?.length) {
       this.readDimensions();
-      this._cd.detectChanges();
     }
   }
 }

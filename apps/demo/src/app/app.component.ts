@@ -67,11 +67,6 @@ export class AppComponent {
     },
   ];
 
-  smallerImages = this.images.map(i => ({
-    ...i,
-    src: i.src.replace('-lg', '-md'),
-  }));
-
   extendedImages: GalleryItem[] = [
     ...this.images,
     {

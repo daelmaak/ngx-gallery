@@ -94,11 +94,11 @@
 
     <section>
       <mat-form-field>
-        <label>Item width</label>
+        <label>Number of displayed items</label>
         <input
-          name="itemWidth"
+          name="visibleItems"
           matInput
-          [(ngModel)]="galleryConfig.itemWidth"
+          [(ngModel)]="galleryConfig.visibleItems"
           (change)="reloadGallery()"
         />
       </mat-form-field>
@@ -203,7 +203,7 @@
     [touchGestures]="galleryConfig.touchGestures"
     [counter]="galleryConfig.counter"
     [counterOrientation]="galleryConfig.counterOrientation"
-    [itemWidth]="galleryConfig.itemWidth"
+    [visibleItems]="galleryConfig.visibleItems"
     [objectFit]="galleryConfig.objectFit"
     [loading]="galleryConfig.loading"
     [loop]="galleryConfig.loop"
@@ -215,7 +215,6 @@
     [thumbsArrows]="galleryConfig.thumbsArrows"
     [thumbsArrowSlideByLength]="galleryConfig.thumbsArrowSlideByLength"
     [thumbsScrollBehavior]="galleryConfig.thumbsScrollBehavior"
-    (imageClick)="onImageClick($event)"
     (descriptionClick)="galleryConfig.descriptions = false"
   ></gallery>
 </div>
@@ -234,12 +233,7 @@
   <ng-container *ngIf="item.video; then videoTemplate; else imgTemplate">
   </ng-container>
   <ng-template #imgTemplate>
-    <img
-      #img
-      class="custom-media"
-      [src]="seen ? item.src : ''"
-      (load)="onImageLoad()"
-    />
+    <img #img class="custom-media" [src]="seen ? item.src : ''" />
     <div class="custom-loading" *ngIf="seen && img.naturalHeight <= 0">
       Custom item loading ...
     </div>
@@ -250,7 +244,6 @@
       class="custom-media"
       [src]="seen ? item.src : ''"
       controls
-      (loadedmetadata)="onImageLoad()"
     ></video>
   </ng-template>
 </ng-template>
