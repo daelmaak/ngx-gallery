@@ -3,4 +3,6 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   component: nxComponentTestingPreset(__filename),
+  viewportWidth: 600,
+  viewportHeight: 700,
 });

@@ -319,8 +319,8 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
       };
 
       const onmousemove = (e: MouseEvent) => {
-        maxDeltaX = Math.max(Math.abs(mousedown.x - e.x));
-        maxDeltaY = Math.max(Math.abs(mousedown.y - e.y));
+        maxDeltaX = Math.max(Math.abs(mousedown.clientX - e.clientX));
+        maxDeltaY = Math.max(Math.abs(mousedown.clientY - e.clientY));
         this.shiftByDelta(e.movementX);
       };
 
