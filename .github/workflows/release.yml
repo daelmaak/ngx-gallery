@@ -21,7 +21,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build
-        run: yarn build
+        run: yarn build --skip-nx-cache
 
       - name: Lint
         run: yarn lint
