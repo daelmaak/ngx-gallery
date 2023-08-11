@@ -12,7 +12,7 @@
   "scripts": {
     "nx": "nx",
     "start": "nx run demo:serve --host 0.0.0.0",
-    "build": "nx build --project=gallery",
+    "build": "nx run gallery:build:production",
     "build:demo": "nx build --configuration production --project=demo --base-href /ngx-gallery/",
     "bundle-stats": "nx build --project=demo --stats-json && webpack-bundle-analyzer docs/stats.json",
     "test": "nx test --project=gallery --browsers=ChromeHeadlessLocal",
