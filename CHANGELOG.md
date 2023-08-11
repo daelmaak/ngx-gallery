@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.6](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.5...v3.0.0-RC.6) (2023-08-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* turn item width into visible item count
+
+### change
+
+* turn item width into visible item count ([80cce04](https://github.com/daelmaak/ngx-gallery/commit/80cce049ff9dd330d8741cecb20baf18fff2ac4f))
+
 ## [3.0.0-RC.5](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.4...v3.0.0-RC.5) (2023-08-06)
 
 
