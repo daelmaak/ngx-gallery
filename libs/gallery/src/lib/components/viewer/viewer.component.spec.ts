@@ -16,7 +16,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { OrientationFlag } from '../../core';
-import { GalleryItemInternal } from '../../core/gallery-item';
+import { GalleryItem, GalleryItemInternal } from '../../core/gallery-item';
 import { ViewerComponent } from './viewer.component';
 
 describe('ViewerComponent', () => {
@@ -231,7 +231,6 @@ describe('ViewerComponent', () => {
 
   describe('selection', () => {
     beforeEach(() => {
-      component.touched = true;
       component.items = generateGalleryImages(4);
       component.loading = 'lazy';
       component.selectedIndex = 2;
@@ -306,10 +305,10 @@ describe('ViewerComponent', () => {
 
       it('should stop video if the last selected item was an video element', () => {
         const videoEl = component.itemsRef
-          .toArray()[2]
+          .get(2)!
           .nativeElement.querySelector('video');
 
-        const videoPauseSpy = spyOn(videoEl, 'pause');
+        const videoPauseSpy = spyOn(videoEl!, 'pause');
 
         component.select(3);
 
@@ -322,7 +321,6 @@ describe('ViewerComponent', () => {
     const ITEM_WIDTH = 600;
 
     beforeEach(() => {
-      component.touched = true;
       component.items = generateGalleryImages(3);
       component.mouseGestures = true;
       component.touchGestures = true;
@@ -600,7 +598,7 @@ describe('ViewerComponent', () => {
   });
 
   function generateGalleryImages(quantity: number) {
-    const items = [];
+    const items: GalleryItem[] = [];
     for (let i = 1; i <= quantity; i++) {
       items.push({ src: `src${i}` });
     }
@@ -619,7 +617,7 @@ describe('ViewerComponent', () => {
       };
     }
 
-    const [, index, tweak] = transform.match(/3d\(calc\((-?\d+).*\s(\d+)px\)/);
+    const [, index, tweak] = transform.match(/3d\(calc\((-?\d+).*\s(\d+)px\)/)!;
 
     return {
       index: +index,

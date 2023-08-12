@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -80,10 +79,6 @@ export class GalleryComponent {
   @ViewChild(ThumbsComponent) _thumbsRef: ThumbsComponent;
   @ViewChild(ViewerComponent, { read: ElementRef })
   _viewerElRef: ElementRef<HTMLElement>;
-
-  _touched = false;
-  INIT_INTERACTIONS = ['touchstart', 'mousedown', 'keydown'];
-
   @HostBinding('class.gallery--column')
   get _galleryColumn() {
     return (
@@ -92,28 +87,9 @@ export class GalleryComponent {
   }
 
   get _thumbsOrientationFlag(): OrientationFlag {
-    if (
-      this.thumbsOrientation === 'top' ||
-      this.thumbsOrientation === 'bottom'
-    ) {
-      return OrientationFlag.HORIZONTAL;
-    }
-    return OrientationFlag.VERTICAL;
-  }
-
-  constructor(
-    private cd: ChangeDetectorRef,
-    private hostRef: ElementRef<HTMLElement>
-  ) {
-    this.INIT_INTERACTIONS.forEach(ename =>
-      hostRef.nativeElement.addEventListener(
-        ename,
-        this._markAsInteractedWith,
-        {
-          passive: true,
-        }
-      )
-    );
+    return this._galleryColumn
+      ? OrientationFlag.HORIZONTAL
+      : OrientationFlag.VERTICAL;
   }
 
   focus() {
@@ -150,13 +126,4 @@ export class GalleryComponent {
     this.selectedIndex = index;
     this.selection.emit(this.items[index]);
   }
-
-  private _markAsInteractedWith = () => {
-    const hostEl = this.hostRef.nativeElement;
-    this._touched = true;
-    this.cd.detectChanges();
-    this.INIT_INTERACTIONS.forEach(ename =>
-      hostEl.removeEventListener(ename, this._markAsInteractedWith)
-    );
-  };
 }

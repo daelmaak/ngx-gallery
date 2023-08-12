@@ -88,7 +88,6 @@ export class ViewerComponent implements OnChanges, OnInit {
   @Input() loop: boolean;
 
   @Input() visibleItems: number;
-  @Input() touched: boolean;
 
   @HostBinding('class.rtl')
   @Input()
