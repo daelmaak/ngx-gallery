@@ -1,6 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -66,7 +67,7 @@ export const NEXT_THRESHOLD_PX = 25;
     SafePipe,
   ],
 })
-export class ViewerComponent implements OnChanges, OnInit {
+export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   @Input() items!: GalleryItemInternal[];
   @Input() arrows: boolean;
   @Input() selectedIndex: number;
@@ -86,7 +87,6 @@ export class ViewerComponent implements OnChanges, OnInit {
   @Input() thumbsOrientation: OrientationFlag;
   @Input() aria: Aria;
   @Input() loop: boolean;
-
   @Input() visibleItems: number;
 
   @HostBinding('class.rtl')
@@ -105,10 +105,10 @@ export class ViewerComponent implements OnChanges, OnInit {
   private _itemWidth: number;
   private pointerDeltaX = 0;
 
-  set _noAnimation(value: boolean) {
+  set noAnimation(value: boolean) {
     this.itemListRef.nativeElement.style.transitionDuration = value
       ? '0ms'
-      : '';
+      : '400ms';
   }
 
   get showArrow() {
@@ -144,7 +144,7 @@ export class ViewerComponent implements OnChanges, OnInit {
         '--item-width',
         `calc(100% / ${this.visibleItems})`
       );
-      this.onResize();
+      setTimeout(() => this.updateDimensions());
     }
   }
 
@@ -160,6 +160,11 @@ export class ViewerComponent implements OnChanges, OnInit {
         this.handleTouchSlides();
       }
     }
+  }
+
+  ngAfterViewInit() {
+    this.center();
+    setTimeout(() => (this.noAnimation = false));
   }
 
   isYoutube(item: GalleryItemInternal) {
@@ -268,7 +273,7 @@ export class ViewerComponent implements OnChanges, OnInit {
 
       const onmousedown = (e: MouseEvent) => {
         mousedown = e;
-        this._noAnimation = true;
+        this.noAnimation = true;
 
         document.addEventListener(
           'mousemove',
@@ -291,7 +296,7 @@ export class ViewerComponent implements OnChanges, OnInit {
       const onmouseup = (e: MouseEvent) => {
         const distance = mousedown.x - e.x;
 
-        this._noAnimation = false;
+        this.noAnimation = false;
         this._zone.run(() => this.selectBySwipeStats(distance));
         this.pointerDeltaX = 0;
 
@@ -335,7 +340,7 @@ export class ViewerComponent implements OnChanges, OnInit {
 
       const ontouchstart = (e: TouchEvent) => {
         touchstart = e;
-        this._noAnimation = true;
+        this.noAnimation = true;
       };
 
       const ontouchmove = (e: TouchEvent) => {
@@ -367,7 +372,7 @@ export class ViewerComponent implements OnChanges, OnInit {
       };
 
       const ontouchend = () => {
-        this._noAnimation = false;
+        this.noAnimation = false;
 
         if (touchstart && lastTouchmove) {
           const distance =
@@ -403,16 +408,20 @@ export class ViewerComponent implements OnChanges, OnInit {
   }
 
   private handleResizes() {
-    window.addEventListener('resize', this.onResize, passiveEventListenerOpts);
+    window.addEventListener(
+      'resize',
+      this.updateDimensions,
+      passiveEventListenerOpts
+    );
 
     this._destroyRef.onDestroy(() => {
-      window.removeEventListener('resize', this.onResize);
+      window.removeEventListener('resize', this.updateDimensions);
     });
   }
 
   private loopTo(desiredIndex: number) {
     const deltaX = this.pointerDeltaX % this._itemWidth;
-    this._noAnimation = true;
+    this.noAnimation = true;
 
     this.selectedIndex =
       desiredIndex < 0
@@ -423,21 +432,12 @@ export class ViewerComponent implements OnChanges, OnInit {
     );
 
     setTimeout(() => {
-      this._noAnimation = false;
+      this.noAnimation = false;
       this.center();
     });
   }
 
-  private onResize = () => {
-    // the setTimeout is here to prevent layout trashing when inquiring layout properties like offsetWidth
-    // using setTimeout increases chance the trashing will be avoided and cashed layout calculation will be used
-    setTimeout(() => {
-      this.updateDimensions();
-      this.center();
-    });
-  };
-
-  private readDimensions() {
+  private updateDimensions() {
     this._itemWidth =
       this._hostRef.nativeElement.querySelector('li')!.offsetWidth;
   }
@@ -470,12 +470,6 @@ export class ViewerComponent implements OnChanges, OnInit {
 
     if (videoEl) {
       videoEl.pause();
-    }
-  }
-
-  private updateDimensions() {
-    if (this.items?.length) {
-      this.readDimensions();
     }
   }
 }
