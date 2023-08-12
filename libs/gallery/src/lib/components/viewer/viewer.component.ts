@@ -67,7 +67,7 @@ export const NEXT_THRESHOLD_PX = 25;
   ],
 })
 export class ViewerComponent implements OnChanges, OnInit {
-  @Input() items?: GalleryItemInternal[];
+  @Input() items!: GalleryItemInternal[];
   @Input() arrows: boolean;
   @Input() selectedIndex: number;
   @Input() descriptions: boolean;
@@ -330,9 +330,9 @@ export class ViewerComponent implements OnChanges, OnInit {
   private handleTouchSlides() {
     this._zone.runOutsideAngular(() => {
       const hostEl = this._hostRef.nativeElement;
-      let horizontal = null;
-      let touchstart: TouchEvent;
-      let lastTouchmove: TouchEvent;
+      let horizontal: boolean | undefined;
+      let touchstart: TouchEvent | undefined;
+      let lastTouchmove: TouchEvent | undefined;
 
       const ontouchstart = (e: TouchEvent) => {
         touchstart = e;
@@ -370,15 +370,15 @@ export class ViewerComponent implements OnChanges, OnInit {
       const ontouchend = () => {
         this._noAnimation = false;
 
-        if (lastTouchmove) {
+        if (touchstart && lastTouchmove) {
           const distance =
             touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
 
           this._zone.run(() => this.selectBySwipeStats(distance));
         }
-        horizontal = null;
-        touchstart = null;
-        lastTouchmove = null;
+        horizontal = undefined;
+        touchstart = undefined;
+        lastTouchmove = undefined;
         this.pointerDeltaX = 0;
       };
 
@@ -440,7 +440,7 @@ export class ViewerComponent implements OnChanges, OnInit {
 
   private readDimensions() {
     this._itemWidth =
-      this._hostRef.nativeElement.querySelector('li').offsetWidth;
+      this._hostRef.nativeElement.querySelector('li')!.offsetWidth;
   }
 
   private selectBySwipeStats(distance: number) {
@@ -465,9 +465,9 @@ export class ViewerComponent implements OnChanges, OnInit {
   };
 
   private stopCurrentVideo() {
-    const videoEl: HTMLMediaElement = this.itemsRef
-      .toArray()
-      [this.selectedIndex].nativeElement.querySelector('video');
+    const videoEl = this.itemsRef
+      .get(this.selectedIndex)
+      ?.nativeElement.querySelector('video');
 
     if (videoEl) {
       videoEl.pause();
