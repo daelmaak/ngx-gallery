@@ -420,16 +420,15 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   }
 
   private loopTo(desiredIndex: number) {
-    const deltaX = this.pointerDeltaX % this._itemWidth;
     this.noAnimation = true;
 
+    const shift = Math.sign(desiredIndex) * this.items.length * this._itemWidth;
+
+    this.shiftByDelta(shift);
     this.selectedIndex =
       desiredIndex < 0
         ? desiredIndex + this.items.length
         : desiredIndex - this.items.length;
-    this.shift(
-      desiredIndex < 0 ? deltaX - this._itemWidth : this._itemWidth + deltaX
-    );
 
     setTimeout(() => {
       this.noAnimation = false;
