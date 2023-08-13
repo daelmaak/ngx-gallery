@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.7](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.6...v3.0.0-RC.7) (2023-08-13)
+
+
+### Bug Fixes
+
+* prevent loop from animated scrolling ([97a8f68](https://github.com/daelmaak/ngx-gallery/commit/97a8f68bde8feb07e14c3e105d9ef2bc52b765b0))
+* prevent on init centering animation ([4d65e22](https://github.com/daelmaak/ngx-gallery/commit/4d65e226c1cc7ef290489d5b653e3250bb2aa91d))
+* swipe by pixels only on loop ([1015d84](https://github.com/daelmaak/ngx-gallery/commit/1015d845638e20c06247c960d6b35af00b6971d1))
+
 ## [3.0.0-RC.6](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.5...v3.0.0-RC.6) (2023-08-11)
 
 
