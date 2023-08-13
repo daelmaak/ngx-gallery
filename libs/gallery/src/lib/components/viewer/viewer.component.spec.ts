@@ -358,6 +358,7 @@ describe('ViewerComponent', () => {
           expect(index).toBe(-1);
           expect(tweak).toBe((ITEM_WIDTH / 3) * 2);
 
+          tick(16); // requestAnimationFrame
           flush(); // give time for centering to happen
           ({ index, tweak } = getSlidePx());
           expect(index).toBe(-1);
@@ -371,9 +372,10 @@ describe('ViewerComponent', () => {
           slideByMouse(usersShiftDistance);
 
           let { index, tweak } = getSlidePx();
-          expect(index).toBe(-2);
-          expect(tweak).toBe((ITEM_WIDTH / 3) * 2);
+          expect(index).toBe(-1);
+          expect(tweak).toBe(-ITEM_WIDTH / 3);
 
+          tick(16); // requestAnimationFrame
           flush(); // give time for centering to happen
           ({ index, tweak } = getSlidePx());
           expect(index).toBe(-2);
@@ -393,6 +395,7 @@ describe('ViewerComponent', () => {
           expect(index).toBe(-1);
           expect(tweak).toBe((ITEM_WIDTH / 3) * 2);
 
+          tick(16); // requestAnimationFrame
           flush(); // give time for centering to happen
           ({ index, tweak } = getSlidePx());
           expect(index).toBe(-1);
@@ -404,6 +407,7 @@ describe('ViewerComponent', () => {
           const usersShiftDistance = -(ITEM_WIDTH * 3);
 
           slideByTouch(usersShiftDistance);
+          tick(16); // requestAnimationFrame
           flush();
 
           const { index, tweak } = getSlidePx();
@@ -418,9 +422,10 @@ describe('ViewerComponent', () => {
           slideByTouch(usersShiftDistance);
 
           let { index, tweak } = getSlidePx();
-          expect(index).toBe(-2);
-          expect(tweak).toBe((ITEM_WIDTH / 3) * 2);
+          expect(index).toBe(-1);
+          expect(tweak).toBe(-ITEM_WIDTH / 3);
 
+          tick(16); // requestAnimationFrame
           flush(); // give time for centering to happen
           ({ index, tweak } = getSlidePx());
           expect(index).toBe(-2);
@@ -608,8 +613,6 @@ describe('ViewerComponent', () => {
   function getSlidePx() {
     const { transform } = component.itemListRef.nativeElement.style;
 
-    // console.log(transform);
-
     if (!transform) {
       return {
         index: 0,
@@ -617,7 +620,9 @@ describe('ViewerComponent', () => {
       };
     }
 
-    const [, index, tweak] = transform.match(/3d\(calc\((-?\d+).*\s(\d+)px\)/)!;
+    const [, index, tweak] = transform.match(
+      /3d\(calc\((-?\d+).*\s(-?\d+)px\)/
+    )!;
 
     return {
       index: +index,

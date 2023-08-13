@@ -430,10 +430,19 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
         ? desiredIndex + this.items.length
         : desiredIndex - this.items.length;
 
-    setTimeout(() => {
-      this.noAnimation = false;
-      this.center();
-    });
+    // NOTE: This is needed so that animation is reactivated really only after the loop shift
+    // happened. Without the requestAnimationFrame, the setTimeout is often not enough, as it
+    // can happen still before the next frame is painted, which would cause the loop shift
+    // to be animated.
+    // But, requestAnimationFrame is not enough as its callback is called BEFORE the next paint,
+    // not after. Second requestAnimationFrame would also be possible, but setTimeout is better
+    // as it's called right after the next paint happens.
+    requestAnimationFrame(() =>
+      setTimeout(() => {
+        this.noAnimation = false;
+        this.center();
+      })
+    );
   }
 
   private updateDimensions = () => {
