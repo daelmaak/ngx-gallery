@@ -13,7 +13,6 @@
     #itemsRef
     *ngFor="let item of displayedItems; let i = index"
     media
-    [class.viewer-item--selected]="i === selectedIndex"
     [attr.tabindex]="itemTabbable(i)"
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'viewer-aria-description-' + i"
