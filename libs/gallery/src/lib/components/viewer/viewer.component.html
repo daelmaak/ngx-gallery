@@ -2,6 +2,7 @@
   *ngIf="showPrevArrow"
   aria-label="Previous image"
   class="viewer-arrow viewer-arrow-prev"
+  (mousedown)="$event.stopPropagation()"
   (click)="selectByDelta(-1)"
 >
   <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>
@@ -105,6 +106,7 @@
   *ngIf="showNextArrow"
   aria-label="Next image"
   class="viewer-arrow viewer-arrow-next"
+  (mousedown)="$event.stopPropagation()"
   (click)="selectByDelta(1)"
 >
   <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>

@@ -42,8 +42,6 @@ const passiveEventListenerOpts = {
   passive: true,
 };
 
-export const NEXT_THRESHOLD_PX = 25;
-
 @Component({
   selector: 'viewer',
   templateUrl: './viewer.component.html',
@@ -103,7 +101,9 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   displayedItems: GalleryItemInternal[];
   fringeCount: number;
   private _itemWidth: number;
+  private fringeObserver?: IntersectionObserver;
   private pointerDeltaX = 0;
+  private sliding = false;
 
   set noAnimation(value: boolean) {
     this.itemListRef.nativeElement.style.transitionDuration = value
@@ -138,6 +138,10 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
       this.loop = this.items?.length > 1 ? this.loop : false;
       this.fringeCount = this.getFringeCount();
       this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
+
+      if (this.loop) {
+        setTimeout(() => this.observeFringes());
+      }
     }
     if (visibleItems) {
       this.itemListRef.nativeElement.style.setProperty(
@@ -159,6 +163,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
       if (this.touchGestures) {
         this.handleTouchSlides();
       }
+      this._destroyRef.onDestroy(() => this.fringeObserver?.disconnect());
     }
   }
 
@@ -273,7 +278,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
 
       const onmousedown = (e: MouseEvent) => {
         mousedown = e;
-        this.noAnimation = true;
+        this.noAnimation = this.sliding = true;
 
         document.addEventListener(
           'mousemove',
@@ -293,11 +298,9 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
         this.shiftByDelta(e.movementX);
       };
 
-      const onmouseup = (e: MouseEvent) => {
-        const distance = mousedown.x - e.x;
-
-        this.noAnimation = false;
-        this._zone.run(() => this.selectBySwipeStats(distance));
+      const onmouseup = () => {
+        this.noAnimation = this.sliding = false;
+        this._zone.run(() => this.selectBySwipeStats(this.pointerDeltaX));
         this.pointerDeltaX = 0;
 
         document.removeEventListener('mousemove', onmousemove);
@@ -340,7 +343,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
 
       const ontouchstart = (e: TouchEvent) => {
         touchstart = e;
-        this.noAnimation = true;
+        this.noAnimation = this.sliding = true;
       };
 
       const ontouchmove = (e: TouchEvent) => {
@@ -372,18 +375,13 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
       };
 
       const ontouchend = () => {
-        this.noAnimation = false;
+        this.noAnimation = this.sliding = false;
+        this._zone.run(() => this.selectBySwipeStats(this.pointerDeltaX));
+        this.pointerDeltaX = 0;
 
-        if (touchstart && lastTouchmove) {
-          const distance =
-            touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
-
-          this._zone.run(() => this.selectBySwipeStats(distance));
-        }
         horizontal = undefined;
         touchstart = undefined;
         lastTouchmove = undefined;
-        this.pointerDeltaX = 0;
       };
 
       hostEl.addEventListener(
@@ -439,11 +437,45 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
     // as it's called right after the next paint happens.
     requestAnimationFrame(() =>
       setTimeout(() => {
+        this.pointerDeltaX = 0;
         this.noAnimation = false;
         this.center();
       })
     );
   }
+
+  private observeFringes() {
+    if (!isBrowser) {
+      return;
+    }
+    this.fringeObserver?.disconnect();
+
+    const observer = new IntersectionObserver(this.repositionOnFringe, {
+      root: this._hostRef.nativeElement,
+      threshold: 1.0,
+    });
+    observer.observe(this.itemsRef.first.nativeElement);
+    observer.observe(this.itemsRef.last.nativeElement);
+
+    this.fringeObserver = observer;
+  }
+
+  private repositionOnFringe: IntersectionObserverCallback = entries => {
+    if (!this.loop || !this.sliding) {
+      return;
+    }
+    const { first } = this.itemsRef;
+    const visibleEntries = entries.filter(e => e.isIntersecting);
+
+    if (visibleEntries.length === 0) {
+      return;
+    }
+
+    const beginningVisible = entries[0].target === first.nativeElement;
+
+    this.pointerDeltaX +=
+      (beginningVisible ? -1 : 1) * this.items.length * this._itemWidth;
+  };
 
   private updateDimensions = () => {
     this._itemWidth =
@@ -451,10 +483,19 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   };
 
   private selectBySwipeStats(distance: number) {
-    const indexDelta = Math.ceil(
-      (Math.abs(distance) - NEXT_THRESHOLD_PX) / this._itemWidth
-    );
-    this.selectByDelta(indexDelta * Math.sign(distance));
+    // I use round instead of previous ceil here because the ceil was pretty one-sided in where the
+    // index delta would move. This was apparent in looping mode, where items that were clearly to be
+    // scrolled to were actually hidden in favor of items that were barely visible, but selected thanks
+    // to Math.ceil.
+    // Now I use magical constant 2.25 to make sure a tiny swipe slides to next items, but there is still
+    // a tiny threshold to make sure the slide doesn't always happen.
+    const indexDelta =
+      Math.round(
+        (Math.abs(distance) + this._itemWidth / 2.25) / this._itemWidth
+      ) * -Math.sign(distance);
+    const newIndex = this.selectedIndex + indexDelta;
+
+    this.select(newIndex);
   }
 
   private shift(delta = 0) {
