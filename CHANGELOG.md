@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.8](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.7...v3.0.0-RC.8) (2023-08-27)
+
+
+### Features
+
+* improve infinte loop ([0bd6c4c](https://github.com/daelmaak/ngx-gallery/commit/0bd6c4ca0096841fba55637950ff1c7c0a77dd42))
+
 ## [3.0.0-RC.7](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.6...v3.0.0-RC.7) (2023-08-13)
 
 
