@@ -2027,7 +2027,6 @@ ThumbsComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_2__[
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   NEXT_THRESHOLD_PX: () => (/* binding */ NEXT_THRESHOLD_PX),
 /* harmony export */   ViewerComponent: () => (/* binding */ ViewerComponent)
 /* harmony export */ });
 /* harmony import */ var _angular_animations__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/animations */ 2501);
@@ -2057,12 +2056,14 @@ function ViewerComponent_button_0_chevron_icon_1_Template(rf, ctx) {
 }
 function ViewerComponent_button_0_Template(rf, ctx) {
   if (rf & 1) {
-    const _r11 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
+    const _r12 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "button", 9);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function ViewerComponent_button_0_Template_button_click_0_listener() {
-      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r11);
-      const ctx_r10 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r10.selectByDelta(-1));
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("mousedown", function ViewerComponent_button_0_Template_button_mousedown_0_listener($event) {
+      return $event.stopPropagation();
+    })("click", function ViewerComponent_button_0_Template_button_click_0_listener() {
+      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r12);
+      const ctx_r11 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
+      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r11.selectByDelta(-1));
     });
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](1, ViewerComponent_button_0_chevron_icon_1_Template, 1, 0, "chevron-icon", 10);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
@@ -2083,9 +2084,9 @@ function ViewerComponent_li_4_ng_container_2_picture_1_source_1_Template(rf, ctx
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](0, "source", 20);
   }
   if (rf & 2) {
-    const source_r24 = ctx.$implicit;
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("srcset", source_r24.srcset);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("media", source_r24.media)("sizes", source_r24.sizes)("type", source_r24.type);
+    const source_r25 = ctx.$implicit;
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("srcset", source_r25.srcset);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("media", source_r25.media)("sizes", source_r25.sizes)("type", source_r25.type);
   }
 }
 function ViewerComponent_li_4_ng_container_2_picture_1_Template(rf, ctx) {
@@ -2096,16 +2097,16 @@ function ViewerComponent_li_4_ng_container_2_picture_1_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
   }
   if (rf & 2) {
-    const item_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2).$implicit;
-    const ctx_r20 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
+    const item_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2).$implicit;
+    const ctx_r21 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("@mediaAnimate", undefined);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngForOf", item_r12.pictureSources);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngForOf", item_r13.pictureSources);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵstyleProp"]("object-fit", ctx_r20.objectFit);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵclassProp"]("viewer-media-loading", !ctx_r20.itemLoaded(item_r12));
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("src", item_r12.src, _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeUrl"])("alt", item_r12.alt);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("loading", ctx_r20.loading);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵstyleProp"]("object-fit", ctx_r21.objectFit);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵclassProp"]("viewer-media-loading", !ctx_r21.itemLoaded(item_r13));
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("src", item_r13.src, _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeUrl"])("alt", item_r13.alt);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("loading", ctx_r21.loading);
   }
 }
 function ViewerComponent_li_4_ng_container_2_video_2_Template(rf, ctx) {
@@ -2113,12 +2114,12 @@ function ViewerComponent_li_4_ng_container_2_video_2_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](0, "video", 21);
   }
   if (rf & 2) {
-    const item_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2).$implicit;
-    const ctx_r21 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵstyleProp"]("object-fit", ctx_r21.objectFit);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵclassProp"]("viewer-media-loading", !ctx_r21.itemLoaded(item_r12));
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("@mediaAnimate", undefined)("src", item_r12.src, _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeUrl"])("poster", item_r12.thumbSrc || "", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeUrl"]);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("preload", ctx_r21.loading === "lazy" ? "metadata" : "auto");
+    const item_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2).$implicit;
+    const ctx_r22 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵstyleProp"]("object-fit", ctx_r22.objectFit);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵclassProp"]("viewer-media-loading", !ctx_r22.itemLoaded(item_r13));
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("@mediaAnimate", undefined)("src", item_r13.src, _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeUrl"])("poster", item_r13.thumbSrc || "", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeUrl"]);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("preload", ctx_r22.loading === "lazy" ? "metadata" : "auto");
   }
 }
 function ViewerComponent_li_4_ng_container_2_iframe_3_Template(rf, ctx) {
@@ -2127,10 +2128,10 @@ function ViewerComponent_li_4_ng_container_2_iframe_3_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpipe"](1, "safe");
   }
   if (rf & 2) {
-    const item_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2).$implicit;
-    const ctx_r22 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("@mediaAnimate", undefined)("src", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpipeBind1"](1, 3, item_r12.src), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeResourceUrl"]);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("loading", ctx_r22.loading);
+    const item_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2).$implicit;
+    const ctx_r23 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("@mediaAnimate", undefined)("src", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpipeBind1"](1, 3, item_r13.src), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeResourceUrl"]);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("loading", ctx_r23.loading);
   }
 }
 function ViewerComponent_li_4_ng_container_2_Template(rf, ctx) {
@@ -2142,14 +2143,14 @@ function ViewerComponent_li_4_ng_container_2_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementContainerEnd"]();
   }
   if (rf & 2) {
-    const item_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]().$implicit;
-    const ctx_r15 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
+    const item_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]().$implicit;
+    const ctx_r16 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", !item_r12.video);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", !item_r13.video);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", !ctx_r15.isYoutube(item_r12) && item_r12.video);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", !ctx_r16.isYoutube(item_r13) && item_r13.video);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", ctx_r15.isYoutube(item_r12));
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", ctx_r16.isYoutube(item_r13));
   }
 }
 function ViewerComponent_li_4_ng_container_3_ng_container_1_Template(rf, ctx) {
@@ -2164,9 +2165,9 @@ function ViewerComponent_li_4_ng_container_3_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementContainerEnd"]();
   }
   if (rf & 2) {
-    const ctx_r16 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2);
+    const ctx_r17 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngTemplateOutlet", ctx_r16.loadingTemplate);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngTemplateOutlet", ctx_r17.loadingTemplate);
   }
 }
 function ViewerComponent_li_4_ng_container_4_div_1_Template(rf, ctx) {
@@ -2179,9 +2180,9 @@ function ViewerComponent_li_4_ng_container_4_div_1_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]()();
   }
   if (rf & 2) {
-    const ctx_r30 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](3);
+    const ctx_r31 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](3);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](4);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtextInterpolate1"](" ", ctx_r30.errorText || "Loading of this media failed", " ");
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtextInterpolate1"](" ", ctx_r31.errorText || "Loading of this media failed", " ");
   }
 }
 function ViewerComponent_li_4_ng_container_4_Template(rf, ctx) {
@@ -2191,9 +2192,9 @@ function ViewerComponent_li_4_ng_container_4_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementContainerEnd"]();
   }
   if (rf & 2) {
-    const ctx_r17 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2);
+    const ctx_r18 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", !ctx_r17.errorTemplate)("ngIfElse", ctx_r17.errorTemplate);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", !ctx_r18.errorTemplate)("ngIfElse", ctx_r18.errorTemplate);
   }
 }
 function ViewerComponent_li_4_ng_template_6_ng_container_0_Template(rf, ctx) {
@@ -2214,40 +2215,40 @@ function ViewerComponent_li_4_ng_template_6_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](0, ViewerComponent_li_4_ng_template_6_ng_container_0_Template, 1, 0, "ng-container", 7);
   }
   if (rf & 2) {
-    const item_r12 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]().$implicit;
-    const ctx_r19 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngTemplateOutlet", ctx_r19.itemTemplate)("ngTemplateOutletContext", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction4"](2, _c2, ctx_r19.items == null ? null : ctx_r19.items.indexOf(item_r12), ctx_r19.selectedIndex, item_r12, item_r12.video));
+    const item_r13 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]().$implicit;
+    const ctx_r20 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngTemplateOutlet", ctx_r20.itemTemplate)("ngTemplateOutletContext", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction4"](2, _c2, ctx_r20.items == null ? null : ctx_r20.items.indexOf(item_r13), ctx_r20.selectedIndex, item_r13, item_r13.video));
   }
 }
 function ViewerComponent_li_4_Template(rf, ctx) {
   if (rf & 1) {
-    const _r34 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
+    const _r35 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "li", 12, 13);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function ViewerComponent_li_4_Template_li_click_0_listener($event) {
-      const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r34);
-      const item_r12 = restoredCtx.$implicit;
-      const ctx_r33 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r33.onImageClick(item_r12, $event));
+      const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r35);
+      const item_r13 = restoredCtx.$implicit;
+      const ctx_r34 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
+      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r34.onImageClick(item_r13, $event));
     })("mediaLoad", function ViewerComponent_li_4_Template_li_mediaLoad_0_listener() {
-      const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r34);
-      const item_r12 = restoredCtx.$implicit;
-      const ctx_r35 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r35.onItemLoaded(item_r12));
-    })("mediaLoadError", function ViewerComponent_li_4_Template_li_mediaLoadError_0_listener() {
-      const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r34);
-      const item_r12 = restoredCtx.$implicit;
+      const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r35);
+      const item_r13 = restoredCtx.$implicit;
       const ctx_r36 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r36.onItemErrored(item_r12));
-    })("keydown.Tab", function ViewerComponent_li_4_Template_li_keydown_Tab_0_listener() {
-      const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r34);
-      const i_r13 = restoredCtx.index;
+      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r36.onItemLoaded(item_r13));
+    })("mediaLoadError", function ViewerComponent_li_4_Template_li_mediaLoadError_0_listener() {
+      const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r35);
+      const item_r13 = restoredCtx.$implicit;
       const ctx_r37 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r37.onTab(i_r13 + 1));
-    })("keydown.shift.Tab", function ViewerComponent_li_4_Template_li_keydown_shift_Tab_0_listener() {
-      const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r34);
-      const i_r13 = restoredCtx.index;
+      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r37.onItemErrored(item_r13));
+    })("keydown.Tab", function ViewerComponent_li_4_Template_li_keydown_Tab_0_listener() {
+      const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r35);
+      const i_r14 = restoredCtx.index;
       const ctx_r38 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r38.onTab(i_r13 - 1));
+      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r38.onTab(i_r14 + 1));
+    })("keydown.shift.Tab", function ViewerComponent_li_4_Template_li_keydown_shift_Tab_0_listener() {
+      const restoredCtx = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r35);
+      const i_r14 = restoredCtx.index;
+      const ctx_r39 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
+      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r39.onTab(i_r14 - 1));
     });
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](2, ViewerComponent_li_4_ng_container_2_Template, 4, 3, "ng-container", 10);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](3, ViewerComponent_li_4_ng_container_3_Template, 2, 1, "ng-container", 4);
@@ -2257,19 +2258,19 @@ function ViewerComponent_li_4_Template(rf, ctx) {
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
   }
   if (rf & 2) {
-    const item_r12 = ctx.$implicit;
-    const i_r13 = ctx.index;
-    const _r18 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵreference"](7);
+    const item_r13 = ctx.$implicit;
+    const i_r14 = ctx.index;
+    const _r19 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵreference"](7);
     const ctx_r3 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("tabindex", ctx_r3.itemTabbable(i_r13))("aria-label", item_r12.alt)("aria-describedby", "viewer-aria-description-" + i_r13);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("tabindex", ctx_r3.itemTabbable(i_r14))("aria-label", item_r13.alt)("aria-describedby", "viewer-aria-description-" + i_r14);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](2);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", !ctx_r3.itemTemplate)("ngIfElse", _r18);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", !ctx_r3.itemTemplate)("ngIfElse", _r19);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", !ctx_r3.itemLoaded(item_r12) && !ctx_r3.itemFailedToLoad(item_r12));
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", !ctx_r3.itemLoaded(item_r13) && !ctx_r3.itemFailedToLoad(item_r13));
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", ctx_r3.itemFailedToLoad(item_r12));
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", ctx_r3.itemFailedToLoad(item_r13));
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("id", "viewer-aria-description-" + i_r13)("innerHTML", item_r12.description, _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeHtml"]);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("id", "viewer-aria-description-" + i_r14)("innerHTML", item_r13.description, _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeHtml"]);
   }
 }
 function ViewerComponent_ng_container_5_ng_container_1_Template(rf, ctx) {
@@ -2296,12 +2297,14 @@ function ViewerComponent_button_6_chevron_icon_1_Template(rf, ctx) {
 }
 function ViewerComponent_button_6_Template(rf, ctx) {
   if (rf & 1) {
-    const _r42 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
+    const _r44 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "button", 28);
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function ViewerComponent_button_6_Template_button_click_0_listener() {
-      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r42);
-      const ctx_r41 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r41.selectByDelta(1));
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("mousedown", function ViewerComponent_button_6_Template_button_mousedown_0_listener($event) {
+      return $event.stopPropagation();
+    })("click", function ViewerComponent_button_6_Template_button_click_0_listener() {
+      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r44);
+      const ctx_r43 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
+      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r43.selectByDelta(1));
     });
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](1, ViewerComponent_button_6_chevron_icon_1_Template, 1, 0, "chevron-icon", 10);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
@@ -2328,18 +2331,18 @@ function ViewerComponent_ng_container_8_Template(rf, ctx) {
 }
 function ViewerComponent_div_9_div_1_Template(rf, ctx) {
   if (rf & 1) {
-    const _r46 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
+    const _r48 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div", 32);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function ViewerComponent_div_9_div_1_Template_div_click_0_listener($event) {
-      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r46);
-      const ctx_r45 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2);
-      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r45.descriptionClick.emit($event));
+      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵrestoreView"](_r48);
+      const ctx_r47 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"](2);
+      return _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵresetView"](ctx_r47.descriptionClick.emit($event));
     });
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
   }
   if (rf & 2) {
-    const description_r44 = ctx.ngIf;
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("innerHTML", description_r44, _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeHtml"]);
+    const description_r46 = ctx.ngIf;
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("innerHTML", description_r46, _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsanitizeHtml"]);
   }
 }
 function ViewerComponent_div_9_Template(rf, ctx) {
@@ -2363,7 +2366,6 @@ const _c3 = function (a0) {
 const passiveEventListenerOpts = {
   passive: true
 };
-const NEXT_THRESHOLD_PX = 25;
 class ViewerComponent {
   set noAnimation(value) {
     this.itemListRef.nativeElement.style.transitionDuration = value ? '0ms' : '400ms';
@@ -2386,6 +2388,21 @@ class ViewerComponent {
     this.descriptionClick = new _angular_core__WEBPACK_IMPORTED_MODULE_5__.EventEmitter();
     this.selection = new _angular_core__WEBPACK_IMPORTED_MODULE_5__.EventEmitter();
     this.pointerDeltaX = 0;
+    this.sliding = false;
+    this.repositionOnFringe = entries => {
+      if (!this.loop || !this.sliding) {
+        return;
+      }
+      const {
+        first
+      } = this.itemsRef;
+      const visibleEntries = entries.filter(e => e.isIntersecting);
+      if (visibleEntries.length === 0) {
+        return;
+      }
+      const beginningVisible = entries[0].target === first.nativeElement;
+      this.pointerDeltaX += (beginningVisible ? -1 : 1) * this.items.length * this._itemWidth;
+    };
     this.updateDimensions = () => {
       this._itemWidth = this._hostRef.nativeElement.querySelector('li').offsetWidth;
     };
@@ -2403,6 +2420,9 @@ class ViewerComponent {
       this.loop = this.items?.length > 1 ? this.loop : false;
       this.fringeCount = this.getFringeCount();
       this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
+      if (this.loop) {
+        setTimeout(() => this.observeFringes());
+      }
     }
     if (visibleItems) {
       this.itemListRef.nativeElement.style.setProperty('--item-width', `calc(100% / ${this.visibleItems})`);
@@ -2418,6 +2438,7 @@ class ViewerComponent {
       if (this.touchGestures) {
         this.handleTouchSlides();
       }
+      this._destroyRef.onDestroy(() => this.fringeObserver?.disconnect());
     }
   }
   ngAfterViewInit() {
@@ -2503,7 +2524,7 @@ class ViewerComponent {
       let maxDeltaY = 0;
       const onmousedown = e => {
         mousedown = e;
-        this.noAnimation = true;
+        this.noAnimation = this.sliding = true;
         document.addEventListener('mousemove', onmousemove, passiveEventListenerOpts);
         document.addEventListener('mouseup', onmouseup, passiveEventListenerOpts);
       };
@@ -2512,10 +2533,9 @@ class ViewerComponent {
         maxDeltaY = Math.max(Math.abs(mousedown.y - e.y));
         this.shiftByDelta(e.movementX);
       };
-      const onmouseup = e => {
-        const distance = mousedown.x - e.x;
-        this.noAnimation = false;
-        this._zone.run(() => this.selectBySwipeStats(distance));
+      const onmouseup = () => {
+        this.noAnimation = this.sliding = false;
+        this._zone.run(() => this.selectBySwipeStats(this.pointerDeltaX));
         this.pointerDeltaX = 0;
         document.removeEventListener('mousemove', onmousemove);
         document.removeEventListener('mouseup', onmouseup);
@@ -2549,7 +2569,7 @@ class ViewerComponent {
       let lastTouchmove;
       const ontouchstart = e => {
         touchstart = e;
-        this.noAnimation = true;
+        this.noAnimation = this.sliding = true;
       };
       const ontouchmove = e => {
         if (!touchstart || e.touches.length !== 1) {
@@ -2574,15 +2594,12 @@ class ViewerComponent {
         }
       };
       const ontouchend = () => {
-        this.noAnimation = false;
-        if (touchstart && lastTouchmove) {
-          const distance = touchstart.touches[0].clientX - lastTouchmove.touches[0].clientX;
-          this._zone.run(() => this.selectBySwipeStats(distance));
-        }
+        this.noAnimation = this.sliding = false;
+        this._zone.run(() => this.selectBySwipeStats(this.pointerDeltaX));
+        this.pointerDeltaX = 0;
         horizontal = undefined;
         touchstart = undefined;
         lastTouchmove = undefined;
-        this.pointerDeltaX = 0;
       };
       hostEl.addEventListener('touchstart', ontouchstart, passiveEventListenerOpts);
       document.addEventListener('touchmove', ontouchmove, {
@@ -2615,13 +2632,34 @@ class ViewerComponent {
     // not after. Second requestAnimationFrame would also be possible, but setTimeout is better
     // as it's called right after the next paint happens.
     requestAnimationFrame(() => setTimeout(() => {
+      this.pointerDeltaX = 0;
       this.noAnimation = false;
       this.center();
     }));
   }
+  observeFringes() {
+    if (!_core__WEBPACK_IMPORTED_MODULE_0__.isBrowser) {
+      return;
+    }
+    this.fringeObserver?.disconnect();
+    const observer = new IntersectionObserver(this.repositionOnFringe, {
+      root: this._hostRef.nativeElement,
+      threshold: 1.0
+    });
+    observer.observe(this.itemsRef.first.nativeElement);
+    observer.observe(this.itemsRef.last.nativeElement);
+    this.fringeObserver = observer;
+  }
   selectBySwipeStats(distance) {
-    const indexDelta = Math.ceil((Math.abs(distance) - NEXT_THRESHOLD_PX) / this._itemWidth);
-    this.selectByDelta(indexDelta * Math.sign(distance));
+    // I use round instead of previous ceil here because the ceil was pretty one-sided in where the
+    // index delta would move. This was apparent in looping mode, where items that were clearly to be
+    // scrolled to were actually hidden in favor of items that were barely visible, but selected thanks
+    // to Math.ceil.
+    // Now I use magical constant 2.25 to make sure a tiny swipe slides to next items, but there is still
+    // a tiny threshold to make sure the slide doesn't always happen.
+    const indexDelta = Math.round((Math.abs(distance) + this._itemWidth / 2.25) / this._itemWidth) * -Math.sign(distance);
+    const newIndex = this.selectedIndex + indexDelta;
+    this.select(newIndex);
   }
   shift(delta = 0) {
     const multiplier = this.isRtl ? 1 : -1;
@@ -2692,7 +2730,7 @@ ViewerComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__[
   features: [_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵNgOnChangesFeature"], _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵStandaloneFeature"]],
   decls: 10,
   vars: 12,
-  consts: [["aria-label", "Previous image", "class", "viewer-arrow viewer-arrow-prev", 3, "click", 4, "ngIf"], ["itemList", ""], ["class", "viewer-initial-item", 4, "ngIf"], ["media", "", 3, "click", "mediaLoad", "mediaLoadError", "keydown.Tab", "keydown.shift.Tab", 4, "ngFor", "ngForOf"], [4, "ngIf"], ["aria-label", "Next image", "class", "viewer-arrow viewer-arrow-next", 3, "click", 4, "ngIf"], [3, "itemQuantity", "selectedIndex", "orientation", 4, "ngIf"], [4, "ngTemplateOutlet", "ngTemplateOutletContext"], ["class", "viewer-description", "aria-hidden", "true", 3, "viewer-description--above-counter", 4, "ngIf"], ["aria-label", "Previous image", 1, "viewer-arrow", "viewer-arrow-prev", 3, "click"], [4, "ngIf", "ngIfElse"], [1, "viewer-initial-item"], ["media", "", 3, "click", "mediaLoad", "mediaLoadError", "keydown.Tab", "keydown.shift.Tab"], ["itemsRef", ""], [1, "sr-only", 3, "id", "innerHTML"], ["customTemplate", ""], ["controls", "", "playsinline", "", 3, "src", "poster", "viewer-media-loading", "objectFit", 4, "ngIf"], ["allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", "allowfullscreen", "", 3, "src", 4, "ngIf"], [3, "srcset", 4, "ngFor", "ngForOf"], [3, "src", "alt"], [3, "srcset"], ["controls", "", "playsinline", "", 3, "src", "poster"], ["allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", "allowfullscreen", "", 3, "src"], [4, "ngTemplateOutlet"], ["class", "viewer-error", 4, "ngIf", "ngIfElse"], [1, "viewer-error"], [1, "viewer-error-icon"], [1, "viewer-error-text"], ["aria-label", "Next image", 1, "viewer-arrow", "viewer-arrow-next", 3, "click"], [3, "itemQuantity", "selectedIndex", "orientation"], ["aria-hidden", "true", 1, "viewer-description"], ["class", "viewer-description-inner", 3, "innerHTML", "click", 4, "ngIf"], [1, "viewer-description-inner", 3, "innerHTML", "click"]],
+  consts: [["aria-label", "Previous image", "class", "viewer-arrow viewer-arrow-prev", 3, "mousedown", "click", 4, "ngIf"], ["itemList", ""], ["class", "viewer-initial-item", 4, "ngIf"], ["media", "", 3, "click", "mediaLoad", "mediaLoadError", "keydown.Tab", "keydown.shift.Tab", 4, "ngFor", "ngForOf"], [4, "ngIf"], ["aria-label", "Next image", "class", "viewer-arrow viewer-arrow-next", 3, "mousedown", "click", 4, "ngIf"], [3, "itemQuantity", "selectedIndex", "orientation", 4, "ngIf"], [4, "ngTemplateOutlet", "ngTemplateOutletContext"], ["class", "viewer-description", "aria-hidden", "true", 3, "viewer-description--above-counter", 4, "ngIf"], ["aria-label", "Previous image", 1, "viewer-arrow", "viewer-arrow-prev", 3, "mousedown", "click"], [4, "ngIf", "ngIfElse"], [1, "viewer-initial-item"], ["media", "", 3, "click", "mediaLoad", "mediaLoadError", "keydown.Tab", "keydown.shift.Tab"], ["itemsRef", ""], [1, "sr-only", 3, "id", "innerHTML"], ["customTemplate", ""], ["controls", "", "playsinline", "", 3, "src", "poster", "viewer-media-loading", "objectFit", 4, "ngIf"], ["allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", "allowfullscreen", "", 3, "src", 4, "ngIf"], [3, "srcset", 4, "ngFor", "ngForOf"], [3, "src", "alt"], [3, "srcset"], ["controls", "", "playsinline", "", 3, "src", "poster"], ["allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", "allowfullscreen", "", 3, "src"], [4, "ngTemplateOutlet"], ["class", "viewer-error", 4, "ngIf", "ngIfElse"], [1, "viewer-error"], [1, "viewer-error-icon"], [1, "viewer-error-text"], ["aria-label", "Next image", 1, "viewer-arrow", "viewer-arrow-next", 3, "mousedown", "click"], [3, "itemQuantity", "selectedIndex", "orientation"], ["aria-hidden", "true", 1, "viewer-description"], ["class", "viewer-description-inner", 3, "innerHTML", "click", 4, "ngIf"], [1, "viewer-description-inner", 3, "innerHTML", "click"]],
   template: function ViewerComponent_Template(rf, ctx) {
     if (rf & 1) {
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](0, ViewerComponent_button_0_Template, 2, 2, "button", 0);
