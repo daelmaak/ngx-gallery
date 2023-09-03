@@ -86,6 +86,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   @Input() aria: Aria;
   @Input() loop: boolean;
   @Input() visibleItems: number;
+  @Input() moveByItems: number;
 
   @HostBinding('class.rtl')
   @Input()
@@ -109,6 +110,10 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
     this.itemListRef.nativeElement.style.transitionDuration = value
       ? '0ms'
       : '400ms';
+  }
+
+  get counterIndex() {
+    return Math.floor(this.selectedIndex / this.moveByItems);
   }
 
   get showArrow() {

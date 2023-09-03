@@ -48,6 +48,7 @@ export class GalleryComponent {
   @Input() counter = true;
   @Input() counterOrientation: VerticalOrientation = 'bottom';
   @Input() visibleItems = 1;
+  @Input() moveByItems = 1;
   @Input() loading: Loading = 'lazy';
   @Input() loop = false;
   @Input() objectFit: ObjectFit = 'cover';

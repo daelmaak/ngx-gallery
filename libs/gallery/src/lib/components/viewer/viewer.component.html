@@ -3,7 +3,7 @@
   aria-label="Previous image"
   class="viewer-arrow viewer-arrow-prev"
   (mousedown)="$event.stopPropagation()"
-  (click)="selectByDelta(-1)"
+  (click)="selectByDelta(-moveByItems)"
 >
   <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>
 </button>
@@ -107,7 +107,7 @@
   aria-label="Next image"
   class="viewer-arrow viewer-arrow-next"
   (mousedown)="$event.stopPropagation()"
-  (click)="selectByDelta(1)"
+  (click)="selectByDelta(moveByItems)"
 >
   <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>
 </button>
@@ -115,7 +115,7 @@
 <counter
   *ngIf="counter && items?.length"
   [itemQuantity]="items?.length"
-  [selectedIndex]="selectedIndex"
+  [selectedIndex]="counterIndex"
   [orientation]="counterOrientation"
 ></counter>
 
