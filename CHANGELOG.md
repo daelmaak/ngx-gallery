@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.9](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.8...v3.0.0-RC.9) (2023-09-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* rename imageClick to itemClick
+
+### Features
+
+* add clip option ([5ff8a5e](https://github.com/daelmaak/ngx-gallery/commit/5ff8a5eb6448d3393995f6326b342d3d53010afd))
+* **demo:** create a carousel example ([1433d0f](https://github.com/daelmaak/ngx-gallery/commit/1433d0f76cf12544aa309bac49fb27bb1b5a7ff0))
+* support navigation by multiple items WIP ([9ff0fae](https://github.com/daelmaak/ngx-gallery/commit/9ff0faefdf23a6d09bdaade5a0643545fdac497e))
+
+
+### change
+
+* rename imageClick to itemClick ([8aa1545](https://github.com/daelmaak/ngx-gallery/commit/8aa154506c2be8075670570c83fa889ca32d1144))
+
 ## [3.0.0-RC.8](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.7...v3.0.0-RC.8) (2023-08-27)
 
 
