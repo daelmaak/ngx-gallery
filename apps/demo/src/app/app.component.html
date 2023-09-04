@@ -5,14 +5,14 @@
   <div class="menu-heading"><a href="#demos">Demos</a></div>
   <ul>
     <li><a href="#demo-responsive">Responsive</a></li>
-    <li><a href="#demo-infinite-loop-multiple">Infinite loop</a></li>
+    <li>
+      <a href="#demo-custom">Custom templates</a>
+    </li>
     <li><a href="#demo-rtl">Right to left</a></li>
     <li><a href="#demo-descriptions">Descriptions</a></li>
     <li><a href="#demo-error-handling">Error handling</a></li>
     <li><a href="#demo-videos">Videos</a></li>
-    <li>
-      <a href="#demo-custom">Custom templates</a>
-    </li>
+
     <li><a href="#demo-full-config">Full configuration</a></li>
   </ul>
 
@@ -60,17 +60,20 @@
     </app-showcase>
 
     <app-showcase
-      id="demo-infinite-loop-multiple"
-      heading="Infinite loop"
-      stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-infinite-loop?file=src%2Fapp%2Fapp.component.html"
+      id="demo-custom"
+      heading="Custom templates"
+      stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-custom-templates?file=src%2Fapp%2Fapp.component.html"
     >
-      <gallery
-        [items]="images"
-        [loop]="true"
-        loading="lazy"
-        [visibleItems]="mobile ? 1.5 : 3"
-        [moveByItems]="mobile ? 1.5 : 3"
-      ></gallery>
+      <div subheading>
+        You can also use your custom templates for items, loading screen,
+        loading errors, thumbnails and more. Find out how in the
+        <a
+          href="https://github.com/daelmaak/ngx-gallery/wiki/Gallery-API"
+          target="_blank"
+          >documentation.</a
+        >
+      </div>
+      <app-demo-custom-templates [mobile]="mobile"></app-demo-custom-templates>
     </app-showcase>
 
     <app-showcase id="demo-rtl" heading="Right to left">
@@ -100,23 +103,6 @@
       subheading="both YouTube and native videos"
     >
       <gallery [items]="videos" loading="lazy"></gallery>
-    </app-showcase>
-
-    <app-showcase
-      id="demo-custom"
-      heading="Custom templates"
-      stackblitz="https://stackblitz.com/edit/ngx-gallery-demo-custom-templates?file=src%2Fapp%2Fapp.component.html"
-    >
-      <div subheading>
-        You can also use your custom templates for items, loading screen,
-        loading errors, thumbnails and more. Find out how in the
-        <a
-          href="https://github.com/daelmaak/ngx-gallery/wiki/Gallery-API"
-          target="_blank"
-          >documentation.</a
-        >
-      </div>
-      <app-demo-custom-templates [mobile]="mobile"></app-demo-custom-templates>
     </app-showcase>
 
     <app-showcase id="demo-full-config" heading="Full configuration">
