@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 
 @Component({
@@ -7,7 +12,7 @@ import { GalleryItem } from '@daelmaak/ngx-gallery';
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   installScript = `
     yarn add @daelmaak/ngx-gallery
   `;
@@ -125,5 +130,18 @@ export class AppComponent {
     { src: 'https://www.youtube.com/embed/80_39eAx3z8', video: true },
   ];
 
-  mobile = matchMedia('(max-width: 767px)').matches;
+  mobile: boolean;
+
+  constructor(private cd: ChangeDetectorRef) {}
+
+  ngOnInit(): void {
+    const mediaMatcher = matchMedia('(max-width: 1024px)');
+
+    mediaMatcher.onchange = e => {
+      this.mobile = e.matches;
+      this.cd.detectChanges();
+    };
+
+    this.mobile = mediaMatcher.matches;
+  }
 }
