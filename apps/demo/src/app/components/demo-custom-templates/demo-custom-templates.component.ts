@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 
 @Component({
@@ -8,23 +8,20 @@ import { GalleryItem } from '@daelmaak/ngx-gallery';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DemoCustomTemplatesComponent {
+  @Input() mobile: boolean;
+
   images: GalleryItem[] = [
     {
       src: './assets/images/mountains-1-lg.jpg',
       thumbSrc: './assets/images/mountains-1-sm.jpg',
       alt: 'Mountains',
-      description: 'Mighty mountains',
+      description: 'Nothing is better than a hike in the mountains',
     },
     {
       src: './assets/images/beach-1.mp4',
       alt: 'Beach',
       description: 'Video of a beach taken from drone',
       video: true,
-    },
-    {
-      src: './assets/images/non-existing-image.jpg',
-      alt: 'Sky',
-      description: 'Mysterious sky',
     },
     {
       src: './assets/images/cheers-1-lg.jpg',
@@ -36,6 +33,11 @@ export class DemoCustomTemplatesComponent {
       src: './assets/images/laptop-1-lg.jpg',
       alt: 'Laptop',
       description: 'Ideal workplace for computer work',
+    },
+    {
+      src: './assets/images/non-existing-image.jpg',
+      alt: 'Sky',
+      description: 'Mysterious sky',
     },
     {
       src: './assets/images/snowflake-1-lg.jpg',
@@ -50,4 +52,6 @@ export class DemoCustomTemplatesComponent {
       description: 'City at night',
     },
   ];
+
+  selectedItem?: GalleryItem;
 }

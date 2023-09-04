@@ -1,28 +1,35 @@
 <gallery
   [items]="images"
   [itemTemplate]="customItem"
+  [visibleItems]="mobile ? 2 : 3"
+  [moveByItems]="mobile ? 2 : 3"
+  [clip]="false"
+  [counter]="false"
   [arrowTemplate]="customArrow"
-  [errorTemplate]="customError"
+  [loop]="true"
+  [thumbs]="false"
   loading="lazy"
 ></gallery>
 
 <ng-template #customItem let-item="item" let-video="video">
-  <div class="custom-item">
+  <div
+    class="custom-item"
+    [class.custom-item--selected]="selectedItem === item"
+    (click)="selectedItem = item"
+  >
     <div class="image-container">
       <img *ngIf="!video" [src]="item.src" />
       <video *ngIf="video" [src]="item.src" controls></video>
     </div>
-    <p class="description">{{ item.description }}</p>
+    <div class="info-box">
+      <p>
+        <strong>{{ item.alt }}</strong>
+      </p>
+      <p>{{ item.description }}</p>
+    </div>
   </div>
 </ng-template>
 
 <ng-template #customArrow>
   <mat-icon class="custom-arrow">arrow_forward_ios</mat-icon>
-</ng-template>
-
-<ng-template #customError>
-  <div class="custom-error">
-    <mat-icon>sentiment_very_dissatisfied</mat-icon>
-    <p>I am a custom error screen</p>
-  </div>
 </ng-template>
