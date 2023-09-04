@@ -43,7 +43,7 @@
   [arrowTemplate]="arrowTemplate"
   [aria]="aria"
   [isRtl]="isRtl"
-  (imageClick)="imageClick.emit($event)"
+  (itemClick)="itemClick.emit($event)"
   (descriptionClick)="descriptionClick.emit($event)"
   (selection)="_selectInternal($event); _thumbsRef?.select($event)"
 >

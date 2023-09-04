@@ -92,7 +92,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   @Input()
   isRtl: boolean;
 
-  @Output() imageClick = new EventEmitter<GalleryItemEvent>();
+  @Output() itemClick = new EventEmitter<GalleryItemEvent>();
   @Output() descriptionClick = new EventEmitter<Event>();
   @Output() selection = new EventEmitter<number>();
 
@@ -209,7 +209,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   }
 
   onImageClick(item: GalleryItemInternal, event: Event) {
-    this.imageClick.emit({
+    this.itemClick.emit({
       event,
       item,
       index: this.items.indexOf(item),
