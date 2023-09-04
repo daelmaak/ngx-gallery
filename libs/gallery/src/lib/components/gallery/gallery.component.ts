@@ -45,6 +45,12 @@ export class GalleryComponent {
   @Input() errorText: string;
   @Input() mouseGestures = true;
   @Input() touchGestures = true;
+  /**
+   * Controls whether items outside gallery's scrollport should overflow it. When clip == false,
+   * items overflowing the gallery will be visible on both sides. Otherwise they will be hidden
+   * with `overflow: hidden`.
+   */
+  @Input() clip = true;
   @Input() counter = true;
   @Input() counterOrientation: VerticalOrientation = 'bottom';
   @Input() visibleItems = 1;

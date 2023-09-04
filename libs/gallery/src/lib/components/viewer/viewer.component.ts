@@ -88,6 +88,10 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   @Input() visibleItems: number;
   @Input() moveByItems: number;
 
+  @HostBinding('class.clip')
+  @Input()
+  clip: boolean;
+
   @HostBinding('class.rtl')
   @Input()
   isRtl: boolean;

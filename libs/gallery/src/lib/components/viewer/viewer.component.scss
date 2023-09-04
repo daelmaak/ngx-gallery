@@ -5,13 +5,16 @@
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   outline: none;
   // NOTE on z-index: It prevents creation of secondary layer for scrollable content (found out in Chromium dev tools in Layers) in context of the viewer DOM element.
   // This secondary layer holds a large portion of memory
   // Positive z-index prevent creation of this layer. It also causes a separate layer to be created, because it has "composited" descendants - ul element,
   // however, this layer holds much less memory.
   z-index: 1;
+
+  &.clip {
+    overflow: hidden;
+  }
 
   &.rtl {
     .viewer-arrow-next {
