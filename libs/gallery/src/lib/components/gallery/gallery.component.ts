@@ -70,7 +70,7 @@ export class GalleryComponent {
   @Input() thumbsArrowTemplate: TemplateRef<never>;
   @Input() thumbErrorTemplate: TemplateRef<never>;
 
-  @Output() imageClick = new EventEmitter<GalleryItemEvent>();
+  @Output() itemClick = new EventEmitter<GalleryItemEvent>();
   @Output() thumbClick = new EventEmitter<GalleryItemEvent>();
   @Output() thumbHover = new EventEmitter<GalleryItemEvent>();
   @Output() descriptionClick = new EventEmitter<Event>();

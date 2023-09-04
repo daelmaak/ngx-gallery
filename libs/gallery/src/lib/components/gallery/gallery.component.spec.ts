@@ -39,14 +39,14 @@ describe('GalleryComponent', () => {
     }));
 
     it('should emit event when viewer image clicked', () => {
-      const imageClickSpy = spyOn(component.imageClick, 'emit');
+      const itemClickSpy = spyOn(component.itemClick, 'emit');
       const secondItem = de.queryAll(By.css('viewer ul li'))[1];
 
       const mockedClick = { name: 'mocked-event' } as any;
       secondItem.triggerEventHandler('click', mockedClick);
 
-      expect(imageClickSpy).toHaveBeenCalled();
-      expect(imageClickSpy).toHaveBeenCalledWith({
+      expect(itemClickSpy).toHaveBeenCalled();
+      expect(itemClickSpy).toHaveBeenCalledWith({
         item: component.items[1],
         index: 1,
         event: mockedClick,
