@@ -3,7 +3,7 @@
   grid-template-columns: 230px calc(100% - 230px);
   grid-template-rows: auto auto 64px;
 
-  @media (max-width: 767px) {
+  @media (max-width: 1024px) {
     grid-template-columns: 0px 100%;
   }
 }
