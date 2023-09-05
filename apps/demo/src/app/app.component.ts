@@ -131,17 +131,25 @@ export class AppComponent implements OnInit {
   ];
 
   mobile: boolean;
+  tablet: boolean;
 
   constructor(private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    const mediaMatcher = matchMedia('(max-width: 1024px)');
+    const mobileMatcher = matchMedia('(max-width: 768px)');
+    const tabletMatcher = matchMedia('(max-width: 1024px)');
 
-    mediaMatcher.onchange = e => {
+    mobileMatcher.onchange = e => {
       this.mobile = e.matches;
       this.cd.detectChanges();
     };
 
-    this.mobile = mediaMatcher.matches;
+    tabletMatcher.onchange = e => {
+      this.tablet = e.matches;
+      this.cd.detectChanges();
+    };
+
+    this.mobile = mobileMatcher.matches;
+    this.tablet = tabletMatcher.matches;
   }
 }

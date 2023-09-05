@@ -9,6 +9,7 @@ import { GalleryItem } from '@daelmaak/ngx-gallery';
 })
 export class DemoCustomTemplatesComponent {
   @Input() mobile: boolean;
+  @Input() tablet: boolean;
 
   images: GalleryItem[] = [
     {

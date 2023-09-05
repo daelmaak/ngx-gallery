@@ -1,8 +1,8 @@
 <gallery
   [items]="images"
   [itemTemplate]="customItem"
-  [visibleItems]="mobile ? 2 : 3"
-  [moveByItems]="mobile ? 2 : 3"
+  [visibleItems]="mobile ? 1 : tablet ? 2 : 3"
+  [moveByItems]="mobile ? 1 : tablet ? 2 : 3"
   [clip]="false"
   [counter]="false"
   [arrowTemplate]="customArrow"
