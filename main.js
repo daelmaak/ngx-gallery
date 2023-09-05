@@ -122,12 +122,18 @@ class AppComponent {
     }];
   }
   ngOnInit() {
-    const mediaMatcher = matchMedia('(max-width: 1024px)');
-    mediaMatcher.onchange = e => {
+    const mobileMatcher = matchMedia('(max-width: 768px)');
+    const tabletMatcher = matchMedia('(max-width: 1024px)');
+    mobileMatcher.onchange = e => {
       this.mobile = e.matches;
       this.cd.detectChanges();
     };
-    this.mobile = mediaMatcher.matches;
+    tabletMatcher.onchange = e => {
+      this.tablet = e.matches;
+      this.cd.detectChanges();
+    };
+    this.mobile = mobileMatcher.matches;
+    this.tablet = tabletMatcher.matches;
   }
 }
 AppComponent.ɵfac = function AppComponent_Factory(t) {
@@ -137,8 +143,8 @@ AppComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵ
   type: AppComponent,
   selectors: [["app-root"]],
   decls: 86,
-  vars: 12,
-  consts: [[1, "menu-heading"], ["href", "#usage"], ["href", "#demos"], ["href", "#demo-responsive"], ["href", "#demo-custom"], ["href", "#demo-rtl"], ["href", "#demo-descriptions"], ["href", "#demo-error-handling"], ["href", "#demo-videos"], ["href", "#demo-full-config"], ["href", "https://github.com/daelmaak/ngx-gallery/wiki", "target", "_blank"], ["role", "main"], [1, "main-content"], ["id", "usage", 1, "usage"], [1, "usage-code"], ["id", "demos"], ["id", "demo-responsive", "heading", "Responsive - resize me!", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-responsive?file=src%2Fapp%2Fapp.component.html"], ["loading", "lazy", 3, "items"], ["id", "demo-custom", "heading", "Custom templates", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-custom-templates?file=src%2Fapp%2Fapp.component.html"], ["subheading", ""], ["href", "https://github.com/daelmaak/ngx-gallery/wiki/Gallery-API", "target", "_blank"], [3, "mobile"], ["id", "demo-rtl", "heading", "Right to left"], ["loading", "lazy", 3, "items", "isRtl"], ["id", "demo-descriptions", "heading", "Descriptions", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-descriptions?file=src%2Fapp%2Fapp.component.html"], ["counterOrientation", "top", "loading", "lazy", 3, "items", "descriptions"], ["id", "demo-error-handling", "heading", "Error handling"], ["id", "demo-videos", "heading", "Videos", "subheading", "both YouTube and native videos"], ["id", "demo-full-config", "heading", "Full configuration"], [3, "images"]],
+  vars: 13,
+  consts: [[1, "menu-heading"], ["href", "#usage"], ["href", "#demos"], ["href", "#demo-responsive"], ["href", "#demo-custom"], ["href", "#demo-rtl"], ["href", "#demo-descriptions"], ["href", "#demo-error-handling"], ["href", "#demo-videos"], ["href", "#demo-full-config"], ["href", "https://github.com/daelmaak/ngx-gallery/wiki", "target", "_blank"], ["role", "main"], [1, "main-content"], ["id", "usage", 1, "usage"], [1, "usage-code"], ["id", "demos"], ["id", "demo-responsive", "heading", "Responsive - resize me!", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-responsive?file=src%2Fapp%2Fapp.component.html"], ["loading", "lazy", 3, "items"], ["id", "demo-custom", "heading", "Custom templates", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-custom-templates?file=src%2Fapp%2Fapp.component.html"], ["subheading", ""], ["href", "https://github.com/daelmaak/ngx-gallery/wiki/Gallery-API", "target", "_blank"], [3, "mobile", "tablet"], ["id", "demo-rtl", "heading", "Right to left"], ["loading", "lazy", 3, "items", "isRtl"], ["id", "demo-descriptions", "heading", "Descriptions", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-descriptions?file=src%2Fapp%2Fapp.component.html"], ["counterOrientation", "top", "loading", "lazy", 3, "items", "descriptions"], ["id", "demo-error-handling", "heading", "Error handling"], ["id", "demo-videos", "heading", "Videos", "subheading", "both YouTube and native videos"], ["id", "demo-full-config", "heading", "Full configuration"], [3, "images"]],
   template: function AppComponent_Template(rf, ctx) {
     if (rf & 1) {
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](0, "app-header");
@@ -242,7 +248,7 @@ AppComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵ
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](4);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("items", ctx.images);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](6);
-      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("mobile", ctx.mobile);
+      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("mobile", ctx.mobile)("tablet", ctx.tablet);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](2);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("items", ctx.images)("isRtl", true);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](2);
@@ -457,7 +463,8 @@ DemoCustomTemplatesComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTE
   type: DemoCustomTemplatesComponent,
   selectors: [["app-demo-custom-templates"]],
   inputs: {
-    mobile: "mobile"
+    mobile: "mobile",
+    tablet: "tablet"
   },
   decls: 5,
   vars: 9,
@@ -471,7 +478,7 @@ DemoCustomTemplatesComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTE
     if (rf & 2) {
       const _r0 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵreference"](2);
       const _r2 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵreference"](4);
-      _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("items", ctx.images)("itemTemplate", _r0)("visibleItems", ctx.mobile ? 2 : 3)("moveByItems", ctx.mobile ? 2 : 3)("clip", false)("counter", false)("arrowTemplate", _r2)("loop", true)("thumbs", false);
+      _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("items", ctx.images)("itemTemplate", _r0)("visibleItems", ctx.mobile ? 1 : ctx.tablet ? 2 : 3)("moveByItems", ctx.mobile ? 1 : ctx.tablet ? 2 : 3)("clip", false)("counter", false)("arrowTemplate", _r2)("loop", true)("thumbs", false);
     }
   },
   dependencies: [_angular_material_icon__WEBPACK_IMPORTED_MODULE_2__.MatIcon, _angular_common__WEBPACK_IMPORTED_MODULE_3__.NgIf, _libs_gallery_src_lib_components_gallery_gallery_component__WEBPACK_IMPORTED_MODULE_0__.GalleryComponent],
