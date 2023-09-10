@@ -143,21 +143,22 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   ) {}
 
   ngOnChanges({ visibleItems, items, loop }: SimpleChanges) {
-    if (loop || items) {
-      this.loop = this.items?.length > 1 ? this.loop : false;
+    if (visibleItems) {
       this.fringeCount = this.getFringeCount();
       this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
-
-      if (this.loop) {
-        setTimeout(() => this.observeFringes());
-      }
-    }
-    if (visibleItems) {
       this.itemListRef.nativeElement.style.setProperty(
         '--item-width',
         `calc(100% / ${this.visibleItems})`
       );
       setTimeout(this.updateDimensions);
+    }
+    if (loop || items) {
+      this.loop = this.items?.length > 1 ? this.loop : false;
+      this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
+
+      if (this.loop) {
+        setTimeout(() => this.observeFringes());
+      }
     }
   }
 
