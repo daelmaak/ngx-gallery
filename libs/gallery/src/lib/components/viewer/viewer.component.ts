@@ -144,6 +144,9 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
 
   ngOnChanges({ visibleItems, items, loop }: SimpleChanges) {
     if (visibleItems) {
+      if (!this.moveByItems && this.visibleItems) {
+        this.moveByItems = this.visibleItems;
+      }
       this.fringeCount = this.getFringeCount();
       this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
       this.itemListRef.nativeElement.style.setProperty(
@@ -186,7 +189,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
     return !!item.src.match(/youtube.*\/embed\//);
   }
 
-  select(index: number) {
+  select(index: number, shortPath = true) {
     if (this.selectedIndex === index) {
       return this.center();
     }
@@ -195,17 +198,37 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
       this.stopCurrentVideo();
     }
 
+    // The purpose of the short path here is best understood by the following example: If going from index
+    // 6 (last) to index 0, do not go back over all the middle items, but go 6 -> 0 the short route. This
+    // makes navigating slider smoother. This of course applies in the other direction as well.
+    if (this.visibleItems > 1 && shortPath) {
+      const maxIndex = this.items.length - this.visibleItems;
+      // When going back, in direction over the first item, stop at the slider's beginning at first.
+      if (this.selectedIndex !== 0 && index < 0) {
+        index = 0;
+      } else if (this.selectedIndex < maxIndex) {
+        // Set the desired index or choose the last if it is the slider's last "page".
+        index = Math.min(maxIndex, index);
+      } else if (index > maxIndex) {
+        // Loop to the first item if going over the slider's end. This trick makes the loop cross the
+        // boundary between the last and the first.
+        index = this.items.length;
+      }
+    }
+
     const indexOutOfBounds = !this.items[index];
     const looping = this.loop && indexOutOfBounds;
 
     if (looping) {
       this.loopTo(index);
-    } else {
-      this.selectedIndex = indexOutOfBounds
-        ? this.correctIndexOutOfBounds(index)
-        : index;
-      this.center(); // we center only for this branch since looping does a delayed centering
+      return this.selection.emit(this.selectedIndex);
     }
+
+    this.selectedIndex = indexOutOfBounds
+      ? this.correctIndexOutOfBounds(index)
+      : index;
+
+    this.center(); // we center only for this branch since looping does a delayed centering
     this.selection.emit(this.selectedIndex);
   }
 
@@ -505,7 +528,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
       ) * -Math.sign(distance);
     const newIndex = this.selectedIndex + indexDelta;
 
-    this.select(newIndex);
+    this.select(newIndex, false);
   }
 
   private shift(delta = 0) {
