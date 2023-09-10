@@ -190,7 +190,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
       return this.center();
     }
 
-    if (this.items[this.selectedIndex].video) {
+    if (this.items[this.selectedIndex]?.video) {
       this.stopCurrentVideo();
     }
 
