@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.10](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.9...v3.0.0-RC.10) (2023-09-15)
+
+
+### Features
+
+* add smoother multi-item navigation WIP ([f748f1e](https://github.com/daelmaak/ngx-gallery/commit/f748f1efa16262831d3d3d8075cabf452d1b0b34))
+
+
+### Bug Fixes
+
+* **demo:** display just 1 item on mobile ([ed793f9](https://github.com/daelmaak/ngx-gallery/commit/ed793f957eca472759e97fabbbfefa8ab8b6389b))
+* prevent type error when video doesn't exist ([1c12e47](https://github.com/daelmaak/ngx-gallery/commit/1c12e479d9f09c081fd49033f6defc9ff4a97d33))
+* update fringe count and respective items on change ([3d9791e](https://github.com/daelmaak/ngx-gallery/commit/3d9791e31a075b8ec5350077943234daef867fbc))
+
 ## [3.0.0-RC.9](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.8...v3.0.0-RC.9) (2023-09-04)
 
 
