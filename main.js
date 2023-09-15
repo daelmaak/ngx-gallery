@@ -1395,7 +1395,6 @@ class GalleryComponent {
     this.counter = true;
     this.counterOrientation = 'bottom';
     this.visibleItems = 1;
-    this.moveByItems = 1;
     this.loading = 'lazy';
     this.loop = false;
     this.objectFit = 'cover';
@@ -2431,17 +2430,21 @@ class ViewerComponent {
     items,
     loop
   }) {
+    if (visibleItems) {
+      if (!this.moveByItems && this.visibleItems) {
+        this.moveByItems = this.visibleItems;
+      }
+      this.fringeCount = this.getFringeCount();
+      this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
+      this.itemListRef.nativeElement.style.setProperty('--item-width', `calc(100% / ${this.visibleItems})`);
+      setTimeout(this.updateDimensions);
+    }
     if (loop || items) {
       this.loop = this.items?.length > 1 ? this.loop : false;
-      this.fringeCount = this.getFringeCount();
       this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
       if (this.loop) {
         setTimeout(() => this.observeFringes());
       }
-    }
-    if (visibleItems) {
-      this.itemListRef.nativeElement.style.setProperty('--item-width', `calc(100% / ${this.visibleItems})`);
-      setTimeout(this.updateDimensions);
     }
   }
   ngOnInit() {
@@ -2463,22 +2466,38 @@ class ViewerComponent {
   isYoutube(item) {
     return !!item.src.match(/youtube.*\/embed\//);
   }
-  select(index) {
+  select(index, shortPath = true) {
     if (this.selectedIndex === index) {
       return this.center();
     }
-    if (this.items[this.selectedIndex].video) {
+    if (this.items[this.selectedIndex]?.video) {
       this.stopCurrentVideo();
+    }
+    // The purpose of the short path here is best understood by the following example: If going from index
+    // 6 (last) to index 0, do not go back over all the middle items, but go 6 -> 0 the short route. This
+    // makes navigating slider smoother. This of course applies in the other direction as well.
+    if (this.visibleItems > 1 && shortPath) {
+      const maxIndex = this.items.length - this.visibleItems;
+      // When going back, in direction over the first item, stop at the slider's beginning at first.
+      if (this.selectedIndex !== 0 && index < 0) {
+        index = 0;
+      } else if (this.selectedIndex < maxIndex) {
+        // Set the desired index or choose the last if it is the slider's last "page".
+        index = Math.min(maxIndex, index);
+      } else if (index > maxIndex) {
+        // Loop to the first item if going over the slider's end. This trick makes the loop cross the
+        // boundary between the last and the first.
+        index = this.items.length;
+      }
     }
     const indexOutOfBounds = !this.items[index];
     const looping = this.loop && indexOutOfBounds;
     if (looping) {
       this.loopTo(index);
-    } else {
-      this.selectedIndex = indexOutOfBounds ? this.correctIndexOutOfBounds(index) : index;
-      this.center(); // we center only for this branch since looping does a delayed centering
+      return this.selection.emit(this.selectedIndex);
     }
-
+    this.selectedIndex = indexOutOfBounds ? this.correctIndexOutOfBounds(index) : index;
+    this.center(); // we center only for this branch since looping does a delayed centering
     this.selection.emit(this.selectedIndex);
   }
   selectByDelta(delta) {
@@ -2674,7 +2693,7 @@ class ViewerComponent {
     // a tiny threshold to make sure the slide doesn't always happen.
     const indexDelta = Math.round((Math.abs(distance) + this._itemWidth / 2.25) / this._itemWidth) * -Math.sign(distance);
     const newIndex = this.selectedIndex + indexDelta;
-    this.select(newIndex);
+    this.select(newIndex, false);
   }
   shift(delta = 0) {
     const multiplier = this.isRtl ? 1 : -1;
