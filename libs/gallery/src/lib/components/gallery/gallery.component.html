@@ -36,7 +36,6 @@
   [objectFit]="objectFit"
   [loading]="loading"
   [itemTemplate]="itemTemplate"
-  [loadingTemplate]="loadingTemplate || defaultLoadingTemplate"
   [errorTemplate]="errorTemplate"
   [contentTemplate]="contentTemplate"
   [loop]="loop"
@@ -49,11 +48,3 @@
   (selection)="_selectInternal($event); _thumbsRef?.select($event)"
 >
 </viewer>
-
-<ng-template #defaultLoadingTemplate>
-  <div class="loading">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-</ng-template>

@@ -62,7 +62,6 @@ export class GalleryComponent {
   @Input()
   isRtl: boolean;
   @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
-  @Input() loadingTemplate: TemplateRef<void>;
   @Input() errorTemplate: TemplateRef<any>;
   @Input() arrowTemplate: TemplateRef<any>;
   @Input() contentTemplate: TemplateRef<ContentTemplateContext>;

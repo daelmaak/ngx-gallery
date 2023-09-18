@@ -18,7 +18,6 @@
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'viewer-aria-description-' + i"
     (click)="onImageClick(item, $event)"
-    (mediaLoad)="onItemLoaded(item)"
     (mediaLoadError)="onItemErrored(item)"
     (keydown.Tab)="onTab(i + 1)"
     (keydown.shift.Tab)="onTab(i - 1)"
@@ -36,7 +35,6 @@
           [src]="item.src"
           [alt]="item.alt"
           [attr.loading]="loading"
-          [class.viewer-media-loading]="!itemLoaded(item)"
           [style.objectFit]="objectFit"
         />
       </picture>
@@ -47,7 +45,6 @@
         [src]="item.src"
         [poster]="item.thumbSrc || ''"
         [attr.preload]="loading === 'lazy' ? 'metadata' : 'auto'"
-        [class.viewer-media-loading]="!itemLoaded(item)"
         [style.objectFit]="objectFit"
         controls
         playsinline
@@ -61,10 +58,6 @@
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
       ></iframe>
-    </ng-container>
-
-    <ng-container *ngIf="!itemLoaded(item) && !itemFailedToLoad(item)">
-      <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
     </ng-container>
 
     <ng-container *ngIf="itemFailedToLoad(item)">
@@ -97,10 +90,6 @@
     </ng-template>
   </li>
 </ul>
-
-<ng-container *ngIf="items?.length <= 0">
-  <ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
-</ng-container>
 
 <button
   *ngIf="showNextArrow"

@@ -78,7 +78,6 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   @Input() loading: Loading;
   @Input() objectFit: ObjectFit;
   @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
-  @Input() loadingTemplate: TemplateRef<void>;
   @Input() errorTemplate: TemplateRef<any>;
   @Input() arrowTemplate: TemplateRef<any>;
   @Input() contentTemplate: TemplateRef<ContentTemplateContext>;
@@ -254,12 +253,6 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
     }
   }
 
-  onItemLoaded(item: GalleryItemInternal) {
-    item._loaded = true;
-    item._failed = false;
-    this._cd.detectChanges();
-  }
-
   onItemErrored(item: GalleryItemInternal) {
     item._failed = true;
     this._cd.detectChanges();
@@ -267,10 +260,6 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
 
   itemFailedToLoad(item: GalleryItemInternal) {
     return item._failed;
-  }
-
-  itemLoaded(item: GalleryItemInternal) {
-    return item._loaded;
   }
 
   itemTabbable(index: number) {

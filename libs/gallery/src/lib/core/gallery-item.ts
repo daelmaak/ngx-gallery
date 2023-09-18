@@ -68,11 +68,6 @@ export interface GalleryItemEvent {
 
 export interface GalleryItemInternal extends GalleryItem {
   /**
-   * Marks item as loaded once its media gets loaded
-   */
-  _loaded?: boolean;
-
-  /**
    * `true` when media couldn't be loaded
    */
   _failed?: boolean;

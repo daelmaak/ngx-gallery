@@ -61,50 +61,6 @@ describe('ViewerComponent', () => {
       viewer.items = [{ src: 'src1' }, { src: 'src2' }];
     });
 
-    describe('succeeded', () => {
-      it('should mark item as loaded', () => {
-        const loadedItem = viewer.items[0] as GalleryItemInternal;
-
-        viewer.onItemLoaded(loadedItem);
-
-        expect(viewer.itemLoaded(loadedItem)).toBe(true);
-      });
-
-      it('should mark item as not failed', () => {
-        const loadedItem = viewer.items[0] as GalleryItemInternal;
-
-        viewer.onItemLoaded(loadedItem);
-
-        expect(viewer.itemFailedToLoad(loadedItem)).toBe(false);
-      });
-
-      it('should mark item as loaded even if it was failing before', () => {
-        const failingItem = viewer.items[0] as GalleryItemInternal;
-
-        viewer.onItemErrored(failingItem);
-        viewer.onItemLoaded(failingItem);
-
-        expect(viewer.itemLoaded(failingItem)).toBe(true);
-      });
-
-      it('should mark item as not failed even if it was failing before', () => {
-        const failingItem = viewer.items[0] as GalleryItemInternal;
-
-        viewer.onItemErrored(failingItem);
-        viewer.onItemLoaded(failingItem);
-
-        expect(viewer.itemFailedToLoad(failingItem)).toBe(false);
-      });
-
-      it('should notify change detector of changes', () => {
-        const loadedItem = viewer.items[0] as GalleryItemInternal;
-
-        viewer.onItemLoaded(loadedItem);
-
-        expect(changeDetector.detectChanges).toHaveBeenCalled();
-      });
-    });
-
     describe('failed', () => {
       it('should mark item as failed to load', () => {
         const failingItem = viewer.items[0] as GalleryItemInternal;
