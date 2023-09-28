@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-RC.11](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.10...v3.0.0-RC.11) (2023-09-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove media loading indicator
+
+### change
+
+* remove media loading indicator ([e43ff13](https://github.com/daelmaak/ngx-gallery/commit/e43ff13d32090881eb7e3827cf056d98366dc3a8))
+
 ## [3.0.0-RC.10](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.9...v3.0.0-RC.10) (2023-09-15)
 
 
