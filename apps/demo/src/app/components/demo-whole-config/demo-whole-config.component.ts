@@ -102,9 +102,6 @@ export class DemoWholeConfigComponent implements OnInit {
   reloadGallery() {
     this.displayGallery = false;
     this.cd.detectChanges();
-    this.images.forEach((i: GalleryItemInternal) => {
-      i._loaded = false;
-    });
     this.displayGallery = true;
     this.cd.detectChanges();
   }
