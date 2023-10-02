@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.11...v3.0.0) (2023-10-02)
+
+
+### Features
+
+* add option not to display media error ([4182376](https://github.com/daelmaak/ngx-gallery/commit/4182376debac954ee3356a9b879375842ac509ac))
+
+
+### Bug Fixes
+
+* **demo:** fix compilation issue ([d0385a2](https://github.com/daelmaak/ngx-gallery/commit/d0385a29072e58729bb6d7469197514f2e802ae0))
+
+
+### Documentation
+
+* add JS docs to the inputs/outputs ([ec5018b](https://github.com/daelmaak/ngx-gallery/commit/ec5018b4d9ffd873563a7f07952af820de0783d9))
+
 ## [3.0.0-RC.11](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.10...v3.0.0-RC.11) (2023-09-28)
 
 
