@@ -59,6 +59,7 @@ describe('ViewerComponent', () => {
       ]);
       viewer = new ViewerComponent(null, changeDetector, null, null);
       viewer.items = [{ src: 'src1' }, { src: 'src2' }];
+      viewer.showErrors = true;
     });
 
     describe('failed', () => {

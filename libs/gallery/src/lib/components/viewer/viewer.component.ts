@@ -71,6 +71,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   @Input() selectedIndex: number;
   @Input() descriptions: boolean;
   @Input() errorText: string;
+  @Input() showErrors: boolean;
   @Input() mouseGestures: boolean;
   @Input() touchGestures: boolean;
   @Input() counter: boolean;
@@ -254,6 +255,9 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   }
 
   onItemErrored(item: GalleryItemInternal) {
+    if (!this.showErrors) {
+      return;
+    }
     item._failed = true;
     this._cd.detectChanges();
   }

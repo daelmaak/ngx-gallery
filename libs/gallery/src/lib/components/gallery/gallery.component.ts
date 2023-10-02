@@ -62,6 +62,10 @@ export class GalleryComponent {
    */
   @Input() errorText: string;
   /**
+   * Display an error when the media contained in gallery item failed to load.
+   */
+  @Input() showErrors = false;
+  /**
    * Allow mouse swipes
    */
   @Input() mouseGestures = true;
