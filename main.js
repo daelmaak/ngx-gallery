@@ -143,8 +143,8 @@ AppComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵ
   type: AppComponent,
   selectors: [["app-root"]],
   decls: 86,
-  vars: 13,
-  consts: [[1, "menu-heading"], ["href", "#usage"], ["href", "#demos"], ["href", "#demo-responsive"], ["href", "#demo-custom"], ["href", "#demo-rtl"], ["href", "#demo-descriptions"], ["href", "#demo-error-handling"], ["href", "#demo-videos"], ["href", "#demo-full-config"], ["href", "https://github.com/daelmaak/ngx-gallery/wiki", "target", "_blank"], ["role", "main"], [1, "main-content"], ["id", "usage", 1, "usage"], [1, "usage-code"], ["id", "demos"], ["id", "demo-responsive", "heading", "Responsive - resize me!", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-responsive?file=src%2Fapp%2Fapp.component.html"], ["loading", "lazy", 3, "items"], ["id", "demo-custom", "heading", "Custom templates", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-custom-templates?file=src%2Fapp%2Fapp.component.html"], ["subheading", ""], ["href", "https://github.com/daelmaak/ngx-gallery/wiki/Gallery-API", "target", "_blank"], [3, "mobile", "tablet"], ["id", "demo-rtl", "heading", "Right to left"], ["loading", "lazy", 3, "items", "isRtl"], ["id", "demo-descriptions", "heading", "Descriptions", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-descriptions?file=src%2Fapp%2Fapp.component.html"], ["counterOrientation", "top", "loading", "lazy", 3, "items", "descriptions"], ["id", "demo-error-handling", "heading", "Error handling"], ["id", "demo-videos", "heading", "Videos", "subheading", "both YouTube and native videos"], ["id", "demo-full-config", "heading", "Full configuration"], [3, "images"]],
+  vars: 14,
+  consts: [[1, "menu-heading"], ["href", "#usage"], ["href", "#demos"], ["href", "#demo-responsive"], ["href", "#demo-custom"], ["href", "#demo-rtl"], ["href", "#demo-descriptions"], ["href", "#demo-error-handling"], ["href", "#demo-videos"], ["href", "#demo-full-config"], ["href", "https://github.com/daelmaak/ngx-gallery/wiki", "target", "_blank"], ["role", "main"], [1, "main-content"], ["id", "usage", 1, "usage"], [1, "usage-code"], ["id", "demos"], ["id", "demo-responsive", "heading", "Responsive - resize me!", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-responsive?file=src%2Fapp%2Fapp.component.html"], ["loading", "lazy", 3, "items"], ["id", "demo-custom", "heading", "Custom templates", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-custom-templates?file=src%2Fapp%2Fapp.component.html"], ["subheading", ""], ["href", "https://github.com/daelmaak/ngx-gallery/wiki/Gallery-API", "target", "_blank"], [3, "mobile", "tablet"], ["id", "demo-rtl", "heading", "Right to left"], ["loading", "lazy", 3, "items", "isRtl"], ["id", "demo-descriptions", "heading", "Descriptions", "stackblitz", "https://stackblitz.com/edit/ngx-gallery-demo-descriptions?file=src%2Fapp%2Fapp.component.html"], ["counterOrientation", "top", "loading", "lazy", 3, "items", "descriptions"], ["id", "demo-error-handling", "heading", "Error handling"], ["loading", "lazy", 3, "items", "showErrors"], ["id", "demo-videos", "heading", "Videos", "subheading", "both YouTube and native videos"], ["id", "demo-full-config", "heading", "Full configuration"], [3, "images"]],
   template: function AppComponent_Template(rf, ctx) {
     if (rf & 1) {
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](0, "app-header");
@@ -222,17 +222,17 @@ AppComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵ
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](73, "gallery", 25);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](74, "app-showcase", 26);
-      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](75, "gallery", 17);
+      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](75, "gallery", 27);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](76, "app-showcase", 27);
+      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](76, "app-showcase", 28);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](77, "gallery", 17);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](78, "app-showcase", 28)(79, "div", 19);
+      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](78, "app-showcase", 29)(79, "div", 19);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](80, " Some options like custom templates are missing. Check them out in the ");
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](81, "a", 20);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](82, "documentation.");
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]()();
-      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](83, "app-demo-whole-config", 29);
+      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](83, "app-demo-whole-config", 30);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]()()();
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](84, "footer");
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](85, "With care from daelmaak");
@@ -254,7 +254,7 @@ AppComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵ
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](2);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("items", ctx.images)("descriptions", true);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](2);
-      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("items", ctx.erroredImages);
+      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("items", ctx.erroredImages)("showErrors", true);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](2);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("items", ctx.videos);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](6);
