@@ -97,7 +97,11 @@
     </app-showcase>
 
     <app-showcase id="demo-error-handling" heading="Error handling">
-      <gallery [items]="erroredImages" loading="lazy"></gallery>
+      <gallery
+        [items]="erroredImages"
+        loading="lazy"
+        [showErrors]="true"
+      ></gallery>
     </app-showcase>
 
     <app-showcase
