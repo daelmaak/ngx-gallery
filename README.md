@@ -5,8 +5,7 @@ Small, performant, responsive, dependency free, easy to use Angular **8+** galle
 [![codecov](https://codecov.io/gh/daelmaak/ngx-gallery/branch/master/graph/badge.svg?token=eQhl2BmseY)](https://codecov.io/gh/daelmaak/ngx-gallery)
 [![npm version](https://badge.fury.io/js/%40daelmaak%2Fngx-gallery.svg)](https://badge.fury.io/js/%40daelmaak%2Fngx-gallery)
 
-[**Demos**](https://daelmaak.github.io/ngx-gallery/) |
-[**Docs**](https://github.com/daelmaak/ngx-gallery/wiki) |
+[**Showcase**](https://daelmaak.github.io/ngx-gallery/) |
 [**Changelog**](https://github.com/daelmaak/ngx-gallery/blob/master/CHANGELOG.md)
 
 ## Installation
