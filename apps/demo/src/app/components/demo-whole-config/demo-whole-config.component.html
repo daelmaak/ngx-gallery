@@ -62,7 +62,7 @@
     </section>
 
     <section>
-      <label>Counter orientation:</label>
+      <mat-label>Counter orientation:</mat-label>
       <mat-radio-group
         name="counterOrientation"
         [(ngModel)]="galleryConfig.counterOrientation"
@@ -73,7 +73,7 @@
     </section>
 
     <section>
-      <label>Image fit:</label>
+      <mat-label>Image fit:</mat-label>
       <mat-radio-group name="objectFit" [(ngModel)]="galleryConfig.objectFit">
         <mat-radio-button value="contain">contain</mat-radio-button>
         <mat-radio-button value="cover">cover</mat-radio-button>
@@ -81,7 +81,7 @@
     </section>
 
     <section>
-      <label>Image loading strategy:</label>
+      <mat-label>Image loading strategy:</mat-label>
       <mat-radio-group
         name="loading"
         [(ngModel)]="galleryConfig.loading"
@@ -94,7 +94,7 @@
 
     <section>
       <mat-form-field>
-        <label>Number of displayed items</label>
+        <mat-label>Number of displayed items</mat-label>
         <input
           name="visibleItems"
           matInput
@@ -106,7 +106,7 @@
 
     <section>
       <mat-form-field>
-        <label>Selected index</label>
+        <mat-label>Selected index</mat-label>
         <input
           name="selectedIndex"
           type="number"
@@ -141,7 +141,7 @@
     </section>
 
     <section>
-      <label>Thumbnails orientation:</label>
+      <mat-label>Thumbnails orientation:</mat-label>
       <mat-radio-group
         name="thumbsOrientation"
         [(ngModel)]="galleryConfig.thumbsOrientation"
@@ -154,7 +154,7 @@
     </section>
 
     <section>
-      <label>Thumbnails scroll behavior:</label>
+      <mat-label>Thumbnails scroll behavior:</mat-label>
       <mat-radio-group
         name="thumbsScrollBehavior"
         [(ngModel)]="galleryConfig.thumbsScrollBehavior"
@@ -166,7 +166,7 @@
 
     <section>
       <mat-form-field>
-        <label>Slide thumbnails by length (px)</label>
+        <mat-label>Slide thumbnails by length (px)</mat-label>
         <input
           name="thumbsArrowsSlideByLength"
           matInput
@@ -181,7 +181,7 @@
 
     <section class="image-loading-latency">
       <mat-form-field>
-        <label>Items (not images!) loading latency</label>
+        <mat-label>Items (not images!) loading latency</mat-label>
         <input
           name="imageLoadingLatency"
           matInput
