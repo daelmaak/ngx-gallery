@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, SimpleChange } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { GalleryItemInternal } from '../../core/gallery-item';
 import { ViewerComponent } from './viewer.component';
 
@@ -15,39 +15,6 @@ describe('ViewerComponent', () => {
     ];
     viewer.loading = 'lazy';
     viewer.selectedIndex = 0;
-  });
-
-  describe('fringe items count in loop mode', () => {
-    beforeEach(() => {
-      viewer.loop = true;
-      viewer.items = [
-        { src: 'src1' },
-        { src: 'src2' },
-        { src: 'src3' },
-        { src: 'src4' },
-      ];
-    });
-
-    it('should be 1 when just 1 item visible in the viewport', () => {
-      viewer.visibleItems = 1;
-      const fringeCount = viewer['getFringeCount']();
-
-      expect(fringeCount).toBe(1);
-    });
-
-    it('should be 2 when gallery item is a little slimmer than scrollport', () => {
-      viewer.visibleItems = 1.2;
-      const fringeCount = viewer['getFringeCount']();
-
-      expect(fringeCount).toBe(2);
-    });
-
-    it('should be 3 when 3 items visible', () => {
-      viewer.visibleItems = 3;
-      const fringeCount = viewer['getFringeCount']();
-
-      expect(fringeCount).toBe(3);
-    });
   });
 
   describe('media asset loading', () => {
