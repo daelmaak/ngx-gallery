@@ -17,10 +17,12 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { OrientationFlag } from '../../core';
 import { GalleryItem, GalleryItemInternal } from '../../core/gallery-item';
+import { StrictComponentRef } from '../../core/ng';
 import { ViewerComponent } from './viewer.component';
 
 describe('ViewerComponent', () => {
   let component: ViewerComponent;
+  let componentRef: StrictComponentRef<ViewerComponent>;
   let fixture: ComponentFixture<ViewerComponent>;
   let viewerDe: DebugElement;
 
@@ -37,9 +39,11 @@ describe('ViewerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewerComponent);
     component = fixture.componentInstance;
+    componentRef = fixture.componentRef;
     viewerDe = fixture.debugElement;
 
     component.items = [];
+    component.visibleItems = 1;
   });
 
   describe('initialization', () => {
@@ -49,10 +53,7 @@ describe('ViewerComponent', () => {
     });
 
     it('should succeed also with empty items', () => {
-      const changes = {
-        items: new SimpleChange(null, [], true),
-      };
-      component.ngOnChanges(changes);
+      componentRef.setInput('items', []);
       fixture.detectChanges();
 
       expect(component).toBeTruthy();
@@ -99,20 +100,28 @@ describe('ViewerComponent', () => {
       expect(getSlidePx().index).toBe(-1);
     }));
 
-    it('looping should be disabled if there is just 1 item', fakeAsync(() => {
-      component.loop = true;
-      component.items = [{ src: 'src1' }];
-      component.visibleItems = 1;
-      const changes = {
-        items: new SimpleChange(null, component.items, true),
-      };
-      component.ngOnChanges(changes);
+    it('looping should be disabled if there is just 1 item', () => {
+      componentRef.setInput('loop', true);
+      componentRef.setInput('items', [{ src: 'src1' }]);
       fixture.detectChanges();
-      tick();
 
-      expect(component.loop).toBe(false);
+      expect(component.reallyLoop).toBe(false);
       expect(component.displayedItems.length).toBe(1);
-    }));
+    });
+
+    it('should enable looping even if the items were set after viewer initialized', () => {
+      componentRef.setInput('loop', true);
+      fixture.detectChanges();
+
+      componentRef.setInput('items', [
+        { src: 'src1' },
+        { src: 'src2' },
+        { src: 'src3' },
+      ]);
+      fixture.detectChanges();
+
+      expect(component.reallyLoop).toBe(true);
+    });
   });
 
   describe('class attribute', () => {
@@ -233,8 +242,7 @@ describe('ViewerComponent', () => {
 
   describe('selection', () => {
     beforeEach(() => {
-      component.items = generateGalleryImages(4);
-      component.loading = 'lazy';
+      componentRef.setInput('items', generateGalleryImages(4));
       component.selectedIndex = 2;
     });
 
@@ -262,7 +270,7 @@ describe('ViewerComponent', () => {
 
     describe('with looping on', () => {
       beforeEach(() => {
-        component.loop = true;
+        componentRef.setInput('loop', true);
         fixture.detectChanges();
       });
 
@@ -323,27 +331,20 @@ describe('ViewerComponent', () => {
     const ITEM_WIDTH = 600;
 
     beforeEach(() => {
-      component.items = generateGalleryImages(3);
       component.mouseGestures = true;
       component.touchGestures = true;
       component.selectedIndex = 0;
-      component.visibleItems = 1;
+
+      componentRef.setInput('items', generateGalleryImages(3));
+      componentRef.setInput('visibleItems', 1);
     });
 
     describe('in loop mode with 2 (1 on each side) fringe items', () => {
       beforeEach(fakeAsync(() => {
-        component.loop = true;
-        component.ngOnChanges({
-          visibleItems: new SimpleChange(
-            undefined,
-            component.visibleItems,
-            true
-          ),
-          items: new SimpleChange(null, component.items, true),
-        });
+        componentRef.setInput('loop', true);
         fixture.detectChanges();
-        viewerDe.nativeElement.style.width = ITEM_WIDTH + 'px';
 
+        viewerDe.nativeElement.style.width = ITEM_WIDTH + 'px';
         tick();
         fixture.detectChanges();
       }));
