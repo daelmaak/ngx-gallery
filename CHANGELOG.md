@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0...v3.0.1) (2023-12-02)
+
+
+### Bug Fixes
+
+* **demo:** fix inflexible form field labels ([0698ed2](https://github.com/daelmaak/ngx-gallery/commit/0698ed2d6dd2fb5a512fce55eb52882d6456e7ba))
+* **demo:** fix links to documentation ([ff7c86b](https://github.com/daelmaak/ngx-gallery/commit/ff7c86bbcda163987747d502efbd78320ad3fd9f))
+* **demo:** use showErrors where needed ([7d989cf](https://github.com/daelmaak/ngx-gallery/commit/7d989cf606248ff11a42919a9382691a74543916))
+* make `items` always defined ([319ad43](https://github.com/daelmaak/ngx-gallery/commit/319ad43b5fc2f357293eb9f0b53fdb56403cd950))
+* prevent looping being stuck in disabled state ([df4b06c](https://github.com/daelmaak/ngx-gallery/commit/df4b06cab690fb39f92f6285e82a3910e992fa14))
+
+
+### Documentation
+
+* remove wiki from readme, rename demos to showcase ([9dd9366](https://github.com/daelmaak/ngx-gallery/commit/9dd93665218093de6adcc7e7a773567aab3cb609))
+
 ## [3.0.0](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0-RC.11...v3.0.0) (2023-10-02)
 
 
