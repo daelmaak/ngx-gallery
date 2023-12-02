@@ -7,7 +7,9 @@ import {
   HostBinding,
   HostListener,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
@@ -36,7 +38,7 @@ import { ViewerComponent } from '../viewer/viewer.component';
   standalone: true,
   imports: [CommonModule, ThumbsComponent, ViewerComponent],
 })
-export class GalleryComponent {
+export class GalleryComponent implements OnChanges {
   /**
    * Gallery items to display
    */
@@ -187,6 +189,12 @@ export class GalleryComponent {
     return this._galleryColumn
       ? OrientationFlag.HORIZONTAL
       : OrientationFlag.VERTICAL;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes.items.currentValue) {
+      this.items = [];
+    }
   }
 
   focus() {
