@@ -105,6 +105,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
 
   displayedItems: GalleryItemInternal[];
   fringeCount: number;
+  reallyLoop: boolean;
   private _itemWidth: number;
   private fringeObserver?: IntersectionObserver;
   private pointerDeltaX = 0;
@@ -125,13 +126,13 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   }
 
   get showPrevArrow() {
-    return this.showArrow && (this.selectedIndex > 0 || this.loop);
+    return this.showArrow && (this.selectedIndex > 0 || this.reallyLoop);
   }
 
   get showNextArrow() {
     return (
       this.showArrow &&
-      (this.selectedIndex < this.items.length - 1 || this.loop)
+      (this.selectedIndex < this.items.length - 1 || this.reallyLoop)
     );
   }
 
@@ -147,8 +148,6 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
       if (!this.moveByItems && this.visibleItems) {
         this.moveByItems = this.visibleItems;
       }
-      this.fringeCount = this.getFringeCount();
-      this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
       this.itemListRef.nativeElement.style.setProperty(
         '--item-width',
         `calc(100% / ${this.visibleItems})`
@@ -156,12 +155,15 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
       setTimeout(this.updateDimensions);
     }
     if (loop || items) {
-      this.loop = this.items.length > 1 ? this.loop : false;
-      this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
+      this.reallyLoop = this.items.length > 1 ? this.loop : false;
 
-      if (this.loop) {
+      if (this.reallyLoop) {
         setTimeout(() => this.observeFringes());
       }
+    }
+    if (items || visibleItems || loop) {
+      this.fringeCount = this.getFringeCount();
+      this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
     }
   }
 
@@ -217,7 +219,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
     }
 
     const indexOutOfBounds = !this.items[index];
-    const looping = this.loop && indexOutOfBounds;
+    const looping = this.reallyLoop && indexOutOfBounds;
 
     if (looping) {
       this.loopTo(index);
@@ -280,13 +282,13 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   }
 
   private getFringeCount() {
-    return this.loop
+    return this.reallyLoop
       ? Math.min(Math.ceil(this.visibleItems), this.items.length)
       : 0;
   }
 
   private getItemsToBeDisplayed(fringeCount: number) {
-    return this.loop
+    return this.reallyLoop
       ? [
           ...this.items.slice(-fringeCount),
           ...this.items,
@@ -487,7 +489,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   }
 
   private repositionOnFringe: IntersectionObserverCallback = entries => {
-    if (!this.loop || !this.sliding) {
+    if (!this.reallyLoop || !this.sliding) {
       return;
     }
     const { first } = this.itemsRef;
