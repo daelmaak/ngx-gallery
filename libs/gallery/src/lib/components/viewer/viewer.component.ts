@@ -156,7 +156,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
       setTimeout(this.updateDimensions);
     }
     if (loop || items) {
-      this.loop = this.items?.length > 1 ? this.loop : false;
+      this.loop = this.items.length > 1 ? this.loop : false;
       this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
 
       if (this.loop) {

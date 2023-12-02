@@ -38,6 +38,8 @@ describe('ViewerComponent', () => {
     fixture = TestBed.createComponent(ViewerComponent);
     component = fixture.componentInstance;
     viewerDe = fixture.debugElement;
+
+    component.items = [];
   });
 
   describe('initialization', () => {

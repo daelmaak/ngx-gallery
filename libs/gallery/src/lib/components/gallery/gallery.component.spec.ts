@@ -1,16 +1,18 @@
 import { DebugElement } from '@angular/core';
 import {
   ComponentFixture,
-  fakeAsync,
   TestBed,
+  fakeAsync,
   tick,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import type { StrictComponentRef } from '../../core/ng';
 import { GalleryComponent } from './gallery.component';
 
 describe('GalleryComponent', () => {
   let component: GalleryComponent;
+  let componentRef: StrictComponentRef<GalleryComponent>;
   let fixture: ComponentFixture<GalleryComponent>;
   let de: DebugElement;
 
@@ -23,12 +25,21 @@ describe('GalleryComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(GalleryComponent);
     component = fixture.componentInstance;
+    componentRef = fixture.componentRef;
     de = fixture.debugElement;
   });
 
   it('should create', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  it('should handle empty items input in looping mode', () => {
+    componentRef.setInput('items', undefined);
+    componentRef.setInput('loop', true);
+    fixture.detectChanges();
+
+    expect().nothing();
   });
 
   describe('emitters', () => {
