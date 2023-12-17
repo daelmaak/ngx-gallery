@@ -1435,9 +1435,17 @@ class GalleryComponent {
      */
     this.objectFit = 'cover';
     /**
+     * Right to left mode
+     */
+    this.isRtl = false;
+    /**
      * How many items are visible in the scrollport.
      */
     this.visibleItems = 1;
+    /**
+     * By how many items the slider shifts when user navigates with arrows.
+     */
+    this.moveByItems = this.visibleItems;
     /**
      * Show thumbnail list.
      */
@@ -1477,7 +1485,7 @@ class GalleryComponent {
   ngOnChanges({
     items
   }) {
-    if (!items.currentValue) {
+    if (!items?.currentValue) {
       this.items = [];
     }
   }
@@ -1492,11 +1500,11 @@ class GalleryComponent {
   }
   select(index) {
     this._viewerRef.select(index);
-    this._thumbsRef.select(index);
+    this._thumbsRef?.select(index);
     this._selectInternal(index);
   }
   slideThumbs(direction) {
-    this._thumbsRef.slide(direction);
+    this._thumbsRef?.slide(direction);
   }
   _onThumbClick(event) {
     this._viewerRef.select(event.index);
@@ -1557,8 +1565,8 @@ GalleryComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4__
     loop: "loop",
     objectFit: "objectFit",
     isRtl: "isRtl",
-    moveByItems: "moveByItems",
     visibleItems: "visibleItems",
+    moveByItems: "moveByItems",
     itemTemplate: "itemTemplate",
     errorTemplate: "errorTemplate",
     arrowTemplate: "arrowTemplate",
@@ -1663,10 +1671,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   ThumbsComponent: () => (/* binding */ ThumbsComponent)
 /* harmony export */ });
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ 6575);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ 1699);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../core */ 8247);
 /* harmony import */ var _icons_chevron_chevron_icon_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../icons/chevron/chevron-icon.component */ 3677);
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common */ 6575);
 
 
 
@@ -2351,7 +2359,7 @@ function ViewerComponent_counter_6_Template(rf, ctx) {
   }
   if (rf & 2) {
     const ctx_r5 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("itemQuantity", ctx_r5.items == null ? null : ctx_r5.items.length)("selectedIndex", ctx_r5.counterIndex)("orientation", ctx_r5.counterOrientation);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("itemQuantity", ctx_r5.items.length)("selectedIndex", ctx_r5.counterIndex)("orientation", ctx_r5.counterOrientation);
   }
 }
 function ViewerComponent_ng_container_7_Template(rf, ctx) {
@@ -2407,10 +2415,10 @@ class ViewerComponent {
     return this.arrows && this.items && this.items.length > 1;
   }
   get showPrevArrow() {
-    return this.showArrow && (this.selectedIndex > 0 || this.loop);
+    return this.showArrow && (this.selectedIndex > 0 || this.reallyLoop);
   }
   get showNextArrow() {
-    return this.showArrow && (this.selectedIndex < this.items.length - 1 || this.loop);
+    return this.showArrow && (this.selectedIndex < this.items.length - 1 || this.reallyLoop);
   }
   constructor(_hostRef, _cd, _destroyRef, _zone) {
     this._hostRef = _hostRef;
@@ -2420,10 +2428,12 @@ class ViewerComponent {
     this.itemClick = new _angular_core__WEBPACK_IMPORTED_MODULE_5__.EventEmitter();
     this.descriptionClick = new _angular_core__WEBPACK_IMPORTED_MODULE_5__.EventEmitter();
     this.selection = new _angular_core__WEBPACK_IMPORTED_MODULE_5__.EventEmitter();
+    this.fringeCount = this.getFringeCount();
+    this._itemWidth = 0;
     this.pointerDeltaX = 0;
     this.sliding = false;
     this.repositionOnFringe = entries => {
-      if (!this.loop || !this.sliding) {
+      if (!this.reallyLoop || !this.sliding) {
         return;
       }
       const {
@@ -2450,20 +2460,18 @@ class ViewerComponent {
     loop
   }) {
     if (visibleItems) {
-      if (!this.moveByItems && this.visibleItems) {
-        this.moveByItems = this.visibleItems;
-      }
-      this.fringeCount = this.getFringeCount();
-      this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
       this.itemListRef.nativeElement.style.setProperty('--item-width', `calc(100% / ${this.visibleItems})`);
       setTimeout(this.updateDimensions);
     }
     if (loop || items) {
-      this.loop = this.items.length > 1 ? this.loop : false;
-      this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
-      if (this.loop) {
+      this.reallyLoop = this.items.length > 1 ? this.loop : false;
+      if (this.reallyLoop) {
         setTimeout(() => this.observeFringes());
       }
+    }
+    if (items || visibleItems || loop) {
+      this.fringeCount = this.getFringeCount();
+      this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
     }
   }
   ngOnInit() {
@@ -2510,7 +2518,7 @@ class ViewerComponent {
       }
     }
     const indexOutOfBounds = !this.items[index];
-    const looping = this.loop && indexOutOfBounds;
+    const looping = this.reallyLoop && indexOutOfBounds;
     if (looping) {
       this.loopTo(index);
       return this.selection.emit(this.selectedIndex);
@@ -2559,10 +2567,10 @@ class ViewerComponent {
     return index < 0 ? 0 : this.items.length - 1;
   }
   getFringeCount() {
-    return this.loop ? Math.min(Math.ceil(this.visibleItems), this.items.length) : 0;
+    return this.reallyLoop ? Math.min(Math.ceil(this.visibleItems), this.items.length) : 0;
   }
   getItemsToBeDisplayed(fringeCount) {
-    return this.loop ? [...this.items.slice(-fringeCount), ...this.items, ...this.items.slice(0, fringeCount)] : this.items;
+    return this.reallyLoop ? [...this.items.slice(-fringeCount), ...this.items, ...this.items.slice(0, fringeCount)] : this.items;
   }
   handleMouseSlides() {
     this._zone.runOutsideAngular(() => {
@@ -2748,8 +2756,8 @@ ViewerComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__[
   },
   inputs: {
     items: "items",
-    arrows: "arrows",
     selectedIndex: "selectedIndex",
+    arrows: "arrows",
     descriptions: "descriptions",
     errorText: "errorText",
     showErrors: "showErrors",
@@ -2804,7 +2812,7 @@ ViewerComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__[
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", ctx.showNextArrow);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", ctx.counter && (ctx.items == null ? null : ctx.items.length));
+      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", ctx.counter && ctx.items.length);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngTemplateOutlet", ctx.contentTemplate)("ngTemplateOutletContext", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpureFunction1"](9, _c3, ctx.selectedIndex));
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
