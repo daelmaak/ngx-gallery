@@ -9,7 +9,6 @@ import {
   Input,
   OnChanges,
   Output,
-  SimpleChanges,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
@@ -27,6 +26,7 @@ import {
   VerticalOrientation,
 } from '../../core';
 import { defaultAria } from '../../core/aria';
+import { StrictSimpleChanges } from '../../core/ng';
 import { ThumbsComponent } from '../thumbs/thumbs.component';
 import { ViewerComponent } from '../viewer/viewer.component';
 
@@ -191,8 +191,8 @@ export class GalleryComponent implements OnChanges {
       : OrientationFlag.VERTICAL;
   }
 
-  ngOnChanges({ items }: SimpleChanges) {
-    if (!items.currentValue) {
+  ngOnChanges({ items }: StrictSimpleChanges<GalleryComponent>) {
+    if (!items?.currentValue) {
       this.items = [];
     }
   }
