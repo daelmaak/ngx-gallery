@@ -16,7 +16,8 @@
       "@daelmaak/ngx-gallery/*": ["libs/gallery/src/*"]
     },
     "useDefineForClassFields": false,
-    "rootDir": "."
+    "rootDir": ".",
+    "strict": true
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

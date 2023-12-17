@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -16,15 +17,14 @@ import {
   ViewChildren,
 } from '@angular/core';
 import {
-  isBrowser,
   Orientation,
   SUPPORT,
   ThumbTemplateContext,
+  isBrowser,
 } from '../../core';
 import { Aria } from '../../core/aria';
 import { GalleryItemEvent, GalleryItemInternal } from '../../core/gallery-item';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'thumbs',
@@ -36,29 +36,29 @@ import { CommonModule } from '@angular/common';
 })
 export class ThumbsComponent implements OnChanges, OnDestroy {
   @Input() items: GalleryItemInternal[] = [];
-  @Input() selectedIndex: number;
-  @Input() aria: Aria;
-  @Input() orientation: Orientation;
-  @Input() arrows: boolean;
-  @Input() arrowSlideByLength: number;
-  @Input() autoScroll: boolean;
-  @Input() thumbTemplate: TemplateRef<ThumbTemplateContext>;
-  @Input() arrowTemplate: TemplateRef<never>;
-  @Input() errorTemplate: TemplateRef<never>;
-  @Input() scrollBehavior: ScrollBehavior;
-  @Input() isRtl: boolean;
+  @Input() selectedIndex!: number;
+  @Input() aria?: Aria;
+  @Input() orientation?: Orientation;
+  @Input() arrows?: boolean;
+  @Input() arrowSlideByLength?: number;
+  @Input() autoScroll?: boolean;
+  @Input() thumbTemplate?: TemplateRef<ThumbTemplateContext>;
+  @Input() arrowTemplate?: TemplateRef<never>;
+  @Input() errorTemplate?: TemplateRef<never>;
+  @Input() scrollBehavior?: ScrollBehavior;
+  @Input() isRtl?: boolean;
 
   @Output() thumbClick = new EventEmitter<GalleryItemEvent>();
   @Output() thumbHover = new EventEmitter<GalleryItemEvent>();
 
-  @ViewChild('thumbs', { static: true }) thumbListRef: ElementRef<HTMLElement>;
-  @ViewChildren('thumb') thumbsRef: QueryList<ElementRef<HTMLElement>>;
+  @ViewChild('thumbs', { static: true }) thumbListRef!: ElementRef<HTMLElement>;
+  @ViewChildren('thumb') thumbsRef!: QueryList<ElementRef<HTMLElement>>;
 
   showStartArrow = false;
   showEndArrow = false;
 
-  private arrowObserver: IntersectionObserver;
-  private scrollId: number;
+  private arrowObserver?: IntersectionObserver;
+  private scrollId?: number;
 
   @HostBinding('class')
   get cssClass() {
@@ -71,7 +71,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
       : this.elRef.nativeElement.offsetWidth;
   }
 
-  private get scrollKey(): string {
+  private get scrollKey(): 'scrollTop' | 'scrollLeft' {
     return this.vertical ? 'scrollTop' : 'scrollLeft';
   }
 

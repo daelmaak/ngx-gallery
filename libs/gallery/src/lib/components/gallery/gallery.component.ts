@@ -62,7 +62,7 @@ export class GalleryComponent implements OnChanges {
   /**
    * Text to be shown when media loading failed
    */
-  @Input() errorText: string;
+  @Input() errorText?: string;
   /**
    * Display an error when the media contained in gallery item failed to load.
    */
@@ -103,31 +103,31 @@ export class GalleryComponent implements OnChanges {
    */
   @HostBinding('class.rtl')
   @Input()
-  isRtl: boolean;
-  /**
-   * By how many items the slider shifts when user navigates with arrows.
-   */
-  @Input() moveByItems?: number;
+  isRtl = false;
   /**
    * How many items are visible in the scrollport.
    */
   @Input() visibleItems = 1;
   /**
+   * By how many items the slider shifts when user navigates with arrows.
+   */
+  @Input() moveByItems = this.visibleItems;
+  /**
    * Custom template for gallery items.
    */
-  @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
+  @Input() itemTemplate?: TemplateRef<ItemTemplateContext>;
   /**
    * Custom item template for media that failed to load
    */
-  @Input() errorTemplate: TemplateRef<any>;
+  @Input() errorTemplate?: TemplateRef<any>;
   /**
    * Custom template for navigation arrows for the slider.
    */
-  @Input() arrowTemplate: TemplateRef<any>;
+  @Input() arrowTemplate?: TemplateRef<any>;
   /**
    * Custom template whose content appears in the gallery viewer.
    */
-  @Input() contentTemplate: TemplateRef<ContentTemplateContext>;
+  @Input() contentTemplate?: TemplateRef<ContentTemplateContext>;
   /**
    * Show thumbnail list.
    */
@@ -147,7 +147,7 @@ export class GalleryComponent implements OnChanges {
   /**
    * By how far in pixels the thumbnails are scrolled when using arrows.
    */
-  @Input() thumbsArrowSlideByLength: number;
+  @Input() thumbsArrowSlideByLength?: number;
   /**
    * Smooth or instant navigation in thumbnails.
    */
@@ -155,15 +155,15 @@ export class GalleryComponent implements OnChanges {
   /**
    * Custom template for thumbnail items.
    */
-  @Input() thumbTemplate: TemplateRef<ThumbTemplateContext>;
+  @Input() thumbTemplate?: TemplateRef<ThumbTemplateContext>;
   /**
    * Custom template for navigation arrows in thumbnail list.
    */
-  @Input() thumbsArrowTemplate: TemplateRef<never>;
+  @Input() thumbsArrowTemplate?: TemplateRef<never>;
   /**
    * Custom template for thumbnails that failed to load.
    */
-  @Input() thumbErrorTemplate: TemplateRef<never>;
+  @Input() thumbErrorTemplate?: TemplateRef<never>;
 
   @Output() itemClick = new EventEmitter<GalleryItemEvent>();
   @Output() thumbClick = new EventEmitter<GalleryItemEvent>();
@@ -174,10 +174,11 @@ export class GalleryComponent implements OnChanges {
    */
   @Output() selection = new EventEmitter<GalleryItem>();
 
-  @ViewChild(ViewerComponent) _viewerRef: ViewerComponent;
-  @ViewChild(ThumbsComponent) _thumbsRef: ThumbsComponent;
+  @ViewChild(ViewerComponent) _viewerRef!: ViewerComponent;
+  @ViewChild(ThumbsComponent) _thumbsRef?: ThumbsComponent;
   @ViewChild(ViewerComponent, { read: ElementRef })
-  _viewerElRef: ElementRef<HTMLElement>;
+  _viewerElRef!: ElementRef<HTMLElement>;
+
   @HostBinding('class.gallery--column')
   get _galleryColumn() {
     return (
@@ -213,12 +214,12 @@ export class GalleryComponent implements OnChanges {
 
   select(index: number) {
     this._viewerRef.select(index);
-    this._thumbsRef.select(index);
+    this._thumbsRef?.select(index);
     this._selectInternal(index);
   }
 
   slideThumbs(direction: number) {
-    this._thumbsRef.slide(direction);
+    this._thumbsRef?.slide(direction);
   }
 
   _onThumbClick(event: GalleryItemEvent) {

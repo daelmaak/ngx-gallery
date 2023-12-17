@@ -1,8 +1,8 @@
 import {
-  Component,
   ChangeDetectionStrategy,
-  Input,
+  Component,
   HostBinding,
+  Input,
 } from '@angular/core';
 
 import { VerticalOrientation } from '../../core';
@@ -20,12 +20,12 @@ import { VerticalOrientation } from '../../core';
 })
 export class CounterComponent {
   @Input()
-  itemQuantity: number;
+  itemQuantity!: number;
 
   @Input()
-  selectedIndex: number;
+  selectedIndex!: number;
 
   @HostBinding('class')
   @Input()
-  orientation: VerticalOrientation;
+  orientation!: VerticalOrientation;
 }
