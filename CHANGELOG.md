@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.2](https://github.com/daelmaak/ngx-gallery/compare/v3.0.1...v3.0.2) (2023-12-17)
+
+
+### Bug Fixes
+
+* check that changes are defined ([ebdc346](https://github.com/daelmaak/ngx-gallery/commit/ebdc34669928ab0b50d2972471d43315a4f67ce3))
+
 ### [3.0.1](https://github.com/daelmaak/ngx-gallery/compare/v3.0.0...v3.0.1) (2023-12-02)
 
 
