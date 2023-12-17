@@ -36,6 +36,8 @@ describe('GalleryComponent', () => {
 
   it('should handle empty items input in looping mode', () => {
     componentRef.setInput('items', undefined);
+    fixture.detectChanges();
+
     componentRef.setInput('loop', true);
     fixture.detectChanges();
 
