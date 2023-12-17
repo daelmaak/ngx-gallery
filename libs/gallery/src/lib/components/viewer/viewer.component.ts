@@ -67,46 +67,47 @@ const passiveEventListenerOpts = {
 })
 export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   @Input() items!: GalleryItemInternal[];
-  @Input() arrows: boolean;
-  @Input() selectedIndex: number;
-  @Input() descriptions: boolean;
-  @Input() errorText: string;
-  @Input() showErrors: boolean;
-  @Input() mouseGestures: boolean;
-  @Input() touchGestures: boolean;
-  @Input() counter: boolean;
-  @Input() counterOrientation: VerticalOrientation;
-  @Input() loading: Loading;
-  @Input() objectFit: ObjectFit;
-  @Input() itemTemplate: TemplateRef<ItemTemplateContext>;
-  @Input() errorTemplate: TemplateRef<any>;
-  @Input() arrowTemplate: TemplateRef<any>;
-  @Input() contentTemplate: TemplateRef<ContentTemplateContext>;
-  @Input() thumbsOrientation: OrientationFlag;
-  @Input() aria: Aria;
-  @Input() loop: boolean;
-  @Input() visibleItems: number;
-  @Input() moveByItems: number;
+  @Input() selectedIndex!: number;
+  @Input() arrows?: boolean;
+  @Input() descriptions?: boolean;
+  @Input() errorText?: string;
+  @Input() showErrors?: boolean;
+  @Input() mouseGestures?: boolean;
+  @Input() touchGestures?: boolean;
+  @Input() counter?: boolean;
+  @Input() counterOrientation!: VerticalOrientation;
+  @Input() loading?: Loading;
+  @Input() objectFit?: ObjectFit;
+  @Input() itemTemplate?: TemplateRef<ItemTemplateContext>;
+  @Input() errorTemplate?: TemplateRef<any>;
+  @Input() arrowTemplate?: TemplateRef<any>;
+  @Input() contentTemplate?: TemplateRef<ContentTemplateContext>;
+  @Input() thumbsOrientation?: OrientationFlag;
+  @Input() aria?: Aria;
+  @Input() loop?: boolean;
+  @Input() visibleItems!: number;
+  @Input() moveByItems!: number;
 
   @HostBinding('class.clip')
   @Input()
-  clip: boolean;
+  clip?: boolean;
 
   @HostBinding('class.rtl')
   @Input()
-  isRtl: boolean;
+  isRtl?: boolean;
 
   @Output() itemClick = new EventEmitter<GalleryItemEvent>();
   @Output() descriptionClick = new EventEmitter<Event>();
   @Output() selection = new EventEmitter<number>();
 
-  @ViewChild('itemList', { static: true }) itemListRef: ElementRef<HTMLElement>;
-  @ViewChildren('itemsRef') itemsRef: QueryList<ElementRef<HTMLElement>>;
+  @ViewChild('itemList', { static: true })
+  itemListRef!: ElementRef<HTMLElement>;
+  @ViewChildren('itemsRef') itemsRef!: QueryList<ElementRef<HTMLElement>>;
 
-  displayedItems: GalleryItemInternal[];
-  fringeCount: number;
-  reallyLoop: boolean;
-  private _itemWidth: number;
+  displayedItems?: GalleryItemInternal[];
+  fringeCount = this.getFringeCount();
+  reallyLoop?: boolean;
+  private _itemWidth = 0;
   private fringeObserver?: IntersectionObserver;
   private pointerDeltaX = 0;
   private sliding = false;
@@ -145,9 +146,6 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
 
   ngOnChanges({ visibleItems, items, loop }: SimpleChanges) {
     if (visibleItems) {
-      if (!this.moveByItems && this.visibleItems) {
-        this.moveByItems = this.visibleItems;
-      }
       this.itemListRef.nativeElement.style.setProperty(
         '--item-width',
         `calc(100% / ${this.visibleItems})`

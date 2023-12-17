@@ -5,7 +5,7 @@
   (mousedown)="$event.stopPropagation()"
   (click)="selectByDelta(-moveByItems)"
 >
-  <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>
+  <chevron-icon *ngIf="!arrowTemplate; else $any(arrowTemplate)"></chevron-icon>
 </button>
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
@@ -61,7 +61,10 @@
     </ng-container>
 
     <ng-container *ngIf="itemFailedToLoad(item)">
-      <div *ngIf="!errorTemplate; else errorTemplate" class="viewer-error">
+      <div
+        *ngIf="!errorTemplate; else $any(errorTemplate)"
+        class="viewer-error"
+      >
         <div class="viewer-error-icon">⚠</div>
         <p class="viewer-error-text">
           {{ errorText || 'Loading of this media failed' }}
@@ -78,7 +81,7 @@
     <ng-template #customTemplate>
       <ng-container
         *ngTemplateOutlet="
-          itemTemplate;
+          $any(itemTemplate);
           context: {
             index: items?.indexOf(item),
             selectedIndex: selectedIndex,
@@ -98,19 +101,19 @@
   (mousedown)="$event.stopPropagation()"
   (click)="selectByDelta(moveByItems)"
 >
-  <chevron-icon *ngIf="!arrowTemplate; else arrowTemplate"></chevron-icon>
+  <chevron-icon *ngIf="!arrowTemplate; else $any(arrowTemplate)"></chevron-icon>
 </button>
 
 <counter
-  *ngIf="counter && items?.length"
-  [itemQuantity]="items?.length"
+  *ngIf="counter && items.length"
+  [itemQuantity]="items.length"
   [selectedIndex]="counterIndex"
   [orientation]="counterOrientation"
 ></counter>
 
 <ng-container
   *ngTemplateOutlet="
-    contentTemplate;
+    $any(contentTemplate);
     context: {
       selectedIndex: selectedIndex
     }

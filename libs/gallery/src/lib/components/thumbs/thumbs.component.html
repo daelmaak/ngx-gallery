@@ -4,7 +4,7 @@
   class="thumbs-arrow thumbs-arrow-prev"
   (click)="slide(-1)"
 >
-  <div *ngIf="!arrowTemplate; else arrowTemplate">
+  <div *ngIf="!arrowTemplate; else $any(arrowTemplate)">
     <chevron-icon></chevron-icon>
   </div>
 </button>
@@ -28,7 +28,10 @@
       />
 
       <ng-container *ngIf="item._thumbFailed">
-        <div *ngIf="!errorTemplate; else errorTemplate" class="thumbs-error">
+        <div
+          *ngIf="!errorTemplate; else $any(errorTemplate)"
+          class="thumbs-error"
+        >
           <div
             class="thumbs-error-icon"
             [class.thumbs-error-icon--video]="item.video"
@@ -40,7 +43,7 @@
     <ng-template #customThumbTemplate>
       <ng-container
         *ngTemplateOutlet="
-          thumbTemplate;
+          $any(thumbTemplate);
           context: { index: i, selectedIndex: selectedIndex, item: item }
         "
       ></ng-container>
@@ -54,7 +57,7 @@
   class="thumbs-arrow thumbs-arrow-next"
   (click)="slide(1)"
 >
-  <div *ngIf="!arrowTemplate; else arrowTemplate">
+  <div *ngIf="!arrowTemplate; else $any(arrowTemplate)">
     <chevron-icon></chevron-icon>
   </div>
 </button>
