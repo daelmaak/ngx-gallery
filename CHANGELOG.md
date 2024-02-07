@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.3](https://github.com/daelmaak/ngx-gallery/compare/v3.0.2...v3.0.3) (2024-02-07)
+
+
+### Bug Fixes
+
+* do not reset items when different input is changed ([834a23e](https://github.com/daelmaak/ngx-gallery/commit/834a23ec717a9ebd55050d202c62ddd6b76a42b6))
+
 ### [3.0.2](https://github.com/daelmaak/ngx-gallery/compare/v3.0.1...v3.0.2) (2023-12-17)
 
 
