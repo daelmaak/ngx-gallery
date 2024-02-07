@@ -193,7 +193,7 @@ export class GalleryComponent implements OnChanges {
   }
 
   ngOnChanges({ items }: StrictSimpleChanges<GalleryComponent>) {
-    if (!items?.currentValue) {
+    if (items && !items.currentValue) {
       this.items = [];
     }
   }
