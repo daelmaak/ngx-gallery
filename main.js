@@ -1485,7 +1485,7 @@ class GalleryComponent {
   ngOnChanges({
     items
   }) {
-    if (!items?.currentValue) {
+    if (items && !items.currentValue) {
       this.items = [];
     }
   }
