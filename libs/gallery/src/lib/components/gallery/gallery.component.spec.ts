@@ -44,6 +44,17 @@ describe('GalleryComponent', () => {
     expect().nothing();
   });
 
+  it('should not reset items when they are already set and different @Input() is changed', () => {
+    component.items = [{ src: 'src1' }, { src: 'src2' }];
+    fixture.detectChanges();
+
+    const items = component.items;
+    componentRef.setInput('thumbs', false);
+    fixture.detectChanges();
+
+    expect(component.items).toBe(items);
+  });
+
   describe('emitters', () => {
     beforeEach(fakeAsync(() => {
       component.items = [{ src: 'src1' }, { src: 'src2' }];
