@@ -18,10 +18,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'yarn'
+          # cache: 'yarn'
 
-      # TODO cache
+      - name: Cache
+        id: install-cache
+        uses: actions/cache@v4
+        with:
+          path: 'node_modules'
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+
       - name: Install
+        if: steps.install-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Build
@@ -30,7 +37,6 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      # TODO Run as separate job? Only when Install is cached
       - name: Test
         run: yarn test:ci
 
