@@ -51,3 +51,4 @@ Thumbs.db
 *.swp
 
 .angular/cache
+.nx/cache
