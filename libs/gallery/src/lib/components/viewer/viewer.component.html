@@ -14,9 +14,10 @@
     #itemsRef
     *ngFor="let item of displayedItems; let i = index"
     media
-    [attr.tabindex]="itemTabbable(i)"
+    [attr.tabindex]="isItemFringe(i) ? -1 : 0"
     [attr.aria-label]="item.alt"
     [attr.aria-describedby]="'viewer-aria-description-' + i"
+    [class.viewer-fringe-item]="isItemFringe(i)"
     (click)="onImageClick(item, $event)"
     (mediaLoadError)="onItemErrored(item)"
     (keydown.Tab)="onTab(i + 1)"

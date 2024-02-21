@@ -164,6 +164,11 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
     if (items || visibleItems || loop) {
       this.fringeCount = this.getFringeCount();
       this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
+
+      if (this.reallyLoop) {
+        this.noAnimation = true;
+        this.center();
+      }
     }
   }
 
@@ -268,9 +273,9 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
     return item._failed;
   }
 
-  itemTabbable(index: number) {
+  isItemFringe(index: number) {
     index = index - this.fringeCount;
-    return index >= 0 && index < this.items.length ? 0 : -1;
+    return index < 0 || index >= this.items.length;
   }
 
   private center() {
