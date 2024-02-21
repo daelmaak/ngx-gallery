@@ -1,7 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GalleryItem } from '../../core';
 import { GalleryComponent } from '../gallery/gallery.component';
-import { SLIDE_ANIMATION_DURATION } from './viewer.component';
 
 describe('Slider', () => {
   const items: GalleryItem[] = [
@@ -29,26 +28,22 @@ describe('Slider', () => {
     ensureImagesVisible(1);
   });
 
-  it('displays the first image even when images load later', () => {
+  it('displays the first genuine image even when images load later (loop mode)', () => {
     cy.mount(GalleryComponent, {
-      componentProperties: { items: [] },
+      componentProperties: { items: [], loop: true },
       imports: [BrowserAnimationsModule],
     }).then(({ fixture }) => {
-      // cy.wait(100);
-      cy.log('set non empty items').then(() => {
-        fixture.componentRef.setInput('items', items);
-        // Even though setInput should trigger change detection, it's for some reason still
-        // needed to rerender with the new items.
-        fixture.detectChanges();
-        cy.wait(SLIDE_ANIMATION_DURATION);
-      });
+      cy.wait(0); // simulates a delay in loading the images
+
+      cy.log('set non empty items');
+      cy.then(() => fixture.componentRef.setInput('items', items));
     });
 
     ensureImagesVisible(0);
   });
 
   function ensureImagesVisible(...visibleIndexes: number[]) {
-    cy.get('viewer li img').then(imgs => {
+    cy.get('viewer li:not(.viewer-fringe-item) img').then(imgs => {
       for (let i = 0; i < imgs.length; i++) {
         const img = imgs[i];
         const isVisible = visibleIndexes.includes(i);
