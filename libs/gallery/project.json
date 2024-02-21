@@ -39,6 +39,7 @@
     "component-test": {
       "executor": "@nx/cypress:cypress",
       "options": {
+        "browser": "electron",
         "cypressConfig": "libs/gallery/cypress.config.ts",
         "testingType": "component",
         "skipServe": true,
