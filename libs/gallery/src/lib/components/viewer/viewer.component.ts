@@ -38,6 +38,8 @@ import { SafePipe } from '../../pipes/safe.pipe';
 import { CounterComponent } from '../counter/counter.component';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
 
+export const SLIDE_ANIMATION_DURATION = 400;
+
 const passiveEventListenerOpts = {
   passive: true,
 };
@@ -52,7 +54,7 @@ const passiveEventListenerOpts = {
       transition(':leave', animate('0ms 100ms')),
       transition(':enter', [
         style({ opacity: 0 }),
-        animate('400ms', style({ opacity: 1 })),
+        animate(`${SLIDE_ANIMATION_DURATION}ms`, style({ opacity: 1 })),
       ]),
     ]),
   ],
@@ -115,7 +117,7 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   set noAnimation(value: boolean) {
     this.itemListRef.nativeElement.style.transitionDuration = value
       ? '0ms'
-      : '400ms';
+      : `${SLIDE_ANIMATION_DURATION}ms`;
   }
 
   get counterIndex() {
