@@ -18,17 +18,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          # cache: 'yarn'
+          cache: 'yarn'
 
       - name: Cache
         id: install-cache
         uses: actions/cache@v4
         with:
-          path: 'node_modules'
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          path: ~/.cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
       - name: Install
-        if: steps.install-cache.outputs.cache-hit != 'true'
+        # if: steps.install-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Build
