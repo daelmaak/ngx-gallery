@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.4](https://github.com/daelmaak/ngx-gallery/compare/v3.0.3...v3.0.4) (2024-02-21)
+
+
+### Bug Fixes
+
+* **gallery:** re-center when items change in loop mode ([548ed56](https://github.com/daelmaak/ngx-gallery/commit/548ed562b1e677e2edcd31170699604b33311d49))
+
 ### [3.0.3](https://github.com/daelmaak/ngx-gallery/compare/v3.0.2...v3.0.3) (2024-02-07)
 
 
