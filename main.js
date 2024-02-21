@@ -2109,6 +2109,7 @@ ThumbsComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_2__[
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   SLIDE_ANIMATION_DURATION: () => (/* binding */ SLIDE_ANIMATION_DURATION),
 /* harmony export */   ViewerComponent: () => (/* binding */ ViewerComponent)
 /* harmony export */ });
 /* harmony import */ var _angular_animations__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/animations */ 2501);
@@ -2319,7 +2320,8 @@ function ViewerComponent_li_4_Template(rf, ctx) {
     const i_r13 = ctx.index;
     const _r17 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵreference"](6);
     const ctx_r3 = _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵnextContext"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("tabindex", ctx_r3.itemTabbable(i_r13))("aria-label", item_r12.alt)("aria-describedby", "viewer-aria-description-" + i_r13);
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵclassProp"]("viewer-fringe-item", ctx_r3.isItemFringe(i_r13));
+    _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵattribute"]("tabindex", ctx_r3.isItemFringe(i_r13) ? -1 : 0)("aria-label", item_r12.alt)("aria-describedby", "viewer-aria-description-" + i_r13);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](2);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("ngIf", !ctx_r3.itemTemplate)("ngIfElse", _r17);
     _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
@@ -2401,12 +2403,13 @@ const _c3 = function (a0) {
     selectedIndex: a0
   };
 };
+const SLIDE_ANIMATION_DURATION = 400;
 const passiveEventListenerOpts = {
   passive: true
 };
 class ViewerComponent {
   set noAnimation(value) {
-    this.itemListRef.nativeElement.style.transitionDuration = value ? '0ms' : '400ms';
+    this.itemListRef.nativeElement.style.transitionDuration = value ? '0ms' : `${SLIDE_ANIMATION_DURATION}ms`;
   }
   get counterIndex() {
     return Math.floor(this.selectedIndex / this.moveByItems);
@@ -2472,6 +2475,10 @@ class ViewerComponent {
     if (items || visibleItems || loop) {
       this.fringeCount = this.getFringeCount();
       this.displayedItems = this.getItemsToBeDisplayed(this.fringeCount);
+      if (this.reallyLoop) {
+        this.noAnimation = true;
+        this.center();
+      }
     }
   }
   ngOnInit() {
@@ -2556,9 +2563,9 @@ class ViewerComponent {
   itemFailedToLoad(item) {
     return item._failed;
   }
-  itemTabbable(index) {
+  isItemFringe(index) {
     index = index - this.fringeCount;
-    return index >= 0 && index < this.items.length ? 0 : -1;
+    return index < 0 || index >= this.items.length;
   }
   center() {
     this.shift();
@@ -2585,8 +2592,8 @@ class ViewerComponent {
         document.addEventListener('mouseup', onmouseup, passiveEventListenerOpts);
       };
       const onmousemove = e => {
-        maxDeltaX = Math.max(Math.abs(mousedown.x - e.x));
-        maxDeltaY = Math.max(Math.abs(mousedown.y - e.y));
+        maxDeltaX = Math.max(Math.abs(mousedown.clientX - e.clientX));
+        maxDeltaY = Math.max(Math.abs(mousedown.clientY - e.clientY));
         this.shiftByDelta(e.movementX);
       };
       const onmouseup = () => {
@@ -2788,13 +2795,13 @@ ViewerComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__[
   features: [_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵNgOnChangesFeature"], _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵStandaloneFeature"]],
   decls: 9,
   vars: 11,
-  consts: [["aria-label", "Previous image", "class", "viewer-arrow viewer-arrow-prev", 3, "mousedown", "click", 4, "ngIf"], ["itemList", ""], ["class", "viewer-initial-item", 4, "ngIf"], ["media", "", 3, "click", "mediaLoadError", "keydown.Tab", "keydown.shift.Tab", 4, "ngFor", "ngForOf"], ["aria-label", "Next image", "class", "viewer-arrow viewer-arrow-next", 3, "mousedown", "click", 4, "ngIf"], [3, "itemQuantity", "selectedIndex", "orientation", 4, "ngIf"], [4, "ngTemplateOutlet", "ngTemplateOutletContext"], ["class", "viewer-description", "aria-hidden", "true", 3, "viewer-description--above-counter", 4, "ngIf"], ["aria-label", "Previous image", 1, "viewer-arrow", "viewer-arrow-prev", 3, "mousedown", "click"], [4, "ngIf", "ngIfElse"], [1, "viewer-initial-item"], ["media", "", 3, "click", "mediaLoadError", "keydown.Tab", "keydown.shift.Tab"], ["itemsRef", ""], [4, "ngIf"], [1, "sr-only", 3, "id", "innerHTML"], ["customTemplate", ""], ["controls", "", "playsinline", "", 3, "src", "poster", "objectFit", 4, "ngIf"], ["allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", "allowfullscreen", "", 3, "src", 4, "ngIf"], [3, "srcset", 4, "ngFor", "ngForOf"], [3, "src", "alt"], [3, "srcset"], ["controls", "", "playsinline", "", 3, "src", "poster"], ["allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", "allowfullscreen", "", 3, "src"], ["class", "viewer-error", 4, "ngIf", "ngIfElse"], [1, "viewer-error"], [1, "viewer-error-icon"], [1, "viewer-error-text"], ["aria-label", "Next image", 1, "viewer-arrow", "viewer-arrow-next", 3, "mousedown", "click"], [3, "itemQuantity", "selectedIndex", "orientation"], ["aria-hidden", "true", 1, "viewer-description"], ["class", "viewer-description-inner", 3, "innerHTML", "click", 4, "ngIf"], [1, "viewer-description-inner", 3, "innerHTML", "click"]],
+  consts: [["aria-label", "Previous image", "class", "viewer-arrow viewer-arrow-prev", 3, "mousedown", "click", 4, "ngIf"], ["itemList", ""], ["class", "viewer-initial-item", 4, "ngIf"], ["media", "", 3, "viewer-fringe-item", "click", "mediaLoadError", "keydown.Tab", "keydown.shift.Tab", 4, "ngFor", "ngForOf"], ["aria-label", "Next image", "class", "viewer-arrow viewer-arrow-next", 3, "mousedown", "click", 4, "ngIf"], [3, "itemQuantity", "selectedIndex", "orientation", 4, "ngIf"], [4, "ngTemplateOutlet", "ngTemplateOutletContext"], ["class", "viewer-description", "aria-hidden", "true", 3, "viewer-description--above-counter", 4, "ngIf"], ["aria-label", "Previous image", 1, "viewer-arrow", "viewer-arrow-prev", 3, "mousedown", "click"], [4, "ngIf", "ngIfElse"], [1, "viewer-initial-item"], ["media", "", 3, "click", "mediaLoadError", "keydown.Tab", "keydown.shift.Tab"], ["itemsRef", ""], [4, "ngIf"], [1, "sr-only", 3, "id", "innerHTML"], ["customTemplate", ""], ["controls", "", "playsinline", "", 3, "src", "poster", "objectFit", 4, "ngIf"], ["allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", "allowfullscreen", "", 3, "src", 4, "ngIf"], [3, "srcset", 4, "ngFor", "ngForOf"], [3, "src", "alt"], [3, "srcset"], ["controls", "", "playsinline", "", 3, "src", "poster"], ["allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture", "allowfullscreen", "", 3, "src"], ["class", "viewer-error", 4, "ngIf", "ngIfElse"], [1, "viewer-error"], [1, "viewer-error-icon"], [1, "viewer-error-text"], ["aria-label", "Next image", 1, "viewer-arrow", "viewer-arrow-next", 3, "mousedown", "click"], [3, "itemQuantity", "selectedIndex", "orientation"], ["aria-hidden", "true", 1, "viewer-description"], ["class", "viewer-description-inner", 3, "innerHTML", "click", 4, "ngIf"], [1, "viewer-description-inner", 3, "innerHTML", "click"]],
   template: function ViewerComponent_Template(rf, ctx) {
     if (rf & 1) {
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](0, ViewerComponent_button_0_Template, 2, 2, "button", 0);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](1, "ul", null, 1);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](3, ViewerComponent_li_3_Template, 1, 0, "li", 2);
-      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](4, ViewerComponent_li_4_Template, 7, 8, "li", 3);
+      _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](4, ViewerComponent_li_4_Template, 7, 10, "li", 3);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](5, ViewerComponent_button_5_Template, 2, 2, "button", 4);
       _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtemplate"](6, ViewerComponent_counter_6_Template, 1, 3, "counter", 5);
@@ -2824,7 +2831,7 @@ ViewerComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__[
   data: {
     animation: [(0,_angular_animations__WEBPACK_IMPORTED_MODULE_7__.trigger)('mediaAnimate', [(0,_angular_animations__WEBPACK_IMPORTED_MODULE_7__.transition)(':leave', (0,_angular_animations__WEBPACK_IMPORTED_MODULE_7__.animate)('0ms 100ms')), (0,_angular_animations__WEBPACK_IMPORTED_MODULE_7__.transition)(':enter', [(0,_angular_animations__WEBPACK_IMPORTED_MODULE_7__.style)({
       opacity: 0
-    }), (0,_angular_animations__WEBPACK_IMPORTED_MODULE_7__.animate)('400ms', (0,_angular_animations__WEBPACK_IMPORTED_MODULE_7__.style)({
+    }), (0,_angular_animations__WEBPACK_IMPORTED_MODULE_7__.animate)(`${SLIDE_ANIMATION_DURATION}ms`, (0,_angular_animations__WEBPACK_IMPORTED_MODULE_7__.style)({
       opacity: 1
     }))])])]
   },
