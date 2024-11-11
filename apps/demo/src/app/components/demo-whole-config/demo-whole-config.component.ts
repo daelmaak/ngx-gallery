@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -16,7 +17,6 @@ import {
   Orientation,
   VerticalOrientation,
 } from '@daelmaak/ngx-gallery';
-import { GalleryItemInternal } from '@daelmaak/ngx-gallery/lib/core/gallery-item';
 
 interface GalleryConfig {
   arrows: boolean;
@@ -52,7 +52,7 @@ export class DemoWholeConfigComponent implements OnInit {
   displayGallery = true;
   imageLoadingLatency = 0;
 
-  mobile = matchMedia('(max-width: 767px)').matches;
+  mobile?: boolean;
 
   galleryConfig: GalleryConfig = {
     arrows: !this.mobile,
@@ -78,7 +78,13 @@ export class DemoWholeConfigComponent implements OnInit {
   @ViewChild(GalleryComponent) gallery: GalleryComponent;
 
   constructor(private cd: ChangeDetectorRef) {
-    this.galleryConfig = this.getGalleryConfig() || this.galleryConfig;
+    afterNextRender({
+      read: () => {
+        this.galleryConfig = this.getGalleryConfig() || this.galleryConfig;
+        this.mobile = matchMedia('(max-width: 767px)').matches;
+        window.addEventListener('pagehide', this.storeGalleryConfig);
+      },
+    });
   }
 
   ngOnInit() {
@@ -87,8 +93,6 @@ export class DemoWholeConfigComponent implements OnInit {
         defer(() => of(items).pipe(delay(this.imageLoadingLatency)))
       )
     );
-
-    window.addEventListener('pagehide', this.storeGalleryConfig);
   }
 
   onConfigChange(prop: keyof GalleryConfig, value: unknown) {

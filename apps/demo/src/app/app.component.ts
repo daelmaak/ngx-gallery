@@ -1,8 +1,8 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnInit,
 } from '@angular/core';
 import { GalleryItem } from '@daelmaak/ngx-gallery';
 
@@ -12,7 +12,7 @@ import { GalleryItem } from '@daelmaak/ngx-gallery';
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   installScript = `
     yarn add @daelmaak/ngx-gallery
   `;
@@ -133,23 +133,25 @@ export class AppComponent implements OnInit {
   mobile: boolean;
   tablet: boolean;
 
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor(private cd: ChangeDetectorRef) {
+    afterNextRender({
+      read: () => {
+        const mobileMatcher = matchMedia('(max-width: 768px)');
+        const tabletMatcher = matchMedia('(max-width: 1024px)');
 
-  ngOnInit(): void {
-    const mobileMatcher = matchMedia('(max-width: 768px)');
-    const tabletMatcher = matchMedia('(max-width: 1024px)');
+        mobileMatcher.onchange = e => {
+          this.mobile = e.matches;
+          this.cd.detectChanges();
+        };
 
-    mobileMatcher.onchange = e => {
-      this.mobile = e.matches;
-      this.cd.detectChanges();
-    };
+        tabletMatcher.onchange = e => {
+          this.tablet = e.matches;
+          this.cd.detectChanges();
+        };
 
-    tabletMatcher.onchange = e => {
-      this.tablet = e.matches;
-      this.cd.detectChanges();
-    };
-
-    this.mobile = mobileMatcher.matches;
-    this.tablet = tabletMatcher.matches;
+        this.mobile = mobileMatcher.matches;
+        this.tablet = tabletMatcher.matches;
+      },
+    });
   }
 }

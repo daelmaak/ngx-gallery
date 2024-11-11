@@ -30,6 +30,9 @@
     "@nx/eslint:lint": {
       "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
       "cache": true
+    },
+    "server": {
+      "cache": true
     }
   },
   "nxCloudAccessToken": "Zjg2NjM5OWYtOWNjYi00ZGJhLWFmNDUtYWIwZTdjYjE0NDZmfHJlYWQtd3JpdGU=",
