@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/daelmaak/ngx-gallery/compare/v3.0.4...v3.1.0) (2024-11-11)
+
+
+### Features
+
+* **demo:** add SSR ([47e3e19](https://github.com/daelmaak/ngx-gallery/commit/47e3e191b3d66953e771cbdd1462ea03b217e491))
+
+
+### Bug Fixes
+
+* **gallery:** exclude browser APIs from SSR in thumbs ([e69eb50](https://github.com/daelmaak/ngx-gallery/commit/e69eb50bb2887de6e40befd12231ebdd3c25babc))
+
 ### [3.0.4](https://github.com/daelmaak/ngx-gallery/compare/v3.0.3...v3.0.4) (2024-02-21)
 
 
