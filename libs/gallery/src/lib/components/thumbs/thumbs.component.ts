@@ -261,7 +261,7 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
   };
 
   private observeArrows() {
-    if (this.thumbsEmpty) return;
+    if (this.thumbsEmpty || !isBrowser) return;
 
     if (!this.arrowObserver) {
       this.arrowObserver = new IntersectionObserver(this.onArrowsObserved, {

@@ -173,18 +173,20 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    if (isBrowser) {
-      this.handleResizes();
-
-      if (this.mouseGestures) {
-        this.handleMouseSlides();
-      }
-
-      if (this.touchGestures) {
-        this.handleTouchSlides();
-      }
-      this._destroyRef.onDestroy(() => this.fringeObserver?.disconnect());
+    if (!isBrowser) {
+      return;
     }
+
+    this.handleResizes();
+
+    if (this.mouseGestures) {
+      this.handleMouseSlides();
+    }
+
+    if (this.touchGestures) {
+      this.handleTouchSlides();
+    }
+    this._destroyRef.onDestroy(() => this.fringeObserver?.disconnect());
   }
 
   ngAfterViewInit() {
