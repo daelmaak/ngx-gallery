@@ -1,4 +1,4 @@
-@import '../../core/mixins.scss';
+@use '../../core/mixins';
 
 :host {
   display: block;
@@ -152,7 +152,7 @@ img {
     margin: 15px 6px;
     opacity: 0.7;
 
-    @include supports-hover {
+    @include mixins.supports-hover {
       &:hover {
         opacity: 1;
       }

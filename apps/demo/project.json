@@ -2,13 +2,13 @@
   "name": "demo",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
+  "sourceRoot": "apps/demo/src",
+  "prefix": "app",
   "generators": {
     "@schematics/angular:component": {
       "style": "scss"
     }
   },
-  "sourceRoot": "apps/demo/src",
-  "prefix": "app",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
@@ -71,19 +71,19 @@
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
       "options": {
-        "browserTarget": "demo:build",
-        "hmr": true
+        "hmr": true,
+        "buildTarget": "demo:build"
       },
       "configurations": {
         "production": {
-          "browserTarget": "demo:build:production"
+          "buildTarget": "demo:build:production"
         }
       }
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "demo:build"
+        "buildTarget": "demo:build"
       }
     },
     "test": {
@@ -99,10 +99,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["apps/demo/**/*.ts", "apps/demo/**/*.html"]
-      }
+      "executor": "@nx/eslint:lint"
     }
   }
 }

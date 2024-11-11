@@ -1,9 +1,9 @@
 {
   "extends": "../../.eslintrc.json",
-  "ignorePatterns": ["!**/*"],
+  "ignorePatterns": ["!**/*", "*.cy.ts"],
   "overrides": [
     {
-      "files": ["*.ts"],
+      "files": ["src/**/*.ts"],
       "parserOptions": {
         "project": ["libs/gallery/tsconfig.*?.json"],
         "createDefaultProgram": true

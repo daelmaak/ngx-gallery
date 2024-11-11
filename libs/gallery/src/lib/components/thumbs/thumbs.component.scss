@@ -1,4 +1,4 @@
-@import '../../core/mixins.scss';
+@use '../../core/mixins';
 
 $arrow-btn-dimension: 30px;
 
@@ -243,7 +243,7 @@ img {
     padding: 0;
     opacity: 0.7;
 
-    @include supports-hover {
+    @include mixins.supports-hover {
       &:hover {
         opacity: 1;
       }

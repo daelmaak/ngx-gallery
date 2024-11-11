@@ -3,3 +3,6 @@ dist
 .angular
 .yarn
 CHANGELOG.md
+
+/.nx/cache
+/.nx/workspace-data

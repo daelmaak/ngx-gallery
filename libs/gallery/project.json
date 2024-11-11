@@ -2,13 +2,13 @@
   "name": "gallery",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
+  "sourceRoot": "libs/gallery/src",
+  "prefix": "",
   "generators": {
     "@schematics/angular:component": {
       "style": "scss"
     }
   },
-  "sourceRoot": "libs/gallery/src",
-  "prefix": "",
   "targets": {
     "build": {
       "executor": "@nx/angular:package",
@@ -31,10 +31,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["libs/gallery/**/*.ts", "libs/gallery/**/*.html"]
-      }
+      "executor": "@nx/eslint:lint"
     },
     "component-test": {
       "executor": "@nx/cypress:cypress",
