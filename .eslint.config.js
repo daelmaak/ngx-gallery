@@ -1,0 +1,58 @@
+export default {
+  root: true,
+  ignorePatterns: ['**/*'],
+  overrides: [
+    {
+      files: ['*.ts'],
+      parserOptions: {
+        createDefaultProgram: true,
+      },
+      extends: [
+        'plugin:@angular-eslint/recommended',
+        'plugin:@angular-eslint/template/process-inline-templates',
+      ],
+      rules: {
+        '@angular-eslint/component-selector': [
+          'error',
+          {
+            prefix: 'app',
+            style: 'kebab-case',
+            type: 'element',
+          },
+        ],
+        '@angular-eslint/directive-selector': [
+          'error',
+          {
+            prefix: 'app',
+            style: 'camelCase',
+            type: 'attribute',
+          },
+        ],
+      },
+    },
+    {
+      files: ['*.html'],
+      extends: ['plugin:@angular-eslint/template/recommended'],
+      rules: {},
+    },
+    {
+      files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
+      rules: {
+        '@nx/enforce-module-boundaries': [
+          'error',
+          {
+            enforceBuildableLibDependency: true,
+            allow: [],
+            depConstraints: [
+              {
+                sourceTag: '*',
+                onlyDependOnLibsWithTags: ['*'],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+  plugins: ['@nx'],
+};
