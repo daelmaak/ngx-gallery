@@ -1,4 +1,7 @@
-# Ngx Gallery
+<p align="center">
+  <img width="150px" src="https://raw.githubusercontent.com/daelmaak/ngx-gallery/2bd4e961c590edeeac3cf9a230f504a51b7db8ad/apps/demo/src/assets/icons/logo.png" style="max-width:100%;">
+</p>
+<h1 align="center">Ngx Gallery</h1>
 
 Small, performant, responsive, dependency free, easy to use Angular **8+** gallery.
 
