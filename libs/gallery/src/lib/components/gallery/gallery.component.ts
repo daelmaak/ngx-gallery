@@ -35,7 +35,7 @@ import { ViewerComponent } from '../viewer/viewer.component';
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
+
   imports: [CommonModule, ThumbsComponent, ViewerComponent],
 })
 export class GalleryComponent implements OnChanges {

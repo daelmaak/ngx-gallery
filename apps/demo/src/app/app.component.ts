@@ -4,13 +4,24 @@ import {
   ChangeDetectorRef,
   Component,
 } from '@angular/core';
-import { GalleryItem } from '@daelmaak/ngx-gallery';
+import { GalleryComponent, GalleryItem } from '@daelmaak/ngx-gallery';
+import { ShowcaseComponent } from './components/showcase/showcase.component';
+import { DemoCustomTemplatesComponent } from './components/demo-custom-templates/demo-custom-templates.component';
+import { DemoWholeConfigComponent } from './components/demo-whole-config/demo-whole-config.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    GalleryComponent,
+    HeaderComponent,
+    ShowcaseComponent,
+    DemoCustomTemplatesComponent,
+    DemoWholeConfigComponent,
+  ],
 })
 export class AppComponent {
   installScript = `
@@ -130,8 +141,8 @@ export class AppComponent {
     { src: 'https://www.youtube.com/embed/80_39eAx3z8', video: true },
   ];
 
-  mobile: boolean;
-  tablet: boolean;
+  mobile = false;
+  tablet = false;
 
   constructor(private cd: ChangeDetectorRef) {
     afterNextRender({

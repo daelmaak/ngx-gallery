@@ -31,7 +31,7 @@ import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
   templateUrl: './thumbs.component.html',
   styleUrls: ['./thumbs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
+
   imports: [CommonModule, ChevronIconComponent],
 })
 export class ThumbsComponent implements OnChanges, OnDestroy {

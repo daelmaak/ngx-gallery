@@ -4,17 +4,18 @@ import {
   Component,
   Input,
 } from '@angular/core';
-import { GalleryItem } from '@daelmaak/ngx-gallery';
+import { GalleryComponent, GalleryItem } from '@daelmaak/ngx-gallery';
 
 @Component({
   selector: 'app-demo-multiple-items',
   templateUrl: './demo-multiple-items.component.html',
   styleUrls: ['./demo-multiple-items.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [GalleryComponent],
 })
 export class DemoMultipleItemsComponent {
-  @Input() items: GalleryItem[];
-  @Input() mobile: boolean;
+  @Input({ required: true }) items!: GalleryItem[];
+  @Input({ required: true }) mobile!: boolean;
 
   showGallery = true;
 

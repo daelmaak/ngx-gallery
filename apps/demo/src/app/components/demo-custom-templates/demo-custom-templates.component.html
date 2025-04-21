@@ -18,8 +18,11 @@
     (click)="selectedItem = item"
   >
     <div class="image-container">
-      <img *ngIf="!video" [src]="item.src" />
-      <video *ngIf="video" [src]="item.src" controls></video>
+      @if (video) {
+      <video [src]="item.src" controls></video>
+      } @else {
+      <img [src]="item.src" />
+      }
     </div>
     <div class="info-box">
       <p>

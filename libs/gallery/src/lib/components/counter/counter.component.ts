@@ -16,7 +16,6 @@ import { VerticalOrientation } from '../../core';
   `,
   styleUrls: ['./counter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
 })
 export class CounterComponent {
   @Input()
