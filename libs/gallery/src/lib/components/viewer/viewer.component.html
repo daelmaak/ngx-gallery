@@ -1,138 +1,153 @@
-<button
-  *ngIf="showPrevArrow"
-  aria-label="Previous image"
-  class="viewer-arrow viewer-arrow-prev"
-  (mousedown)="$event.stopPropagation()"
-  (click)="selectByDelta(-moveByItems)"
->
-  <chevron-icon *ngIf="!arrowTemplate; else $any(arrowTemplate)"></chevron-icon>
-</button>
+@if (showPrevArrow) {
+  <button
+    aria-label="Previous image"
+    class="viewer-arrow viewer-arrow-prev"
+    (mousedown)="$event.stopPropagation()"
+    (click)="selectByDelta(-moveByItems)"
+  >
+    @if (!arrowTemplate) {
+      <chevron-icon></chevron-icon>
+    } @else {
+      <ng-template [ngTemplateOutlet]="arrowTemplate"></ng-template>
+    }
+  </button>
+}
 
 <ul #itemList [attr.aria-label]="aria?.viewerLabel">
-  <li *ngIf="!displayedItems?.length" class="viewer-initial-item"></li>
-  <li
-    #itemsRef
-    *ngFor="let item of displayedItems; let i = index"
-    media
-    [attr.tabindex]="isItemFringe(i) ? -1 : 0"
-    [attr.aria-label]="item.alt"
-    [attr.aria-describedby]="'viewer-aria-description-' + i"
-    [class.viewer-fringe-item]="isItemFringe(i)"
-    (click)="onImageClick(item, $event)"
-    (mediaLoadError)="onItemErrored(item)"
-    (keydown.Tab)="onTab(i + 1)"
-    (keydown.shift.Tab)="onTab(i - 1)"
-  >
-    <ng-container *ngIf="!itemTemplate; else customTemplate">
-      <picture *ngIf="!item.video" @mediaAnimate>
-        <source
-          *ngFor="let source of item.pictureSources"
-          [srcset]="source.srcset"
-          [attr.media]="source.media"
-          [attr.sizes]="source.sizes"
-          [attr.type]="source.type"
-        />
-        <img
-          [src]="item.src"
-          [alt]="item.alt"
-          [attr.loading]="loading"
-          [style.objectFit]="objectFit"
-        />
-      </picture>
-      <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
-      <video
-        *ngIf="!isYoutube(item) && item.video"
-        @mediaAnimate
-        [src]="item.src"
-        [poster]="item.thumbSrc || ''"
-        [attr.preload]="loading === 'lazy' ? 'metadata' : 'auto'"
-        [style.objectFit]="objectFit"
-        controls
-        playsinline
-      ></video>
-
-      <iframe
-        *ngIf="isYoutube(item)"
-        @mediaAnimate
-        [attr.loading]="loading"
-        [src]="item.src | safe"
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
-    </ng-container>
-
-    <ng-container *ngIf="itemFailedToLoad(item)">
-      <div
-        *ngIf="!errorTemplate; else $any(errorTemplate)"
-        class="viewer-error"
-      >
-        <div class="viewer-error-icon">⚠</div>
-        <p class="viewer-error-text">
-          {{ errorText || 'Loading of this media failed' }}
-        </p>
-      </div>
-    </ng-container>
-
-    <span
-      [id]="'viewer-aria-description-' + i"
-      class="sr-only"
-      [innerHTML]="item.description"
-    ></span>
-
-    <ng-template #customTemplate>
-      <ng-container
-        *ngTemplateOutlet="
-          $any(itemTemplate);
-          context: {
-            index: items?.indexOf(item),
-            selectedIndex: selectedIndex,
-            item: item,
-            video: item.video
-          }
-        "
-      ></ng-container>
-    </ng-template>
-  </li>
+  @if (!displayedItems?.length) {
+    <li class="viewer-initial-item"></li>
+  }
+  @for (item of displayedItems; track item.src + i; let i = $index) {
+    <li
+      #itemsRef
+      media
+      [attr.tabindex]="isItemFringe(i) ? -1 : 0"
+      [attr.aria-label]="item.alt"
+      [attr.aria-describedby]="'viewer-aria-description-' + i"
+      [class.viewer-fringe-item]="isItemFringe(i)"
+      (click)="onImageClick(item, $event)"
+      (mediaLoadError)="onItemErrored(item)"
+      (keydown.Tab)="onTab(i + 1)"
+      (keydown.shift.Tab)="onTab(i - 1)"
+    >
+      @if (!itemTemplate) {
+        @if (!item.video) {
+          <picture @mediaAnimate>
+            @for (source of item.pictureSources; track source) {
+              <source
+                [srcset]="source.srcset"
+                [attr.media]="source.media"
+                [attr.sizes]="source.sizes"
+                [attr.type]="source.type"
+              />
+            }
+            <img
+              [src]="item.src"
+              [alt]="item.alt"
+              [attr.loading]="loading"
+              [style.objectFit]="objectFit"
+            />
+          </picture>
+        }
+        <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
+        @if (!isYoutube(item) && item.video) {
+          <video
+            @mediaAnimate
+            [src]="item.src"
+            [poster]="item.thumbSrc || ''"
+            [attr.preload]="loading === 'lazy' ? 'metadata' : 'auto'"
+            [style.objectFit]="objectFit"
+            controls
+            playsinline
+          ></video>
+        } @else if (isYoutube(item)) {
+          <iframe
+            @mediaAnimate
+            [attr.loading]="loading"
+            [src]="item.src | safe"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        }
+      } @else {
+        <ng-container
+          *ngTemplateOutlet="
+            itemTemplate;
+            context: {
+              index: items.indexOf(item),
+              selectedIndex: selectedIndex,
+              item: item,
+              video: item.video ?? false,
+            }
+          "
+        ></ng-container>
+      }
+      @if (itemFailedToLoad(item)) {
+        @if (!errorTemplate) {
+          <div class="viewer-error">
+            <div class="viewer-error-icon">⚠</div>
+            <p class="viewer-error-text">
+              {{ errorText || 'Loading of this media failed' }}
+            </p>
+          </div>
+        } @else {
+          <ng-template [ngTemplateOutlet]="errorTemplate"></ng-template>
+        }
+      }
+      <span
+        [id]="'viewer-aria-description-' + i"
+        class="sr-only"
+        [innerHTML]="item.description"
+      ></span>
+    </li>
+  }
 </ul>
 
-<button
-  *ngIf="showNextArrow"
-  aria-label="Next image"
-  class="viewer-arrow viewer-arrow-next"
-  (mousedown)="$event.stopPropagation()"
-  (click)="selectByDelta(moveByItems)"
->
-  <chevron-icon *ngIf="!arrowTemplate; else $any(arrowTemplate)"></chevron-icon>
-</button>
-
-<counter
-  *ngIf="counter && items.length"
-  [itemQuantity]="items.length"
-  [selectedIndex]="counterIndex"
-  [orientation]="counterOrientation"
-></counter>
-
-<ng-container
-  *ngTemplateOutlet="
-    $any(contentTemplate);
-    context: {
-      selectedIndex: selectedIndex
+@if (showNextArrow) {
+  <button
+    aria-label="Next image"
+    class="viewer-arrow viewer-arrow-next"
+    (mousedown)="$event.stopPropagation()"
+    (click)="selectByDelta(moveByItems)"
+  >
+    @if (!arrowTemplate) {
+      <chevron-icon></chevron-icon>
+    } @else {
+      <ng-template [ngTemplateOutlet]="arrowTemplate"></ng-template>
     }
-  "
-></ng-container>
-
-<div
-  *ngIf="descriptions && items"
-  class="viewer-description"
-  [class.viewer-description--above-counter]="
-    counter && counterOrientation === 'bottom'
-  "
-  aria-hidden="true"
->
+  </button>
+}
+@if (counter && items.length) {
+  <counter
+    [itemQuantity]="items.length"
+    [selectedIndex]="counterIndex"
+    [orientation]="counterOrientation"
+  ></counter>
+}
+@if (contentTemplate) {
+  <ng-container
+    *ngTemplateOutlet="
+      contentTemplate;
+      context: {
+        selectedIndex: selectedIndex,
+      }
+    "
+  ></ng-container>
+}
+@if (descriptions && items) {
   <div
-    *ngIf="items[selectedIndex]?.description as description"
-    class="viewer-description-inner"
-    [innerHTML]="description"
-    (click)="descriptionClick.emit($event)"
-  ></div>
-</div>
+    class="viewer-description"
+    [class.viewer-description--above-counter]="
+      counter && counterOrientation === 'bottom'
+    "
+    aria-hidden="true"
+  >
+    @if (items[selectedIndex]?.description; as description) {
+      <div
+        class="viewer-description-inner"
+        [innerHTML]="description"
+        (click)="descriptionClick.emit($event)"
+      ></div>
+    }
+  </div>
+}

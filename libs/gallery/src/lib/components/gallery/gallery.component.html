@@ -1,24 +1,26 @@
-<span *ngIf="aria?.galleryLabel" class="sr-only" tabindex="0">
-  {{ aria.galleryLabel }}
-</span>
-
-<thumbs
-  *ngIf="thumbs"
-  [items]="items"
-  [selectedIndex]="selectedIndex"
-  [orientation]="thumbsOrientation"
-  [arrows]="thumbsArrows"
-  [arrowSlideByLength]="thumbsArrowSlideByLength"
-  [autoScroll]="thumbsAutoScroll"
-  [scrollBehavior]="thumbsScrollBehavior"
-  [thumbTemplate]="thumbTemplate"
-  [arrowTemplate]="thumbsArrowTemplate"
-  [errorTemplate]="thumbErrorTemplate"
-  [aria]="aria"
-  [isRtl]="isRtl"
-  (thumbClick)="_onThumbClick($event)"
-  (thumbHover)="thumbHover.emit($event)"
-></thumbs>
+@if (aria.galleryLabel) {
+  <span class="sr-only" tabindex="0">
+    {{ aria.galleryLabel }}
+  </span>
+}
+@if (thumbs) {
+  <thumbs
+    [items]="items"
+    [selectedIndex]="selectedIndex"
+    [orientation]="thumbsOrientation"
+    [arrows]="thumbsArrows"
+    [arrowSlideByLength]="thumbsArrowSlideByLength"
+    [autoScroll]="thumbsAutoScroll"
+    [scrollBehavior]="thumbsScrollBehavior"
+    [thumbTemplate]="thumbTemplate"
+    [arrowTemplate]="thumbsArrowTemplate"
+    [errorTemplate]="thumbErrorTemplate"
+    [aria]="aria"
+    [isRtl]="isRtl"
+    (thumbClick)="_onThumbClick($event)"
+    (thumbHover)="thumbHover.emit($event)"
+  ></thumbs>
+}
 
 <viewer
   [items]="items"

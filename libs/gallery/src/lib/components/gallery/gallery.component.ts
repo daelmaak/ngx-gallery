@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -36,7 +35,7 @@ import { ViewerComponent } from '../viewer/viewer.component';
   styleUrls: ['./gallery.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 
-  imports: [CommonModule, ThumbsComponent, ViewerComponent],
+  imports: [ThumbsComponent, ViewerComponent],
 })
 export class GalleryComponent implements OnChanges {
   /**
