@@ -193,30 +193,32 @@
 </form>
 
 <div class="gallery-container">
-  @if (displayGallery) { @if (items | async; as itemsSync) {
-  <gallery
-    [items]="itemsSync"
-    [arrows]="galleryConfig.arrows"
-    [descriptions]="galleryConfig.descriptions"
-    [mouseGestures]="galleryConfig.mouseGestures"
-    [touchGestures]="galleryConfig.touchGestures"
-    [counter]="galleryConfig.counter"
-    [counterOrientation]="galleryConfig.counterOrientation"
-    [visibleItems]="galleryConfig.visibleItems"
-    [objectFit]="galleryConfig.objectFit"
-    [loading]="galleryConfig.loading"
-    [loop]="galleryConfig.loop"
-    [isRtl]="galleryConfig.rtl"
-    [selectedIndex]="galleryConfig.selectedIndex ?? 0"
-    [thumbs]="galleryConfig.thumbs"
-    [thumbsAutoScroll]="galleryConfig.thumbsAutoScroll"
-    [thumbsOrientation]="galleryConfig.thumbsOrientation"
-    [thumbsArrows]="galleryConfig.thumbsArrows"
-    [thumbsArrowSlideByLength]="galleryConfig.thumbsArrowSlideByLength"
-    [thumbsScrollBehavior]="galleryConfig.thumbsScrollBehavior"
-    (descriptionClick)="galleryConfig.descriptions = false"
-  ></gallery>
-  } }
+  @if (displayGallery) {
+    @if (items | async; as itemsSync) {
+      <gallery
+        [items]="itemsSync"
+        [arrows]="galleryConfig.arrows"
+        [descriptions]="galleryConfig.descriptions"
+        [mouseGestures]="galleryConfig.mouseGestures"
+        [touchGestures]="galleryConfig.touchGestures"
+        [counter]="galleryConfig.counter"
+        [counterOrientation]="galleryConfig.counterOrientation"
+        [visibleItems]="galleryConfig.visibleItems"
+        [objectFit]="galleryConfig.objectFit"
+        [loading]="galleryConfig.loading"
+        [loop]="galleryConfig.loop"
+        [isRtl]="galleryConfig.rtl"
+        [selectedIndex]="galleryConfig.selectedIndex ?? 0"
+        [thumbs]="galleryConfig.thumbs"
+        [thumbsAutoScroll]="galleryConfig.thumbsAutoScroll"
+        [thumbsOrientation]="galleryConfig.thumbsOrientation"
+        [thumbsArrows]="galleryConfig.thumbsArrows"
+        [thumbsArrowSlideByLength]="galleryConfig.thumbsArrowSlideByLength"
+        [thumbsScrollBehavior]="galleryConfig.thumbsScrollBehavior"
+        (descriptionClick)="galleryConfig.descriptions = false"
+      ></gallery>
+    }
+  }
 </div>
 
 <ng-template #loadingTemplate>
@@ -230,22 +232,19 @@
   let-item="item"
   let-seen="seen"
 >
-  <ng-container *ngIf="item.video; then videoTemplate; else imgTemplate">
-  </ng-container>
-  <ng-template #imgTemplate>
-    <img #img class="custom-media" [src]="seen ? item.src : ''" />
-    <div class="custom-loading" *ngIf="seen && img.naturalHeight <= 0">
-      Custom item loading ...
-    </div>
-  </ng-template>
-  <ng-template #videoTemplate>
+  @if (item.video) {
     <video
       #video
       class="custom-media"
       [src]="seen ? item.src : ''"
       controls
     ></video>
-  </ng-template>
+  } @else {
+    <img #img class="custom-media" [src]="seen ? item.src : ''" />
+    @if (seen && img.naturalHeight <= 0) {
+      <div class="custom-loading">Custom item loading ...</div>
+    }
+  }
 </ng-template>
 
 <ng-template

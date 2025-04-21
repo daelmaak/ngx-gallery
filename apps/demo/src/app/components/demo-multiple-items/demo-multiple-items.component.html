@@ -1,6 +1,7 @@
-<gallery
-  *ngIf="showGallery"
-  [items]="items"
-  [visibleItems]="mobile ? 1.5 : 2.5"
-  loading="lazy"
-></gallery>
+@if (showGallery) {
+  <gallery
+    [items]="items"
+    [visibleItems]="mobile ? 1.5 : 2.5"
+    loading="lazy"
+  ></gallery>
+}

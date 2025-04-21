@@ -1,63 +1,74 @@
-<button
-  *ngIf="showStartArrow"
-  aria-label="Previous thumbnails"
-  class="thumbs-arrow thumbs-arrow-prev"
-  (click)="slide(-1)"
->
-  <div *ngIf="!arrowTemplate; else $any(arrowTemplate)">
-    <chevron-icon></chevron-icon>
-  </div>
-</button>
+@if (showStartArrow) {
+  <button
+    aria-label="Previous thumbnails"
+    class="thumbs-arrow thumbs-arrow-prev"
+    (click)="slide(-1)"
+  >
+    @if (!arrowTemplate) {
+      <div>
+        <chevron-icon></chevron-icon>
+      </div>
+    } @else {
+      <ng-template [ngTemplateOutlet]="arrowTemplate"></ng-template>
+    }
+  </button>
+}
 
 <ul #thumbs [style.scrollBehavior]="scrollBehavior" [class.rtl]="isRtl">
-  <li *ngIf="!items || !items.length" class="thumbs-initial-item"></li>
-  <li
-    #thumb
-    *ngFor="let item of items; let i = index"
-    [class.thumbs-item--selected]="i === selectedIndex"
-    aria-hidden="true"
-    (click)="emitEvent(i, item, $event, thumbClick)"
-    (mouseenter)="emitEvent(i, item, $event, thumbHover)"
-  >
-    <ng-container *ngIf="!thumbTemplate; else customThumbTemplate">
-      <img
-        [src]="item.thumbSrc || ''"
-        [alt]="item.alt"
-        (load)="onLoadChange(item, true)"
-        (error)="onLoadChange(item, false)"
-      />
-
-      <ng-container *ngIf="item._thumbFailed">
-        <div
-          *ngIf="!errorTemplate; else $any(errorTemplate)"
-          class="thumbs-error"
-        >
-          <div
-            class="thumbs-error-icon"
-            [class.thumbs-error-icon--video]="item.video"
-          ></div>
-        </div>
-      </ng-container>
-    </ng-container>
-
-    <ng-template #customThumbTemplate>
-      <ng-container
-        *ngTemplateOutlet="
-          $any(thumbTemplate);
-          context: { index: i, selectedIndex: selectedIndex, item: item }
-        "
-      ></ng-container>
-    </ng-template>
-  </li>
+  @if (!items || !items.length) {
+    <li class="thumbs-initial-item"></li>
+  }
+  @for (item of items; track item.src + i; let i = $index) {
+    <li
+      #thumb
+      [class.thumbs-item--selected]="i === selectedIndex"
+      aria-hidden="true"
+      (click)="emitEvent(i, item, $event, thumbClick)"
+      (mouseenter)="emitEvent(i, item, $event, thumbHover)"
+    >
+      @if (!thumbTemplate) {
+        <img
+          [src]="item.thumbSrc || ''"
+          [alt]="item.alt"
+          (load)="onLoadChange(item, true)"
+          (error)="onLoadChange(item, false)"
+        />
+        @if (item._thumbFailed) {
+          @if (!errorTemplate) {
+            <div class="thumbs-error">
+              <div
+                class="thumbs-error-icon"
+                [class.thumbs-error-icon--video]="item.video"
+              ></div>
+            </div>
+          } @else {
+            <ng-template [ngTemplateOutlet]="errorTemplate"></ng-template>
+          }
+        }
+      } @else {
+        <ng-container
+          *ngTemplateOutlet="
+            thumbTemplate;
+            context: { index: i, selectedIndex: selectedIndex, item: item }
+          "
+        ></ng-container>
+      }
+    </li>
+  }
 </ul>
 
-<button
-  *ngIf="showEndArrow"
-  aria-label="Next thumbnails"
-  class="thumbs-arrow thumbs-arrow-next"
-  (click)="slide(1)"
->
-  <div *ngIf="!arrowTemplate; else $any(arrowTemplate)">
-    <chevron-icon></chevron-icon>
-  </div>
-</button>
+@if (showEndArrow) {
+  <button
+    aria-label="Next thumbnails"
+    class="thumbs-arrow thumbs-arrow-next"
+    (click)="slide(1)"
+  >
+    @if (!arrowTemplate) {
+      <div>
+        <chevron-icon></chevron-icon>
+      </div>
+    } @else {
+      <ng-template [ngTemplateOutlet]="arrowTemplate"></ng-template>
+    }
+  </button>
+}

@@ -42,4 +42,3 @@ jobs:
 
       - name: Cy Component Test
         run: yarn test:cy:ci
-
