@@ -1,5 +1,13 @@
 {
   "arrowParens": "avoid",
   "trailingComma": "es5",
-  "singleQuote": true
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "parser": "angular"
+      }
+    }
+  ]
 }
