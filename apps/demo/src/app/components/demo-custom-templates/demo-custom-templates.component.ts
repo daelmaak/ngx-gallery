@@ -1,15 +1,17 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { GalleryItem } from '@daelmaak/ngx-gallery';
+import { MatIcon } from '@angular/material/icon';
+import { GalleryComponent, GalleryItem } from '@daelmaak/ngx-gallery';
 
 @Component({
   selector: 'app-demo-custom-templates',
   templateUrl: './demo-custom-templates.component.html',
   styleUrls: ['./demo-custom-templates.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [GalleryComponent, MatIcon],
 })
 export class DemoCustomTemplatesComponent {
-  @Input() mobile: boolean;
-  @Input() tablet: boolean;
+  @Input() mobile?: boolean;
+  @Input() tablet?: boolean;
 
   images: GalleryItem[] = [
     {

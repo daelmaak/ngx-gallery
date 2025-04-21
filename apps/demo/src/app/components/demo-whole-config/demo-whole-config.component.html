@@ -111,8 +111,7 @@
           name="selectedIndex"
           type="number"
           matInput
-          [value]="galleryConfig.selectedIndex"
-          (input)="onConfigChange('selectedIndex', getInputValue($event))"
+          [(ngModel)]="galleryConfig.selectedIndex"
         />
       </mat-form-field>
     </section>
@@ -194,9 +193,9 @@
 </form>
 
 <div class="gallery-container">
+  @if (displayGallery) { @if (items | async; as itemsSync) {
   <gallery
-    *ngIf="displayGallery"
-    [items]="items | async"
+    [items]="itemsSync"
     [arrows]="galleryConfig.arrows"
     [descriptions]="galleryConfig.descriptions"
     [mouseGestures]="galleryConfig.mouseGestures"
@@ -208,7 +207,7 @@
     [loading]="galleryConfig.loading"
     [loop]="galleryConfig.loop"
     [isRtl]="galleryConfig.rtl"
-    [selectedIndex]="galleryConfig.selectedIndex"
+    [selectedIndex]="galleryConfig.selectedIndex ?? 0"
     [thumbs]="galleryConfig.thumbs"
     [thumbsAutoScroll]="galleryConfig.thumbsAutoScroll"
     [thumbsOrientation]="galleryConfig.thumbsOrientation"
@@ -217,6 +216,7 @@
     [thumbsScrollBehavior]="galleryConfig.thumbsScrollBehavior"
     (descriptionClick)="galleryConfig.descriptions = false"
   ></gallery>
+  } }
 </div>
 
 <ng-template #loadingTemplate>

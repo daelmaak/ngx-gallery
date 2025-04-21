@@ -58,7 +58,7 @@ const passiveEventListenerOpts = {
       ]),
     ]),
   ],
-  standalone: true,
+
   imports: [
     CommonModule,
     CounterComponent,

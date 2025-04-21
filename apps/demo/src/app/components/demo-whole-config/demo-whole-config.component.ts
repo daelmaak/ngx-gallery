@@ -17,6 +17,13 @@ import {
   Orientation,
   VerticalOrientation,
 } from '@daelmaak/ngx-gallery';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatRadioModule } from '@angular/material/radio';
+import { CommonModule } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 interface GalleryConfig {
   arrows: boolean;
@@ -44,10 +51,21 @@ interface GalleryConfig {
   templateUrl: './demo-whole-config.component.html',
   styleUrls: ['./demo-whole-config.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    GalleryComponent,
+    FormsModule,
+    MatCheckboxModule,
+    MatIcon,
+    MatInputModule,
+    MatLabel,
+    MatFormField,
+    MatRadioModule,
+  ],
 })
 export class DemoWholeConfigComponent implements OnInit {
-  @Input() images: GalleryItem[];
-  items: Observable<GalleryItem[]>;
+  @Input({ required: true }) images!: GalleryItem[];
+  items?: Observable<GalleryItem[]>;
 
   displayGallery = true;
   imageLoadingLatency = 0;
@@ -75,7 +93,7 @@ export class DemoWholeConfigComponent implements OnInit {
     thumbsScrollBehavior: 'smooth',
   };
 
-  @ViewChild(GalleryComponent) gallery: GalleryComponent;
+  @ViewChild(GalleryComponent) gallery?: GalleryComponent;
 
   constructor(private cd: ChangeDetectorRef) {
     afterNextRender({
@@ -95,14 +113,6 @@ export class DemoWholeConfigComponent implements OnInit {
     );
   }
 
-  onConfigChange(prop: keyof GalleryConfig, value: unknown) {
-    if (value === '') {
-      return;
-    }
-    this.galleryConfig[prop as any] = +value ?? value;
-    this.reloadGallery();
-  }
-
   reloadGallery() {
     this.displayGallery = false;
     this.cd.detectChanges();
@@ -115,7 +125,7 @@ export class DemoWholeConfigComponent implements OnInit {
   }
 
   private getGalleryConfig() {
-    return JSON.parse(sessionStorage.getItem('galleryConfig'));
+    return JSON.parse(sessionStorage.getItem('galleryConfig') || '{}');
   }
 
   private storeGalleryConfig = () => {

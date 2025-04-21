@@ -9,7 +9,6 @@ import {
 
 @Directive({
   selector: '[media]',
-  standalone: true,
 })
 export class MediaDirective implements OnInit, OnDestroy {
   @Output()
