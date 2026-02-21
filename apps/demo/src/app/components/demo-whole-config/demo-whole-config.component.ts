@@ -1,12 +1,4 @@
-import {
-  afterNextRender,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { defer, Observable, of } from 'rxjs';
 import { delay, switchMap } from 'rxjs/operators';
 import {
@@ -64,6 +56,8 @@ interface GalleryConfig {
   ],
 })
 export class DemoWholeConfigComponent implements OnInit {
+  private cd = inject(ChangeDetectorRef);
+
   @Input({ required: true }) images!: GalleryItem[];
   items?: Observable<GalleryItem[]>;
 
@@ -95,7 +89,7 @@ export class DemoWholeConfigComponent implements OnInit {
 
   @ViewChild(GalleryComponent) gallery?: GalleryComponent;
 
-  constructor(private cd: ChangeDetectorRef) {
+  constructor() {
     afterNextRender({
       read: () => {
         this.galleryConfig = this.getGalleryConfig() || this.galleryConfig;

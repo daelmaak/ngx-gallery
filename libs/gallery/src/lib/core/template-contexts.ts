@@ -1,4 +1,4 @@
-import { GalleryItem } from './gallery-item';
+import type { GalleryItem } from './gallery-item';
 
 export interface ItemTemplateContext {
   index: number;

@@ -1,3 +1,6 @@
+import type {
+  OnChanges,
+  TemplateRef} from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,12 +9,10 @@ import {
   HostBinding,
   HostListener,
   Input,
-  OnChanges,
   Output,
-  TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {
+import type {
   Aria,
   ContentTemplateContext,
   GalleryItem,
@@ -20,12 +21,13 @@ import {
   Loading,
   ObjectFit,
   Orientation,
-  OrientationFlag,
   ThumbTemplateContext,
-  VerticalOrientation,
+  VerticalOrientation} from '../../core';
+import {
+  OrientationFlag
 } from '../../core';
 import { defaultAria } from '../../core/aria';
-import { StrictSimpleChanges } from '../../core/ng';
+import type { StrictSimpleChanges } from '../../core/ng';
 import { ThumbsComponent } from '../thumbs/thumbs.component';
 import { ViewerComponent } from '../viewer/viewer.component';
 

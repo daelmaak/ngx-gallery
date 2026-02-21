@@ -1,9 +1,4 @@
-import {
-  afterNextRender,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-} from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { GalleryComponent, GalleryItem } from '@daelmaak/ngx-gallery';
 import { ShowcaseComponent } from './components/showcase/showcase.component';
 import { DemoCustomTemplatesComponent } from './components/demo-custom-templates/demo-custom-templates.component';
@@ -24,6 +19,8 @@ import { HeaderComponent } from './components/header/header.component';
   ],
 })
 export class AppComponent {
+  private cd = inject(ChangeDetectorRef);
+
   installScript = `
     yarn add @daelmaak/ngx-gallery
   `;
@@ -144,7 +141,7 @@ export class AppComponent {
   mobile = false;
   tablet = false;
 
-  constructor(private cd: ChangeDetectorRef) {
+  constructor() {
     afterNextRender({
       read: () => {
         const mobileMatcher = matchMedia('(max-width: 768px)');

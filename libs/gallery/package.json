@@ -7,6 +7,7 @@
     "email": "daniel.macak@email.cz",
     "url": "https://github.com/daelmaak"
   },
+  "type": "module",
   "homepage": "https://daelmaak.github.io/ngx-gallery/",
   "repository": {
     "type": "git",
@@ -22,7 +23,7 @@
     "defaults and supports es6-module"
   ],
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.19.0"
   },
   "scripts": {
     "build": "ng build",

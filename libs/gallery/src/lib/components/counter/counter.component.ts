@@ -5,7 +5,7 @@ import {
   Input,
 } from '@angular/core';
 
-import { VerticalOrientation } from '../../core';
+import type { VerticalOrientation } from '../../core';
 
 @Component({
   selector: 'counter',

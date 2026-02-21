@@ -78,7 +78,8 @@
         "production": {
           "buildTarget": "demo:build:production"
         }
-      }
+      },
+      "continuous": true
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -92,7 +93,7 @@
         "main": "apps/demo/src/test.ts",
         "polyfills": "apps/demo/src/polyfills.ts",
         "tsConfig": "apps/demo/tsconfig.spec.json",
-        "karmaConfig": "apps/demo/karma.conf.js",
+        "karmaConfig": "apps/demo/karma.conf.cjs",
         "assets": ["apps/demo/src/favicon.ico", "apps/demo/src/assets"],
         "styles": ["apps/demo/src/styles.scss"],
         "scripts": []
@@ -144,7 +145,8 @@
           "serverTarget": "demo:server:production"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "prerender": {
       "executor": "@angular-devkit/build-angular:prerender",

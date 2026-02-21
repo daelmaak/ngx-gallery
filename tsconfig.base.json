@@ -6,7 +6,7 @@
     "sourceMap": true,
     "declaration": false,
     "experimentalDecorators": true,
-    "module": "es2020",
+    "module": "es2022",
     "moduleResolution": "node",
     "target": "ES2022",
     "typeRoots": ["node_modules/@types"],
@@ -20,7 +20,6 @@
     "strict": true
   },
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
     "strictTemplates": true
   },

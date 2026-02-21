@@ -1,13 +1,15 @@
+import type {
+  DebugElement,
+  TemplateRef} from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
-  DebugElement,
   SimpleChange,
-  TemplateRef,
   ViewChild,
 } from '@angular/core';
+import type {
+  ComponentFixture} from '@angular/core/testing';
 import {
-  ComponentFixture,
   TestBed,
   fakeAsync,
   flush,
@@ -16,8 +18,8 @@ import {
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { OrientationFlag } from '../../core';
-import { GalleryItem, GalleryItemInternal } from '../../core/gallery-item';
-import { StrictComponentRef } from '../../core/ng';
+import type { GalleryItem, GalleryItemInternal } from '../../core/gallery-item';
+import type { StrictComponentRef } from '../../core/ng';
 import { ViewerComponent } from './viewer.component';
 
 describe('ViewerComponent', () => {

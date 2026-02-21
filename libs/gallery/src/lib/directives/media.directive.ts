@@ -1,11 +1,6 @@
-import {
-  Directive,
-  ElementRef,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import type { OnDestroy, OnInit } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { Directive, EventEmitter, Output, inject } from '@angular/core';
 
 @Directive({
   selector: '[media]',
@@ -16,7 +11,9 @@ export class MediaDirective implements OnInit, OnDestroy {
 
   private nativeEl: HTMLElement;
 
-  constructor(hostRef: ElementRef<HTMLElement>) {
+  constructor() {
+    const hostRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
     this.nativeEl = hostRef.nativeElement;
   }
 
