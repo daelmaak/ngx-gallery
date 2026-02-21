@@ -1,12 +1,11 @@
-import { ChangeDetectorRef } from '@angular/core';
-import { GalleryItemInternal } from '../../core/gallery-item';
+import type { GalleryItemInternal } from '../../core/gallery-item';
 import { ViewerComponent } from './viewer.component';
 
 describe('ViewerComponent', () => {
   let viewer: ViewerComponent;
 
   beforeEach(() => {
-    viewer = new ViewerComponent(null, null, null, null);
+    viewer = new ViewerComponent();
     viewer.items = [
       { src: 'src1' },
       { src: 'src2' },
@@ -18,13 +17,8 @@ describe('ViewerComponent', () => {
   });
 
   describe('media asset loading', () => {
-    let changeDetector: ChangeDetectorRef;
-
     beforeEach(() => {
-      changeDetector = jasmine.createSpyObj('changeDetectorRef', [
-        'detectChanges',
-      ]);
-      viewer = new ViewerComponent(null, changeDetector, null, null);
+      viewer = new ViewerComponent();
       viewer.items = [{ src: 'src1' }, { src: 'src2' }];
       viewer.showErrors = true;
     });

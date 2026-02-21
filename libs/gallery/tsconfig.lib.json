@@ -5,14 +5,12 @@
     "declarationMap": true,
     "declaration": true,
     "inlineSources": true,
-    "lib": ["dom"]
+    "lib": ["dom"],
+    "moduleResolution": "bundler",
+    "module": "preserve"
   },
   "angularCompilerOptions": {
-    "skipTemplateCodegen": true,
-    "strictMetadataEmit": true,
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true,
-    "enableResourceInlining": true
+    "strictInjectionParameters": true
   },
   "exclude": [
     "src/test.ts",

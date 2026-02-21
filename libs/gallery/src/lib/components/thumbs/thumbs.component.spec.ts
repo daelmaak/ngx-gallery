@@ -1,17 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  DebugElement,
-  SimpleChange,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  flush,
-  tick,
-} from '@angular/core/testing';
+import type { DebugElement } from '@angular/core';
+import { ChangeDetectionStrategy, SimpleChange } from '@angular/core';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { GalleryItem, SUPPORT } from '../../core';
+import type { GalleryItem } from '../../core';
+import { SUPPORT } from '../../core';
 import { ThumbsComponent } from './thumbs.component';
 
 describe('ThumbnailsComponent', () => {
@@ -281,7 +274,7 @@ describe('ThumbnailsComponent', () => {
       }));
 
       it('should disappear once they are turned off', done => {
-        waitForArrows(done, _ => {
+        waitForArrows(done, () => {
           toggleArrows(false);
 
           const arrows = de.queryAll(By.css('chevron-icon'));
@@ -527,7 +520,7 @@ describe('ThumbnailsComponent', () => {
     return new Promise(resolve => {
       let arrows: DebugElement[];
 
-      const arrowWaiter = setInterval(i => {
+      const arrowWaiter = setInterval(() => {
         arrows = de.queryAll(By.css('chevron-icon'));
 
         if (arrows.length) {

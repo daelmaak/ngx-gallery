@@ -3,10 +3,12 @@
   "compilerOptions": {
     "allowJs": true,
     "outDir": "../../dist/out-tsc",
-    "types": ["cypress", "node"],
+    "types": ["node"],
     "sourceMap": false,
     "target": "ES2022",
-    "lib": ["ES2022", "DOM"]
+    "lib": ["ES2022", "DOM"],
+    "moduleResolution": "bundler",
+    "module": "preserve"
   },
   "include": ["**/*.ts"]
 }

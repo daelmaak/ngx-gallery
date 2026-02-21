@@ -1,4 +1,4 @@
-import { ComponentRef, SimpleChange, SimpleChanges } from '@angular/core';
+import type { ComponentRef, SimpleChange, SimpleChanges } from '@angular/core';
 
 export interface StrictComponentRef<C> extends ComponentRef<C> {
   // `& string` because otherwise keyof would return string | number

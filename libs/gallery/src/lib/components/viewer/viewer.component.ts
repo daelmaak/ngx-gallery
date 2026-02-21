@@ -1,26 +1,31 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import {
+import type {
   AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  DestroyRef,
-  ElementRef,
-  EventEmitter,
-  HostBinding,
-  Input,
-  NgZone,
   OnChanges,
   OnInit,
-  Output,
   QueryList,
   SimpleChanges,
   TemplateRef,
-  ViewChild,
-  ViewChildren,
 } from '@angular/core';
 import {
+  ChangeDetectorRef,
+  DestroyRef,
+  ElementRef,
+  NgZone,
+} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  Output,
+  ViewChild,
+  ViewChildren,
+  inject,
+} from '@angular/core';
+import type {
   Aria,
   ContentTemplateContext,
   GalleryItemEvent,
@@ -28,11 +33,10 @@ import {
   Loading,
   ObjectFit,
   OrientationFlag,
-  UA,
   VerticalOrientation,
-  isBrowser,
 } from '../../core';
-import { GalleryItemInternal } from '../../core/gallery-item';
+import { UA, isBrowser } from '../../core';
+import type { GalleryItemInternal } from '../../core/gallery-item';
 import { MediaDirective } from '../../directives/media.directive';
 import { SafePipe } from '../../pipes/safe.pipe';
 import { CounterComponent } from '../counter/counter.component';
@@ -68,6 +72,11 @@ const passiveEventListenerOpts = {
   ],
 })
 export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
+  private _hostRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private _cd = inject(ChangeDetectorRef);
+  private _destroyRef = inject(DestroyRef);
+  private _zone = inject(NgZone);
+
   @Input() items!: GalleryItemInternal[];
   @Input() selectedIndex!: number;
   @Input() arrows?: boolean;
@@ -138,13 +147,6 @@ export class ViewerComponent implements OnChanges, OnInit, AfterViewInit {
       (this.selectedIndex < this.items.length - 1 || this.reallyLoop)
     );
   }
-
-  constructor(
-    private _hostRef: ElementRef<HTMLElement>,
-    private _cd: ChangeDetectorRef,
-    private _destroyRef: DestroyRef,
-    private _zone: NgZone
-  ) {}
 
   ngOnChanges({ visibleItems, items, loop }: SimpleChanges) {
     if (visibleItems) {

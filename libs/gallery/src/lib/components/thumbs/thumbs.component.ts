@@ -1,29 +1,30 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostBinding,
-  Input,
+import type {
   OnChanges,
   OnDestroy,
-  Output,
   QueryList,
   SimpleChanges,
   TemplateRef,
+} from '@angular/core';
+import { ChangeDetectorRef, ElementRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  Output,
   ViewChild,
   ViewChildren,
+  inject,
 } from '@angular/core';
-import {
-  Orientation,
-  SUPPORT,
-  ThumbTemplateContext,
-  isBrowser,
-} from '../../core';
-import { Aria } from '../../core/aria';
-import { GalleryItemEvent, GalleryItemInternal } from '../../core/gallery-item';
+import type { Orientation, ThumbTemplateContext } from '../../core';
+import { SUPPORT, isBrowser } from '../../core';
+import type { Aria } from '../../core/aria';
+import type {
+  GalleryItemEvent,
+  GalleryItemInternal,
+} from '../../core/gallery-item';
 import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
 
 @Component({
@@ -31,10 +32,12 @@ import { ChevronIconComponent } from '../icons/chevron/chevron-icon.component';
   templateUrl: './thumbs.component.html',
   styleUrls: ['./thumbs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-
   imports: [CommonModule, ChevronIconComponent],
 })
 export class ThumbsComponent implements OnChanges, OnDestroy {
+  private cd = inject(ChangeDetectorRef);
+  private elRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
   @Input() items: GalleryItemInternal[] = [];
   @Input() selectedIndex!: number;
   @Input() aria?: Aria;
@@ -82,11 +85,6 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
   private get vertical(): boolean {
     return this.orientation === 'left' || this.orientation === 'right';
   }
-
-  constructor(
-    private cd: ChangeDetectorRef,
-    private elRef: ElementRef<HTMLElement>
-  ) {}
 
   ngOnChanges({ arrows, items }: SimpleChanges) {
     if (arrows) {
@@ -291,6 +289,6 @@ export class ThumbsComponent implements OnChanges, OnDestroy {
   }
 
   private unobserveArrows() {
-    this.arrowObserver && this.arrowObserver.disconnect();
+    this.arrowObserver?.disconnect();
   }
 }

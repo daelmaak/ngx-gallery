@@ -1,5 +1,5 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { GalleryItem } from '../../core';
+import type { GalleryItem } from '../../core';
 import { GalleryComponent } from '../gallery/gallery.component';
 
 describe('Slider', () => {
