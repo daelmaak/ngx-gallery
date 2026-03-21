@@ -1,26 +1,44 @@
+import { ChangeDetectionStrategy } from '@angular/core';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import type { GalleryItemInternal } from '../../core/gallery-item';
+import type { StrictComponentRef } from '../../core/ng';
 import { ViewerComponent } from './viewer.component';
 
 describe('ViewerComponent', () => {
   let viewer: ViewerComponent;
+  let viewerRef: StrictComponentRef<ViewerComponent>;
+  let fixture: ComponentFixture<ViewerComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({})
+      .overrideComponent(ViewerComponent, {
+        set: { changeDetection: ChangeDetectionStrategy.Default },
+      })
+      .compileComponents();
+  });
 
   beforeEach(() => {
-    viewer = new ViewerComponent();
-    viewer.items = [
+    fixture = TestBed.createComponent(ViewerComponent);
+    viewer = fixture.componentInstance;
+    viewerRef = fixture.componentRef;
+    viewerRef.setInput('items', [
       { src: 'src1' },
       { src: 'src2' },
       { src: 'src3' },
       { src: 'src4' },
-    ];
-    viewer.loading = 'lazy';
-    viewer.selectedIndex = 0;
+    ]);
+    viewerRef.setInput('loading', 'lazy');
+    viewerRef.setInput('selectedIndex', 0);
   });
 
   describe('media asset loading', () => {
     beforeEach(() => {
-      viewer = new ViewerComponent();
-      viewer.items = [{ src: 'src1' }, { src: 'src2' }];
-      viewer.showErrors = true;
+      fixture = TestBed.createComponent(ViewerComponent);
+      viewer = fixture.componentInstance;
+      viewerRef = fixture.componentRef;
+      viewerRef.setInput('items', [{ src: 'src1' }, { src: 'src2' }]);
+      viewerRef.setInput('showErrors', true);
     });
 
     describe('failed', () => {

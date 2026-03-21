@@ -1,14 +1,16 @@
 import type { DebugElement } from '@angular/core';
-import { ChangeDetectionStrategy, SimpleChange } from '@angular/core';
+import { ChangeDetectionStrategy } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import type { GalleryItem } from '../../core';
+import type { StrictComponentRef } from '../../core/ng';
 import { SUPPORT } from '../../core';
 import { ThumbsComponent } from './thumbs.component';
 
 describe('ThumbnailsComponent', () => {
   let component: ThumbsComponent;
+  let componentRef: StrictComponentRef<ThumbsComponent>;
   let fixture: ComponentFixture<ThumbsComponent>;
   let de: DebugElement;
 
@@ -23,6 +25,7 @@ describe('ThumbnailsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ThumbsComponent);
     component = fixture.componentInstance;
+    componentRef = fixture.componentRef;
     de = fixture.debugElement;
   });
 
@@ -34,8 +37,7 @@ describe('ThumbnailsComponent', () => {
   describe('selecting', () => {
     beforeEach(() => {
       const items = [{ src: 'src1' }, { src: 'src2' }, { src: 'src3' }];
-      component.items = items;
-      component.ngOnChanges({ items: new SimpleChange(null, items, true) });
+      componentRef.setInput('items', items);
     });
 
     it('calling select() should give newly selected thumb .selected class', () => {
@@ -58,9 +60,9 @@ describe('ThumbnailsComponent', () => {
 
     beforeEach(() => {
       items = [{ src: 'src1' }, { src: 'src2' }, { src: 'src3' }];
-      component.items = items;
-      component.scrollBehavior = 'auto';
-      component.orientation = 'bottom';
+      componentRef.setInput('items', items);
+      componentRef.setInput('scrollBehavior', 'auto');
+      componentRef.setInput('orientation', 'bottom');
 
       fixture.detectChanges();
       setThumbsContainerWidth(2 * ITEM_WIDTH);
@@ -69,12 +71,8 @@ describe('ThumbnailsComponent', () => {
 
     describe('with arrows', () => {
       beforeEach(fakeAsync(() => {
-        component.arrows = true;
-
-        component.ngOnChanges({
-          items: new SimpleChange(null, component.items, true),
-          arrows: new SimpleChange(null, component.arrows, true),
-        });
+        componentRef.setInput('arrows', true);
+        fixture.detectChanges();
         flush();
       }));
 
@@ -108,11 +106,8 @@ describe('ThumbnailsComponent', () => {
 
     describe('with autoscroll', () => {
       beforeEach(fakeAsync(() => {
-        component.autoScroll = true;
-        component.ngOnChanges({
-          items: new SimpleChange(null, component.items, true),
-          autoScroll: new SimpleChange(null, component.autoScroll, true),
-        });
+        componentRef.setInput('autoScroll', true);
+        fixture.detectChanges();
         flush();
       }));
 
@@ -165,10 +160,8 @@ describe('ThumbnailsComponent', () => {
         tick();
 
         component.selectedIndex = 0;
-        component.items = [...component.items, { src: 'src4' }];
-        component.ngOnChanges({
-          items: new SimpleChange(items, component.items, false),
-        });
+        componentRef.setInput('items', [...component.items, { src: 'src4' }]);
+        fixture.detectChanges();
         tick();
 
         expect(getSliderShift()).toBe(0);
@@ -183,7 +176,8 @@ describe('ThumbnailsComponent', () => {
             'shiftByDelta'
           ).and.callThrough();
 
-          component.scrollBehavior = 'smooth';
+          componentRef.setInput('scrollBehavior', 'smooth');
+          fixture.detectChanges();
           SUPPORT.scrollBehavior = false;
         });
 
@@ -218,9 +212,7 @@ describe('ThumbnailsComponent', () => {
 
     describe('without autoscroll', () => {
       beforeEach(fakeAsync(() => {
-        component.ngOnChanges({
-          items: new SimpleChange(null, component.items, true),
-        });
+        fixture.detectChanges();
         flush();
       }));
 
@@ -233,10 +225,8 @@ describe('ThumbnailsComponent', () => {
         tick();
 
         component.selectedIndex = 0;
-        component.items = [...component.items, { src: 'src4' }];
-        component.ngOnChanges({
-          items: new SimpleChange(items, component.items, false),
-        });
+        componentRef.setInput('items', [...component.items, { src: 'src4' }]);
+        fixture.detectChanges();
         tick();
 
         expect(getSliderShift()).toBe(0);
@@ -255,18 +245,14 @@ describe('ThumbnailsComponent', () => {
 
     beforeEach(() => {
       items = [{ src: 'src1' }, { src: 'src2' }, { src: 'src3' }];
-      component.arrows = true;
-      component.scrollBehavior = 'auto';
-      component.orientation = 'bottom';
+      componentRef.setInput('arrows', true);
+      componentRef.setInput('scrollBehavior', 'auto');
+      componentRef.setInput('orientation', 'bottom');
     });
 
     describe('with items already loaded', () => {
       beforeEach(fakeAsync(() => {
-        component.items = items;
-        component.ngOnChanges({
-          items: new SimpleChange(null, items, true),
-          arrows: new SimpleChange(null, component.arrows, true),
-        });
+        componentRef.setInput('items', items);
         fixture.detectChanges();
         setThumbsContainerWidth(2 * ITEM_WIDTH);
 
@@ -297,10 +283,7 @@ describe('ThumbnailsComponent', () => {
       describe('when items changed', () => {
         it(`should not be shown
             if items empty`, fakeAsync(() => {
-          component.items = [];
-          component.ngOnChanges({
-            items: new SimpleChange(items, component.items, false),
-          });
+          componentRef.setInput('items', []);
           fixture.detectChanges();
           flush();
 
@@ -310,10 +293,7 @@ describe('ThumbnailsComponent', () => {
 
         it(`should be still shown
             if items' length changed`, done => {
-          component.items = [...items, { src: 'src4' }];
-          component.ngOnChanges({
-            items: new SimpleChange(items, component.items, false),
-          });
+          componentRef.setInput('items', [...items, { src: 'src4' }]);
           fixture.detectChanges();
 
           waitForArrows(done, arrows => {
@@ -323,10 +303,11 @@ describe('ThumbnailsComponent', () => {
 
         it(`should be still shown
             even if items' length hasn't changed`, done => {
-          component.items = [{ src: 'src4' }, { src: 'src5' }, { src: 'src6' }];
-          component.ngOnChanges({
-            items: new SimpleChange(items, component.items, false),
-          });
+          componentRef.setInput('items', [
+            { src: 'src4' },
+            { src: 'src5' },
+            { src: 'src6' },
+          ]);
           fixture.detectChanges();
 
           waitForArrows(done, arrows => {
@@ -338,19 +319,13 @@ describe('ThumbnailsComponent', () => {
 
     describe('with items coming later', () => {
       beforeEach(fakeAsync(() => {
-        component.ngOnChanges({
-          arrows: new SimpleChange(null, component.arrows, true),
-        });
         fixture.detectChanges();
         flush();
         tick(1000);
       }));
 
       it('should appear although items were loaded later', async () => {
-        component.items = items;
-        component.ngOnChanges({
-          items: new SimpleChange(null, items, true),
-        });
+        componentRef.setInput('items', items);
         fixture.detectChanges();
         setThumbsContainerWidth(2 * ITEM_WIDTH);
         setThumbItemsWidth(ITEM_WIDTH);
@@ -363,11 +338,8 @@ describe('ThumbnailsComponent', () => {
 
     describe('direction mode', () => {
       beforeEach(() => {
-        component.items = items;
-        component.ngOnChanges({
-          items: new SimpleChange(null, items, true),
-          arrows: new SimpleChange(null, component.arrows, true),
-        });
+        componentRef.setInput('items', items);
+        componentRef.setInput('autoScroll', true);
       });
 
       describe('left to right with horizontal orientation', () => {
@@ -395,7 +367,7 @@ describe('ThumbnailsComponent', () => {
 
       describe('left to right with vertical orientation', () => {
         beforeEach(fakeAsync(() => {
-          component.orientation = 'left';
+          componentRef.setInput('orientation', 'left');
           fixture.detectChanges();
           setThumbsContainerHeight(2 * ITEM_HEIGHT);
 
@@ -419,7 +391,7 @@ describe('ThumbnailsComponent', () => {
 
       describe('right to left with horizontal orientation', () => {
         beforeEach(fakeAsync(() => {
-          component.isRtl = true;
+          componentRef.setInput('isRtl', true);
           fixture.detectChanges();
           setThumbsContainerWidth(2 * ITEM_WIDTH);
 
@@ -434,6 +406,7 @@ describe('ThumbnailsComponent', () => {
 
         it('should display "show next" arrow if the last thumb selected', done => {
           component.select(2);
+          fixture.detectChanges();
 
           waitForArrows(done, arrows => {
             expect(isNextArrow(arrows[0])).toBeTruthy();
@@ -443,8 +416,8 @@ describe('ThumbnailsComponent', () => {
 
       describe('right to left with vertical orientation', () => {
         beforeEach(fakeAsync(() => {
-          component.isRtl = true;
-          component.orientation = 'left';
+          componentRef.setInput('isRtl', true);
+          componentRef.setInput('orientation', 'left');
           fixture.detectChanges();
           setThumbsContainerHeight(2 * ITEM_HEIGHT);
 
@@ -476,10 +449,7 @@ describe('ThumbnailsComponent', () => {
     }
 
     function toggleArrows(enabled: boolean) {
-      component.arrows = enabled;
-      component.ngOnChanges({
-        arrows: new SimpleChange(null, component.arrows, false),
-      });
+      componentRef.setInput('arrows', enabled);
       fixture.detectChanges();
     }
   });
@@ -487,8 +457,7 @@ describe('ThumbnailsComponent', () => {
   describe('loading', () => {
     beforeEach(() => {
       const items = [{ src: 'src1' }, { src: 'src2' }, { src: 'src3' }];
-      component.items = items;
-      component.ngOnChanges({ items: new SimpleChange(null, items, true) });
+      componentRef.setInput('items', items);
     });
 
     it(`shouldn't load main image`, () => {
