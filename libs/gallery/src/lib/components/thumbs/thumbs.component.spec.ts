@@ -3,9 +3,9 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import type { GalleryItem } from '../../core';
+import type { GalleryItem } from '../../core/gallery-item';
 import type { StrictComponentRef } from '../../core/ng';
-import { SUPPORT } from '../../core';
+import { SUPPORT } from '../../core/support';
 import { ThumbsComponent } from './thumbs.component';
 
 describe('ThumbnailsComponent', () => {
