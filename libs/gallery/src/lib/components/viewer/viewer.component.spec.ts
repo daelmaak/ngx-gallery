@@ -1,22 +1,13 @@
-import type {
-  DebugElement,
-  TemplateRef} from '@angular/core';
+import type { DebugElement, TemplateRef } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
   SimpleChange,
   ViewChild,
 } from '@angular/core';
-import type {
-  ComponentFixture} from '@angular/core/testing';
-import {
-  TestBed,
-  fakeAsync,
-  flush,
-  tick,
-} from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { OrientationFlag } from '../../core';
 import type { GalleryItem, GalleryItemInternal } from '../../core/gallery-item';
 import type { StrictComponentRef } from '../../core/ng';
@@ -29,9 +20,7 @@ describe('ViewerComponent', () => {
   let viewerDe: DebugElement;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule],
-    })
+    await TestBed.configureTestingModule({})
       .overrideComponent(ViewerComponent, {
         set: { changeDetection: ChangeDetectionStrategy.Default },
       })

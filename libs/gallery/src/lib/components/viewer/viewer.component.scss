@@ -164,3 +164,21 @@ img {
     }
   }
 }
+
+.fade-in {
+  animation: fade-in-animation 400ms;
+}
+
+.fade-out {
+  transition: opacity 0ms 100ms;
+  opacity: 0;
+}
+
+@keyframes fade-in-animation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
