@@ -1,4 +1,3 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import type {
   AfterViewInit,
@@ -53,16 +52,6 @@ const passiveEventListenerOpts = {
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('mediaAnimate', [
-      transition(':leave', animate('0ms 100ms')),
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate(`${SLIDE_ANIMATION_DURATION}ms`, style({ opacity: 1 })),
-      ]),
-    ]),
-  ],
-
   imports: [
     CommonModule,
     CounterComponent,

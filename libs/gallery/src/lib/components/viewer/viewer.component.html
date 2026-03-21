@@ -32,7 +32,7 @@
     >
       @if (!itemTemplate) {
         @if (!item.video) {
-          <picture @mediaAnimate>
+          <picture animate.enter="fade-in" animate.leave="fade-out">
             @for (source of item.pictureSources; track source) {
               <source
                 [srcset]="source.srcset"
@@ -52,7 +52,8 @@
         <!-- Using loadedmetadata instead of loadeddata because iOS loads data lazily upon user's interaction -->
         @if (!isYoutube(item) && item.video) {
           <video
-            @mediaAnimate
+            animate.enter="fade-in"
+            animate.leave="fade-out"
             [src]="item.src"
             [poster]="item.thumbSrc || ''"
             [attr.preload]="loading === 'lazy' ? 'metadata' : 'auto'"
@@ -62,7 +63,8 @@
           ></video>
         } @else if (isYoutube(item)) {
           <iframe
-            @mediaAnimate
+            animate.enter="fade-in"
+            animate.leave="fade-out"
             [attr.loading]="loading"
             [src]="item.src | safe"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
