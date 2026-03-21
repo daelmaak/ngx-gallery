@@ -10,8 +10,9 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace Cypress {
-  interface Chainable<Subject> {
+  interface Chainable {
     slideByMouse(...cords: { x: number; y: number }[]): void;
   }
 }

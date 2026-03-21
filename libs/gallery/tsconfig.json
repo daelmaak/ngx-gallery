@@ -1,14 +1,8 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "allowJs": true,
-    "outDir": "../../dist/out-tsc",
-    "types": ["node"],
-    "sourceMap": false,
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM"],
-    "moduleResolution": "bundler",
-    "module": "preserve"
-  },
-  "include": ["**/*.ts"]
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.lib.json" },
+    { "path": "./tsconfig.spec.json" },
+    { "path": "./tsconfig.e2e.json" }
+  ]
 }

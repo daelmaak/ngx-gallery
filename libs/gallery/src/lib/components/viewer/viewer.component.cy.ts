@@ -1,4 +1,4 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+/// <reference types="cypress" />
 import type { GalleryItem } from '../../core';
 import { GalleryComponent } from '../gallery/gallery.component';
 
@@ -18,7 +18,6 @@ describe('Slider', () => {
   it('slides to next image', () => {
     cy.mount(GalleryComponent, {
       componentProperties: { items },
-      imports: [BrowserAnimationsModule],
     });
 
     ensureImagesVisible(0);
@@ -31,7 +30,6 @@ describe('Slider', () => {
   it('displays the first genuine image even when images load later (loop mode)', () => {
     cy.mount(GalleryComponent, {
       componentProperties: { items: [], loop: true },
-      imports: [BrowserAnimationsModule],
     }).then(({ fixture }) => {
       cy.wait(0); // simulates a delay in loading the images
 

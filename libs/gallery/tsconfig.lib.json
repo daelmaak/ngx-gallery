@@ -5,9 +5,10 @@
     "declarationMap": true,
     "declaration": true,
     "inlineSources": true,
-    "lib": ["dom"],
+    "lib": ["ES2022", "DOM"],
     "moduleResolution": "bundler",
-    "module": "preserve"
+    "module": "preserve",
+    "composite": true
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true
@@ -22,5 +23,5 @@
     "**/*.cy.tsx",
     "**/*.cy.jsx"
   ],
-  "include": ["**/*.ts"]
+  "include": ["src/**/*.ts"]
 }
