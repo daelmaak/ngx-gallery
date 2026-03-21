@@ -11,7 +11,7 @@ export default defineConfig([
 
     languageOptions: {
       parserOptions: {
-        project: ['libs/gallery/tsconfig.*?.json'],
+        projectService: ['libs/gallery/tsconfig.json'],
       },
     },
 
