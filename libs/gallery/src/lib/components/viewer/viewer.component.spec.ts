@@ -1,14 +1,8 @@
 import type { DebugElement, TemplateRef } from '@angular/core';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  SimpleChange,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed, fakeAsync, flush, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { OrientationFlag } from '../../core';
 import type { GalleryItem, GalleryItemInternal } from '../../core/gallery-item';
 import type { StrictComponentRef } from '../../core/ng';
 import { ViewerComponent } from './viewer.component';
@@ -33,8 +27,8 @@ describe('ViewerComponent', () => {
     componentRef = fixture.componentRef;
     viewerDe = fixture.debugElement;
 
-    component.items = [];
-    component.visibleItems = 1;
+    componentRef.setInput('items', []);
+    componentRef.setInput('visibleItems', 1);
   });
 
   describe('initialization', () => {
@@ -53,20 +47,12 @@ describe('ViewerComponent', () => {
     });
 
     it('should display items even though they have been set later', fakeAsync(() => {
-      component.items = [];
-      let changes = {
-        items: new SimpleChange(null, component.items, true),
-      };
-      component.ngOnChanges(changes);
+      componentRef.setInput('items', []);
       fixture.detectChanges();
 
       tick(1000);
 
-      component.items = [{ src: 'src1' }, { src: 'src2' }];
-      changes = {
-        items: new SimpleChange([], component.items, false),
-      };
-      component.ngOnChanges(changes);
+      componentRef.setInput('items', [{ src: 'src1' }, { src: 'src2' }]);
       fixture.detectChanges();
       flush();
 
@@ -76,14 +62,9 @@ describe('ViewerComponent', () => {
     }));
 
     it('should preselect item based on given index', fakeAsync(() => {
-      component.visibleItems = 1;
-      component.selectedIndex = 1;
-      component.items = [{ src: 'src1' }, { src: 'src2' }];
-      const changes = {
-        visibleItems: new SimpleChange(undefined, component.visibleItems, true),
-        items: new SimpleChange(undefined, component.items, true),
-      };
-      component.ngOnChanges(changes);
+      componentRef.setInput('visibleItems', 1);
+      componentRef.setInput('selectedIndex', 1);
+      componentRef.setInput('items', [{ src: 'src1' }, { src: 'src2' }]);
       fixture.detectChanges();
 
       tick();
@@ -117,18 +98,14 @@ describe('ViewerComponent', () => {
 
   describe('class attribute', () => {
     beforeEach(fakeAsync(() => {
-      component.selectedIndex = 0;
-      component.items = [{ src: 'src1' }, { src: 'src2' }];
-      const changes = {
-        items: new SimpleChange(null, component.items, true),
-      };
-      component.ngOnChanges(changes);
+      componentRef.setInput('selectedIndex', 0);
+      componentRef.setInput('items', [{ src: 'src1' }, { src: 'src2' }]);
       fixture.detectChanges();
       tick();
     }));
 
     it('should have class denoting RTL mode if turned on', () => {
-      component.isRtl = true;
+      componentRef.setInput('isRtl', true);
       fixture.detectChanges();
 
       expect(viewerDe.classes.rtl).toBeTruthy();
@@ -157,13 +134,8 @@ describe('ViewerComponent', () => {
         { src: 'src1', _failed: true },
         { src: 'src2' },
       ] as GalleryItemInternal[];
-      component.items = items;
-      component.errorTemplate = templateContainer.errorTemplate;
-
-      const changes = {
-        items: new SimpleChange(null, items, true),
-      };
-      component.ngOnChanges(changes);
+      componentRef.setInput('items', items);
+      componentRef.setInput('errorTemplate', templateContainer.errorTemplate);
       fixture.detectChanges();
       tick();
 
@@ -191,13 +163,8 @@ describe('ViewerComponent', () => {
       it('should display item content', fakeAsync(() => {
         const items = [{ src: 'src1' }] as GalleryItemInternal[];
 
-        component.items = items;
-        component.itemTemplate = templateContainer.itemTemplate;
-
-        const changes = {
-          items: new SimpleChange(null, items, true),
-        };
-        component.ngOnChanges(changes);
+        componentRef.setInput('items', items);
+        componentRef.setInput('itemTemplate', templateContainer.itemTemplate);
         fixture.detectChanges();
         tick();
 
@@ -211,17 +178,15 @@ describe('ViewerComponent', () => {
 
   describe('descriptions', () => {
     beforeEach(() => {
-      component.descriptions = true;
+      componentRef.setInput('descriptions', true);
     });
 
     it(`shouldn't give description class above-counter when counter position set, but counter is disabled`, () => {
-      component.counterOrientation = 'bottom';
-      component.counter = false;
-      component.items = [{ src: 'src1', description: 'description1' }];
-      const changes = {
-        items: new SimpleChange(null, component.items, true),
-      };
-      component.ngOnChanges(changes);
+      componentRef.setInput('counterOrientation', 'bottom');
+      componentRef.setInput('counter', false);
+      componentRef.setInput('items', [
+        { src: 'src1', description: 'description1' },
+      ]);
       fixture.detectChanges();
 
       const descContainer = viewerDe.query(By.css('.viewer-description'));
@@ -234,7 +199,7 @@ describe('ViewerComponent', () => {
   describe('selection', () => {
     beforeEach(() => {
       componentRef.setInput('items', generateGalleryImages(4));
-      component.selectedIndex = 2;
+      componentRef.setInput('selectedIndex', 2);
     });
 
     describe('without looping', () => {
@@ -289,16 +254,10 @@ describe('ViewerComponent', () => {
 
     describe('with video items', () => {
       beforeEach(fakeAsync(() => {
-        component.items[2] = { src: 'video-src1', video: true };
-        component.loading = 'auto';
-        component.ngOnChanges({
-          thumbsOrientationt: new SimpleChange(
-            null,
-            OrientationFlag.BOTTOM,
-            true
-          ),
-          items: new SimpleChange(null, component.items, true),
-        });
+        const items = [...component.items];
+        items[2] = { src: 'video-src1', video: true };
+        componentRef.setInput('items', items);
+        componentRef.setInput('loading', 'auto');
         fixture.detectChanges();
         tick();
         fixture.detectChanges();
@@ -322,9 +281,9 @@ describe('ViewerComponent', () => {
     const ITEM_WIDTH = 600;
 
     beforeEach(() => {
-      component.mouseGestures = true;
-      component.touchGestures = true;
-      component.selectedIndex = 0;
+      componentRef.setInput('mouseGestures', true);
+      componentRef.setInput('touchGestures', true);
+      componentRef.setInput('selectedIndex', 0);
 
       componentRef.setInput('items', generateGalleryImages(3));
       componentRef.setInput('visibleItems', 1);
@@ -430,16 +389,8 @@ describe('ViewerComponent', () => {
 
     describe('with looping off', () => {
       beforeEach(fakeAsync(() => {
-        component.visibleItems = 1;
-        component.loop = false;
-        component.ngOnChanges({
-          visibleItems: new SimpleChange(
-            undefined,
-            component.visibleItems,
-            true
-          ),
-          items: new SimpleChange(undefined, component.items, true),
-        });
+        componentRef.setInput('visibleItems', 1);
+        componentRef.setInput('loop', false);
         fixture.detectChanges();
         viewerDe.nativeElement.style.width = ITEM_WIDTH + 'px';
 
@@ -554,17 +505,9 @@ describe('ViewerComponent', () => {
 
     describe('in right to left mode', () => {
       beforeEach(fakeAsync(() => {
-        component.visibleItems = 1;
-        component.loop = false;
-        component.isRtl = true;
-        component.ngOnChanges({
-          visibleItems: new SimpleChange(
-            undefined,
-            component.visibleItems,
-            true
-          ),
-          items: new SimpleChange(null, component.items, true),
-        });
+        componentRef.setInput('visibleItems', 1);
+        componentRef.setInput('loop', false);
+        componentRef.setInput('isRtl', true);
         fixture.detectChanges();
         viewerDe.nativeElement.style.width = ITEM_WIDTH + 'px';
 
