@@ -12,20 +12,23 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import type { Aria } from '../../core/aria';
 import type {
-  Aria,
-  ContentTemplateContext,
   GalleryItem,
   GalleryItemEvent,
-  ItemTemplateContext,
-  Loading,
-  ObjectFit,
+} from '../../core/gallery-item';
+import type { Loading } from '../../core/loading';
+import type { ObjectFit } from '../../core/object-fit';
+import type {
   Orientation,
+  VerticalOrientation,
+} from '../../core/orientation';
+import { OrientationFlag } from '../../core/orientation';
+import type {
+  ContentTemplateContext,
+  ItemTemplateContext,
   ThumbTemplateContext,
-  VerticalOrientation} from '../../core';
-import {
-  OrientationFlag
-} from '../../core';
+} from '../../core/template-contexts';
 import { defaultAria } from '../../core/aria';
 import type { StrictSimpleChanges } from '../../core/ng';
 import { ThumbsComponent } from '../thumbs/thumbs.component';

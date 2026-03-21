@@ -18,8 +18,9 @@ import {
   ViewChildren,
   inject,
 } from '@angular/core';
-import type { Orientation, ThumbTemplateContext } from '../../core';
-import { SUPPORT, isBrowser } from '../../core';
+import type { Orientation } from '../../core/orientation';
+import { SUPPORT, isBrowser } from '../../core/support';
+import type { ThumbTemplateContext } from '../../core/template-contexts';
 import type { Aria } from '../../core/aria';
 import type {
   GalleryItemEvent,

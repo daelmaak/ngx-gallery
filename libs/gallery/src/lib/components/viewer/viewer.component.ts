@@ -24,17 +24,16 @@ import {
   ViewChildren,
   inject,
 } from '@angular/core';
+import type { Aria } from '../../core/aria';
+import type { GalleryItemEvent } from '../../core/gallery-item';
+import type { Loading } from '../../core/loading';
+import type { ObjectFit } from '../../core/object-fit';
+import type { OrientationFlag, VerticalOrientation } from '../../core/orientation';
+import { UA, isBrowser } from '../../core/support';
 import type {
-  Aria,
   ContentTemplateContext,
-  GalleryItemEvent,
   ItemTemplateContext,
-  Loading,
-  ObjectFit,
-  OrientationFlag,
-  VerticalOrientation,
-} from '../../core';
-import { UA, isBrowser } from '../../core';
+} from '../../core/template-contexts';
 import type { GalleryItemInternal } from '../../core/gallery-item';
 import { MediaDirective } from '../../directives/media.directive';
 import { SafePipe } from '../../pipes/safe.pipe';

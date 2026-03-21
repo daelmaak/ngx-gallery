@@ -1,5 +1,4 @@
-/// <reference types="cypress" />
-import type { GalleryItem } from '../../core';
+import type { GalleryItem } from '../../core/gallery-item';
 import { GalleryComponent } from '../gallery/gallery.component';
 
 describe('Slider', () => {
