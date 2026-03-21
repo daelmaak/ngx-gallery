@@ -1,11 +1,19 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "es6",
-    "lib": ["es6", "dom"],
+    "target": "ES2022",
+    "lib": ["ES2022", "dom"],
     "sourceMap": true,
     "types": ["cypress", "node"],
-    "isolatedModules": true
+    "outDir": "../../dist/out-tsc",
+    "moduleResolution": "bundler",
+    "module": "preserve",
+    "composite": true,
+    "declaration": true
   },
-  "include": ["**/*.cy.ts"]
+  "include": ["src/**/*.ts", "cypress/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/test.ts"],
+  "references": [
+    { "path": "./tsconfig.lib.json" }
+  ]
 }

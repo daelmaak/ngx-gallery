@@ -6,8 +6,13 @@
     "strict": false,
     "moduleResolution": "bundler",
     "module": "preserve",
-    "isolatedModules": true
+    "composite": true,
+    "declaration": true
   },
   "files": ["src/test.ts"],
-  "include": ["**/*.spec.ts", "**/*.d.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.cy.ts", "cypress/**/*"],
+  "references": [
+    { "path": "./tsconfig.lib.json" }
+  ]
 }
