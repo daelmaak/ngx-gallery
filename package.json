@@ -21,10 +21,7 @@
     "test:ci": "nx run gallery:test --watch=false --code-coverage --browsers=ChromeHeadless",
     "test:cy": "nx component-test gallery --watch",
     "test:cy:ci": "DISPLAY= nx component-test gallery",
-    "lint": "nx run gallery:lint",
-    "release-changelog": "cd libs/gallery && standard-version -i ../../CHANGELOG.md",
-    "release": "yarn release-changelog && git push --follow-tags",
-    "release:rc": "yarn release-changelog --prerelease RC && git push --follow-tags"
+    "lint": "nx run gallery:lint"
   },
   "private": true,
   "dependencies": {
@@ -87,7 +84,6 @@
     "postcss-preset-env": "~7.5.0",
     "postcss-url": "~10.1.3",
     "prettier": "~3.6.2",
-    "standard-version": "^9.3.2",
     "typescript": "5.9.3",
     "typescript-eslint": "^8.56.0",
     "webpack-bundle-analyzer": "^4.9.0"
