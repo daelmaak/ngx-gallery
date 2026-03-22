@@ -11,4 +11,6 @@
 
 ## Release
 
-There are no manual steps required except for creating a release in GitHub. See https://github.com/daelmaak/ngx-gallery/commit/c88b182ae6edb835fbd44b18ae22e9c62c3148c9 for details.
+There are no manual steps required except for creating a release in GitHub. See https://github.com/daelmaak/ngx-gallery/commit/c88b182ae6edb835fbd44b18ae22e9c62c3148c9 and https://github.com/daelmaak/ngx-gallery/commit/1d1ee7d10da9e2a1b368bedf80becd68136f5639 for details.
+
+Basically, each new commit to master is picked up by Release Please lib, which tracks it in a Release PR, and once I want to release, I merge it. This leads to a new tag, which triggers the actual release flow.
