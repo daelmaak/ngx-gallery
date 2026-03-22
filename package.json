@@ -17,6 +17,7 @@
     "build:demo": "nx run demo:build:production --base-href /ngx-gallery/",
     "bundle-stats": "nx run demo:build:production --stats-json && webpack-bundle-analyzer docs/stats.json",
     "test": "nx run gallery:test --browsers=ChromeHeadlessLocal",
+    "test:ai": "nx run gallery:test --watch=false --browsers=ChromeHeadlessLocal",
     "test:ci": "nx run gallery:test --watch=false --code-coverage --browsers=ChromeHeadless",
     "test:cy": "nx component-test gallery --watch",
     "test:cy:ci": "DISPLAY= nx component-test gallery",
