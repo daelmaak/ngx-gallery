@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.2](https://github.com/daelmaak/ngx-gallery/compare/v3.1.1...v3.1.2) (2026-03-22)
+
+
+### Bug Fixes
+
+* **demo:** apply default config when no saved config exists ([e91bf6f](https://github.com/daelmaak/ngx-gallery/commit/e91bf6fe69446d83b83c955bf343d2f287dee747))
+* **demo:** get rid of deprecation warnings for color functions ([b19410b](https://github.com/daelmaak/ngx-gallery/commit/b19410b92860aea3ee04fda7807ce88edfb58d31))
+
 ## [3.1.0](https://github.com/daelmaak/ngx-gallery/compare/v3.0.4...v3.1.0) (2024-11-11)
 
 
