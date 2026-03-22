@@ -119,7 +119,10 @@ export class DemoWholeConfigComponent implements OnInit {
   }
 
   private getGalleryConfig() {
-    return JSON.parse(sessionStorage.getItem('galleryConfig') || '{}');
+    const stored = sessionStorage.getItem('galleryConfig');
+    if (!stored) return null;
+    const config = JSON.parse(stored);
+    return Object.keys(config).length > 0 ? config : null;
   }
 
   private storeGalleryConfig = () => {
