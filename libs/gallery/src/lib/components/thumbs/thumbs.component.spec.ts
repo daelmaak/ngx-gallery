@@ -351,15 +351,16 @@ describe('ThumbnailsComponent', () => {
         }));
 
         it('should display "show next" arrow if the first thumb selected', done => {
-          waitForArrows(done, arrows => {
+          waitForArrowDirection(done, 'next', arrows => {
             expect(isNextArrow(arrows[0])).toBeTruthy();
           });
         });
 
         it('should display "show prev" arrow if the last thumb selected', done => {
           component.select(2);
+          fixture.detectChanges();
 
-          waitForArrows(done, arrows => {
+          waitForArrowDirection(done, 'prev', arrows => {
             expect(isPrevArrow(arrows[0])).toBeTruthy();
           });
         });
@@ -375,15 +376,16 @@ describe('ThumbnailsComponent', () => {
         }));
 
         it('should display "show next" arrow if the first thumb selected', done => {
-          waitForArrows(done, arrows => {
+          waitForArrowDirection(done, 'next', arrows => {
             expect(isNextArrow(arrows[0])).toBeTruthy();
           });
         });
 
         it('should display "show prev" arrow if the last thumb selected', done => {
           component.select(2);
+          fixture.detectChanges();
 
-          waitForArrows(done, arrows => {
+          waitForArrowDirection(done, 'prev', arrows => {
             expect(isPrevArrow(arrows[0])).toBeTruthy();
           });
         });
@@ -399,7 +401,7 @@ describe('ThumbnailsComponent', () => {
         }));
 
         it('should display "show prev" arrow if the first thumb selected', done => {
-          waitForArrows(done, arrows => {
+          waitForArrowDirection(done, 'prev', arrows => {
             expect(isPrevArrow(arrows[0])).toBeTruthy();
           });
         });
@@ -408,7 +410,7 @@ describe('ThumbnailsComponent', () => {
           component.select(2);
           fixture.detectChanges();
 
-          waitForArrows(done, arrows => {
+          waitForArrowDirection(done, 'next', arrows => {
             expect(isNextArrow(arrows[0])).toBeTruthy();
           });
         });
@@ -425,15 +427,16 @@ describe('ThumbnailsComponent', () => {
         }));
 
         it('should display "show next" arrow if the first thumb selected', done => {
-          waitForArrows(done, arrows => {
+          waitForArrowDirection(done, 'next', arrows => {
             expect(isNextArrow(arrows[0])).toBeTruthy();
           });
         });
 
         it('should display "show prev" arrow if the last thumb selected', done => {
           component.select(2);
+          fixture.detectChanges();
 
-          waitForArrows(done, arrows => {
+          waitForArrowDirection(done, 'prev', arrows => {
             expect(isPrevArrow(arrows[0])).toBeTruthy();
           });
         });
@@ -451,6 +454,27 @@ describe('ThumbnailsComponent', () => {
     function toggleArrows(enabled: boolean) {
       componentRef.setInput('arrows', enabled);
       fixture.detectChanges();
+    }
+
+    function waitForArrowDirection(
+      done: DoneFn,
+      expectedDirection: 'prev' | 'next',
+      cb: (arrows: DebugElement[]) => void
+    ) {
+      let arrows: DebugElement[];
+      const checker = expectedDirection === 'prev' ? isPrevArrow : isNextArrow;
+
+      const arrowWaiter = setInterval(() => {
+        arrows = de.queryAll(By.css('.thumbs-arrow'));
+
+        if (arrows.length && checker(arrows[0])) {
+          clearInterval(arrowWaiter);
+
+          cb(arrows);
+
+          done();
+        }
+      }, 10);
     }
   });
 
