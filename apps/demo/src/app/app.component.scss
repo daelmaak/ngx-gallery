@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 :host {
   display: grid;
   grid-template-columns: 230px calc(100% - 230px);
@@ -44,11 +46,11 @@ aside {
     padding: 0 15px 8px;
     box-sizing: border-box;
     margin: 20px 10px 0;
-    color: lighten(#5b5b5b, 5%);
+    color: color.adjust(#5b5b5b, $lightness: 5%);
     font-weight: bold;
 
     + ul {
-      border-top: 1px solid lighten(#5b5b5b, 40%);
+      border-top: 1px solid color.adjust(#5b5b5b, $lightness: 40%);
     }
   }
 }
